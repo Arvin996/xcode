@@ -1,10 +1,8 @@
-package cn.xk.xcode.entity.dto;
+package cn.xk.xcode.entity.dto.dict;
 
-import cn.xk.xcode.entity.po.DictPo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;

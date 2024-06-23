@@ -15,6 +15,11 @@ public interface GlobalErrorCodeConstants
     ErrorCode FORBIDDEN = new IntErrorCode(403, "没有该操作权限");
     ErrorCode NOT_FOUND = new IntErrorCode(404, "请求未找到");
     ErrorCode METHOD_NOT_ALLOWED = new IntErrorCode(405, "请求方法不正确");
+    ErrorCode QUERY_FAILED = new IntErrorCode(409, "用户不存在");
+    ErrorCode USER_ADD_FAILED = new IntErrorCode(410, "该用户名已存在"); // 并发请求，不允许
+
+    ErrorCode ROLE_ADD_FAILED = new IntErrorCode(411, "该角色已存在");
+
     ErrorCode LOCKED = new IntErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new IntErrorCode(429, "请求过于频繁，请稍后重试");
     // ========== 服务端错误段 ==========

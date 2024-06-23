@@ -1,5 +1,4 @@
-package cn.xk.xcode.dict;
-
+package cn.xk.xcode.config;
 import cn.xk.xcode.convert.DictConvert;
 import cn.xk.xcode.dict.entity.DataTableDict;
 import cn.xk.xcode.dict.handler.DataBaseDictLoader;

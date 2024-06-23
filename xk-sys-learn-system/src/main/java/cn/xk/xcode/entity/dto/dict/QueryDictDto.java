@@ -1,4 +1,4 @@
-package cn.xk.xcode.entity.dto;
+package cn.xk.xcode.entity.dto.dict;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

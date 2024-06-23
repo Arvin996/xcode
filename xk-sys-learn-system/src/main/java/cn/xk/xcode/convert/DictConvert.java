@@ -1,10 +1,10 @@
 package cn.xk.xcode.convert;
 
 import cn.xk.xcode.dict.entity.DataTableDict;
-import cn.xk.xcode.entity.dto.UpdateDictDto;
+import cn.xk.xcode.entity.dto.dict.UpdateDictDto;
 import cn.xk.xcode.entity.po.DictPo;
-import cn.xk.xcode.entity.vo.DictVo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -17,13 +17,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DictConvert {
 
-    DataTableDict dictDoToTableDict(DictPo dictPo);
 
+    @Mapping(target = "pad3", ignore = true)
+    @Mapping(target = "pad2", ignore = true)
+    @Mapping(target = "pad1", ignore = true)
     List<DataTableDict> dictDoToTableDict(List<DictPo> dictPoList);
 
     DictPo dictDtoToPo(UpdateDictDto dictDto);
 
-    DictVo dictPoToVo(DictPo dictPo);
-
-    List<DictVo> dictPoToVo(List<DictPo> dictPoList);
 }

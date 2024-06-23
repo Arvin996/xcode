@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.po;
 
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 
@@ -13,43 +14,32 @@ import lombok.NoArgsConstructor;
 /**
  *  实体类。
  *
- * @author lenovo
+ * @author Arvin
  * @since 2024-06-21
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("system_dict")
-public class DictPo implements Serializable {
+@Table("system_user_role")
+public class UserRolePo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字典id
+     * 自增主键 无意义
      */
-    @Id
-    private String code;
+    @Id(keyType = KeyType.Auto)
+    private Integer id;
 
     /**
-     * 字典值
+     * 用户id
      */
-    private String name;
+    private Integer userId;
 
     /**
-     * 父字典id,一级为##
+     * 角色id
      */
-    @Id
-    private String parId;
-
-    /**
-     * 字典表备注，如排序
-     */
-    private String note;
-
-    /**
-     * 填充字段
-     */
-    private String pad;
+    private Integer roleId;
 
 }

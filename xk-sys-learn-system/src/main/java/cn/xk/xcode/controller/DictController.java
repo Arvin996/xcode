@@ -1,17 +1,15 @@
 package cn.xk.xcode.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.xk.xcode.convert.DictConvert;
 import cn.xk.xcode.dict.context.DictContext;
 import cn.xk.xcode.dict.entity.DataTableDict;
 import cn.xk.xcode.dict.event.DataTableReloadPublisher;
-import cn.xk.xcode.dict.event.TableDictEvent;
-import cn.xk.xcode.entity.dto.QueryDictDto;
-import cn.xk.xcode.entity.dto.UpdateDictDto;
+import cn.xk.xcode.entity.dto.dict.QueryDictDto;
+import cn.xk.xcode.entity.dto.dict.UpdateDictDto;
 import cn.xk.xcode.entity.po.DictPo;
-import cn.xk.xcode.entity.vo.DictVo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.DictService;
-import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
@@ -62,33 +60,36 @@ public class DictController
         return CommonResult.success(dictContext.getListCodeByProperty(queryDictDto.getParId(), DataTableDict::getName));
     }
 
+    @SaCheckPermission("dict::updateDict")
     @Operation(summary = "更新字典")
     @PostMapping("/updateDict")
-    public CommonResult<List<DictVo>> updateDict(@Validated @RequestBody UpdateDictDto updateDictDto)
+    public CommonResult<List<DictPo>> updateDict(@Validated @RequestBody UpdateDictDto updateDictDto)
     {
         DictPo dictPo = dictConvert.dictDtoToPo(updateDictDto);
         dictService.update(dictPo, DICT_PO.CODE.eq(dictPo.getCode()).and(DICT_PO.PAR_ID.eq(dictPo.getParId())));
         dataTableReloadPublisher.publish();
-        return CommonResult.success(dictConvert.dictPoToVo(dictService.list()));
+        return CommonResult.success(dictService.list());
     }
 
+    @SaCheckPermission("dict::delDict")
     @Operation(summary = "删除字典")
     @PostMapping("/delDict")
-    public CommonResult<List<DictVo>> delDict(@Validated @RequestBody UpdateDictDto updateDictDto)
+    public CommonResult<List<DictPo>> delDict(@Validated @RequestBody UpdateDictDto updateDictDto)
     {
         dictService.remove(DICT_PO.CODE.eq(updateDictDto.getCode()).and(DICT_PO.PAR_ID.eq(updateDictDto.getParId())));
         dataTableReloadPublisher.publish();
-        return CommonResult.success(dictConvert.dictPoToVo(dictService.list()));
+        return CommonResult.success(dictService.list());
     }
 
+    @SaCheckPermission("dict::addDict")
     @Operation(summary = "新增字典")
     @PostMapping("/addDict")
-    public CommonResult<List<DictVo>> addDict(@Validated @RequestBody UpdateDictDto updateDictDto)
+    public CommonResult<List<DictPo>> addDict(@Validated @RequestBody UpdateDictDto updateDictDto)
     {
         DictPo dictPo = dictConvert.dictDtoToPo(updateDictDto);
         dictService.save(dictPo);
         dataTableReloadPublisher.publish();
-        return CommonResult.success(dictConvert.dictPoToVo(dictService.list()));
+        return CommonResult.success(dictService.list());
     }
 
 }

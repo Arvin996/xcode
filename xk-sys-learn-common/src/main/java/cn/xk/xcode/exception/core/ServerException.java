@@ -25,6 +25,7 @@ public class ServerException extends RuntimeException
     private String message;
 
     public ServerException(Object code,String message) {
+        super(message);
         this.code = code;
         this.message = message;
     }

@@ -57,4 +57,8 @@ public class CommonResult<T> implements Serializable
         return error(serverException.getCode(), serverException.getMessage());
     }
 
+    public static boolean isSuccess(CommonResult<?> result){
+        return Objects.equals(result.getCode(), GlobalErrorCodeConstants.SUCCESS.getCode());
+    }
+
 }

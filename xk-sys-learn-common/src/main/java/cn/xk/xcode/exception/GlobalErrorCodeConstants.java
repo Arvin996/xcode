@@ -17,8 +17,12 @@ public interface GlobalErrorCodeConstants
     ErrorCode METHOD_NOT_ALLOWED = new IntErrorCode(405, "请求方法不正确");
     ErrorCode QUERY_FAILED = new IntErrorCode(409, "用户不存在");
     ErrorCode USER_ADD_FAILED = new IntErrorCode(410, "该用户名已存在"); // 并发请求，不允许
-
     ErrorCode ROLE_ADD_FAILED = new IntErrorCode(411, "该角色已存在");
+    ErrorCode INVALID_TOKEN = new IntErrorCode(412, "无效token");
+    ErrorCode INVALID_GRANT_TYPE = new IntErrorCode(413, "无效授权类型");
+    ErrorCode INVALID_CLIENT = new IntErrorCode(414, "无效客户端");
+    ErrorCode INVALID_USERNAME_OR_PASSWORD = new IntErrorCode(416, "用户名或密码错误");
+    ErrorCode ACCOUNT_NOT_ENABLE = new IntErrorCode(417, "该账号已被封禁，请联系管理员");
 
     ErrorCode LOCKED = new IntErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new IntErrorCode(429, "请求过于频繁，请稍后重试");

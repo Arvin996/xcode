@@ -1,11 +1,14 @@
 package cn.xk.xcode.service.impl;
 
 import cn.xk.xcode.entity.dto.user.UpdateUserDto;
+import cn.xk.xcode.entity.po.ResourcePo;
 import cn.xk.xcode.entity.po.RolePo;
 import cn.xk.xcode.entity.po.UserRolePo;
 import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.pojo.LoginUser;
 import cn.xk.xcode.service.RoleService;
 import cn.xk.xcode.service.UserRoleService;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.UserPo;
 import cn.xk.xcode.mapper.UserMapper;
@@ -14,8 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static cn.xk.xcode.entity.def.UserRoleTableDef.USER_ROLE_PO;
@@ -23,7 +28,7 @@ import static cn.xk.xcode.entity.def.UserTableDef.USER_PO;
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.QUERY_FAILED;
 
 /**
- *  服务层实现。
+ * 服务层实现。
  *
  * @author Arvin
  * @since 2024-06-21
@@ -54,9 +59,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPo> implements 
     @Override
     public CommonResult<UserPo> queryByUsername(String userName) {
         UserPo userPo = getOne(USER_PO.USERNAME.eq(userName));
-        if (Objects.isNull(userPo)){
+        if (Objects.isNull(userPo)) {
             return CommonResult.error(QUERY_FAILED);
         }
         return CommonResult.success(userPo);
+    }
+
+    @Override
+    public LoginUser buildLoginUser(UserPo userPo) {
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUsername(userPo.getUsername());
+        List<RolePo> roles = queryRolesByUserId(userPo.getId()).getData();
+        loginUser.setRoles(CollectionUtil.convertSet(roles, RolePo::getName));
+        Set<String> recourses = new HashSet<>();
+        for (RolePo role : roles) {
+            recourses.addAll(CollectionUtil.convertSet( roleService.queryResourcesByRole(role.getId()).getData(), ResourcePo::getRecourseCode));
+        }
+        loginUser.setPermissions(recourses);
+        return loginUser;
     }
 }

@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.xk.xcode</groupId>
-        <artifactId>xk-sys-learn-parent</artifactId>
+        <artifactId>xk-sys-learn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../xk-sys-learn/xk-sys-learn-parent/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>xk-sys-learn-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -120,22 +120,12 @@
             <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-jwt</artifactId>
-        </dependency>
-
         <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-jackson</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>

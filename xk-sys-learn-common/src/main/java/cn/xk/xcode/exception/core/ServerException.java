@@ -12,9 +12,8 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ServerException extends RuntimeException
-{
-    public ServerException(){
+public class ServerException extends RuntimeException {
+    public ServerException() {
         super();
     }
 
@@ -24,13 +23,13 @@ public class ServerException extends RuntimeException
      */
     private String message;
 
-    public ServerException(Object code,String message) {
+    public ServerException(Object code, String message) {
         super(message);
         this.code = code;
         this.message = message;
     }
 
-    public ServerException(ErrorCode errorCode){
+    public ServerException(ErrorCode errorCode) {
         this.code = errorCode.getCode();
         this.message = errorCode.getMessage();
     }

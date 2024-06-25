@@ -6,10 +6,10 @@ package cn.xk.xcode.core;
  * @Version 1.0
  * @Description IntEnumValueToArray
  */
-public abstract class IntEnumValueToArray implements EnumValueToArray
+public interface IntEnumValueToArray extends EnumValueToArray
 {
     @Override
-    public String[] toArrayString() {
+    default String[] toArrayString() {
         return new String[0];
     }
 }

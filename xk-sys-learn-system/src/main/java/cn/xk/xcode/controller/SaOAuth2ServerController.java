@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description
  */
 @RestController
-@Tag(name = "oauth2服务端控制器")
+@Tag(name = "oauth2资源服务认证控制器")
 @RequestMapping("/oauth2")
 public class SaOAuth2ServerController {
 

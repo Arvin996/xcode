@@ -1,18 +1,19 @@
 package cn.xk.xcode.service;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.xk.xcode.entity.dto.user.LoginUserDto;
 import cn.xk.xcode.pojo.CommonResult;
-
-import java.util.Map;
+import cn.xk.xcode.pojo.LoginInfoDto;
+import cn.xk.xcode.pojo.LoginVO;
 
 /**
- * @author xukai
- * @version 1.0
- * @date 2024/6/22 16:21
- * @description
+ * @Author xuk
+ * @Date 2024/6/24 14:16
+ * @Version 1.0
+ * @Description AuthService
  */
 public interface AuthService {
+    CommonResult<LoginVO> doLogin(LoginInfoDto loginUserDto);
 
-    CommonResult<SaTokenInfo> doLogin(LoginUserDto loginUserDto);
+    CommonResult<Boolean> logout();
+
+    CommonResult<Boolean> kickout(LoginInfoDto loginInfoDto);
 }

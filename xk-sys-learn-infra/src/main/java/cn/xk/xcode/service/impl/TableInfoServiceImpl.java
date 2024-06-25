@@ -51,10 +51,9 @@ public class TableInfoServiceImpl extends ServiceImpl<TableInfoMapper, TableInfo
         try {
             Connection connection = dataSource.getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
-            ResultSet resultSet = metaData.getTables(null, null, "%", new String[]{"TABLE"});
+            ResultSet resultSet = metaData.getTables(databaseName, username, null, new String[]{"TABLE"});
             List<TableInfoPo> tableInfoPoList = new ArrayList<>();
             while (resultSet.next()) {
-
                 tableInfoPoList.add(TableInfoPo
                         .builder()
                         .tablePre(batchSaveTablesDto.getTablePre())

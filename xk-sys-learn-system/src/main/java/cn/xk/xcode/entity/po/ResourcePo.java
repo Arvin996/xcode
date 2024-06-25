@@ -37,7 +37,7 @@ public class ResourcePo implements Serializable {
     /**
      * 资源路径 唯一
      */
-    private String recourseCode;
+    private String resourceCode;
 
     /**
      * 资源名称

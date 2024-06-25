@@ -71,7 +71,7 @@
     <!-- 编码定义 -->
     <Property name="encoding">utf-8</Property>
     <!-- 应用名 -->
-    <Property name="project">sk-learn-system</Property>
+    <Property name="project">sk-learn-infra</Property>
 
     <!-- 文件名和路径定义 -->
     <Property name="logFileBasePath">logs</Property>  <!-- 日志保存的根文件夹 -->

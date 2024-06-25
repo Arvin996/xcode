@@ -42,6 +42,7 @@ public class DataBaseInfoController {
     @PostMapping("/add")
     public CommonResult<Boolean> addDatabaseInfo(@Validated @RequestBody AddDatabaseConnInfoPoDto addDatabaseConnInfoPoDto) {
         DatabaseConnInfoPo databaseConnInfoPo = BeanUtil.toBean(addDatabaseConnInfoPoDto, DatabaseConnInfoPo.class);
+        databaseConnInfoPo.setCreateUser(StpUtil.getLoginIdAsString());
         return CommonResult.success(databaseConnInfoService.save(databaseConnInfoPo));
     }
 

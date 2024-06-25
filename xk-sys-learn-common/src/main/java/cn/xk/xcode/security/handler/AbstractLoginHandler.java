@@ -21,7 +21,6 @@ public abstract class AbstractLoginHandler {
     public abstract LoginVO handlerLogin(LoginInfoDto loginInfoDto);
 
     public LoginVO Login(LoginInfoDto loginInfoDto) {
-        String grantType = loginInfoDto.getGrantType();
         validateClient(loginInfoDto);
         return handlerLogin(loginInfoDto);
     }

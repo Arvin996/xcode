@@ -16,6 +16,7 @@ import lombok.*;
 @Schema(description = "一键批量导入表信息dto")
 public class BatchSaveTablesDto extends UpdateDatabaseConnInfoPoDto
 {
+
     /**
      * 表名前缀
      */

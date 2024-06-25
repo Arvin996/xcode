@@ -43,7 +43,7 @@ public class ResourceTableDef extends TableDef {
     /**
      * 资源路径 唯一
      */
-    public final QueryColumn RESCOURSE_CODE = new QueryColumn(this, "rescourse_code");
+    public final QueryColumn RESOURCE_CODE = new QueryColumn(this, "resource_code");
 
     /**
      * 所有字段。
@@ -53,7 +53,7 @@ public class ResourceTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, RESCOURSE_CODE, RESOURCE_NAME, STATUS, UPDATE_TIME, CREATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, RESOURCE_CODE, RESOURCE_NAME, STATUS, UPDATE_TIME, CREATE_TIME};
 
     public ResourceTableDef() {
         super("", "system_resource");

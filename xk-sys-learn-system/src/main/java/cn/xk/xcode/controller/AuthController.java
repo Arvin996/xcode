@@ -1,11 +1,6 @@
 package cn.xk.xcode.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.LoginInfoDto;
 import cn.xk.xcode.pojo.LoginVO;
@@ -20,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Map;
-
-import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_GRANT_TYPE;
 
 /**
  * @author xukai

@@ -6,8 +6,6 @@ import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.LoginUser;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.UserPo;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

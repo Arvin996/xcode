@@ -25,6 +25,7 @@ public class AddDatabaseConnInfoPoDto
     /**
      * 数据库名
      */
+    @Schema(description = "新增数据库名")
     @NotNull
     private String databaseName;
 
@@ -32,17 +33,20 @@ public class AddDatabaseConnInfoPoDto
      * 数据库连接地址 ip:port 只支持mysql
      */
     @NotNull
+    @Schema(description = "新增数据库连接地址")
     private String url;
 
     /**
      * 数据库用户名
      */
     @NotNull
+    @Schema(description = "新增数据库用户名")
     private String userName;
 
     /**
      * 数据库密码
      */
     @NotNull
+    @Schema(description = "新增数据库密码")
     private String password;
 }

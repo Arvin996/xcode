@@ -20,10 +20,12 @@ public class BatchSaveTablesDto extends UpdateDatabaseConnInfoPoDto
     /**
      * 表名前缀
      */
+    @Schema(description = "表名前缀")
     private String tablePre;
 
     /**
      * 实体类后缀
      */
+    @Schema(description = "实体类后缀")
     private String entitySuff;
 }

@@ -21,26 +21,31 @@ public class UpdateDatabaseConnInfoPoDto
 {
 
     @NotNull
+    @Schema(description = "数据库配置id")
     private Integer id;
 
     /**
      * 数据库名
      */
+    @Schema(description = "数据库名")
     private String databaseName;
 
     /**
      * 数据库连接地址 ip:port 只支持mysql
      */
+    @Schema(description = "数据库连接地址 ip:port 只支持mysql")
     private String url;
 
     /**
      * 数据库用户名
      */
+    @Schema(description = "数据库用户名")
     private String userName;
 
     /**
      * 数据库密码
      */
+    @Schema(description = "数据库密码")
     private String password;
 
 }

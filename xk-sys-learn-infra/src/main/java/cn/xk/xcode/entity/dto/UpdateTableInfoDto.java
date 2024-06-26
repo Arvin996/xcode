@@ -24,21 +24,25 @@ public class UpdateTableInfoDto
      * 表所属数据库
      */
     @NotNull
+    @Schema(description = "数据库id")
     private Integer databaseId;
 
     /**
      * 表名
      */
     @NotNull
+    @Schema(description = "表名")
     private String tableName;
 
     /**
      * 表名前缀
      */
+    @Schema(description = "表名前缀")
     private String tablePre;
 
     /**
      * 实体类后缀
      */
+    @Schema(description = "实体类后缀")
     private String entitySuff;
 }

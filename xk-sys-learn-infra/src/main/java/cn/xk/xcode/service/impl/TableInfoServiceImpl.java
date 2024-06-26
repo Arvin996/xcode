@@ -95,8 +95,7 @@ public class TableInfoServiceImpl extends ServiceImpl<TableInfoMapper, TableInfo
     public CommonResult<String> generateCode(GenerateCodeDto generateCodeDto) {
         CodeGenerate codeGenerate = SpringUtil.getBean(generateCodeDto.getCode() + "CodeGenerate", CodeGenerate.class);
         try {
-            String generate = codeGenerate.generate(generateCodeDto);
-            return CommonResult.success(generate);
+            return CommonResult.success(codeGenerate.getRealFilePath(generateCodeDto));
         } catch (Exception e) {
             throw new ServiceException("代码生成失败");
         }

@@ -1,11 +1,13 @@
 package cn.xk.xcode.service.impl.generate;
 
+import cn.xk.xcode.entity.CodeGen;
+import cn.xk.xcode.entity.DataSourceEntity;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
-import com.mybatisflex.codegen.config.GlobalConfig;
+import cn.xk.xcode.exception.core.ServerException;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.UUID;
 
 /**
@@ -18,39 +20,38 @@ import java.util.UUID;
 public class EntityCodeGenerate implements CodeGenerate{
 
     @Override
-    public GlobalConfig createGlobalConfig(File file, GenerateCodeDto generateCodeDto) {
-        //创建配置内容
-        GlobalConfig globalConfig = new GlobalConfig();
-        //设置根包
-        globalConfig.setBasePackage(generateCodeDto.getCode());
-        globalConfig.setSourceDir(file.getParent());
-//        //设置表前缀和只生成哪些表
-        globalConfig.setTablePrefix(generateCodeDto.getTablePre());
-        globalConfig.setGenerateTable(generateCodeDto.getTableName());
-        //设置生成 entity 并启用 Lombok
-        globalConfig.setEntityGenerateEnable(true);
-        globalConfig.setEntityWithLombok(true);
-        globalConfig.setEntityPackage(null);
-        globalConfig.setEntityClassSuffix(generateCodeDto.getEntitySuff());
-        //设置生成 mapper
-        globalConfig.setMapperGenerateEnable(false);
-        //设置生成 service
-        globalConfig.setServiceGenerateEnable(false);
-        //设置生成 serviceImpl
-        globalConfig.setServiceImplGenerateEnable(false);
-        //设置生成 mapperXml
-        globalConfig.setMapperXmlGenerateEnable(false);
-        ////设置生成 表结构对象
-        globalConfig.setTableDefGenerateEnable(false);
-        return globalConfig;
+    public CodeGen createCodeGen(Object o) {
+        GenerateCodeDto generateCodeDto = (GenerateCodeDto) o;
+        return CodeGen.builder()
+                .basePackage(generateCodeDto.getCode())
+                .entityWithLombok(true)
+                .mapperXmlGenerateEnable(false)
+                .serviceGenerateEnable(false)
+                .mapperGenerateEnable(false)
+                .entityGenerateEnable(true)
+                .serviceImplGenerateEnable(false)
+                .tableDefGenerateEnable(false)
+                .sourceDir(getTemplatePath())
+                .tablePrefix(generateCodeDto.getTablePre())
+                .tables(new String[]{generateCodeDto.getTableName()})
+                .entityPackage("temp")
+                .entityClassSuffix(generateCodeDto.getEntitySuff()).build();
     }
 
     @Override
-    public File createOutputFile() throws IOException {
-        String fid = UUID.randomUUID().toString();
-        fid = fid.replace("-", "").substring(0, 6);
-        File tempFile = File.createTempFile("temp" + fid, "entity");
-        tempFile.deleteOnExit();
-        return tempFile;
+    public DataSourceEntity createDataSourceEntity(Object o) {
+        GenerateCodeDto generateCodeDto = (GenerateCodeDto) o;
+        String url = generateCodeDto.getUrl();
+        String dbIp = url.substring(0, url.lastIndexOf(":"));
+        String dbPort = url.substring(url.lastIndexOf(":") + 1, url.lastIndexOf("/"));
+        return DataSourceEntity
+                .builder()
+                .dbIp(dbIp)
+                .dbPort(dbPort)
+                .dbName(generateCodeDto.getDatabaseName())
+                .username(generateCodeDto.getUserName())
+                .password(generateCodeDto.getPassword())
+                .build();
     }
+
 }

@@ -1,13 +1,19 @@
 package cn.xk.xcode.service.impl.generate;
 
+import cn.xk.xcode.entity.CodeGen;
+import cn.xk.xcode.entity.DataSourceEntity;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
+import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.generate.ICodeGenerate;
 import com.mybatisflex.codegen.Generator;
 import com.mybatisflex.codegen.config.GlobalConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @Author xuk
@@ -15,40 +21,47 @@ import java.io.IOException;
  * @Version 1.0
  * @Description CodeGenerate
  */
-public interface CodeGenerate
-{
-    default String generate(GenerateCodeDto generateCodeDto) throws IOException {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setUsername(generateCodeDto.getUserName());
-        dataSource.setPassword(generateCodeDto.getPassword());
-        String url = generateCodeDto.getUrl();
-        String databaseName = generateCodeDto.getDatabaseName();
-        String jdbcUrl = "jdbc:mysql://" + url + "/" + databaseName + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-        dataSource.setJdbcUrl(jdbcUrl);
-        File outputFile = createOutputFile();
-        GlobalConfig globalConfig = createGlobalConfig(outputFile, generateCodeDto);
-        Generator generator = new Generator(dataSource, globalConfig);
-        //生成代码
-        generator.generate();
-        File file = new File(outputFile.getParent() + "/" + generateCodeDto.getCode() + "/" + generateCodeDto.getCode());
-        File[] files = file.listFiles();
-        File file1 = files[0];
-        StringBuilder sb = new StringBuilder();
-        if ("java".equals(file1.getName().substring(file1.getName().lastIndexOf(".") + 1))){
-            //将文件内容输出为文本
-            FileInputStream fis = new FileInputStream(file1);
-            byte[] buffer = new byte[10];
-            while (fis.read(buffer) != -1) {
-                sb.append(new String(buffer));
-                buffer = new byte[10];
-            }
-            fis.close();
+public interface CodeGenerate extends ICodeGenerate{
 
-        }
-        return sb.toString();
+    default String getTemplatePath() {
+        return System.getProperty("user.dir");
     }
 
-    GlobalConfig createGlobalConfig(File file, GenerateCodeDto generateCodeDto);
+    default CodeGen createCodeGen() {
+        return null;
+    }
 
-    File createOutputFile() throws IOException;
+    default DataSourceEntity createDataSourceEntity() {
+        return null;
+    }
+
+    default String getRealFilePath(Object o) throws IOException {
+        // 生成代码
+        // 这里要考虑并发问题 文件重复生成的问题
+        String pathPrefix = UUID.randomUUID().toString().replace("_", "").substring(0, 6);
+        GenerateCodeDto generateCodeDto = (GenerateCodeDto) o;
+        generateCodeDto.setCode(pathPrefix);
+        doGenerate(generateCodeDto);
+        String fileUrl = getTemplatePath() + "/"
+                + generateCodeDto.getCode() + "/"
+                + "temp";
+        File file = new File(fileUrl);
+        File[] files = file.listFiles();
+        if (files == null || 0 == files.length) {
+            throw new ServerException(500, "生成代码失败");
+        }
+        File rFile = files[0];
+        rFile.deleteOnExit();
+        // 将文件内容输出为字符串
+        byte[] buffer = new byte[10];
+        StringBuilder sb = new StringBuilder();
+        FileInputStream fis = new FileInputStream(fileUrl);
+        while (fis.read(buffer) != -1) {
+            sb.append(new String(buffer));
+            buffer = new byte[10];
+        }
+        fis.close();
+        rFile.deleteOnExit();
+        return sb.toString();
+    }
 }

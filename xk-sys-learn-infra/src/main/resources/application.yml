@@ -3,15 +3,6 @@ common-variables:
   nacos-addr: 127.0.0.1:8848
 
 spring:
-  main:
-    banner-mode: console
-  banner:
-    charset: UTF-8
-    image:
-      margin: 0
-      height: 10
-      invert: false
-      location: classpath:QIP-C.jpg
   profiles:
     active: test
   application:

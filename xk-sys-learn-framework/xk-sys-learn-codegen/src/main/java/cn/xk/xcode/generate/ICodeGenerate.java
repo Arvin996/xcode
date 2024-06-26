@@ -6,6 +6,8 @@ import com.mybatisflex.codegen.Generator;
 import com.mybatisflex.codegen.config.GlobalConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.util.Objects;
+
 /**
  * @Author xuk
  * @Date 2024/6/26 10:52
@@ -21,9 +23,24 @@ public interface ICodeGenerate {
         generator.generate();
     }
 
+    default void doGenerate(Object o) {
+        Generator generator = new Generator(createDataSource(createDataSourceEntity(o))
+                , createGlobalConfig(createCodeGen(o)));
+        //生成代码
+        generator.generate();
+    }
+
     CodeGen createCodeGen();
 
     DataSourceEntity createDataSourceEntity();
+
+    default CodeGen createCodeGen(Object o){
+        return null;
+    }
+
+    default DataSourceEntity createDataSourceEntity(Object o){
+        return null;
+    }
 
     default HikariDataSource createDataSource(DataSourceEntity dataSourceEntity) {
         HikariDataSource dataSource = new HikariDataSource();

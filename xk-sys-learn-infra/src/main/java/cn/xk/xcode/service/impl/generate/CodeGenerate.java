@@ -35,11 +35,33 @@ public interface CodeGenerate extends ICodeGenerate{
         return null;
     }
 
-    default String getRealFilePath(Object o) throws IOException {
+    CodeGen createCodeGen(GenerateCodeDto generateCodeDto);
+
+    default DataSourceEntity createDataSourceEntity(GenerateCodeDto generateCodeDto){
+        String url = generateCodeDto.getUrl();
+        String dbIp = url.substring(0, url.lastIndexOf(":"));
+        String dbPort = url.substring(url.lastIndexOf(":") + 1, url.lastIndexOf("/"));
+        return DataSourceEntity
+                .builder()
+                .dbIp(dbIp)
+                .dbPort(dbPort)
+                .dbName(generateCodeDto.getDatabaseName())
+                .username(generateCodeDto.getUserName())
+                .password(generateCodeDto.getPassword())
+                .build();
+    }
+
+    default void doGenerate(GenerateCodeDto generateCodeDto){
+        Generator generator = new Generator(createDataSource(createDataSourceEntity(generateCodeDto))
+                , createGlobalConfig(createCodeGen(generateCodeDto)));
+        //生成代码
+        generator.generate();
+    }
+
+    default String getGenerateFileContent(GenerateCodeDto generateCodeDto) throws IOException {
         // 生成代码
         // 这里要考虑并发问题 文件重复生成的问题
         String pathPrefix = UUID.randomUUID().toString().replace("_", "").substring(0, 6);
-        GenerateCodeDto generateCodeDto = (GenerateCodeDto) o;
         generateCodeDto.setCode(pathPrefix);
         doGenerate(generateCodeDto);
         String fileUrl = getTemplatePath() + "/"

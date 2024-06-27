@@ -23,24 +23,9 @@ public interface ICodeGenerate {
         generator.generate();
     }
 
-    default void doGenerate(Object o) {
-        Generator generator = new Generator(createDataSource(createDataSourceEntity(o))
-                , createGlobalConfig(createCodeGen(o)));
-        //生成代码
-        generator.generate();
-    }
-
     CodeGen createCodeGen();
 
     DataSourceEntity createDataSourceEntity();
-
-    default CodeGen createCodeGen(Object o){
-        return null;
-    }
-
-    default DataSourceEntity createDataSourceEntity(Object o){
-        return null;
-    }
 
     default HikariDataSource createDataSource(DataSourceEntity dataSourceEntity) {
         HikariDataSource dataSource = new HikariDataSource();

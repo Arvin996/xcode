@@ -63,7 +63,7 @@ public class TableInfoController {
 
     @Operation(description = "刷新数据库表")
     @PostMapping("/refreshTables")
-    public CommonResult<List<TableInfoPo>> queryTable(@Validated @RequestBody UpdateDatabaseConnInfoPoDto updateDatabaseConnInfoPoDto) {
+    public CommonResult<List<TableInfoPo>> refreshTables(@Validated @RequestBody UpdateDatabaseConnInfoPoDto updateDatabaseConnInfoPoDto) {
         return CommonResult.success(tableInfoService.refreshTables(updateDatabaseConnInfoPoDto));
     }
 

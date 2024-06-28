@@ -11,9 +11,6 @@
     <artifactId>xk-sys-learn-infra</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>xk-sys-learn-infra</name>
-    <modules>
-        <module>xk-sys-learn-api</module>
-    </modules>
     <description>xk-sys-learn-infra 1.提供统一的文件minio服务 2.提供代码生成功能 实体类 service层等</description>
     <properties>
         <java.version>1.8</java.version>
@@ -24,11 +21,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
@@ -43,8 +35,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-infra-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

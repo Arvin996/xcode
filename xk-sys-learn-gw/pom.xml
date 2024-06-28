@@ -6,12 +6,12 @@
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>xk-sys-learn-api</artifactId>
+    <artifactId>xk-sys-learn-gw</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>xk-sys-learn-api</name>
-    <description>由于此模块的文件接口一定会被其它模块调用，故抽象出此文件公共模块用于其它模块的调用</description>
+    <name>xk-sys-learn-gw</name>
+    <description>提供网关支持 灰度发布 以及统一的swagger接口管理</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,24 +22,24 @@
     <dependencies>
 
         <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 
-         <!-- RPC 远程调用相关 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <optional>true</optional>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
 
     </dependencies>
-
 </project>

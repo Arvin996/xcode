@@ -30,7 +30,7 @@ public class SysFilesPo implements Serializable {
      * 文件id  md5值
      */
     @Id
-    private Long id;
+    private String id;
 
     /**
      * 文件名

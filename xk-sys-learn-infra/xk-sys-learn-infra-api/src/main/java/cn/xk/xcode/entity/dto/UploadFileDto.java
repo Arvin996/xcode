@@ -1,11 +1,14 @@
 package cn.xk.xcode.entity.dto;
 
+import cn.xk.xcode.enums.MinioBucketType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @Author xuk
@@ -14,18 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
  * @Description UploadFileDto
  */
 @Data
+@Schema(description = "上传文件dto")
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Schema(description = "上传文件dto")
 public class UploadFileDto
 {
+    @NotNull
     @Schema(description = "文件内容")
-    private byte[] fileContent;
+    private MultipartFile file;
 
+    @NotNull
     @Schema(description = "文件桶")
-    private String bucket;
+    private MinioBucketType bucketType;
 
     @Schema(description = "如果文件时.mp3,是否需要将mp3文件转为MP4格式")
-    boolean isMap3ConvertToMp4 = false;
+    private boolean isNeedConvertToMp4 = false;
 }

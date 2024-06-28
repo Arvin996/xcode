@@ -1,6 +1,8 @@
 package cn.xk.xcode.entity.po;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,13 +31,13 @@ public class SysFilesProcessPo implements Serializable {
     /**
      * 文件主键id
      */
-    @Id
-    private Long id;
+    @Id(keyType = KeyType.Auto)
+    private int id;
 
     /**
      * 对应于file表中的id 表示要进行转码
      */
-    private Long fileId;
+    private String fileId;
 
     /**
      * 文件名
@@ -60,6 +62,7 @@ public class SysFilesProcessPo implements Serializable {
     /**
      * 上传时间
      */
+    @Column(onInsertValue = "now()")
     private LocalDateTime uploadTime;
 
     /**

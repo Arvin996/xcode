@@ -7,6 +7,9 @@ import cn.xk.xcode.feignclient.FileApi;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.SysFilesService;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,22 +29,28 @@ public class FilesController implements FileApi
     private SysFilesService sysFilesService;
 
     @Override
+    @PostMapping("/uploadFile")
     public CommonResult<FileResultVo> uploadFile(UploadFileDto uploadFileDto) {
         return CommonResult.success(sysFilesService.uploadFile(uploadFileDto));
     }
 
+
     @Override
-    public CommonResult<String> delFile(String fileId) {
+    @GetMapping("/delFile/{fileId}")
+    public CommonResult<String> delFile(@PathVariable(name = "fileId") String fileId) {
         return CommonResult.success(sysFilesService.delFile(fileId));
     }
 
     @Override
+    @PostMapping("/updateFile")
     public CommonResult<String> updateFile(UpdateFileDto updateFileDto) {
         return CommonResult.success(sysFilesService.updateFile(updateFileDto));
     }
 
+
     @Override
-    public CommonResult<byte[]> downloadFile(String fileId) throws IOException {
+    @GetMapping("/downloadFile/{fileId}")
+    public CommonResult<byte[]> downloadFile(@PathVariable(name = "fileId") String fileId) throws IOException {
         return CommonResult.success(sysFilesService.downloadFile(fileId));
     }
 }

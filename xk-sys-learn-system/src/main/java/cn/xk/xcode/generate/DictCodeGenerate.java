@@ -28,7 +28,7 @@ public class DictCodeGenerate implements ICodeGenerate
                 .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/java")
                 .tablePrefix("system_")
                 .tables(new String[]{"system_dict"})
-                .mapperXmlPath(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();

@@ -25,7 +25,7 @@ public class FileCodeGenerate implements ICodeGenerate{
                 .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-infra/src/main/java")
                 .tablePrefix("infra_")
                 .tables(new String[]{"infra_sys_files", "infra_sys_files_process"})
-                .mapperXmlPath(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-infra/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-infra/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();

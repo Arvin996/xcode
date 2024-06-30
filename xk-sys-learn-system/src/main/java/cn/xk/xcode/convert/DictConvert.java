@@ -1,6 +1,6 @@
 package cn.xk.xcode.convert;
 
-import cn.xk.xcode.dict.entity.DataTableDict;
+import cn.xk.xcode.entity.DataTableDict;
 import cn.xk.xcode.entity.dto.dict.UpdateDictDto;
 import cn.xk.xcode.entity.po.DictPo;
 import org.mapstruct.Mapper;

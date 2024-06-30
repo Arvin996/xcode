@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @Tag(name = "数据库信息接口")
-@RequestMapping("/infra/dbinfo")
+@RequestMapping("/dbinfo")
 public class DataBaseInfoController {
 
     @Resource

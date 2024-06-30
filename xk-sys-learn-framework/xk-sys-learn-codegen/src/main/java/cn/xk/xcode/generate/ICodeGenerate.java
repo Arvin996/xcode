@@ -50,8 +50,16 @@ public interface ICodeGenerate {
         //设置生成 entity 并启用 Lombok
         globalConfig.setEntityGenerateEnable(codeGen.isEntityGenerateEnable());
         globalConfig.setEntityWithLombok(codeGen.isEntityWithLombok());
+
+        // ******
         globalConfig.setEntityPackage(codeGen.getEntityPackage());
         globalConfig.setTableDefPackage(codeGen.getTableDefPackage());
+        globalConfig.setServicePackage(codeGen.getServicePackage());
+        globalConfig.setServiceImplPackage(codeGen.getServiceImplPackage());
+        globalConfig.setMapperPackage(codeGen.getMapperPackage());
+        globalConfig.setMapperXmlPath(codeGen.getMapperXmlPackage());
+
+
         globalConfig.setEntityClassSuffix(codeGen.getEntityClassSuffix());
         //设置生成 mapper
         globalConfig.setMapperGenerateEnable(codeGen.isMapperGenerateEnable());
@@ -61,7 +69,7 @@ public interface ICodeGenerate {
         globalConfig.setServiceImplGenerateEnable(codeGen.isServiceImplGenerateEnable());
         //设置生成 mapperXml
         globalConfig.setMapperXmlGenerateEnable(codeGen.isMapperXmlGenerateEnable());
-        globalConfig.setMapperXmlPath(codeGen.getMapperXmlPath());
+
         ////设置生成 表结构对象
         globalConfig.setTableDefGenerateEnable(codeGen.isTableDefGenerateEnable());
         return globalConfig;

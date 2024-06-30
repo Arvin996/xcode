@@ -38,7 +38,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.ROLE_ADD_FAILED;
  * @description
  */
 @Tag(name = "角色管理")
-@RestController
+@RestController("/role")
 public class RoleController {
 
     @Resource

@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -32,7 +29,7 @@ public interface FileApi
     CommonResult<FileResultVo> uploadFile(@Validated @RequestBody UploadFileDto uploadFileDto);
 
     @Operation(summary = "删除文件")
-    @PostMapping("/delFile/#{fileId}")
+    @GetMapping("/delFile/{fileId}")
     CommonResult<String> delFile(@PathVariable(name = "fileId") String fileId);
 
     @Operation(summary = "更新文件")
@@ -40,6 +37,6 @@ public interface FileApi
     CommonResult<String> updateFile(@Validated @RequestBody UpdateFileDto updateFileDto);
 
     @Operation(summary = "下载文件")
-    @PostMapping("/downloadFile/#{fileId}")
+    @GetMapping("/downloadFile/{fileId}")
     CommonResult<byte[]> downloadFile(@PathVariable(name = "fileId") String fileId) throws IOException;
 }

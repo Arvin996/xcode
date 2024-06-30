@@ -21,7 +21,7 @@ public class MoneyUtil
     /**
      * 百分比对应的 BigDecimal 对象
      */
-    public static final BigDecimal PERCENT_100 = BigDecimal.valueOf(100);
+    public static final BigDecimal PERCENT_100 = BigDecimal.valueOf(100L);
 
     /**
      * 计算百分比金额，四舍五入

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CodeGen
 {
+    // todo 配置生成的代码包 而不是直接指定路径
     private String basePackage = "cn.xk.xcode";
 
     private String sourceDir;
@@ -39,9 +40,15 @@ public class CodeGen
 
     private boolean entityWithLombok = true;
 
-    private String mapperXmlPath;
-
     private String entityPackage = "cn.xk.xcode.entity.po";
+
+    private String serviceImplPackage = "cn.xk.xcode.service.impl";
+
+    private String servicePackage = "cn.xk.xcode.service";
+
+    private String mapperPackage = "cn.xk.xcode.mapper";
+
+    private String mapperXmlPackage = "cn.xk.xcode.mapper.xml";
 
     private String tableDefPackage = "cn.xk.xcode.entity.def";
 

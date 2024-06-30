@@ -28,7 +28,7 @@ public class UserRoleResCodeGenerate implements ICodeGenerate {
                 .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/java")
                 .tablePrefix("system_")
                 .tables(new String[]{"system_user", "system_role", "system_resource", "system_user_role", "system_role_resource"})
-                .mapperXmlPath(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-system/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();

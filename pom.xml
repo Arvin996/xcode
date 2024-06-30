@@ -11,6 +11,7 @@
         <module>xk-sys-learn-framework</module>
         <module>xk-sys-learn-infra</module>
         <module>xk-sys-learn-system</module>
+        <module>xk-sys-learn-gateway</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

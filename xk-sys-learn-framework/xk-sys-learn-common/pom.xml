@@ -12,6 +12,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>xk-sys-learn-common</name>
     <packaging>jar</packaging>
+    <description>提供工具类和公共返回类</description>
 
     <properties>
         <java.version>1.8</java.version>

@@ -29,6 +29,10 @@ public class GenerateCodeDto extends UpdateDatabaseConnInfoPoDto
     @Schema(description = "生成类型")
     private String code;
 
+    // 这里注意指定的包名 就不能指定路径了哦
+    @Schema(description = "生成的包名")
+    private String packageName;
+
     /**
      * 表名前缀
      */

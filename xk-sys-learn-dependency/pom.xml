@@ -34,11 +34,17 @@
         <okhttp.version>4.11.0</okhttp.version>
         <google.zxing.version>3.5.0</google.zxing.version>
         <google.javase.version>3.3.3</google.javase.version>
+        <knife4j-gw.version>4.3.0</knife4j-gw.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+                <version>${knife4j-gw.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

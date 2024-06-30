@@ -1,5 +1,6 @@
 package cn.xk.xcode.service.impl.generate;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,8 @@ public class ImplCodeGenerate implements CodeGenerate
 
     @Override
     public CodeGen createCodeGen(GenerateCodeDto generateCodeDto) {
-        return CodeGen.builder()
-                .basePackage(generateCodeDto.getCode())
-                .entityWithLombok(true)
+        CodeGen codeGen = CodeGen.builder()
+                .entityWithLombok(false)
                 .mapperXmlGenerateEnable(false)
                 .serviceGenerateEnable(false)
                 .mapperGenerateEnable(false)
@@ -26,9 +26,14 @@ public class ImplCodeGenerate implements CodeGenerate
                 .serviceImplGenerateEnable(true)
                 .tableDefGenerateEnable(false)
                 .sourceDir(getTemplatePath())
+                .serviceImplPackage("temp." + generateCodeDto.getCode())
                 .tablePrefix(generateCodeDto.getTablePre())
                 .tables(new String[]{generateCodeDto.getTableName()})
-                .entityPackage("temp")
                 .entityClassSuffix(generateCodeDto.getEntitySuff()).build();
+        if (ObjectUtil.isNotNull(generateCodeDto.getPackageName())){
+            codeGen.setServiceImplPackage(generateCodeDto.getPackageName().replace(".", "/"));
+            codeGen.setSourceDir(getTemplatePath() + "/" + "temp");
+        }
+        return codeGen;
     }
 }

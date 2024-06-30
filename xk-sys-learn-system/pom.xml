@@ -29,12 +29,6 @@
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-security</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-codegen</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -80,6 +74,17 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-oauth2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-dict</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-security</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
 

@@ -1,7 +1,7 @@
 package cn.xk.xcode.config;
 import cn.xk.xcode.convert.DictConvert;
-import cn.xk.xcode.dict.entity.DataTableDict;
-import cn.xk.xcode.dict.handler.DataBaseDictLoader;
+import cn.xk.xcode.entity.DataTableDict;
+import cn.xk.xcode.handler.DataBaseDictLoader;
 import cn.xk.xcode.service.DictService;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;

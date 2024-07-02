@@ -17,6 +17,12 @@
         <module>xk-sys-learn-security</module>
         <module>xk-sys-learn-codegen</module>
         <module>xk-sys-learn-dict</module>
+        <module>xk-sys-learn-redis</module>
+        <module>xk-sys-learn-websocket</module>
+        <module>xk-sys-learn-ip</module>
+        <module>xk-sys-learn-xxl-job</module>
+        <module>xk-sys-learn-log</module>
+        <module>xk-sys-learn-rocketmq</module>
     </modules>
     <description>xk-sys-learn-framework</description>
 

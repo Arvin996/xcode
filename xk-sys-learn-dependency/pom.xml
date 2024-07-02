@@ -35,11 +35,17 @@
         <google.zxing.version>3.5.0</google.zxing.version>
         <google.javase.version>3.3.3</google.javase.version>
         <knife4j-gw.version>4.3.0</knife4j-gw.version>
+        <ip2region.version>2.7.0</ip2region.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>ip2region</artifactId>
+                <version>${ip2region.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-gateway-spring-boot-starter</artifactId>

@@ -6,7 +6,6 @@ import cn.xk.xcode.message.MessageEntity;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 /**
  * @Author xuk

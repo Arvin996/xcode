@@ -25,9 +25,14 @@ public class GwAccessLog
      */
     private String userId;
     /**
-     * 用户类型
+     * 用户授权类型
      */
-    private String userType;
+    private String grantType;
+
+    /**
+     * 用户访问ip所在地址
+     */
+    private String Address;
     /**
      * 路由
      *

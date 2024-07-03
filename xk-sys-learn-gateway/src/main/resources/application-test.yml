@@ -8,6 +8,9 @@ spring:
         # Nacos 配置中心
         namespace: xk-learn
         group: DEFAULT_GROUP
+        metadata:
+          version: 1.0.0
+
       config:
         server-addr: ${common-variables.nacos-addr}
         file-extension: yaml

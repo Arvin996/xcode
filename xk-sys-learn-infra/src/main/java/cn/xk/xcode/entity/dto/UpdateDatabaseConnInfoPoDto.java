@@ -31,6 +31,7 @@ public class UpdateDatabaseConnInfoPoDto
     private String databaseName;
 
     /**
+     * todo ip和端口单独维护会更好一点
      * 数据库连接地址 ip:port 只支持mysql
      */
     @Schema(description = "数据库连接地址 ip:port 只支持mysql")

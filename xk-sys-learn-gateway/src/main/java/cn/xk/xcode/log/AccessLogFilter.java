@@ -53,7 +53,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
         // 方式2 控制台输出
         Map<String, Object> values = MapUtil.newHashMap(15, true); // 手工拼接，保证排序；15 保证不用扩容
         values.put("userId", gatewayLog.getUserId());
-        values.put("userType", gatewayLog.getUserType());
+        values.put("grantType", gatewayLog.getGrantType());
         values.put("routeId", gatewayLog.getRoute() != null ? gatewayLog.getRoute().getId() : null);
         values.put("schema", gatewayLog.getSchema());
         values.put("requestUrl", gatewayLog.getRequestUrl());
@@ -80,6 +80,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
         }
         ServerHttpRequest request = exchange.getRequest();
         // TODO traceId 可以直接设置到请求头或者前端传递
+        // todo 根据ip 得到用户地址
         GwAccessLog gwAccessLog = new GwAccessLog();
         gwAccessLog.setRoute(exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR));
         gwAccessLog.setSchema(request.getURI().getScheme());
@@ -125,6 +126,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
                             gatewayLog.getEndTime()).toMillis()));
                     // 设置其它字段
                     gatewayLog.setUserId(StpUtil.getLoginIdAsString());
+                    gatewayLog.setGrantType((String) StpUtil.getExtra("grantType"));
               //      gatewayLog.setUserType(StpUtil.getExtra("userType").toString());
                     gatewayLog.setResponseHeaders(response.getHeaders());
                     gatewayLog.setHttpStatus(response.getStatusCode());

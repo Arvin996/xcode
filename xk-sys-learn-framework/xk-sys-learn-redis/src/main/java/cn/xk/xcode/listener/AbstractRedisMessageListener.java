@@ -2,6 +2,7 @@ package cn.xk.xcode.listener;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.xk.xcode.core.MessageInterceptorHolder;
 import cn.xk.xcode.core.RedisMqTemplate;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.message.MessageEntity;
@@ -19,7 +20,7 @@ public abstract class AbstractRedisMessageListener implements MessageListener {
 
     public abstract String channel();
 
-    private final RedisMqTemplate redisMqTemplate = SpringUtil.getBean(RedisMqTemplate.class);
+    private final MessageInterceptorHolder messageInterceptorHolder = SpringUtil.getBean(MessageInterceptorHolder.class);
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
@@ -32,19 +33,15 @@ public abstract class AbstractRedisMessageListener implements MessageListener {
     public abstract void onMessage(MessageEntity messageEntity);
 
     private void before(MessageEntity messageEntity) {
-        Assert.isNull(redisMqTemplate, () -> {
-            throw new ServiceException("redisMqTemplate is null");
+        Assert.isNull(messageInterceptorHolder, () -> {
+            throw new ServiceException("messageInterceptorHolder is null");
         });
-        redisMqTemplate.getMessageInterceptorHolder().getConsumeMessageInterceptor()
-                .forEach(interceptor -> {
-                    interceptor.consumeMessageBefore(messageEntity);
-                });
+        messageInterceptorHolder.getConsumeMessageInterceptor()
+                .forEach(interceptor -> interceptor.consumeMessageBefore(messageEntity));
     }
 
     private void after(MessageEntity messageEntity) {
-        redisMqTemplate.getMessageInterceptorHolder().getConsumeMessageInterceptor()
-                .forEach(interceptor -> {
-                    interceptor.consumeMessageAfter(messageEntity);
-                });
+        messageInterceptorHolder.getConsumeMessageInterceptor()
+                .forEach(interceptor -> interceptor.consumeMessageAfter(messageEntity));
     }
 }

@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
  * @Date 2024/7/2 11:24
  * @Version 1.0
  * @Description WebSocketMessageHandler
+ * ws服务订阅redis的消息 然后redis再通过ws发给其他客户端登录单用户
  */
 @Component
 @Slf4j
@@ -39,7 +40,6 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
 
     @Resource
     WsRedisStatisticsAndManage wsRedisStatisticsAndManage;
-
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {

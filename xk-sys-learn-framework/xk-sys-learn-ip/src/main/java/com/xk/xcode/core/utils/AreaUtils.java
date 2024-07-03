@@ -22,6 +22,7 @@ import static cn.xk.xcode.utils.collections.CollectionUtil.convertList;
  * @description
  */
 public class AreaUtils {
+
     private final static AreaUtils INSTANCE = new AreaUtils();
 
     private final static Map<Integer, Area> areas = new HashMap<>();

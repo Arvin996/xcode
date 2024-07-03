@@ -30,15 +30,16 @@ public abstract class AbstractLoginHandler {
     public SaLoginModel bulidSaLoginModel(String clientId, LoginInfoDto loginInfoDto){
         SaLoginModel saLoginModel = SaLoginModel.create();
         saLoginModel.setDevice(loginInfoDto.getLoginDevType());
-        saLoginModel.setExtraData(createExtraData(clientId, loginInfoDto.getUsername()));
+        saLoginModel.setExtraData(createExtraData(clientId, loginInfoDto.getUsername(), loginInfoDto.getGrantType()));
         return saLoginModel;
     }
 
-    public Map<String, Object> createExtraData(String clientId, String username) {
+    public Map<String, Object> createExtraData(String clientId, String username, String loginType) {
         Map<String, Object> extraData = new HashMap<>();
         extraData.put("clientId", clientId);
-        extraData.put("username", username);
+        extraData.put("loginId", username);
         extraData.put("sys_key", "xk-sys-learn");
+        extraData.put("loginType", loginType);
         return extraData;
     }
 

@@ -12,7 +12,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>xk-sys-learn-api</name>
     <packaging>jar</packaging>
-    <description>由于此模块的文件接口一定会被其它模块调用，故抽象出此文件公共模块用于其它模块的调用</description>
+    <description>
+        1. 由于此模块的文件接口一定会被其它模块调用，故抽象出此文件公共模块用于其它模块的调用
+        2. 提供公共的信息监控上传接口（不同服务器的信息 由system服务上传）
+    </description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

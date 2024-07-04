@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public abstract class BaseMessage
 {
     // 消息主键 例如订单id等
-    protected String bizKey;
+    protected String bizKey = "default";
 
     // 消息来源
     protected String messageSource;

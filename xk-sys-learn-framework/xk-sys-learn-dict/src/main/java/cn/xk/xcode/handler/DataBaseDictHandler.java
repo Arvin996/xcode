@@ -50,48 +50,4 @@ public class DataBaseDictHandler extends AbstractDataDictHandler {
         }
     }
 
-    public DataTableDict get(String parentId, String code) {
-        List<DataTableDict> dataTableDictList = cache.getOrDefault(parentId, null);
-        if (Objects.isNull(dataTableDictList)) {
-            return null;
-        }
-        return dataTableDictList.stream().filter(d -> d.getCode().equals(code)).findFirst().orElse(null);
-    }
-
-    public String getValue(String parentId, String code) {
-        DataTableDict dataTableDict = get(parentId, code);
-        if (Objects.isNull(dataTableDict)) {
-            return null;
-        }
-        return dataTableDict.getName();
-    }
-
-    public String getNote(String parentId, String code) {
-        DataTableDict dataTableDict = get(parentId, code);
-        if (Objects.isNull(dataTableDict)) {
-            return null;
-        }
-        return dataTableDict.getNote();
-    }
-
-    public String getPad(String parentId, String code) {
-        DataTableDict dataTableDict = get(parentId, code);
-        if (Objects.isNull(dataTableDict)) {
-            return null;
-        }
-        return dataTableDict.getPad();
-    }
-
-    public List<DataTableDict> getListBtParId(String parentId) {
-        return cache.getOrDefault(parentId, new ArrayList<>());
-    }
-
-    public List<String> getListCodeByProperty(String parentId, Function<DataTableDict, String> func) {
-        return getListBtParId(parentId).stream().map(func).collect(Collectors.toList());
-    }
-
-    public String getProperty(String parentId, String code, Function<DataTableDict, String> func) {
-        return cache.get(parentId).stream().filter(d -> d.getCode().equals(code)).map(func).findFirst().orElse(null);
-    }
-
 }

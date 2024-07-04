@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
 
 import javax.annotation.Resource;
 
@@ -18,10 +19,14 @@ import javax.annotation.Resource;
  * // todo 进一步抽象
  */
 @Slf4j
-public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage>{
-    public static final int DEFAULT_RETRY_TIMES = 3;
+public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> implements RocketMQListener<T> {
 
     public static final int MAX_RETRY_TIMES = 5;
+
+    @Override
+    public void onMessage(T message) {
+        dispatchMessage(message);
+    }
 
     private static final int DELAY_LEVEL = 2;
 

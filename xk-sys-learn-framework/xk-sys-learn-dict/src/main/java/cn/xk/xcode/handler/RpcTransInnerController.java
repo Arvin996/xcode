@@ -17,11 +17,8 @@ import javax.annotation.Resource;
 @RestController
 public class RpcTransInnerController
 {
-    @Resource
-    private DictContext dictContext;
-
     @PostMapping("/rpc/trans")
     public String rpcTrans(@RequestBody DataTableDict dataTableDict){
-        return dictContext.getValue(dataTableDict.getParId(), dataTableDict.getCode());
+        return DictContext.getValue(dataTableDict.getParId(), dataTableDict.getCode());
     }
 }

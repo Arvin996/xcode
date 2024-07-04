@@ -1,10 +1,9 @@
 package cn.xk.xcode.core;
 
 import cn.hutool.json.JSONUtil;
-import cn.xk.xcode.interceptor.MessageInterceptor;
+import cn.xk.xcode.message.Header;
 import cn.xk.xcode.message.MessageEntity;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -28,6 +27,24 @@ public class RedisMqTemplate {
 
     @Resource(name = "messageInterceptorHolder")
     private MessageInterceptorHolder messageInterceptorHolder;
+
+    public void sendMessage(String msgType, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll){
+        sendMessage(msgType, "default", messageContent, fromUser, toUsers, pushAll);
+    }
+
+    public void sendMessage(String msgType, String msgChannel, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll){
+        MessageEntity messageEntity = new MessageEntity();
+        Header header = new Header();
+        header.setType(msgType);
+        header.setChannel(msgChannel);
+        messageEntity.setHeader(header);
+        messageEntity.setData(messageContent);
+        messageEntity.setFromUser(fromUser);
+        messageEntity.setToUsers(toUsers);
+        messageEntity.setToPushAll(pushAll);
+        sendMessage(messageEntity);
+    }
+
 
     public void sendMessage(MessageEntity message) {
         before(message);

@@ -8,6 +8,7 @@ import org.apache.rocketmq.spring.support.RocketMQMessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -23,13 +24,17 @@ import java.util.List;
  * @Description RocketMQEnhanceAutoConfiguration
  */
 @EnableConfigurationProperties(RocketEnhanceProperties.class)
+@Configuration
 public class RocketMQEnhanceConfig
 {
     @Resource
     private RocketEnhanceProperties rocketEnhanceProperties;
 
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
+
     @Bean
-    public RocketMQEnhanceTemplate rocketMQEnhanceTemplate(RocketMQTemplate rocketMQTemplate){
+    public RocketMQEnhanceTemplate rocketMQEnhanceTemplate(){
         return new RocketMQEnhanceTemplate(rocketMQTemplate, rocketEnhanceProperties);
     }
 

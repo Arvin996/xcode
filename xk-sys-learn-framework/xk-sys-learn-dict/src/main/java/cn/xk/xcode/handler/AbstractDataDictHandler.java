@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationListener;
 
 import java.util.*;
 
+import static cn.xk.xcode.context.DictContext.GLOBAL_DICT_CACHE;
+
 /**
  * @Author xuk
  * @Date 2024/5/30 15:19
@@ -16,10 +18,11 @@ import java.util.*;
 @Slf4j
 public abstract class AbstractDataDictHandler implements ApplicationListener<TableDictEvent> {
 
+    // 这个要唯一 要修改
     protected Map<String, List<DataTableDict>> cache;
 
     public AbstractDataDictHandler() {
-        cache = new HashMap<>();
+        cache = GLOBAL_DICT_CACHE;
     }
 
     @Override

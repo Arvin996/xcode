@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
  * @date 2024/6/28 19:46
  * @description 网关访问日志
  */
+@NoArgsConstructor
 @Data
 public class GwAccessLog
 {
@@ -25,7 +27,7 @@ public class GwAccessLog
     /**
      * 用户类型
      */
-    private String userType;
+    private String LoginType;
     /**
      * 路由
      *

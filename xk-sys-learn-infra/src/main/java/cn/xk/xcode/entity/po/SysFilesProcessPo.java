@@ -60,6 +60,11 @@ public class SysFilesProcessPo implements Serializable {
     private String status;
 
     /**
+     * 失败次数 最大为3
+     */
+    private String failCount;
+
+    /**
      * 上传时间
      */
     @Column(onInsertValue = "now()")

@@ -3,6 +3,8 @@ package cn.xk.xcode.service;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.SysFilesProcessPo;
 
+import java.util.List;
+
 /**
  *  服务层。
  *
@@ -11,4 +13,7 @@ import cn.xk.xcode.entity.po.SysFilesProcessPo;
  */
 public interface SysFilesProcessService extends IService<SysFilesProcessPo> {
 
+    List<SysFilesProcessPo> getSysFilesProcessList(int shardIndex, int shardTotal, int processors);
+
+    boolean startTask(int id);
 }

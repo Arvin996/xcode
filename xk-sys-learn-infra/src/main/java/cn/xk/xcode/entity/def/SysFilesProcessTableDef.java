@@ -50,6 +50,11 @@ public class SysFilesProcessTableDef extends TableDef {
     public final QueryColumn FILE_NAME = new QueryColumn(this, "file_name");
 
     /**
+     * 失败次数
+     */
+    public final QueryColumn FAIL_COUNT = new QueryColumn(this, "fail_count");
+
+    /**
      * 文件在minio中的访问路劲
      */
     public final QueryColumn FILE_PATH = new QueryColumn(this, "file_path");
@@ -72,7 +77,7 @@ public class SysFilesProcessTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, FILE_ID, FILE_NAME, BUCKET, FILE_PATH, STATUS, UPLOAD_TIME, FINISH_TIME, ERR_MSG};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, FILE_ID, FILE_NAME, BUCKET, FILE_PATH, STATUS, UPLOAD_TIME, FINISH_TIME, ERR_MSG, FAIL_COUNT};
 
     public SysFilesProcessTableDef() {
         super("", "infra_sys_files_process");

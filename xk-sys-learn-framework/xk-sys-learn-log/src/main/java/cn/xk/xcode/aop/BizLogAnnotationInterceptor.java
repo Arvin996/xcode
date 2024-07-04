@@ -5,6 +5,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.annotation.BizLogRecord;
+import cn.xk.xcode.context.LogValueContext;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.entity.BizAccessLog;
 import cn.xk.xcode.exception.core.ServiceException;
@@ -95,7 +96,6 @@ public class BizLogAnnotationInterceptor implements MethodInterceptor {
         }
         bizAccessLog.setMethodParams(JSONUtil.toJsonStr(map));
         bizAccessLog.setTraceId(request.getHeader("traceId"));
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         bizAccessLog.setDesc(bizLogRecord.desc());
         bizAccessLog.setBizType(bizLogRecord.bizType());
         // spel处理
@@ -109,6 +109,8 @@ public class BizLogAnnotationInterceptor implements MethodInterceptor {
             log.error(e.getStackTrace().toString());
             throw new ServiceException(e.getMessage());
         }
+        // 清楚threadlocal
+        LogValueContext.clearVariable();
         stopWatch.stop();
         bizAccessLog.setEndTime(LocalDateTime.now());
         bizAccessLog.setDuration(stopWatch.getTotalTimeMillis());

@@ -3,6 +3,7 @@ package cn.xk.xcode.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author xuk
@@ -13,6 +14,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class DataTableDict
 {
     private String code;

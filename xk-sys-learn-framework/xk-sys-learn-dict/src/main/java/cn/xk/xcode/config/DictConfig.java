@@ -2,6 +2,7 @@ package cn.xk.xcode.config;
 
 import cn.xk.xcode.context.DictContext;
 import cn.xk.xcode.handler.DataBaseDictHandler;
+import cn.xk.xcode.handler.EnumDictHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.FeignClientBuilder;
 import org.springframework.context.ApplicationContext;
@@ -26,5 +27,15 @@ public class DictConfig
     @Bean
     public FeignClientBuilder feignClientBuilder(ApplicationContext applicationContext){
         return new FeignClientBuilder(applicationContext);
+    }
+    
+    @Bean
+    public DataBaseDictHandler dataBaseDictHandler(){
+        return new DataBaseDictHandler();
+    }
+
+    @Bean
+    public EnumDictHandler enumDictHandler(){
+        return new EnumDictHandler(dictEnumPackages);
     }
 }

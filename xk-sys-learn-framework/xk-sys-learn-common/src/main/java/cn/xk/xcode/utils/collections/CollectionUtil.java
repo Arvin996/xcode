@@ -200,4 +200,33 @@ public class CollectionUtil {
         }
         return from.stream().filter(filter).map(func).collect(Collectors.toList());
     }
+
+    public static <T> List<T> createEmptyList(){
+        return Collections.emptyList();
+    }
+
+    public static <T> Set<T> createEmptySet(){
+        return Collections.emptySet();
+    }
+
+    public static <K, V> Map<K, V> createEmptyMap(){
+        return Collections.emptyMap();
+    }
+
+    public static <T> List<T> createSingleList(T obj){
+        return Collections.singletonList(obj);
+    }
+
+    public static <T> Set<T> createSingleSet(T obj){
+        return Collections.singleton(obj);
+    }
+
+    public static  <K, V> Map<K, V> createSingleMap(K key, V value){
+        return Collections.singletonMap(key, value);
+    }
+
+    public static <T> boolean isEmpty(Collection<T> collection){
+        return collection == null || collection.isEmpty();
+    }
+
 }

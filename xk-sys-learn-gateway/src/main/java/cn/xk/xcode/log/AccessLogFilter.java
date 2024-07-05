@@ -127,6 +127,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
                     // 设置其它字段
                     gatewayLog.setUserId(StpUtil.getLoginIdAsString());
                     gatewayLog.setGrantType((String) StpUtil.getExtra("grantType"));
+                    // todo 用户类型可以考虑在system模块增加字段
               //      gatewayLog.setUserType(StpUtil.getExtra("userType").toString());
                     gatewayLog.setResponseHeaders(response.getHeaders());
                     gatewayLog.setHttpStatus(response.getStatusCode());

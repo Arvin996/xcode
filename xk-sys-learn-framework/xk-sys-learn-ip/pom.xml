@@ -6,9 +6,9 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
-
+    <version>${revision}</version>
     <artifactId>xk-sys-learn-ip</artifactId>
     <description>提供ip解析支持</description>
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <!-- IP地址检索 -->

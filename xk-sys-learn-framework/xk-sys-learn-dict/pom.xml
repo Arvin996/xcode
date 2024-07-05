@@ -5,10 +5,10 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>xk-sys-learn-dict</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>xk-sys-learn-dict</name>
     <description>xk-sys-learn-dict 提供字典服务以及字典自动转换功能 目前只集成了数据据字典 还未集成枚举类</description>
     <properties>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>

@@ -2,10 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cn.xk.xcode</groupId>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xk-sys-learn-build</artifactId>
+        <version>${revision}</version>
+        <relativePath>/xk-sys-learn-build/pom.xml</relativePath>
+    </parent>
     <artifactId>xk-sys-learn</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>xk-sys-learn</description>
+    <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
         <module>xk-sys-learn-framework</module>
@@ -43,7 +47,7 @@
             <dependency>
                 <groupId>cn.xk.xcode</groupId>
                 <artifactId>xk-sys-learn-dependency</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

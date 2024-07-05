@@ -5,10 +5,10 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>xk-sys-learn-security</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>xk-sys-learn-security</name>
     <description>xk-sys-learn-security</description>
     <packaging>jar</packaging>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
 

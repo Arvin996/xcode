@@ -16,4 +16,6 @@ public interface SysFilesProcessService extends IService<SysFilesProcessPo> {
     List<SysFilesProcessPo> getSysFilesProcessList(int shardIndex, int shardTotal, int processors);
 
     boolean startTask(int id);
+
+    void saveProcessFinishStatus(int taskId, String status, String originalFileId, String objectName, String msg);
 }

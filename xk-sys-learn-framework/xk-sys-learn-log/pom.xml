@@ -6,10 +6,11 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>xk-sys-learn-log</artifactId>
+    <version>${revision}</version>
     <description>提供日志接口服务 集成rocketmq异步传送日志信息</description>
 
     <properties>
@@ -23,13 +24,13 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-rocketmq</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
@@ -40,8 +41,9 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-security</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
+
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -52,7 +54,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-ip</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 </project>

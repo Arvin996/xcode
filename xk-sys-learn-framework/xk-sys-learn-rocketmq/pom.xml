@@ -6,11 +6,11 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>xk-sys-learn-rocketmq</artifactId>
-
+    <version>${revision}</version>
     <description>对rocketmq的发送和消费组件的二次封装</description>
 
     <properties>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
     </dependencies>

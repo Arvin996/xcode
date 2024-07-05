@@ -48,7 +48,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
     private CodecConfigurer codecConfigurer;
 
     private void writeAccessLog(GwAccessLog gatewayLog){
-        // todo 方式1：调用远程服务，记录到数据库中 后续会做一个统一的日志服务
+        // todo 方式1：使用消息队列，记录到数据库中 后续会做一个统一的日志服务
 
         // 方式2 控制台输出
         Map<String, Object> values = MapUtil.newHashMap(15, true); // 手工拼接，保证排序；15 保证不用扩容

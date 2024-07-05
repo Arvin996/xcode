@@ -5,6 +5,7 @@ import cn.xk.xcode.entity.po.SysFilesProcessPo;
 import cn.xk.xcode.service.MinioService;
 import cn.xk.xcode.service.SysFilesProcessService;
 import cn.xk.xcode.service.SysFilesService;
+import cn.xk.xcode.utils.MinioFileUtils;
 import cn.xk.xcode.utils.file.Mp4VideoUtil;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author xukai
@@ -67,7 +69,7 @@ public class TransformVideoJob {
                         try {
                             int taskId = sysFilesProcessPo.getId();
                             boolean b = sysFilesProcessService.startTask(taskId);
-                            if (!b){
+                            if (!b) {
                                 log.warn("抢占失败，任务已经开始处理，任务id：{}", taskId);
                                 return;
                             }
@@ -76,9 +78,11 @@ public class TransformVideoJob {
                             String filePath = sysFilesProcessPo.getFilePath();
                             String originalFileId = sysFilesProcessPo.getFileId();
                             InputStream stream = minioService.downloadFile(bucket, filePath);
-                            if (stream == null){
+                            if (stream == null) {
                                 log.error("下载文件失败，文件路径：{}", bucket + ":" + filePath);
                                 // todo 记录到数据库
+                                sysFilesProcessService.saveProcessFinishStatus(
+                                        taskId, "3", originalFileId, null, "下载文件失败");
                                 return;
                             }
                             File mp4File = null;
@@ -90,9 +94,11 @@ public class TransformVideoJob {
                                 mp3File = File.createTempFile("mp3", ".mp3");
                                 outputStream = new FileOutputStream(mp3File);
                                 IoUtil.copy(stream, outputStream);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 log.error("创建临时文件失败，信息：{}", e.getMessage());
                                 // todo 记录到数据库
+                                sysFilesProcessService.saveProcessFinishStatus(
+                                        taskId, "3", originalFileId, null, "创建临时文件失败");
                                 return;
                             }
                             // 开始转码
@@ -101,26 +107,45 @@ public class TransformVideoJob {
                                 Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpegPath, mp3File.getAbsolutePath()
                                         , mp4File.getName(), mp4File.getAbsolutePath());
                                 result = videoUtil.generateMp4();
-                                if (!result.equals("success")){
+                                if (!result.equals("success")) {
                                     log.error("转码失败, 文件路径{}", filePath);
                                     // todo 记录到数据库
+                                    sysFilesProcessService.saveProcessFinishStatus(
+                                            taskId, "3", originalFileId, null, "转码失败");
                                     return;
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 log.error("转码失败，信息：{}, 文件路径{}", e.getMessage(), filePath);
                                 // todo 记录到数据库
+                                sysFilesProcessService.saveProcessFinishStatus(
+                                        taskId, "3", originalFileId, null, "转码失败");
                                 return;
                             }
                             // 上传minio todo
+                            String fileMd5Id = MinioFileUtils.getFileMd5Id(mp4File);
+                            String objectName = MinioFileUtils.getObjectName(mp4File.getName(), fileMd5Id);
+                            try {
+                                b = minioService.uploadFile(mp4File, objectName, bucket, "mp4");
+                                if (b){
+                                    log.info("上传mp4文件成功:{}", objectName);
+                                    sysFilesProcessService.saveProcessFinishStatus(
+                                            taskId, "2", originalFileId, objectName, "上传mp4文件失败");
+                                }
+                                // todo 更新数据库
+                            } catch (Exception e) {
+                                log.error("上传mp4文件失败：文件路径{}， 错误信息{}", bucket + objectName, e.getMessage());
+                                // 记录数据库 todo
+                                sysFilesProcessService.saveProcessFinishStatus(
+                                        taskId, "3", originalFileId, null, "上传mp4文件失败");
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }finally{
-
+                        } finally {
+                            countDownLatch.countDown();
                         }
-
                     });
                 }
         );
-
+        countDownLatch.await(30, TimeUnit.MINUTES);
     }
 }

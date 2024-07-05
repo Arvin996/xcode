@@ -6,11 +6,11 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xk-sys-learn-framework</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>xk-sys-learn-xxl-job</artifactId>
-
+    <version>${revision}</version>
     <description>提供xxl配置</description>
 
     <properties>

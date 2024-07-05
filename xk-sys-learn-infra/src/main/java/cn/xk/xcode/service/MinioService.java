@@ -5,6 +5,7 @@ import cn.xk.xcode.enums.MinioBucketType;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.utils.MinioFileUtils;
 import io.minio.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,7 @@ public class MinioService {
                             .build()
             );
         } catch (Exception e) {
-            return false;
+            throw new ServiceException(e.getMessage());
         }
         return true;
     }
@@ -52,7 +53,7 @@ public class MinioService {
                     .object(objectName)
                     .build());
         } catch (Exception e) {
-            return null;
+            throw new ServiceException(e.getMessage());
         }
         return inputStream;
     }
@@ -64,7 +65,7 @@ public class MinioService {
                     .object(objectName)
                     .build());
         } catch (Exception e) {
-            return false;
+            throw new ServiceException(e.getMessage());
         }
         return true;
     }

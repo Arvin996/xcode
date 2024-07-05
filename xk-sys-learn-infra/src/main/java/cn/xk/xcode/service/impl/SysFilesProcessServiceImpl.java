@@ -42,4 +42,9 @@ public class SysFilesProcessServiceImpl extends ServiceImpl<SysFilesProcessMappe
                 .where(SYS_FILES_PROCESS_PO.STATUS.eq("1").or(SYS_FILES_PROCESS_PO.STATUS.eq("3")))
                 .and(SYS_FILES_PROCESS_PO.ID.eq(id)).update();
     }
+
+    @Override
+    public void saveProcessFinishStatus(int taskId, String number, String originalFileId, String objectName, String msg) {
+
+    }
 }

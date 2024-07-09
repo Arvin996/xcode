@@ -38,6 +38,9 @@ public class EnumDictHandler extends AbstractDataDictHandler {
     void loadDictCache() {
         // 扫描当前工程中的枚举类
         List<String> packages = dictEnumPackages.getPackages();
+        if (CollectionUtil.isEmpty(packages)){
+            log.info("未配置枚举类扫描包路径");
+        }
         Set<Class<?>> classes = new HashSet<>();
         for (String pack : packages) {
             classes.addAll(ClassUtil.scanPackage(pack));

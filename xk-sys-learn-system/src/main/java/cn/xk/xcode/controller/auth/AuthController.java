@@ -1,6 +1,7 @@
-package cn.xk.xcode.controller;
+package cn.xk.xcode.controller.auth;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.xk.xcode.config.LoginValidationGroupsConfig;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.LoginInfoDto;
 import cn.xk.xcode.pojo.LoginVO;
@@ -30,11 +31,25 @@ public class AuthController {
     private AuthService authService;
 
     // 登录接口
-    @Operation(summary = "登录认证接口")
-    @PostMapping("/doLogin")
-    public CommonResult<LoginVO> doLogin(@Validated @RequestBody LoginInfoDto loginUserDto) {
+    @Operation(summary = "用户密码登录认证接口")
+    @PostMapping("/passwordLogin")
+    public CommonResult<LoginVO> passwordLogin(@Validated({LoginValidationGroupsConfig.PASSWORD_LOGIN.class}) @RequestBody LoginInfoDto loginUserDto) {
         return authService.doLogin(loginUserDto);
     }
+
+    // 登录接口
+    @Operation(summary = "微信登录认证接口")
+    @PostMapping("/wxLogin")
+    public CommonResult<LoginVO> wxLogin(@Validated({LoginValidationGroupsConfig.WX_LOGIN.class}) @RequestBody LoginInfoDto loginUserDto) {
+        return authService.doLogin(loginUserDto);
+    }
+
+    @Operation(summary = "qq登录认证接口")
+    @PostMapping("/qqLogin")
+    public CommonResult<LoginVO> qqLogin(@Validated({LoginValidationGroupsConfig.WX_LOGIN.class}) @RequestBody LoginInfoDto loginUserDto) {
+        return authService.doLogin(loginUserDto);
+    }
+
 
     // 下线
     @Operation(summary = "下线接口")
@@ -50,4 +65,6 @@ public class AuthController {
     public CommonResult<Boolean> kickout(@RequestBody LoginInfoDto loginInfoDto) {
         return authService.kickout(loginInfoDto);
     }
+
+    //todo 注册 找回密码
 }

@@ -1,5 +1,6 @@
 package cn.xk.xcode.config;
 
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -15,5 +16,5 @@ import java.util.List;
 @ConfigurationProperties("xk.sys.dict.enum.packages")
 public class DictEnumPackages
 {
-    private List<String> packages;
+    private List<String> packages = CollectionUtil.createEmptyList();
 }

@@ -1,5 +1,6 @@
 package cn.xk.xcode.pojo;
 
+import cn.xk.xcode.config.LoginValidationGroupsConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,11 +10,11 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "用户登录实体类")
 public class LoginInfoDto {
 
-    @NotNull
+    @NotNull(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
     @Schema(description = "用户名")
     private String username;
 
-    @NotNull
+    @NotNull(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
     @Schema(description = "密码")
     private String password;
 
@@ -24,10 +25,12 @@ public class LoginInfoDto {
     @Schema(description = "客户端id", requiredMode = Schema.RequiredMode.REQUIRED)
     private String clientId;
 
+    @NotNull
     @Schema(description = "授权类型", requiredMode = Schema.RequiredMode.REQUIRED)
     private String grantType;
 
-    @Schema(description = "微信小程序登录code")
+    @NotNull(groups = {LoginValidationGroupsConfig.WX_LOGIN.class})
+    @Schema(description = "微信小程序登录oauth授权返回的code")
     private String code;
 
 }

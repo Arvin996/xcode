@@ -1,6 +1,8 @@
 package cn.xk.xcode.entity;
 
+import cn.xk.xcode.message.BaseMessage;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
@@ -12,9 +14,10 @@ import java.time.LocalDateTime;
  * @date 2024/6/28 19:46
  * @description 网关访问日志
  */
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
-public class GwAccessLog
+public class GwAccessLog extends BaseMessage
 {
     /**
      * 链路追踪编号

@@ -3,9 +3,9 @@ package cn.xk.xcode.context;
 
 
 import cn.xk.xcode.entity.DataTableDict;
-import cn.xk.xcode.handler.DataBaseDictHandler;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class DictContext
 {
-    public final static Map<String, List<DataTableDict>> GLOBAL_DICT_CACHE= new HashMap<>();
+    public final static Map<String, List<DataTableDict>> GLOBAL_DICT_CACHE= new ConcurrentHashMap<>();
 
     public static DataTableDict get(String parentId, String code) {
         List<DataTableDict> dataTableDictList = GLOBAL_DICT_CACHE.getOrDefault(parentId, null);

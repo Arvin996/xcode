@@ -5,6 +5,10 @@ import cn.xk.xcode.exception.ErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.IllegalFormatException;
+
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR;
+
 /**
  * @Author xuk
  * @Date 2024/5/27 15:23
@@ -13,10 +17,8 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ServiceException extends RuntimeException
-{
-    public ServiceException()
-    {
+public class ServiceException extends RuntimeException {
+    public ServiceException() {
         super();
     }
 
@@ -24,21 +26,29 @@ public class ServiceException extends RuntimeException
 
     String msg;
 
-    public ServiceException(Object code, String msg)
-    {
+    public ServiceException(Object code, String msg) {
         super(msg);
         this.code = code;
         this.msg = msg;
     }
 
-    public ServiceException(String msg)
-    {
+    public ServiceException(String msg) {
         super(msg);
         this.msg = msg;
     }
 
-   public ServiceException(ErrorCode errCode){
+    public ServiceException(ErrorCode errCode) {
         this.code = errCode.getCode();
         this.msg = errCode.getMessage();
-   }
+    }
+
+    public ServiceException(ErrorCode errorCode, Object... objs) {
+        String msg;
+        try {
+            msg = String.format(errorCode.getMessage(), objs);
+        } catch (IllegalFormatException e) {
+            throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+        }
+        throw new ServiceException(errorCode.getCode(), msg);
+    }
 }

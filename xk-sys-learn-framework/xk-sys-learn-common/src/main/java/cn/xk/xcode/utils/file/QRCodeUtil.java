@@ -1,5 +1,6 @@
 package cn.xk.xcode.utils.file;
 
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.utils.encrypt.EncryptUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -7,6 +8,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -14,14 +16,16 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
 
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.QR_CODE_GEN_ERROR;
+
+@Slf4j
 public class QRCodeUtil {
+
     /**
      * 生成二维码
-     *
      * @param content 二维码对应的URL
      * @param width   二维码图片宽度
      * @param height  二维码图片高度
-     * @return
      */
     public static String createQRCode(String content, int width, int height) throws IOException {
         String resultImage = "";
@@ -40,34 +44,22 @@ public class QRCodeUtil {
             hints.put(EncodeHintType.MARGIN, 1);
 
             try {
-                //zxing生成二维码核心类
+                // zxing生成二维码核心类
                 QRCodeWriter writer = new QRCodeWriter();
-                //把输入文本按照指定规则转成二维吗
+                // 把输入文本按照指定规则转成二维吗
                 BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-                //生成二维码图片流
+                // 生成二维码图片流
                 BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-                //输出流
+                // 输出流
                 ImageIO.write(bufferedImage, "png", os);
-                /**
-                 * 原生转码前面没有 data:image/png;base64 这些字段，返回给前端是无法被解析，所以加上前缀
-                 */
+                // 原生转码前面没有 data:image/png;base64 这些字段，返回给前端是无法被解析，所以加上前缀
                 resultImage = "data:image/png;base64," + EncryptUtil.encodeBase64(os.toByteArray());
                 return resultImage;
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("生成二维码出错");
+                log.error(e.getMessage());
+                ExceptionUtil.castServiceException(QR_CODE_GEN_ERROR);
             }
         }
         return null;
-    }
-
-    public static void main(String[] args) throws IOException {
-        String qrCode = createQRCode("asas", 100, 100);
-        qrCode = qrCode.replace("data:image/png;base64,", "");
-        byte[] bytes = EncryptUtil.decodeBase64(qrCode);
-        OutputStream os = new FileOutputStream("D:\\soft\\test.png");
-        os.write(bytes, 0, bytes.length);
-        os.flush();
-        os.close();
     }
 }

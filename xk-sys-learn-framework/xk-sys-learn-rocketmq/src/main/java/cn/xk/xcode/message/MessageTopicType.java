@@ -14,9 +14,9 @@ import lombok.Getter;
 public enum MessageTopicType
 {
     TOPIC_BIZ_LOG("bizLog"),
-
     TOPIC_GW_LOG("gwLog"),
-
+    TOPIC_TRACE_LOG("traceLog"),
+    TOPIC_LOGIN_LOG("loginLog"),
     TOPIC_OTHER("other");
 
     private final String type;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xk-sys-learn-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <version>${revision}</version>
+    <artifactId>xk-sys-learn-trace</artifactId>
+    <description>
+        1. 提供微服务调用的链路监控服务 自研发
+        2. 也是给日志服务发送异步消息 提高系统的并发量
+    </description>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-rocketmq</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+</project>

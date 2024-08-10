@@ -10,84 +10,18 @@
     </parent>
     <artifactId>xk-sys-learn-infra</artifactId>
     <version>${revision}</version>
+    <packaging>pom</packaging>
     <name>xk-sys-learn-infra</name>
     <description>xk-sys-learn-infra 1.提供统一的文件minio服务 2.提供代码生成功能 实体类 service层等 3.提供服务器信息监测（待办）</description>
+    <modules>
+        <module>xk-sys-learn-infra-biz</module>
+        <module>xk-sys-learn-infra-api</module>
+    </modules>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
-
-    <dependencies>
-
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-security</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-codegen</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-infra-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.squareup.okhttp3</groupId>
-                    <artifactId>okhttp</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.11.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-xxl-job</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-    </dependencies>
 
 </project>

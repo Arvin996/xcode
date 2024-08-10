@@ -4,6 +4,7 @@ import cn.xk.xcode.entity.DataTableDict;
 import cn.xk.xcode.event.TableDictEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 
 import java.util.*;
 

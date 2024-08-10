@@ -16,6 +16,10 @@
         <module>xk-sys-learn-infra</module>
         <module>xk-sys-learn-system</module>
         <module>xk-sys-learn-gateway</module>
+        <module>xk-sys-learn-checkcode</module>
+        <module>xk-sys-learn-member</module>
+        <module>xk-sys-learn-logger-server</module>
+        <module>xk-sys-learn-websocket-server</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

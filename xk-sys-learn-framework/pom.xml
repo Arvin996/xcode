@@ -15,7 +15,7 @@
     <modules>
         <module>xk-sys-learn-common</module>
         <module>xk-sys-learn-security</module>
-        <module>xk-sys-learn-codegen</module>
+        <module>xk-sys-learn-mysql</module>
         <module>xk-sys-learn-dict</module>
         <module>xk-sys-learn-redis</module>
         <module>xk-sys-learn-websocket</module>
@@ -23,6 +23,11 @@
         <module>xk-sys-learn-xxl-job</module>
         <module>xk-sys-learn-log</module>
         <module>xk-sys-learn-rocketmq</module>
+        <module>xk-sys-learn-protection</module>
+        <module>xk-sys-learn-biz-message</module>
+        <module>xk-sys-learn-trace</module>
+        <module>xk-sys-learn-trans-flex</module>
+        <module>xk-sys-learn-report-sdk</module>
     </modules>
     <description>
         xk-sys-learn-framework 项目框架管理

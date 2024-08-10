@@ -1,0 +1,13 @@
+common-variables:
+  application-name: xk-learn-checkcode
+  nacos-addr: 127.0.0.1:8848
+
+spring:
+  profiles:
+    active: test
+  application:
+    # 微服务名
+    # 添加服务名称，用于在注册中心显示，必要字段
+    # 此处服务名称，与 plat_service 表中 route 字段一致（重要）
+    name: ${common-variables.application-name}
+

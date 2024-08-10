@@ -2,7 +2,7 @@ package cn.xk.xcode.feignclient;
 
 import cn.xk.xcode.entity.dto.UpdateFileDto;
 import cn.xk.xcode.entity.dto.UploadFileDto;
-import cn.xk.xcode.entity.fallback.FileApiFallback;
+import cn.xk.xcode.fallback.FileApiFallback;
 import cn.xk.xcode.entity.vo.FileResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * @Version 1.0
  * @Description FileApi
  */
-@FeignClient(name = "xk-learn-infra", fallback = FileApiFallback.class)
+@FeignClient(name = "xk-learn-infra", fallbackFactory = FileApiFallback.class)
 @Tag(name = "RPC 服务 - 文件")
 @RequestMapping("/infra/file")
 public interface FileApi

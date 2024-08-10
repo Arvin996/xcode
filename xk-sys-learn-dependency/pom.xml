@@ -28,7 +28,7 @@
         <rocketmq.version>2.2.0</rocketmq.version>
         <satoken.version>1.38.0</satoken.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <easyexcel.verion>3.3.3</easyexcel.verion>
+        <easyexcel.verion>2.2.10</easyexcel.verion>
         <easy-trans.version>2.2.11</easy-trans.version>
         <redisson.version>3.18.0</redisson.version>
         <mybatis-flex.version>1.9.3</mybatis-flex.version>
@@ -39,11 +39,41 @@
         <google.javase.version>3.3.3</google.javase.version>
         <knife4j-gw.version>4.3.0</knife4j-gw.version>
         <ip2region.version>2.7.0</ip2region.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <caffeine.version>2.9.3</caffeine.version>
+        <aliyun.sdk.core.version>4.5.16</aliyun.sdk.core.version>
+        <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.sdk.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun.sdk.dysmsapi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>

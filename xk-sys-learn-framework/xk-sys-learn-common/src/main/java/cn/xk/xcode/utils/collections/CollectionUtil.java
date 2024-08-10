@@ -1,6 +1,7 @@
 package cn.xk.xcode.utils.collections;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -88,36 +89,36 @@ public class CollectionUtil {
         return from.stream().filter(filter).collect(Collectors.toMap(keyFunc, Function.identity()));
     }
 
-    public static <T, K> Map<K, List<T>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc){
+    public static <T, K> Map<K, List<T>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc) {
         if (CollUtil.isEmpty(from)) {
             return new HashMap<>();
         }
-        return from.stream().collect(Collectors.groupingBy(keyFunc, Collectors.mapping(Function.identity(),  Collectors.toList())));
+        return from.stream().collect(Collectors.groupingBy(keyFunc, Collectors.mapping(Function.identity(), Collectors.toList())));
     }
 
-    public static <T, K, V> Map<K, List<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc, Function<T, V> valueFunc){
+    public static <T, K, V> Map<K, List<V>> convertMultiMap(Collection<T> from, Function<T, K> keyFunc, Function<T, V> valueFunc) {
         if (CollUtil.isEmpty(from)) {
             return new HashMap<>();
         }
-        return from.stream().collect(Collectors.groupingBy(keyFunc,  Collectors.mapping(valueFunc, Collectors.toList())));
+        return from.stream().collect(Collectors.groupingBy(keyFunc, Collectors.mapping(valueFunc, Collectors.toList())));
     }
 
     public static <T> List<List<T>> diffList(Collection<T> oldList, Collection<T> newList,
-                                             BiFunction<T, T, Boolean> sameFunc){
+                                             BiFunction<T, T, Boolean> sameFunc) {
         List<T> createList = new LinkedList<>(newList); // 默认都认为是新增的，后续会进行移除
         List<T> updateList = new ArrayList<>();
         List<T> deleteList = new ArrayList<>();
-        for (T t : oldList){
+        for (T t : oldList) {
             T foundObj = null;
-            for (Iterator<T> iterator = createList.iterator(); iterator.hasNext(); ){
-                 T createObj = iterator.next();
-                 if (sameFunc.apply(t, createObj)){
-                     foundObj = createObj;
-                     iterator.remove();
-                     break;
-                 }
+            for (Iterator<T> iterator = createList.iterator(); iterator.hasNext(); ) {
+                T createObj = iterator.next();
+                if (sameFunc.apply(t, createObj)) {
+                    foundObj = createObj;
+                    iterator.remove();
+                    break;
+                }
             }
-            if (foundObj != null){
+            if (foundObj != null) {
                 updateList.add(foundObj);
             } else {
                 deleteList.add(t);
@@ -126,23 +127,23 @@ public class CollectionUtil {
         return Arrays.asList(createList, updateList, deleteList);
     }
 
-    public static boolean containsAny(Collection<?> source, Collection<?> candidates){
+    public static boolean containsAny(Collection<?> source, Collection<?> candidates) {
         return CollectionUtils.containsAny(source, candidates);
     }
 
-    public static <T> T getFirst(List<T> from){
+    public static <T> T getFirst(List<T> from) {
         return from.isEmpty() ? null : from.get(0);
     }
 
-    public static <T> T findFirst(Collection<T> from, Predicate<T> predicate){
+    public static <T> T findFirst(Collection<T> from, Predicate<T> predicate) {
         return findFirst(from, predicate, Function.identity());
     }
 
-    public static <T, U> U findFirst(Collection<T> from, Predicate<T> predicate, Function<T, U> func){
+    public static <T, U> U findFirst(Collection<T> from, Predicate<T> predicate, Function<T, U> func) {
         return from.stream().filter(predicate).map(func).findFirst().orElse(null);
     }
 
-    public static <T, V extends Comparable<? super V>> V getMaxValue(Collection<T> from, Function<T, V> valueFunc){
+    public static <T, V extends Comparable<? super V>> V getMaxValue(Collection<T> from, Function<T, V> valueFunc) {
         if (CollUtil.isEmpty(from)) {
             return null;
         }
@@ -151,7 +152,7 @@ public class CollectionUtil {
         return valueFunc.apply(t);
     }
 
-    public static <T, V extends Comparable<? super V>> V getMinValue(List<T> from, Function<T, V> valueFunc){
+    public static <T, V extends Comparable<? super V>> V getMinValue(List<T> from, Function<T, V> valueFunc) {
         if (CollUtil.isEmpty(from)) {
             return null;
         }
@@ -161,71 +162,72 @@ public class CollectionUtil {
     }
 
     public static <T, V extends Comparable<? super V>> V getSumValue(List<T> from, Function<T, V> valueFunc,
-                                                                     BinaryOperator<V> accumulator){
-        if (CollUtil.isEmpty(from)){
+                                                                     BinaryOperator<V> accumulator) {
+        if (CollUtil.isEmpty(from)) {
             return null;
         }
         return getSumValue(from, valueFunc, accumulator, null);
     }
 
     public static <T, V extends Comparable<? super V>> V getSumValue(Collection<T> from, Function<T, V> valueFunc,
-                                                                     BinaryOperator<V> accumulator, V defaultValue){
-        if (CollUtil.isEmpty(from)){
+                                                                     BinaryOperator<V> accumulator, V defaultValue) {
+        if (CollUtil.isEmpty(from)) {
             return defaultValue;
         }
         return from.stream().map(valueFunc).reduce(defaultValue, accumulator);
     }
 
-    public static <T> void addIfNotNull(Collection<T> coll, T item){
-        if (item != null){
+    public static <T> void addIfNotNull(Collection<T> coll, T item) {
+        if (item != null) {
             coll.add(item);
         }
     }
 
-    public static <T> Collection<T> singleton(T obj){
+    public static <T> Collection<T> singleton(T obj) {
         return Objects.isNull(obj) ? Collections.emptyList() : Collections.singletonList(obj);
     }
 
-    public static <T> List<T> newArrayList(List<List<T>> list){
+    public static <T> List<T> newArrayList(List<List<T>> list) {
         return list.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func){
+    public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func) {
         return convertList(from, func, Objects::nonNull);
     }
 
-    public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func, Predicate<T> filter){
+    public static <T, U> List<U> convertList(Collection<T> from, Function<T, U> func, Predicate<T> filter) {
         if (CollUtil.isEmpty(from)) {
             return new ArrayList<>();
         }
         return from.stream().filter(filter).map(func).collect(Collectors.toList());
     }
 
-    public static <T> List<T> createEmptyList(){
+
+    public static <T> List<T> createEmptyList() {
         return Collections.emptyList();
     }
 
-    public static <T> Set<T> createEmptySet(){
+    public static <T> Set<T> createEmptySet() {
         return Collections.emptySet();
     }
 
-    public static <K, V> Map<K, V> createEmptyMap(){
+    public static <K, V> Map<K, V> createEmptyMap() {
         return Collections.emptyMap();
     }
 
-    public static <T> List<T> createSingleList(T obj){
+    public static <T> List<T> createSingleList(T obj) {
         return Collections.singletonList(obj);
     }
 
-    public static <T> Set<T> createSingleSet(T obj){
+    public static <T> Set<T> createSingleSet(T obj) {
         return Collections.singleton(obj);
     }
 
-    public static  <K, V> Map<K, V> createSingleMap(K key, V value){
+    public static <K, V> Map<K, V> createSingleMap(K key, V value) {
         return Collections.singletonMap(key, value);
     }
 
-    public static <T> boolean isEmpty(Collection<T> collection){
+    public static <T> boolean isEmpty(Collection<T> collection) {
         return collection == null || collection.isEmpty();
     }
 

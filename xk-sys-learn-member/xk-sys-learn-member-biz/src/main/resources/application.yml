@@ -1,0 +1,10 @@
+common-variables:
+  application-name: xk-learn-member
+  nacos-addr: 127.0.0.1:8848
+
+spring:
+  profiles:
+    active: test
+  application:
+    name: ${common-variables.application-name}
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xk-sys-learn-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>xk-sys-learn-trans-flex</artifactId>
+    <version>${revision}</version>
+    <description>
+        提供基于mf的翻译器，主要是提供外键翻译
+        1. 提供优雅的枚举类context启动读取（考虑如何整合IdictEnum接口）
+        2. 提供spel形式的返回值注入，考虑结合日志系统中的spel形式
+        3. 提供注解式翻译例如userid -> username 它们在同一个返回实体类中
+        4. 提供类+函数形式的invoke调用
+        5. 远程调用api形式
+    </description>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-mysql</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+</project>

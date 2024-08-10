@@ -16,22 +16,76 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class BizAccessLog extends BaseMessage {
+    /**
+     * 链路id
+     */
     private String traceId;
+    /**
+     * 业务id
+     */
     private String bizId;
+    /**
+     * 业务类型
+     */
     private String bizType;
+    /**
+     * 用户id
+     */
     private String userId;
+    /**
+     * 登录类型
+     */
     private String LoginType;
+    /**
+     * 访问地址
+     */
     private String url;
+    /**
+     * 开始时间
+     */
     private LocalDateTime startTime;
+    /**
+     * 访问方法
+     */
     private String method;
+    /**
+     * 访问ip
+     */
     private String ip;
+    /**
+     * 参数类型
+     */
     private String contentType;
+    /**
+     * 方法参数
+     */
     private String methodParams;
+    /**
+     * 方法名称
+     */
     private String methodName;
+    /**
+     * 类名
+     */
     private String className;
+    /**
+     * 结束时间
+     */
     private LocalDateTime endTime;
+    /**
+     * 总时长
+     */
     private Long duration;
-    private String desc; //接口描述
-    private String ipAddress; //ip所在城市 例如: 北京市等等
+    /**
+     * 接口描述
+     */
+    private String desc;
+    /**
+     * /ip所在城市 例如: 北京市等等
+     */
+    private String ipAddress;
+    /**
+     * 返回值
+     */
     private String result;
 }

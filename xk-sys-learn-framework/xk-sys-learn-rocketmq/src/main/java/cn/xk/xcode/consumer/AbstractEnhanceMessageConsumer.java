@@ -2,6 +2,7 @@ package cn.xk.xcode.consumer;
 
 import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
+import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.message.BaseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -11,12 +12,13 @@ import org.apache.rocketmq.spring.core.RocketMQListener;
 
 import javax.annotation.Resource;
 
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.MQ_MESSAGE_SEND_FAIL;
+
 /**
  * @Author xuk
  * @Date 2024/7/3 09:44
  * @Version 1.0
  * @Description AbstractEnhanceMessageConsumer 消费者抽取
- * // todo 进一步抽象
  */
 @Slf4j
 public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> implements RocketMQListener<T> {
@@ -37,7 +39,6 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
 
     /**
      * 消息处理
-     *
      * @param message 待处理消息
      * @throws Exception 消费异常
      */
@@ -59,6 +60,8 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
     protected boolean filter(T message) {
         return false;
     }
+
+
 
     /**
      * 是否异常时重复发送
@@ -151,7 +154,7 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
         }
         // 发送失败的处理就是不进行ACK，由RocketMQ重试
         if (sendResult.getSendStatus() != SendStatus.SEND_OK) {
-            throw new RuntimeException("重试消息发送失败");
+            throw new ServiceException(MQ_MESSAGE_SEND_FAIL);
         }
 
     }

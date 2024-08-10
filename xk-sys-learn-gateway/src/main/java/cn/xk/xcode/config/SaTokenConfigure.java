@@ -29,7 +29,6 @@ public class SaTokenConfigure {
 
             })
             // 异常处理方法：每次setAuth函数出现异常时进入 
-            .setError(e -> SaResult.error(e.getMessage()))
-            ;
+            .setError(e -> SaResult.error(e.getMessage()));
     }
 }

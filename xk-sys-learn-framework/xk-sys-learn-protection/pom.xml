@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xk-sys-learn-framework</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <artifactId>xk-sys-learn-protection</artifactId>
+    <version>${revision}</version>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <description>
+        1. 提供限流
+        2. 提供幂等性
+        3. 提供熔断降级
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

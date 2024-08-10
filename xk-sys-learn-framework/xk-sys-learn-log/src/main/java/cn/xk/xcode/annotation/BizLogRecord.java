@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * @Author xuk
  * @Date 2024/7/4 12:57
  * @Version 1.0
- * @Description LogRecod
+ * @Description BizLogRecord
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

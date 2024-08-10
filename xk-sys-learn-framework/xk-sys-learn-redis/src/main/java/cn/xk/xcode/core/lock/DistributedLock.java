@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
  */
 @RequiredArgsConstructor
 @Slf4j
-public class DistributedLock
-{
+public class DistributedLock {
+
     private final RedissonClient redissonClient;
 
     /**
@@ -26,10 +26,15 @@ public class DistributedLock
      * @param key
      * @param seconds
      */
-    public boolean tryLock(String key, int seconds) {
+    public boolean tryLock(String key, long seconds) {
+        return tryLock(key, seconds, TimeUnit.SECONDS);
+    }
+
+
+    public boolean tryLock(String key, long time, TimeUnit timeUnit) {
         RLock rLock = redissonClient.getLock(key);
         try {
-            return rLock.tryLock(seconds, TimeUnit.SECONDS);
+            return rLock.tryLock(time, timeUnit);
         } catch (InterruptedException e) {
             return false;
         }
@@ -43,7 +48,7 @@ public class DistributedLock
     public boolean tryLock(String key) {
         RLock rLock = redissonClient.getLock(key);
         boolean locked = rLock.tryLock();
-        log.info("tryLock: key={},locked={}",key,locked);
+        log.info("tryLock: key={},locked={}", key, locked);
         return locked;
     }
 
@@ -56,7 +61,7 @@ public class DistributedLock
         RLock rLock = redissonClient.getLock(key);
         if (rLock.isLocked()) {
             rLock.unlock();
-            log.info("unlock: key={}",key);
+            log.info("unlock: key={}", key);
         }
     }
 

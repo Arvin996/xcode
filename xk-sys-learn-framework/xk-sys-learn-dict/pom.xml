@@ -10,7 +10,10 @@
     <artifactId>xk-sys-learn-dict</artifactId>
     <version>${revision}</version>
     <name>xk-sys-learn-dict</name>
-    <description>xk-sys-learn-dict 提供字典服务以及字典自动转换功能 目前只集成了数据据字典 还未集成枚举类</description>
+    <description>
+        xk-sys-learn-dict 提供字典服务以及字典自动转换功能
+        目前集成了数据库字典以及枚举类
+    </description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

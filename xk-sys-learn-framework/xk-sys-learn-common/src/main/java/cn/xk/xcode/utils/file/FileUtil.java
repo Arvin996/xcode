@@ -1,11 +1,14 @@
 package cn.xk.xcode.utils.file;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.nio.file.Files;
 
 /**
  * 文件读取工具类
  */
+@Slf4j
 public class FileUtil {
 
     /**
@@ -15,23 +18,23 @@ public class FileUtil {
         File file = new File(filePath);
         if (!file.exists()) {
             throw new FileNotFoundException(filePath);
-        } 
+        }
 
         if (file.length() > 1024 * 1024 * 1024) {
             throw new IOException("File is too large");
-        } 
+        }
 
         StringBuilder sb = new StringBuilder((int) (file.length()));
         // 创建字节输入流  
-        FileInputStream fis = new FileInputStream(filePath);  
+        FileInputStream fis = new FileInputStream(filePath);
         // 创建一个长度为10240的Buffer
-        byte[] bbuf = new byte[10240];  
+        byte[] bbuf = new byte[10240];
         // 用于保存实际读取的字节数  
         int hasRead;
-        while ( (hasRead = fis.read(bbuf)) > 0 ) {  
-            sb.append(new String(bbuf, 0, hasRead));  
-        }  
-        fis.close();  
+        while ((hasRead = fis.read(bbuf)) > 0) {
+            sb.append(new String(bbuf, 0, hasRead));
+        }
+        fis.close();
         return sb.toString();
     }
 
@@ -54,16 +57,14 @@ public class FileUtil {
                 while (-1 != (len1 = in.read(buffer, 0, bufSize))) {
                     bos.write(buffer, 0, len1);
                 }
-
-                byte[] var7 = bos.toByteArray();
-                return var7;
+                return bos.toByteArray();
             } finally {
                 try {
                     if (in != null) {
                         in.close();
                     }
                 } catch (IOException var14) {
-                    var14.printStackTrace();
+                    log.error(var14.getMessage());
                 }
 
                 bos.close();

@@ -11,20 +11,28 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ExceptionUtil {
-    public static ServiceException castServiceException0(Object code, String message) {
-        return new ServiceException(code, message);
+    public static void castServiceException0(Object code, String message) {
+        throw new ServiceException(code, message);
     }
 
-    public static ServiceException castServiceException(ErrorCode errorCode) {
-        return castServiceException0(errorCode.getCode(), errorCode.getMessage());
+    public static void castServiceException(ErrorCode errorCode) {
+        castServiceException0(errorCode.getCode(), errorCode.getMessage());
     }
 
-    public static ServerException castServerException0(Object code, String message) {
-        return new ServerException(code, message);
+    public static void castServerException0(Object code, String message) {
+        throw new ServerException(code, message);
     }
 
-    public static ServerException castServerException(ErrorCode errorCode) {
-        return castServerException0(errorCode.getCode(), errorCode.getMessage());
+    public static void castServerException(ErrorCode errorCode) {
+        castServerException0(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    public static void castServiceException(ErrorCode errorCode, Object... objs) {
+        throw new ServiceException(errorCode, objs);
+    }
+
+    public static void castServerException(ErrorCode errorCode, Object... objs) {
+        throw new ServerException(errorCode, objs);
     }
 
 }

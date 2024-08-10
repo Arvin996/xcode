@@ -4,19 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.xk.xcode</groupId>
-        <artifactId>xk-sys-learn</artifactId>
+        <artifactId>xk-sys-learn-framework</artifactId>
         <version>${revision}</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>xk-sys-learn-mysql</artifactId>
     <version>${revision}</version>
     <name>xk-sys-learn-mysql</name>
     <description>
-        xk-sys-learn-mysql
-        此模块主要提供flex中全局监听器的功能
-        1. 对于create_time update_time create_user自动更新
-        2. 后续加了字段权限以及部门权限以及读写分离的场景 增加配置
-        3. sql审计配置
+        1.每个项目的代码生成统一管理 并提供数据库的相关依赖
+        2.mf相关配置
     </description>
     <properties>
         <java.version>1.8</java.version>
@@ -24,8 +20,44 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
+
     <dependencies>
 
-    </dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-dict</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-codegen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
 </project>

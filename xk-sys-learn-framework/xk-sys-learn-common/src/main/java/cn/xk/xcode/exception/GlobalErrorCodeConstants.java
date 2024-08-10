@@ -23,13 +23,26 @@ public interface GlobalErrorCodeConstants
     ErrorCode INVALID_CLIENT = new IntErrorCode(414, "无效客户端");
     ErrorCode INVALID_USERNAME_OR_PASSWORD = new IntErrorCode(416, "用户名或密码错误");
     ErrorCode ACCOUNT_NOT_ENABLE = new IntErrorCode(417, "该账号已被封禁，请联系管理员");
+    ErrorCode PARAMETER_VALIDATION_FAIL = new IntErrorCode(418, "参数解析异常");
+    ErrorCode ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR = new IntErrorCode(419, "错误码信息占位符个哦实话异常");
+    ErrorCode QR_CODE_GEN_ERROR = new IntErrorCode(420, "生成二维码错误");
 
     ErrorCode LOCKED = new IntErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new IntErrorCode(429, "请求过于频繁，请稍后重试");
+    ErrorCode CACHE_TYPE_INVALID = new IntErrorCode(430, "无效缓存类型");
     // ========== 服务端错误段 ==========
     ErrorCode INTERNAL_SERVER_ERROR = new IntErrorCode(500, "系统异常");
     ErrorCode NOT_IMPLEMENTED = new IntErrorCode(501, "功能未实现/未开启");
     ErrorCode ERROR_CONFIGURATION = new IntErrorCode(502, "错误的配置项");
+    ErrorCode CHECK_CODE_IS_EXPIRED = new IntErrorCode(503, "验证码已过期");
+    ErrorCode CHECK_CODE_IS_ERROR = new IntErrorCode(504, "验证码不正确");
+    ErrorCode CHECK_CODE_GEN_ERROR = new IntErrorCode(505, "验证码生成失败");
+    ErrorCode CHECK_CODE_SEND_ERROR = new IntErrorCode(506, "验证码发送失败");
+    ErrorCode CHECK_CODE_EMAIL_NOT_CONFIG = new IntErrorCode(507, "验证码邮箱未配置");
+    ErrorCode CHECK_CODE_PHONE_NOT_CONFIG = new IntErrorCode(508, "验证码手机短信未配置");
+    ErrorCode CHECK_CODE_HANDLER_NOT_EXISTS = new IntErrorCode(509, "对应的验证码处理器不存在");
+    ErrorCode MQ_MESSAGE_SEND_FAIL = new IntErrorCode(510, "消息发送失败");
+    ErrorCode SERVICE_FALL_BACK = new IntErrorCode(511, "服务熔断");
     // ========== 自定义错误段 ==========
     ErrorCode REPEATED_REQUESTS = new IntErrorCode(900, "重复请求，请稍后重试"); // 重复请求
     ErrorCode DEMO_DENY = new IntErrorCode(901, "演示模式，禁止写操作");

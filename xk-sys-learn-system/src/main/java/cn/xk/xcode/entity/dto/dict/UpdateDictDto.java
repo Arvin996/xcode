@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
 public class UpdateDictDto
 {
     @Schema(description = "字典code", example = "01")
-    @NotNull
     private String code;
 
     @Schema(description = "字典名称", example = "测试环境")

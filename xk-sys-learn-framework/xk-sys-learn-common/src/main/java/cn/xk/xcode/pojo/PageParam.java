@@ -17,19 +17,19 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "分页参数")
 public class PageParam implements java.io.Serializable
 {
-    public static final int PAGENO_DEFAULT = 1;
+    public static final int PAGE_NO_DEFAULT = 1;
 
-    public static final int PAGESIZE_DEFAULT = 10;
+    public static final int PAGE_SIZE_DEFAULT = 10;
 
     @Schema(description = "起始页", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "起始页不能为空")
     @Min(value = 1, message = "起始页不能小于1")
-    private Integer pageNo = PAGENO_DEFAULT;
+    private Integer pageNo = PAGE_NO_DEFAULT;
 
     @Schema(description = "每页大小", example = "10", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull(message = "每页大小不能为空")
     @Min(value = 1, message = "每页大小不能小于1")
     @Max(value = 100, message = "每页大小不能大于100")
-    private Integer pageSize = PAGESIZE_DEFAULT;
+    private Integer pageSize = PAGE_SIZE_DEFAULT;
 
 }

@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.po;
 
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 
@@ -28,7 +29,7 @@ public class MemberLevelPo implements Serializable {
     /**
      * 自增id
      */
-    @Id
+    @Id(keyType = KeyType.Auto)
     private Integer id;
 
     /**

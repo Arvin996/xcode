@@ -12,6 +12,9 @@
     <artifactId>xk-sys-learn-member-biz</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
+    <description>
+        用户会员业务实现
+    </description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -41,6 +44,12 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xk-sys-learn-member-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-security</artifactId>
             <version>${revision}</version>
         </dependency>
 

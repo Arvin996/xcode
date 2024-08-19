@@ -6,7 +6,6 @@ package cn.xk.xcode.enums;
  * @Version 1.0
  * @Description GlobalInfraConfig
  */
-public interface GlobalInfraConfig
-{
+public interface GlobalInfraConfig {
 
 }

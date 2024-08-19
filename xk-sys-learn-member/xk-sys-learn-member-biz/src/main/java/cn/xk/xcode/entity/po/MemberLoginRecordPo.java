@@ -1,6 +1,8 @@
 package cn.xk.xcode.entity.po;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,7 +31,7 @@ public class MemberLoginRecordPo implements Serializable {
     /**
      * 自增id
      */
-    @Id
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
@@ -45,6 +47,7 @@ public class MemberLoginRecordPo implements Serializable {
     /**
      * 登录时间
      */
+    @Column(onInsertValue = "now()")
     private LocalDateTime loginTime;
 
     /**

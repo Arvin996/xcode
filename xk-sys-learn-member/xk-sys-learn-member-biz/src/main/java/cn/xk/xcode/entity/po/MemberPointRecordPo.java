@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.po;
 
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ public class MemberPointRecordPo implements Serializable {
     /**
      * 自增id
      */
-    @Id
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
@@ -40,7 +41,7 @@ public class MemberPointRecordPo implements Serializable {
     /**
      * 变更的业务类型
      */
-    private String bizType;
+    private Integer bizType;
 
     /**
      * 变更的业务id

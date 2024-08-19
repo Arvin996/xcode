@@ -1,0 +1,133 @@
+package cn.xk.xcode.core.handler;
+
+import cn.hutool.core.util.ReflectUtil;
+import cn.xk.xcode.core.annotation.FlexTrans;
+import cn.xk.xcode.core.client.TransFlexClient;
+import cn.xk.xcode.core.entity.FlexTransDto;
+import cn.xk.xcode.core.entity.TransVo;
+import cn.xk.xcode.core.service.FlexTransService;
+import cn.xk.xcode.exception.core.ServerException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.openfeign.FeignClientBuilder;
+import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
+
+import static cn.xk.xcode.constants.TransFlexGlobalConstants.TRANS_FAILED;
+
+/**
+ * @author xukai
+ * @version 1.0
+ * @date 2024/8/16 15:32
+ * @description
+ */
+@Slf4j
+public class TransFlexHandler {
+    private TransFlexHandler() {
+    }
+
+    public static void resolveFlexLocalTrans(FlexTrans flexTrans, Field field, Object proceed, FlexTransService flexTransService) {
+        if (validate(flexTrans, proceed)) {
+            return;
+        }
+        Field tagetField = ReflectUtil.getField(proceed.getClass(), flexTrans.targetField());
+        if (tagetField.getType().isAssignableFrom(List.class)) {
+            //list翻译
+            List<? extends TransVo> list = flexTransService.findList((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
+            if (Objects.isNull(list) || list.isEmpty()) {
+                log.warn("list翻译对象为空");
+                return;
+            }
+            tagetField.setAccessible(true);
+            try {
+                tagetField.set(proceed, list);
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage());
+                throw new ServerException(TRANS_FAILED);
+            }
+        } else {
+            //单个翻译
+            TransVo transVo = flexTransService.findById((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
+            if (Objects.isNull(transVo)) {
+                log.warn("transVo翻译对象为空");
+                return;
+            }
+            tagetField.setAccessible(true);
+            try {
+                tagetField.set(proceed, transVo);
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage());
+                throw new ServerException(TRANS_FAILED);
+            }
+        }
+    }
+
+    public static void resolveFlexRpcTrans(FlexTrans flexTrans, Field field, Object proceed, FeignClientBuilder feignClientBuilder) {
+        if (validate(flexTrans, proceed)) {
+            return;
+        }
+        String serviceName = flexTrans.serviceName();
+        if (!StringUtils.hasLength(serviceName)) {
+            log.error("翻译出错，服务名未定义");
+            return;
+        }
+        Field tagetField = ReflectUtil.getField(proceed.getClass(), flexTrans.targetField());
+        TransFlexClient transFlexClient = feignClientBuilder.forType(TransFlexClient.class, serviceName).build();
+        if (tagetField.getType().isAssignableFrom(List.class)) {
+            //list翻译
+            List<? extends TransVo> list = transFlexClient.flexTransList(FlexTransDto.builder().
+                    targetClazz(flexTrans.ref()).
+                    id((Serializable) ReflectUtil.getFieldValue(proceed, field)).
+                    conditionField(flexTrans.refConditionField()).build());
+            if (Objects.isNull(list) || list.isEmpty()) {
+                log.warn("远程list翻译对象为空");
+                return;
+            }
+            tagetField.setAccessible(true);
+            try {
+                tagetField.set(proceed, list);
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage());
+                throw new ServerException(TRANS_FAILED);
+            }
+        } else {
+            //单个翻译
+            TransVo transVo = transFlexClient.flexTrans(FlexTransDto.builder().
+                    targetClazz(flexTrans.ref()).
+                    id((Serializable) ReflectUtil.getFieldValue(proceed, field)).
+                    conditionField(flexTrans.refConditionField()).build());
+            if (Objects.isNull(transVo)) {
+                log.warn("远程transVo翻译对象为空");
+                return;
+            }
+            tagetField.setAccessible(true);
+            try {
+                tagetField.set(proceed, transVo);
+            } catch (IllegalAccessException e) {
+                log.error(e.getMessage());
+                throw new ServerException(TRANS_FAILED);
+            }
+        }
+    }
+
+    private static boolean validate(FlexTrans flexTrans, Object proceed) {
+        String targetField = flexTrans.targetField();
+        String refConditionField = flexTrans.refConditionField();
+        if (!StringUtils.hasLength(targetField)) {
+            log.error("targetField 不能为空");
+            return false;
+        }
+        if (!StringUtils.hasLength(refConditionField)) {
+            log.error("refConditionField 不能为空");
+            return false;
+        }
+        if (Objects.isNull(ReflectUtil.getField(proceed.getClass(), flexTrans.targetField()))) {
+            log.error("翻译对象目标属性{}不存在", targetField);
+            return false;
+        }
+        return true;
+    }
+}

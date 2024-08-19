@@ -19,6 +19,7 @@
         （1） 基本数据类型-》基本数据类型
         （2） 基本数据类型-》实体
         3. 内置controller支持rpc翻译
+        4. todo 考虑加一个类似于mappers 里面可以一个id翻译多个字段
     </description>
     <properties>
         <java.version>1.8</java.version>

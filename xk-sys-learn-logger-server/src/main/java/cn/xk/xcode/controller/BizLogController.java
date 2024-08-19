@@ -11,6 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/bizLog")
-public class BizLogController
-{
+public class BizLogController {
 }

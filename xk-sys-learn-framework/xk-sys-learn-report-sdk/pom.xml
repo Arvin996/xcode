@@ -13,6 +13,7 @@
     <description>
         1. 提供导出报表的等待队列queue 防止OOM
         2. 提供多线程百万级数据报表导出 提供效率的同时防止OOM
+        3. 新思路优化 考虑使用disruptor队列来导出报表
     </description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

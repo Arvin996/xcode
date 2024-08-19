@@ -1,5 +1,7 @@
 package cn.xk.xcode.entity.dto;
 
+import cn.xk.xcode.enums.CheckCodeGenerateType;
+import cn.xk.xcode.validation.InStrEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +28,7 @@ public class CheckCodeVerifyReqDto
     private String code;
 
     @NotNull
-    @Schema(description = "生成类型")
+    @Schema(description = "生成类型", example = "email")
+    @InStrEnum(CheckCodeGenerateType.class)
     private String type;
 }

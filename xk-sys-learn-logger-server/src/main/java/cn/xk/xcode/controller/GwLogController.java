@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/Gwlog")
-public class GwLogController
-{
+public class GwLogController {
 
 }

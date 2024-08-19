@@ -2,7 +2,6 @@ package cn.xk.xcode.client;
 
 import cn.xk.xcode.entity.dto.MemberQueryDto;
 import cn.xk.xcode.entity.dto.MemberUserListQueryDto;
-import cn.xk.xcode.entity.dto.MemberUsersQueryDto;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;

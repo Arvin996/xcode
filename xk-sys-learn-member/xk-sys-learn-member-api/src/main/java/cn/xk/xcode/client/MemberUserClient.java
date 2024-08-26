@@ -1,6 +1,7 @@
 package cn.xk.xcode.client;
 
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
+import cn.xk.xcode.factory.MemberUserFallFactory;
 import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  * @Description MemberUserClient
  */
-@FeignClient("xk-sys-member")
+@FeignClient(value = "xk-sys-member", fallbackFactory = MemberUserFallFactory.class)
 @Tag(name = "用户rpc接口")
 @RequestMapping("/member-user")
 public interface MemberUserClient {

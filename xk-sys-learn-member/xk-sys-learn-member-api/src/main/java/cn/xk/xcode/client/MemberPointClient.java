@@ -1,6 +1,7 @@
 package cn.xk.xcode.client;
 
 import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
+import cn.xk.xcode.factory.MemberPointFallFactory;
 import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Version 1.0
  * @Description MemberPointClient
  */
-@FeignClient("xk-sys-member")
+@FeignClient(value = "xk-sys-member", fallbackFactory = MemberPointFallFactory.class)
 @Tag(name = "用户积分rpc接口")
 @RequestMapping("/member-point")
-public interface MemberPointClient
-{
+public interface MemberPointClient {
     @Operation(summary = "用户积分变更")
     @PostMapping("/memberPointChange")
     CommonResult<Boolean> memberPointChange(@RequestBody MemberPointChangeReqDto memberPointChangeReqDto);

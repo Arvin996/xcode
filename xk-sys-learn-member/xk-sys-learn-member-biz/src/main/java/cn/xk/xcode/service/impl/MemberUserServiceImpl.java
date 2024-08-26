@@ -1,22 +1,26 @@
 package cn.xk.xcode.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.xk.xcode.entity.dto.user.MemberUserBaseDto;
+import cn.hutool.extra.spring.SpringUtil;
+import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
+import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
 import cn.xk.xcode.entity.dto.user.MemberUserSignDto;
-import cn.xk.xcode.entity.po.MemberSignPo;
+import cn.xk.xcode.entity.po.*;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
+import cn.xk.xcode.enums.MemberPointChangeBizTypeEnum;
+import cn.xk.xcode.event.MemberExperienceRecordEvent;
+import cn.xk.xcode.event.MemberLevelChangeRecordEvent;
+import cn.xk.xcode.event.MemberPointRecordEvent;
+import cn.xk.xcode.event.MemberSignRecordEvent;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.service.MemberLevelService;
-import cn.xk.xcode.service.MemberSignRecordService;
 import cn.xk.xcode.service.MemberSignService;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import cn.xk.xcode.entity.po.MemberUserPo;
 import cn.xk.xcode.mapper.MemberUserMapper;
 import cn.xk.xcode.service.MemberUserService;
-import com.xk.xcode.core.utils.AreaUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,10 +28,13 @@ import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+import static cn.xk.xcode.entity.def.MemberLevelTableDef.MEMBER_LEVEL_PO;
 import static cn.xk.xcode.entity.def.MemberSignTableDef.MEMBER_SIGN_PO;
 import static cn.xk.xcode.entity.def.MemberUserTableDef.MEMBER_USER_PO;
-import static cn.xk.xcode.enums.MemberErrorCodeConstants.USER_NOT_EXISTS;
+import static cn.xk.xcode.enums.MemberErrorCodeConstants.*;
+import static cn.xk.xcode.enums.MemberPointChangeBizTypeEnum.SIGN;
 
 /**
  * 服务层实现。
@@ -40,9 +47,6 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
 
     @Resource
     private MemberSignService memberSignService;
-
-    @Resource
-    private MemberSignRecordService memberSignRecordService;
 
     @Resource
     private MemberLevelService memberLevelService;
@@ -101,8 +105,154 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
     public Boolean userSign(MemberUserSignDto memberUserSignDto) {
         String userId = memberUserSignDto.getId();
         Integer day = memberUserSignDto.getDay();
-        MemberUserPo memberUserPo = this.getById(userId);
         MemberSignPo memberSignPo = memberSignService.getOne(MEMBER_SIGN_PO.DAY.eq(day));
-        return null;
+        if (ObjectUtil.isNull(memberSignPo)) {
+            ExceptionUtil.castServiceException(SIGN_IN_CONFIG_NOT_EXISTS, day);
+        }
+        // 1. 创建签到记录 这里考虑使用异步事件监听的方式 更优雅
+        MemberSignRecordPo memberSignRecordPo = new MemberSignRecordPo();
+        memberSignRecordPo.setUserId(userId);
+        memberSignRecordPo.setDay(day);
+        memberSignRecordPo.setPoint(memberSignPo.getPoint());
+        SpringUtil.publishEvent(new MemberSignRecordEvent(memberSignRecordPo));
+        // 2. 增加积分 创建积分增加记录
+        MemberPointChangeReqDto memberPointChangeReqDto = MemberPointChangeReqDto.builder().point(memberSignPo.getPoint())
+                .bizId(day.toString()).bizType(SIGN.getType()).build();
+        memberPointChangeReqDto.setUserId(userId);
+        memberPointChange(memberPointChangeReqDto);
+        // 3. 增加经验 这里要判断用户是否升级
+        MemberExperienceChangeReqDto memberExperienceChangeReqDto = MemberExperienceChangeReqDto.builder().bizId(day.toString()).bizType(SIGN.getType()).experience(memberSignPo.getExperience())
+                .build();
+        memberExperienceChangeReqDto.setUserId(userId);
+        memberExperienceChange(memberExperienceChangeReqDto);
+        return true;
     }
+
+    @Override
+    public void memberPointChange(MemberPointChangeReqDto memberPointChangeReqDto) {
+        String userId = memberPointChangeReqDto.getUserId();
+        Integer bizType = memberPointChangeReqDto.getBizType();
+        String bizId = memberPointChangeReqDto.getBizId();
+        Integer point = memberPointChangeReqDto.getPoint();
+        MemberUserPo memberUserPo = this.getById(userId);
+        if (ObjectUtil.isNull(memberUserPo)) {
+            ExceptionUtil.castServiceException(USER_NOT_EXISTS);
+        }
+        MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum = MemberPointChangeBizTypeEnum.getByType(bizType);
+        if (ObjectUtil.isNull(memberPointChangeBizTypeEnum)) {
+            ExceptionUtil.castServiceException(POINT_BIZ_NOT_SUPPORT);
+        }
+        if (!memberPointChangeBizTypeEnum.isAdd()) {
+            memberUserPo.setPoint(memberUserPo.getPoint() - point);
+        } else {
+            memberUserPo.setPoint(memberUserPo.getPoint() + point);
+        }
+        MemberPointRecordPo memberPointRecordPo = new MemberPointRecordPo();
+        memberPointRecordPo.setUserId(userId);
+        memberPointRecordPo.setBizType(bizType);
+        memberPointRecordPo.setBizId(bizId);
+        memberPointRecordPo.setTitle(memberPointChangeBizTypeEnum.getName());
+        memberPointRecordPo.setDescription(String.format(memberPointChangeBizTypeEnum.getDescription(), point));
+        memberPointRecordPo.setChangePoint(point);
+        memberPointRecordPo.setTotalPoint(memberUserPo.getPoint());
+        SpringUtil.publishEvent(new MemberPointRecordEvent(memberPointRecordPo));
+        memberUserPo.setPoint(memberUserPo.getPoint() + point);
+        this.updateById(memberUserPo);
+    }
+
+    @Override
+    public void memberExperienceChange(MemberExperienceChangeReqDto memberExperienceChangeReqDto) {
+        Integer experience = memberExperienceChangeReqDto.getExperience();
+        String bizId = memberExperienceChangeReqDto.getBizId();
+        String userId = memberExperienceChangeReqDto.getUserId();
+        MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum = MemberPointChangeBizTypeEnum.getByType(memberExperienceChangeReqDto.getBizType());
+        if (ObjectUtil.isNull(memberPointChangeBizTypeEnum)) {
+            ExceptionUtil.castServiceException(EXPERIENCE_BIZ_NOT_SUPPORT);
+        }
+        // 1. 获取用户
+        MemberUserPo memberUserPo = this.getById(userId);
+        if (ObjectUtil.isNull(memberUserPo)) {
+            ExceptionUtil.castServiceException(USER_NOT_EXISTS);
+        }
+        // 获取用户等级
+        Integer levelId = memberUserPo.getLevelId();
+        // 获取用户现有经验
+        Integer currentExperience = memberUserPo.getExperience();
+        int changeExperience;
+        if (memberPointChangeBizTypeEnum.isAdd()) {
+            // 判断是否升级
+            MemberLevelPo memberLevelPo = memberLevelService.list(MEMBER_LEVEL_PO.LEVEL.gt(levelId)).get(0);
+            if (ObjectUtil.isNull(memberLevelPo)) {
+                // 不存在下一级
+                memberLevelPo = memberLevelService.getOne(MEMBER_LEVEL_PO.LEVEL.eq(levelId));
+                if (Objects.equals(currentExperience, memberLevelPo.getExperience())){
+                    return;
+                }
+                if (currentExperience + experience >= memberLevelPo.getExperience()){
+                    memberUserPo.setExperience(memberLevelPo.getExperience());
+                    changeExperience = memberLevelPo.getExperience() - currentExperience;
+                }else {
+                    memberUserPo.setExperience(currentExperience + experience);
+                    changeExperience = experience;
+                }
+            } else {
+                // 存在下一级
+                changeExperience = experience;
+                memberUserPo.setExperience(experience + currentExperience);
+                if (currentExperience + experience >= memberLevelPo.getExperience()){
+                    // 升级
+                    memberUserPo.setLevelId(memberLevelPo.getLevel());
+                    // 记录日志
+                    createMemberLevelChangeRecord(userId, memberLevelPo, memberUserPo, changeExperience, memberPointChangeBizTypeEnum);
+                }
+            }
+        } else {
+            // 判断是否降级
+            MemberLevelPo memberLevelPo = memberLevelService.list(MEMBER_LEVEL_PO.LEVEL.lt(levelId)).get(0);
+            if (ObjectUtil.isNull(memberLevelPo)){
+                // 不存在上一级
+                if (currentExperience - experience <= 0){
+                    changeExperience = currentExperience;
+                    memberUserPo.setExperience(0);
+                }else {
+                    changeExperience = experience;
+                    memberUserPo.setExperience(currentExperience - experience);
+                }
+            }else {
+                // 存在上一级
+                changeExperience = experience;
+                memberUserPo.setExperience(currentExperience - experience);
+                if (memberLevelPo.getExperience() >= currentExperience - experience){
+                    memberUserPo.setLevelId(memberLevelPo.getId());
+                    // 记录日志
+                    createMemberLevelChangeRecord(userId, memberLevelPo, memberUserPo, changeExperience, memberPointChangeBizTypeEnum);
+                }
+            }
+        }
+        // 经验变更日志
+        MemberExperienceRecordPo memberExperienceRecordPo = new MemberExperienceRecordPo();
+        memberExperienceRecordPo.setUserId(userId);
+        memberExperienceRecordPo.setExperience(changeExperience);
+        memberExperienceRecordPo.setDescription(String.format(memberPointChangeBizTypeEnum.getDescription(), changeExperience));
+        memberExperienceRecordPo.setTitle(memberPointChangeBizTypeEnum.getName());
+        memberExperienceRecordPo.setBizId(bizId);
+        memberExperienceRecordPo.setBizType(memberPointChangeBizTypeEnum.getType());
+        memberExperienceRecordPo.setTotalExperience(memberUserPo.getExperience());
+        SpringUtil.publishEvent(new MemberExperienceRecordEvent(memberExperienceRecordPo));
+        // 更新用户经验
+        this.updateById(memberUserPo);
+    }
+
+    private static void createMemberLevelChangeRecord(String userId, MemberLevelPo memberLevelPo, MemberUserPo memberUserPo, int changeExperience, MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum) {
+        MemberLevelChangeRecordPo memberLevelChangeRecordPo = new MemberLevelChangeRecordPo();
+        memberLevelChangeRecordPo.setUserId(userId);
+        memberLevelChangeRecordPo.setLevelId(memberLevelPo.getLevel());
+        memberLevelChangeRecordPo.setLevelName(memberLevelPo.getName());
+        memberLevelChangeRecordPo.setTotalExperience(memberUserPo.getExperience());
+        memberLevelChangeRecordPo.setChangeExperience(changeExperience);
+        memberLevelChangeRecordPo.setTitle(memberPointChangeBizTypeEnum.getName());
+        memberLevelChangeRecordPo.setDescription(String.format(memberPointChangeBizTypeEnum.getDescription(), changeExperience));
+        SpringUtil.publishEvent(new MemberLevelChangeRecordEvent(memberLevelChangeRecordPo));
+    }
+
 }

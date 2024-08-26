@@ -53,6 +53,7 @@ public interface MemberErrorCodeConstants
     IntErrorCode LEVEL_EXPERIENCE_MAX = new IntErrorCode(1_004_011_004, "升级经验必须小于下一个等级[{}]设置的升级经验[{}]");
     IntErrorCode LEVEL_HAS_USER = new IntErrorCode(1_004_011_005, "用户等级下存在用户，无法删除");
     IntErrorCode EXPERIENCE_BIZ_NOT_SUPPORT = new IntErrorCode(1_004_011_201, "用户经验业务类型不支持");
+    IntErrorCode POINT_BIZ_NOT_SUPPORT = new IntErrorCode(1_004_011_202, "用户积分业务类型不支持");
 
     //========== 用户分组 1-004-012-000 ==========
     IntErrorCode GROUP_NOT_EXISTS = new IntErrorCode(1_004_012_000, "用户分组不存在");

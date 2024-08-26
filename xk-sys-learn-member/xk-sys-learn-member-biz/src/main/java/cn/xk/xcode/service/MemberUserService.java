@@ -1,6 +1,7 @@
 package cn.xk.xcode.service;
 
-import cn.xk.xcode.entity.dto.user.MemberUserBaseDto;
+import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
+import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
 import cn.xk.xcode.entity.dto.user.MemberUserSignDto;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
 import com.mybatisflex.core.service.IService;
@@ -29,4 +30,8 @@ public interface MemberUserService extends IService<MemberUserPo> {
     MemberUserResultVo getUserByEmail(String email);
 
     Boolean userSign(MemberUserSignDto memberUserSignDto);
+
+    void memberPointChange(MemberPointChangeReqDto memberPointChangeReqDto);
+
+    void memberExperienceChange(MemberExperienceChangeReqDto memberExperienceChangeReqDto);
 }

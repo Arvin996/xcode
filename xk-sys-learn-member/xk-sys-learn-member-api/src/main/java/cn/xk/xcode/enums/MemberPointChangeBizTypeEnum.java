@@ -14,8 +14,7 @@ import java.util.Arrays;
  */
 @Getter
 @AllArgsConstructor
-public enum MemberPointChangeBizTypeEnum implements IntEnumValueToArray
-{
+public enum MemberPointChangeBizTypeEnum implements IntEnumValueToArray {
     SIGN(1, "签到", "签到获得 {} 积分", true),
 //    ADMIN(2, "管理员修改", "管理员修改 {} 积分", true),
 //

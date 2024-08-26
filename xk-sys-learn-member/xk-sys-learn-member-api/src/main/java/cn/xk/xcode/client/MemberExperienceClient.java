@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(value = "xk-sys-member", fallbackFactory = MemberExperienceFallFactory.class)
 @Tag(name = "用户经验rpc接口")
 @RequestMapping("/member-experience")
-public interface MemberExperienceClient
-{
+public interface MemberExperienceClient {
     @Operation(summary = "用户经验变更")
     @PostMapping("/memberExperienceChange")
     CommonResult<Boolean> memberExperienceChange(@RequestBody MemberExperienceChangeReqDto memberExperienceChangeReqDto);

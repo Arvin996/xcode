@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.po;
 
+import cn.xk.xcode.listener.BaseEntityChangeListener;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("member_sign")
+@Table(value = "member_sign", onUpdate = BaseEntityChangeListener.class)
 public class MemberSignPo implements Serializable {
 
     private static final long serialVersionUID = 1L;

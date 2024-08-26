@@ -13,8 +13,7 @@ import org.mapstruct.Mapping;
  * @description
  */
 @Mapper(componentModel = "spring")
-public interface UserConvert
-{
+public interface UserConvert {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "updateTime", ignore = true)

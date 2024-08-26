@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,44 +21,26 @@ import javax.validation.constraints.NotNull;
 public class AddUserDto
 {
     @Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
+    @NotBlank(message = "用户名不能为空")
     private String username;
 
-    /**
-     * 用户登录密码
-     */
-    @NotNull
-    @Length(min = 8, max = 16)
+    @NotBlank(message = "密码不能为空")
+    @Length(min = 8, max = 16, message = "密码长度必须在8-16位之间")
     @Schema(description = "用户密码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String password;
 
-    /**
-     * 用户昵称
-     */
     @Schema(description = "用户昵称")
     private String nickname;
 
-    /**
-     * 用户头像
-     */
     @Schema(description = "用户头像")
     private String userpic;
 
-    /**
-     * qq
-     */
     @Schema(description = "qq")
     private String qq;
 
-    /**
-     * 微信
-     */
     @Schema(description = "微信")
     private String wx;
 
-    /**
-     * 手机号
-     */
     @Schema(description = "手机号")
     @Mobile
     private String mobile;

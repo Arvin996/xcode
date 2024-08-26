@@ -5,6 +5,7 @@ import cn.xk.xcode.validation.InIntEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,12 +25,12 @@ public class MemberExperienceChangeReqDto extends MemberBaseReqDto{
     @Schema(description = "变更经验")
     private Integer experience;
 
-    @NotNull
+    @NotNull(message = "bizType不能为空")
     @Schema(description = "何种业务引起的经验变更")
-    @InIntEnum(MemberExperienceChangeBizTypeEnum.class)
+    @InIntEnum(value = MemberExperienceChangeBizTypeEnum.class, message = "bizType不在范围内")
     private Integer bizType;
 
-    @NotNull
+    @NotBlank(message = "bizId不能为空")
     @Schema(description = "业务id")
     private String bizId;
 }

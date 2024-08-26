@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,11 +22,11 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "代码生成")
 public class GenerateCodeDto extends UpdateDatabaseConnInfoPoDto
 {
-    @NotNull
+    @NotBlank(message = "表名不能为空")
     @Schema(description = "表名")
     private String tableName;
 
-    @NotNull
+    @NotBlank(message = "生成类型不能为空")
     @Schema(description = "生成类型")
     private String code;
 

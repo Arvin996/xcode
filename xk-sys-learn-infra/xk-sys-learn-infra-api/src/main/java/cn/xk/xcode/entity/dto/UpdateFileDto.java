@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class UpdateFileDto
 {
-    @NotNull
+    @NotBlank(message = "文件Id不能为空")
     @Schema(description = "文件id")
     private String fileId;
 

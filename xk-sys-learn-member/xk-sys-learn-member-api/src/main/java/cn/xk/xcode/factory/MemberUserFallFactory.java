@@ -1,12 +1,11 @@
 package cn.xk.xcode.factory;
 
 import cn.xk.xcode.client.MemberUserClient;
-import cn.xk.xcode.entity.dto.MemberQueryDto;
-import cn.xk.xcode.entity.dto.MemberUserListQueryDto;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
+import java.util.Collection;
 import java.util.List;
 
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.SERVICE_FALL_BACK;
@@ -23,12 +22,27 @@ public class MemberUserFallFactory implements FallbackFactory<MemberUserClient> 
     public MemberUserClient create(Throwable cause) {
         return new MemberUserClient() {
             @Override
-            public CommonResult<MemberUserResultVo> getMemberUser(MemberQueryDto memberUsersQueryDto) {
+            public CommonResult<MemberUserResultVo> getMemberUser(String userId) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
 
             @Override
-            public CommonResult<List<MemberUserResultVo>> getMemberUserList(MemberUserListQueryDto memberUserListQueryDto) {
+            public CommonResult<List<MemberUserResultVo>> getMemberUserList(Collection<Long> ids) {
+                return CommonResult.error(SERVICE_FALL_BACK);
+            }
+
+            @Override
+            public CommonResult<List<MemberUserResultVo>> getUserListByNickname(String nickname) {
+                return CommonResult.error(SERVICE_FALL_BACK);
+            }
+
+            @Override
+            public CommonResult<MemberUserResultVo> getUserByMobile(String mobile) {
+                return CommonResult.error(SERVICE_FALL_BACK);
+            }
+
+            @Override
+            public CommonResult<MemberUserResultVo> getUserByEmail(String email) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
         };

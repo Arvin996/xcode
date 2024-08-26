@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.vo;
 
+import com.xk.xcode.core.entity.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,7 @@ public class MemberAddressResultVo
     private Integer areaId;
 
     @Schema(description = "地区详情")
-    private String areaName;
+    private Area area;
 
     @Schema(description = "详细的收件地址 如楼层+门牌号")
     private String detailAddress;

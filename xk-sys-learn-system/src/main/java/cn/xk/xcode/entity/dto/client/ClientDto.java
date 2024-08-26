@@ -25,7 +25,7 @@ public class ClientDto {
     /**
      * 客户端id
      */
-    @NotNull
+    @NotNull(message = "clientId cannot be null")
     @Schema(description = "客户端编号", example = "xk-sys-learn")
     private String clientId;
 

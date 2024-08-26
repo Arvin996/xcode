@@ -3,6 +3,7 @@ package cn.xk.xcode.client;
 import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
 import cn.xk.xcode.factory.MemberExperienceFallFactory;
 import cn.xk.xcode.pojo.CommonResult;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient(value = "xk-sys-member", fallbackFactory = MemberExperienceFallFactory.class)
 @Tag(name = "用户经验rpc接口")
-@RequestMapping("/member-client")
+@RequestMapping("/member-experience")
 public interface MemberExperienceClient
 {
+    @Operation(summary = "用户经验变更")
     @PostMapping("/memberExperienceChange")
     CommonResult<Boolean> memberExperienceChange(@RequestBody MemberExperienceChangeReqDto memberExperienceChangeReqDto);
 }

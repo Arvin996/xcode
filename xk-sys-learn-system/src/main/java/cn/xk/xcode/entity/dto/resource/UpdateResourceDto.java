@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -16,16 +17,15 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @Schema(description = "修改资源")
-public class UpdateResourceDto{
+public class UpdateResourceDto {
 
-    @NotNull
+    @NotNull(message = "资源id不能为空")
     @Schema(description = "资源id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer id;
 
     @Schema(description = "资源路径", requiredMode = Schema.RequiredMode.AUTO)
-    @NotNull
+    @NotBlank(message = "资源路径不能为空")
     private String recourseCode;
-
 
     @Schema(description = "资源名称")
     private String resourceName;

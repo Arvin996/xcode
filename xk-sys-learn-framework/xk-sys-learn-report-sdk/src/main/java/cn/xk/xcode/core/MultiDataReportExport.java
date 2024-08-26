@@ -14,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
 public abstract class MultiDataReportExport implements Runnable {
     private int TotalData;
     private int DataLengthUnit;
+    // todo 待完成
     private CountDownLatch countDownLatch;
     @Override
     public void run() {

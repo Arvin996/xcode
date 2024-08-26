@@ -20,8 +20,7 @@ import java.util.List;
 @FeignClient(value = "xk-sys-member", fallbackFactory = MemberAddressFallFactory.class)
 @Tag(name = "用户地址rpc接口")
 @RequestMapping("/member-address")
-public interface MemberAddressClient
-{
+public interface MemberAddressClient {
     @Operation(summary = "获取用户所有收货地址")
     @PostMapping("/list")
     CommonResult<List<MemberAddressResultVo>> getMemberAddressList(@RequestParam("userId") String userId);

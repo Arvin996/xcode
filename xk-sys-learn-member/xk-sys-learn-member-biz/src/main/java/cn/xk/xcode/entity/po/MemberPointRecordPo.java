@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.po;
 
+import cn.xk.xcode.listener.BaseEntityChangeListener;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("member_point_record")
+@Table(value = "member_point_record", onInsert = BaseEntityChangeListener.class)
 public class MemberPointRecordPo implements Serializable {
 
     private static final long serialVersionUID = 1L;

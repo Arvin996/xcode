@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,10 +19,10 @@ import javax.validation.constraints.NotNull;
 public class AddResourceDto {
 
     @Schema(description = "资源路径", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
+    @NotBlank(message = "资源Code cannot be null")
     private String recourseCode;
 
-
     @Schema(description = "资源名称")
+    @NotBlank(message = "资源Name不能为空")
     private String resourceName;
 }

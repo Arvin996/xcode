@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,14 +21,15 @@ import javax.validation.constraints.NotNull;
 public class UpdateDictDto
 {
     @Schema(description = "字典code", example = "01")
+    @NotNull(message = "字典code不能为空")
     private String code;
 
     @Schema(description = "字典名称", example = "测试环境")
-    @NotNull
+    @NotBlank(message = "字典name不能为空")
     private String name;
 
     @Schema(description = "字典父id", example = "0")
-    @NotNull
+    @NotNull(message = "字典parId不能为空")
     private String parId;
 
     @Schema(description = "字典备注", example = "测试环境")

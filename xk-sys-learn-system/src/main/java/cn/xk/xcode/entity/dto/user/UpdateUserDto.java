@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "更新用户信息实体类")
 public class UpdateUserDto {
 
-    @NotNull
+    @NotNull(message = "用户id不能为空")
     @Schema(description = "用户id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer id;
 

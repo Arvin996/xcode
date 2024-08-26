@@ -21,13 +21,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UploadFileDto
-{
-    @NotNull
+public class UploadFileDto {
+
+    @NotNull(message = "文件内容不能为空")
     @Schema(description = "文件内容")
     private MultipartFile file;
 
-    @NotNull
+    @NotNull(message = "文件桶不能为空")
     @Schema(description = "文件桶")
     private MinioBucketType bucketType;
 

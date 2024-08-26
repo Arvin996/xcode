@@ -4,7 +4,7 @@ package cn.xk.xcode.handler;
  * @Author xuk
  * @Date 2024/7/31 19:14
  * @Version 1.0
- * @Description SaveCheckCodeStragety
+ * @Description SaveCheckCodeStrategy
  */
 public interface SaveCheckCodeCacheStrategy {
 

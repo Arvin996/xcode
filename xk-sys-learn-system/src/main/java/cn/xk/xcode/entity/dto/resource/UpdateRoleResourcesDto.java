@@ -18,7 +18,7 @@ import java.util.List;
 @Schema(description = "修改资源")
 public class UpdateRoleResourcesDto {
 
-    @NotNull
+    @NotNull(message = "角色id不能为空")
     @Schema(description = "角色id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer id;
 

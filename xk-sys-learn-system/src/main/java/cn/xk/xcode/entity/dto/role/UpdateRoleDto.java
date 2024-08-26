@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "更新角色dto")
 public class UpdateRoleDto extends AddRoleDto
 {
-    @NotNull
+    @NotNull(message = "角色id不能为空")
     @Schema(description = "角色id", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer id;
 

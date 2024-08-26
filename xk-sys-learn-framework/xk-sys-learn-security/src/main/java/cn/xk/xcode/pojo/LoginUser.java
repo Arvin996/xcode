@@ -18,8 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "登录用户")
-public class LoginUser
-{
+public class LoginUser {
     @Schema(description = "用户名")
     private String username;
 

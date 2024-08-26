@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 public class UpdateDatabaseConnInfoPoDto
 {
 
-    @NotNull
+    @NotNull(message = "id不能为空")
     @Schema(description = "数据库配置id")
     private Integer id;
 

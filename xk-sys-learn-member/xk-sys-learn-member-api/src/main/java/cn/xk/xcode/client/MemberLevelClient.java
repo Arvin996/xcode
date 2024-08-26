@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient(value = "xk-sys-member", fallbackFactory = MemberLevelFallFactory.class)
 @Tag(name = "用户等级rpc接口")
-@RequestMapping("/member-client")
+@RequestMapping("/member-level")
 public interface MemberLevelClient
 {
-    @Operation(summary = "用户积分变更")
+    @Operation(summary = "获取用户等级")
     @PostMapping("/getMemberUserLevel")
     CommonResult<MemberLevelResultVo> getMemberUserLevel(@Validated @RequestBody MemberBaseReqDto memberBaseReqDto);
 }

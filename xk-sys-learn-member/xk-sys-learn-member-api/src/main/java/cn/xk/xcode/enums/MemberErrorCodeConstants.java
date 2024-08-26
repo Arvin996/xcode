@@ -29,15 +29,18 @@ public interface MemberErrorCodeConstants
     IntErrorCode TAG_NOT_EXISTS = new IntErrorCode(1_004_006_000, "用户标签不存在");
     IntErrorCode TAG_NAME_EXISTS = new IntErrorCode(1_004_006_001, "用户标签已经存在");
     IntErrorCode TAG_HAS_USER = new IntErrorCode(1_004_006_002, "用户标签下存在用户，无法删除");
+    IntErrorCode TAG_NOT_ALLOWED_UPDATE = new IntErrorCode(1_004_006_003, "用户标签不存在，请刷新页面");
 
     //========== 积分配置 1-004-007-000 ==========
+    IntErrorCode POINT_CONFIG_ALREADY_EXISTS = new IntErrorCode(1_004_007_000, "积分配置已存在, 请勿重复添加");
+    IntErrorCode POINT_CONFIG_NOT_EXISTS = new IntErrorCode(1_004_007_001, "积分配置已存在, 请勿重复添加");
 
     //========== 积分记录 1-004-008-000 ==========
     IntErrorCode POINT_RECORD_BIZ_NOT_SUPPORT = new IntErrorCode(1_004_008_000, "用户积分记录业务类型不支持");
 
     //========== 签到配置 1-004-009-000 ==========
-    IntErrorCode SIGN_IN_CONFIG_NOT_EXISTS = new IntErrorCode(1_004_009_000, "签到天数规则不存在");
-    IntErrorCode SIGN_IN_CONFIG_EXISTS = new IntErrorCode(1_004_009_001, "签到天数规则已存在");
+    IntErrorCode SIGN_IN_CONFIG_NOT_EXISTS = new IntErrorCode(1_004_009_000, "星期{}的签到规则不存在");
+    IntErrorCode SIGN_IN_CONFIG_EXISTS = new IntErrorCode(1_004_009_001, "星期{}的签到规则已存在");
 
     //========== 签到配置 1-004-010-000 ==========
     IntErrorCode SIGN_IN_RECORD_TODAY_EXISTS = new IntErrorCode(1_004_010_000, "今日已签到，请勿重复签到");
@@ -54,5 +57,8 @@ public interface MemberErrorCodeConstants
     //========== 用户分组 1-004-012-000 ==========
     IntErrorCode GROUP_NOT_EXISTS = new IntErrorCode(1_004_012_000, "用户分组不存在");
     IntErrorCode GROUP_HAS_USER = new IntErrorCode(1_004_012_001, "用户分组下存在用户，无法删除");
+    IntErrorCode GROUP_HAS_EXISTS = new IntErrorCode(1_004_012_002, "用户分组{}已存在");
 
+    //========== 系统错误 1-004-013-000 ==========
+    IntErrorCode SYSTEM_ERROR = new IntErrorCode(1_004_013_000, "操作失败，请登录后再操作");
 }

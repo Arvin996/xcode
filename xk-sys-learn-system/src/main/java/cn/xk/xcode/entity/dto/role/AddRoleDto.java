@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,9 +18,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "新增角色dto")
-public class AddRoleDto
-{
-    @NotNull
+public class AddRoleDto {
+
+    @NotBlank(message = "角色名称不能为空")
     @Schema(description = "角色名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 }

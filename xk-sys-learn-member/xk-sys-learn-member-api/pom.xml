@@ -26,6 +26,12 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-ip</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

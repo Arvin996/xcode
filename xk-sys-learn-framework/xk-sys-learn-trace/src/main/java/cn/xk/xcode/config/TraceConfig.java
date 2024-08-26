@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(TraceProperties.class)
 @ConditionalOnProperty
-public class TraceConfig
-{
+public class TraceConfig {
 
 }

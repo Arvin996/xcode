@@ -47,12 +47,6 @@
             <version>${revision}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-security</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
     </dependencies>
 
 </project>

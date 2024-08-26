@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient(value = "xk-sys-member", fallbackFactory = MemberConfigFallFactory.class)
 @Tag(name = "用户信息配置rpc接口")
-@RequestMapping("/member-client")
+@RequestMapping("/member-config")
 public interface MemberConfigClient
 {
     @Operation(summary = "获取会员配置信息")

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "生成验证码dto")
 public class CheckCodeGenReqDto
 {
-    @NotNull
+    @NotBlank(message = "验证码生成类型不能为空")
     @Schema(description = "生成类型", example = "email")
     @InStrEnum(CheckCodeGenerateType.class)
     private String type;

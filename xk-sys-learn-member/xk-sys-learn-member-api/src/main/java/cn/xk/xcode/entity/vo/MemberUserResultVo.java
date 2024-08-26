@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.vo;
 
+import com.xk.xcode.core.entity.Area;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,10 @@ import java.util.List;
 @Builder
 @Schema(description = "用户信息返回")
 public class MemberUserResultVo {
+
+    @Schema(description = "id")
+    private String id;
+
     @Schema(description = "用户手机号")
     private String mobile;
 
@@ -70,7 +75,7 @@ public class MemberUserResultVo {
     private MemberLevelResultVo memberLevelResultVo;
 
     @Schema(description = "具体地区")
-    private String AreaName;
+    private Area area;
 
     @Schema(description = "具体标签")
     private List<String> tagNames;

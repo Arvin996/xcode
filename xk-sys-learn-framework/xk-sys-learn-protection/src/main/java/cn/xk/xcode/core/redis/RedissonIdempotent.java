@@ -2,8 +2,6 @@ package cn.xk.xcode.core.redis;
 
 import cn.xk.xcode.core.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;
-import org.redisson.Redisson;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,8 +12,7 @@ import java.util.concurrent.TimeUnit;
  * @Description RedisIdempotent
  */
 @RequiredArgsConstructor
-public class RedissonIdempotent
-{
+public class RedissonIdempotent {
     private static final String IDEMPOTENT = "idempotent:%s";
 
     private final DistributedLock distributedLock;

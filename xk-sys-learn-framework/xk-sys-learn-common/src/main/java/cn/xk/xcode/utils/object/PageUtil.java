@@ -13,8 +13,7 @@ import org.springframework.util.Assert;
  * @Version 1.0
  * @Description PageUtil
  */
-public class PageUtil
-{
+public class PageUtil {
     private static final Object[] ORDER_TYPES = new String[]{SortedField.ORDER_ASC, SortedField.ORDER_DESC};
 
     public static int getStart(PageParam pageParam){

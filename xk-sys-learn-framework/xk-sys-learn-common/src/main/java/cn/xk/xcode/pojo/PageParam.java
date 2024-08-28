@@ -1,6 +1,7 @@
 package cn.xk.xcode.pojo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -15,8 +16,8 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Schema(description = "分页参数")
-public class PageParam implements java.io.Serializable
-{
+@AllArgsConstructor
+public class PageParam implements java.io.Serializable {
     public static final int PAGE_NO_DEFAULT = 1;
 
     public static final int PAGE_SIZE_DEFAULT = 10;

@@ -25,6 +25,11 @@ public class MemberUserTableDef extends TableDef {
     public final QueryColumn ID = new QueryColumn(this, "id");
 
     /**
+     * 用户密码
+     */
+
+    public final QueryColumn PASSWORD = new QueryColumn(this, "password");
+    /**
      * 用户性别 0男 1女
      */
     public final QueryColumn SEX = new QueryColumn(this, "sex");
@@ -107,7 +112,7 @@ public class MemberUserTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, MOBILE, EMAIL, STATUS, NICKNAME, LEVEL_ID, EXPERIENCE, AVATAR, POINT, TAG_IDS, GROUP_ID, SEX, BIRTHDAY, LOGIN_IP, LOGIN_AREA_ID, LOGIN_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, PASSWORD, MOBILE, EMAIL, STATUS, NICKNAME, LEVEL_ID, EXPERIENCE, AVATAR, POINT, TAG_IDS, GROUP_ID, SEX, BIRTHDAY, LOGIN_IP, LOGIN_AREA_ID, LOGIN_TIME};
 
     public MemberUserTableDef() {
         super("", "member_user");

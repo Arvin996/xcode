@@ -17,8 +17,8 @@ import java.lang.reflect.Method;
  * @Version 1.0
  * @Description BaseKeyResolver
  */
-public interface BaseKeyResolver
-{
+public interface BaseKeyResolver {
+
     String resolver(JoinPoint joinPoint, RateLimiter rateLimiter);
 
     String resolver(JoinPoint joinPoint, Idempotent idempotent);

@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RequiredArgsConstructor
 public class RedissonRateLimiter {
+
     private static final String RATE_LIMITER = "rate_limiter:%s";
 
     private final RedissonClient redissonClient;

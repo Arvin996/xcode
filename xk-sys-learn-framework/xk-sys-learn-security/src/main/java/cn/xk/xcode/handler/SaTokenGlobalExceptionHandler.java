@@ -4,6 +4,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.xk.xcode.exception.GlobalErrorCodeConstants;
 import cn.xk.xcode.pojo.CommonResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @Version 1.0
  * @Description SaTokenGlobalExceptionHandler
  */
+@Slf4j
 @RestControllerAdvice
 public class SaTokenGlobalExceptionHandler
 {
     @ExceptionHandler(NotLoginException.class)
     public CommonResult<String> notLoginExceptionHandler(NotLoginException e)
     {
-        e.printStackTrace();
+        log.error(e.getMessage());
         String message;
         if (e.getType().equals(NotLoginException.NOT_TOKEN)) {
             message = "未能读取到有效 token";
@@ -43,6 +45,7 @@ public class SaTokenGlobalExceptionHandler
 
     @ExceptionHandler(NotPermissionException.class)
     public CommonResult<String> handlerNotPermissionException(NotPermissionException e) {
+        log.error(e.getMessage());
         return CommonResult.error(GlobalErrorCodeConstants.FORBIDDEN);
     }
 

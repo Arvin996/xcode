@@ -5,13 +5,14 @@ import cn.xk.xcode.core.redis.RedissonIdempotent;
 import cn.xk.xcode.core.resolver.IdempotentKeyResolver;
 import cn.xk.xcode.exception.GlobalErrorCodeConstants;
 import cn.xk.xcode.exception.core.ServiceException;
-import lombok.RequiredArgsConstructor;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,15 +23,18 @@ import java.util.Map;
  */
 @Aspect
 @Slf4j
-@RequiredArgsConstructor
-public class IdempotentAop
-{
-    private final Map<Class<? extends IdempotentKeyResolver>, IdempotentKeyResolver> keyResolvers;
+public class IdempotentAop {
 
+    private final Map<Class<? extends IdempotentKeyResolver>, IdempotentKeyResolver> keyResolvers;
     private final RedissonIdempotent redissonIdempotent;
 
+    public IdempotentAop(RedissonIdempotent redissonIdempotent, List<IdempotentKeyResolver> keyResolvers) {
+        this.redissonIdempotent = redissonIdempotent;
+        this.keyResolvers = CollectionUtil.convertMap(keyResolvers, IdempotentKeyResolver::getClass);
+    }
+
     @Around(value = "@annotation(idempotent)")
-    public Object aroundPointCut(ProceedingJoinPoint joinPoint, Idempotent idempotent) throws Throwable{
+    public Object aroundPointCut(ProceedingJoinPoint joinPoint, Idempotent idempotent) throws Throwable {
         IdempotentKeyResolver idempotentKeyResolver = keyResolvers.get(idempotent.keyResolver());
         Assert.notNull(idempotentKeyResolver, "找不到对应的 IdempotentKeyResolver");
         String resKey = idempotentKeyResolver.resolver(joinPoint, idempotent);
@@ -41,15 +45,15 @@ public class IdempotentAop
             throw new ServiceException(GlobalErrorCodeConstants.REPEATED_REQUESTS.getCode(), idempotent.message());
         }
         Object object;
-        try{
+        try {
             object = joinPoint.proceed();
-        }catch(Throwable e){
-            if (idempotent.unlockWhenException()){
+        } catch (Throwable e) {
+            if (idempotent.unlockWhenException()) {
                 redissonIdempotent.unlock(resKey);
             }
             throw e;
         }
-        if (idempotent.unlockWhenSuccess()){
+        if (idempotent.unlockWhenSuccess()) {
             redissonIdempotent.unlock(resKey);
         }
         return object;

@@ -2,8 +2,12 @@ package cn.xk.xcode.service;
 
 import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
 import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
+import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
+import cn.xk.xcode.entity.dto.user.MemberUserRegisterDto;
 import cn.xk.xcode.entity.dto.user.MemberUserSignDto;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
+import cn.xk.xcode.entity.vo.user.MemberUserLoginVo;
+import cn.xk.xcode.pojo.LoginVO;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.MemberUserPo;
 
@@ -34,4 +38,10 @@ public interface MemberUserService extends IService<MemberUserPo> {
     void memberPointChange(MemberPointChangeReqDto memberPointChangeReqDto);
 
     void memberExperienceChange(MemberExperienceChangeReqDto memberExperienceChangeReqDto);
+
+    Boolean userRegister(MemberUserRegisterDto memberUserRegisterDto);
+
+    MemberUserLoginVo createMemberUserLoginVo(MemberUserPo memberUserPo);
+
+    LoginVO userLogin(MemberUserLoginDto memberUserLoginDto);
 }

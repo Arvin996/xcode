@@ -17,4 +17,8 @@ public enum GlobalStatusEnum {
     private final int code;
 
     private final String name;
+
+    public static boolean isEnable(int code) {
+        return code == ENABLE.code;
+    }
 }

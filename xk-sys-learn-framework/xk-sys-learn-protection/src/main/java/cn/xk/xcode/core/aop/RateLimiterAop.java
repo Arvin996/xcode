@@ -7,12 +7,14 @@ import cn.xk.xcode.core.redis.RedissonRateLimiter;
 import cn.xk.xcode.core.resolver.RateLimiterKeyResolver;
 import cn.xk.xcode.exception.GlobalErrorCodeConstants;
 import cn.xk.xcode.exception.core.ServiceException;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,11 +26,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Aspect
 @Slf4j
-public class RateLimiterAop
-{
-    private final Map<Class<? extends RateLimiterKeyResolver>, RateLimiterKeyResolver> keyResolvers;
+public class RateLimiterAop {
 
+    private final Map<Class<? extends RateLimiterKeyResolver>, RateLimiterKeyResolver> keyResolvers;
     private final RedissonRateLimiter redissonRateLimiter;
+
+    public RateLimiterAop(RedissonRateLimiter redissonRateLimiter, List<RateLimiterKeyResolver> keyResolvers){
+        this.redissonRateLimiter = redissonRateLimiter;
+        this.keyResolvers = CollectionUtil.convertMap(keyResolvers, RateLimiterKeyResolver::getClass);
+    }
 
     @Before("@annotation(rateLimiter)")
     public void beforePointCut(JoinPoint joinPoint, RateLimiter rateLimiter){

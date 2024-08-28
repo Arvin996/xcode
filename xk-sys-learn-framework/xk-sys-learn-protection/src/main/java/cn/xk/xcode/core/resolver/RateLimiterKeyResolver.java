@@ -9,10 +9,9 @@ import org.aspectj.lang.JoinPoint;
  * @Version 1.0
  * @Description RateLimiterKeyResolver
  */
-public interface RateLimiterKeyResolver extends BaseKeyResolver
-{
+public interface RateLimiterKeyResolver extends BaseKeyResolver {
     @Override
-    default String resolver(JoinPoint joinPoint, Idempotent idempotent){
+    default String resolver(JoinPoint joinPoint, Idempotent idempotent) {
         return null;
     }
 }

@@ -36,6 +36,11 @@ public class MemberUserPo implements Serializable {
     private String id;
 
     /**
+     * 用户密码
+     */
+    private String password;
+
+    /**
      * 用户手机号
      */
     private String mobile;

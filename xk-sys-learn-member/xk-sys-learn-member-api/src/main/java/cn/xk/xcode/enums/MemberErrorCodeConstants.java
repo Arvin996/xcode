@@ -12,9 +12,13 @@ public interface MemberErrorCodeConstants
 {
     // ========== 用户相关  1-004-001-000 ============
     IntErrorCode USER_NOT_EXISTS = new IntErrorCode(1_004_001_000, "用户不存在");
-    IntErrorCode USER_MOBILE_NOT_EXISTS = new IntErrorCode(1_004_001_001, "手机号未注册用户");
+    IntErrorCode USER_MOBILE_ALREADY_USED = new IntErrorCode(1_004_001_001, "手机号已注册");
     IntErrorCode USER_MOBILE_USED = new IntErrorCode(1_004_001_002, "修改手机失败，该手机号({})已经被使用");
     IntErrorCode USER_POINT_NOT_ENOUGH = new IntErrorCode(1_004_001_003, "用户积分余额不足");
+    IntErrorCode PASSWORD_AND_CONFIRM_NOT_MATCH = new IntErrorCode(1_004_001_004, "密码和确认密码不一致");
+    IntErrorCode USER_EMAIL_ALREADY_USED = new IntErrorCode(1_004_001_005, "邮箱已注册");
+    IntErrorCode USER_PHONE_NOT_REGISTER = new IntErrorCode(1_004_001_006, "手机号未注册");
+    IntErrorCode USER_EMAIL_NOT_REGISTER = new IntErrorCode(1_004_001_007, "邮箱未注册");
 
     // ========== AUTH 模块 1-004-003-000 ==========
     IntErrorCode AUTH_LOGIN_BAD_CREDENTIALS = new IntErrorCode(1_004_003_000, "登录失败，账号密码不正确");

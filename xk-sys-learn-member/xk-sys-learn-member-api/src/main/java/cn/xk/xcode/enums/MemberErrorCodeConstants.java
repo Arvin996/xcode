@@ -25,6 +25,8 @@ public interface MemberErrorCodeConstants
     IntErrorCode AUTH_LOGIN_USER_DISABLED = new IntErrorCode(1_004_003_001, "登录失败，账号被禁用");
     IntErrorCode AUTH_SOCIAL_USER_NOT_FOUND = new IntErrorCode(1_004_003_005, "登录失败，解析不到三方登录信息");
     IntErrorCode AUTH_MOBILE_USED = new IntErrorCode(1_004_003_007, "手机号已经被使用");
+    IntErrorCode AUTH_OLD_PASSWORD_NOT_CORRECT = new IntErrorCode(1_004_003_008, "旧密码不正确");
+    IntErrorCode AUTH_OLD_PASSWORD_MUST_NOT_EQUAL_NEW = new IntErrorCode(1_004_003_009, "新密码不能与旧密码相同");
 
     // ========== 用户收件地址 1-004-004-000 ==========
     IntErrorCode ADDRESS_NOT_EXISTS = new IntErrorCode(1_004_004_000, "用户收件地址不存在");

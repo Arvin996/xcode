@@ -1,7 +1,6 @@
 package cn.xk.xcode.utils;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 
 /**
  * @Author xuk
@@ -9,8 +8,7 @@ import cn.hutool.core.util.StrUtil;
  * @Version 1.0
  * @Description CheckCodeGenUtils
  */
-public class CheckCodeGenUtils
-{
+public class CheckCodeGenUtils {
     public static String genCode(int len){
         if (4 == len){
             return gen4Code();

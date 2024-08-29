@@ -34,9 +34,6 @@ import java.util.stream.Collectors;
 public class BeanTranAspect {
 
     @Resource
-    private DictContext dictContext;
-
-    @Resource
     private FeignClientBuilder feignClientBuilder;
 
     @Around(value = "@annotation(cn.xk.xcode.annotation.DictTrans) || @within(cn.xk.xcode.annotation.DictTrans)")
@@ -103,7 +100,7 @@ public class BeanTranAspect {
                     DictCodeMethod dictCodeMethod = beanDictTrans.dictCodeMethod();
                     tatgetClassField.setAccessible(true);
                     if (dictCodeMethod.equals(DictCodeMethod.LOCAL)) {
-                        tatgetClassField.set(transPojo, dictContext.getValue(parentId, fieldValue));
+                        tatgetClassField.set(transPojo, DictContext.getValue(parentId, fieldValue));
                     } else {
                         String servicedName = beanDictTrans.serviceName();
                         RpcDictClient rpcDictClient = feignClientBuilder.forType(RpcDictClient.class, servicedName).build();

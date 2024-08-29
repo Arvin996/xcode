@@ -8,6 +8,10 @@
         <version>2.6.13</version>
         <relativePath/>
     </parent>
+    <modules>
+        <module>../xk-sys-learn-dependency</module>
+        <module>../../xk-sys-learn</module>
+    </modules>
     <groupId>cn.xk.xcode</groupId>
     <artifactId>xk-sys-learn-build</artifactId>
     <version>${revision}</version>

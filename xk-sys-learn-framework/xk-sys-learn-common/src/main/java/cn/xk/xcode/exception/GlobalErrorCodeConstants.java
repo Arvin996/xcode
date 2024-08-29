@@ -39,7 +39,7 @@ public interface GlobalErrorCodeConstants
     ErrorCode CHECK_CODE_GEN_ERROR = new IntErrorCode(505, "验证码生成失败");
     ErrorCode CHECK_CODE_SEND_ERROR = new IntErrorCode(506, "验证码发送失败");
     ErrorCode CHECK_CODE_EMAIL_NOT_CONFIG = new IntErrorCode(507, "验证码邮箱未配置");
-    ErrorCode CHECK_CODE_PHONE_NOT_CONFIG = new IntErrorCode(508, "验证码手机短信未配置");
+    ErrorCode CHECK_CODE_MOBILE_NOT_CONFIG = new IntErrorCode(508, "验证码手机短信未配置");
     ErrorCode CHECK_CODE_HANDLER_NOT_EXISTS = new IntErrorCode(509, "对应的验证码处理器不存在");
     ErrorCode MQ_MESSAGE_SEND_FAIL = new IntErrorCode(510, "消息发送失败");
     ErrorCode SERVICE_FALL_BACK = new IntErrorCode(511, "服务熔断");

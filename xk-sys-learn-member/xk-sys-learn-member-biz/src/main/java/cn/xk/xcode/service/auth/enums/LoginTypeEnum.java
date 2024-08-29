@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 public enum LoginTypeEnum implements StringEnumValueToArray {
 
-    PHONE("phone"),
+    MOBILE("mobile"),
 
     EMAIL("email"),
 
@@ -31,7 +31,7 @@ public enum LoginTypeEnum implements StringEnumValueToArray {
         return ArrayUtil.toArray(Arrays.stream(values()).map(LoginTypeEnum::getType).collect(Collectors.toList()));
     }
 
-    public static LoginTypeEnum getLoginTypeEnum(String type){
+    public static LoginTypeEnum getLoginTypeEnum(String type) {
         return Arrays.stream(values()).filter(loginTypeEnum -> loginTypeEnum.getType().equals(type)).findFirst().orElse(null);
     }
 }

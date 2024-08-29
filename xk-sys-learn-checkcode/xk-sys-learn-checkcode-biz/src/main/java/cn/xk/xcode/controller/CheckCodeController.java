@@ -7,6 +7,8 @@ import cn.xk.xcode.entity.vo.CheckCodeGenResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.CheckCodeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 
@@ -17,17 +19,20 @@ import javax.annotation.Resource;
  * @Description CheckCodeController
  */
 @Controller
+@RequestMapping("/checkcode")
 public class CheckCodeController implements CheckCodeClientApi {
 
     @Resource
     private CheckCodeService checkCodeService;
 
     @Override
+    @PostMapping("/genCode")
     public CommonResult<CheckCodeGenResultVo> genCheckCode(CheckCodeGenReqDto checkCodeGenReqDto) {
         return checkCodeService.genCheckCode(checkCodeGenReqDto);
     }
 
     @Override
+    @PostMapping("/verifyCode")
     public CommonResult<Boolean> verifyCode(CheckCodeVerifyReqDto checkCodeVerifyReqDto) {
         return checkCodeService.verifyCode(checkCodeVerifyReqDto);
     }

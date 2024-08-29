@@ -11,8 +11,9 @@ import lombok.RequiredArgsConstructor;
  * @Description QueueExportEventHandler
  */
 @RequiredArgsConstructor
-public class QueueExportEventHandler implements EventHandler<ExportModel> {
+public abstract class AbsQueueExportEventHandler implements EventHandler<ExportModel> {
 
+    // ... todo 考虑怎么优雅封装 通过easyexcel导出
     @Override
     public void onEvent(ExportModel exportModel, long l, boolean b) throws Exception {
 

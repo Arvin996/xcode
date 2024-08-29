@@ -23,7 +23,7 @@ public class InitTransEnumsEventHandler {
 
     private InitTransEnumsEventHandler(){}
 
-    public static GlobalEnumsContext handler() {
+    public static GlobalEnumsContext init() {
         log.info("开始注册globalEnumsContext");
         Map<String, TransEnumConfigurer> beansOfType = SpringUtil.getBeansOfType(TransEnumConfigurer.class);
         TransEnumsRegistry transEnumsRegistry = new TransEnumsRegistry(new ArrayList<>());

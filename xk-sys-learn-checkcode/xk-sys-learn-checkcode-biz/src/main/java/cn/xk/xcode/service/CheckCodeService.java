@@ -11,9 +11,7 @@ import cn.xk.xcode.pojo.CommonResult;
  * @Version 1.0
  * @Description CheckCodeService
  */
-public interface CheckCodeService
-{
-
+public interface CheckCodeService {
     CommonResult<CheckCodeGenResultVo> genCheckCode(CheckCodeGenReqDto checkCodeGenReqDto);
 
     CommonResult<Boolean> verifyCode(CheckCodeVerifyReqDto checkCodeVerifyReqDto);

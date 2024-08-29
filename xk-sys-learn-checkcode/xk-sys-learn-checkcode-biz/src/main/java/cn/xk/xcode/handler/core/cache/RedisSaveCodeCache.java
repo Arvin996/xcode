@@ -13,8 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @Description RedisSaveCodeMemory
  */
 @RequiredArgsConstructor
-public class RedisSaveCodeCache implements SaveCheckCodeCacheStrategy
-{
+public class RedisSaveCodeCache implements SaveCheckCodeCacheStrategy {
     private final StringRedisTemplate stringRedisTemplate;
 
     private final long expireTime;

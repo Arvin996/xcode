@@ -17,9 +17,9 @@ import static cn.xk.xcode.enums.MemberErrorCodeConstants.USER_PHONE_NOT_REGISTER
  * @Version V1.0.0
  * @Description MemberUserLoginPhoneHandler
  */
-public class MemberUserLoginPhoneHandler extends AbstractMemberUserLoginHandler {
+public class MemberUserLoginMobileHandler extends AbstractMemberUserLoginHandler {
 
-    public MemberUserLoginPhoneHandler(CheckCodeClientApi checkCodeClientApi, MemberUserService memberUserService) {
+    public MemberUserLoginMobileHandler(CheckCodeClientApi checkCodeClientApi, MemberUserService memberUserService) {
         super(checkCodeClientApi, memberUserService);
     }
 

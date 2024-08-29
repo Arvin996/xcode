@@ -9,8 +9,7 @@ import lombok.Data;
  * @Description PhoneConfig
  */
 @Data
-public class CheckCodePhoneProperties
-{
+public class CheckCodeMobileProperties {
     private String regionId;
 
     private String accessKeyId;

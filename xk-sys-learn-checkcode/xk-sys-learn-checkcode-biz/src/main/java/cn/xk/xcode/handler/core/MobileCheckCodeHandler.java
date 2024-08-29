@@ -22,13 +22,13 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CHECK_CODE_SEND_ERR
  * @Version 1.0
  * @Description PhoneCheckCodeHandler
  */
-public class PhoneCheckCodeHandler extends CheckCodeHandlerStrategy {
+public class MobileCheckCodeHandler extends CheckCodeHandlerStrategy {
 
     private final DefaultProfile defaultProfile;
     private final String signName;
     private final Integer expiredTime;
 
-    public PhoneCheckCodeHandler(SaveCheckCodeCacheStrategy saveCheckCodeStrategy
+    public MobileCheckCodeHandler(SaveCheckCodeCacheStrategy saveCheckCodeStrategy
             , CheckCodeProperties checkCodeProperties
             , DefaultProfile defaultProfile
             , String signName
@@ -48,7 +48,7 @@ public class PhoneCheckCodeHandler extends CheckCodeHandlerStrategy {
     @Override
     public String sendMessage(CheckCodeGenReqDto checkCodeGenReqDto, int len) {
         String code = CheckCodeGenUtils.genCode(len);
-        String phone = checkCodeGenReqDto.getPhone();
+        String phone = checkCodeGenReqDto.getMobile();
         IAcsClient client = new DefaultAcsClient(defaultProfile);
         SendSmsRequest request = new SendSmsRequest();
         request.setSysRegionId(defaultProfile.getRegionId());
@@ -67,6 +67,6 @@ public class PhoneCheckCodeHandler extends CheckCodeHandlerStrategy {
 
     @Override
     public CheckCodeGenerateType getType() {
-        return CheckCodeGenerateType.PHONE;
+        return CheckCodeGenerateType.MOBILE;
     }
 }

@@ -27,12 +27,12 @@ public class TransFlexInnerController {
 
     @PostMapping("/trans/flex")
     public TransVo flexTrans(@RequestBody FlexTransDto flexTransDto){
-        return flexTransService.findById(flexTransDto.getId(), flexTransDto.getTransVo().getClass(), flexTransDto.getConditionField());
+        return flexTransService.findById(flexTransDto.getId(), flexTransDto.getTargetClazz(), flexTransDto.getConditionField());
     }
 
     @PostMapping("/trans/flex/list")
     public List<? extends TransVo> flexTransList(@RequestBody FlexTransDto flexTransDto){
-        return flexTransService.findList(flexTransDto.getId(), flexTransDto.getTransVo().getClass(), flexTransDto.getConditionField());
+        return flexTransService.findList(flexTransDto.getId(), flexTransDto.getTargetClazz(), flexTransDto.getConditionField());
     }
 
     @PostMapping("/trans/enum")

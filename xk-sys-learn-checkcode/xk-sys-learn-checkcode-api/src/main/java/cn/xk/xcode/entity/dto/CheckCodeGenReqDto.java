@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @Author xuk
@@ -33,5 +32,5 @@ public class CheckCodeGenReqDto
     private String email;
 
     @Schema(description = "手机号", example = "13027102413")
-    private String phone;
+    private String mobile;
 }

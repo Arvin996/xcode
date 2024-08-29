@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -38,8 +36,6 @@ public class MemberUserLoginDto {
     @Schema(description = "用户账号")
     private String account;
 
-    @NotBlank(message = "用户密码不能为空")
-    @Length(min = 8, max = 16, message = "用户密码长度必须为8-16位")
     @Schema(description = "用户密码")
     private String password;
 

@@ -1,6 +1,6 @@
 package cn.xk.xcode.entity.dto.user;
 
-import cn.xk.xcode.enums.CheckCodeGenerateType;
+import cn.xk.xcode.service.auth.enums.RegisterTypeEnum;
 import cn.xk.xcode.typehandler.ListIntTypeHandler;
 import cn.xk.xcode.validation.Email;
 import cn.xk.xcode.validation.InStrEnum;
@@ -30,8 +30,8 @@ import java.util.List;
 public class MemberUserRegisterDto {
 
     @NotBlank
-    @Schema(description = "注册类型 phone手机注册 email邮箱注册")
-    @InStrEnum(value = CheckCodeGenerateType.class)
+    @Schema(description = "注册类型 mobile手机注册 email邮箱注册", example = "mobile")
+    @InStrEnum(RegisterTypeEnum.class)
     private String registerType;
 
     @Mobile

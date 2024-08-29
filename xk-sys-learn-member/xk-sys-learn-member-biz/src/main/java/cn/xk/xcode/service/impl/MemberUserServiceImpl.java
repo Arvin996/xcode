@@ -1,5 +1,7 @@
 package cn.xk.xcode.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -8,9 +10,7 @@ import cn.xk.xcode.entity.dto.CheckCodeVerifyReqDto;
 import cn.xk.xcode.entity.dto.MemberBaseReqDto;
 import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
 import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
-import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
-import cn.xk.xcode.entity.dto.user.MemberUserRegisterDto;
-import cn.xk.xcode.entity.dto.user.MemberUserSignDto;
+import cn.xk.xcode.entity.dto.user.*;
 import cn.xk.xcode.entity.po.*;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
 import cn.xk.xcode.entity.vo.user.MemberUserLoginVo;
@@ -23,6 +23,7 @@ import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.LoginVO;
 import cn.xk.xcode.service.*;
+import cn.xk.xcode.service.auth.enums.LoginTypeEnum;
 import cn.xk.xcode.service.auth.handler.AbstractMemberUserLoginHandler;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
@@ -291,6 +292,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
         }
         MemberUserPo memberUserPo = BeanUtil.toBean(memberUserRegisterDto, MemberUserPo.class);
         memberUserPo.setExperience(0);
+        memberUserPo.setPassword(SaSecureUtil.md5(memberUserPo.getPassword()));
         memberUserPo.setId(IdUtil.fastUUID());
         memberUserPo.setPoint(0);
         memberUserPo.setStatus("0");
@@ -317,6 +319,50 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
         return loginHandler.doLogin(memberUserLoginDto);
     }
 
+    @Override
+    public Boolean kickout(MemberUserBaseDto memberUserBaseDto) {
+        StpUtil.kickout(memberUserBaseDto.getId());
+        MemberUserPo memberUserPo = getById(memberUserBaseDto.getId());
+        memberUserPo.setStatus("1");
+        updateById(memberUserPo);
+        return true;
+    }
+
+    @Override
+    public Boolean changePassword(MemberUserChangePasswordDto memberUserChangePasswordDto) {
+        String id = memberUserChangePasswordDto.getId();
+        String newPassword = memberUserChangePasswordDto.getNewPassword();
+        String oldPassword = memberUserChangePasswordDto.getOldPassword();
+        MemberUserPo memberUserPo = getById(id);
+        if (ObjectUtil.notEqual(SaSecureUtil.md5(oldPassword), memberUserPo.getPassword())){
+            ExceptionUtil.castServiceException(AUTH_OLD_PASSWORD_NOT_CORRECT);
+        }
+        if (ObjectUtil.equals(newPassword, oldPassword)){
+            ExceptionUtil.castServiceException(AUTH_OLD_PASSWORD_MUST_NOT_EQUAL_NEW);
+        }
+        memberUserPo.setPassword(SaSecureUtil.md5(newPassword));
+        updateById(memberUserPo);
+        // 用户需要重新登录 这里需要刷新令牌
+        StpUtil.logout(id);
+        return true;
+    }
+
+    @Override
+    public Boolean bindEmail(MemberUserBindEmailDto memberUserBindEmailDto) {
+        verifyCode(memberUserBindEmailDto.getCode(), LoginTypeEnum.EMAIL.getType());
+        MemberUserPo memberUserPo = getById(memberUserBindEmailDto.getId());
+        memberUserPo.setEmail(memberUserBindEmailDto.getEmail());
+        return updateById(memberUserPo);
+    }
+
+    @Override
+    public Boolean bindMobile(MemberUserBindMobileDto memberUserBindMobileDto) {
+        verifyCode(memberUserBindMobileDto.getCode(), LoginTypeEnum.MOBILE.getType());
+        MemberUserPo memberUserPo = getById(memberUserBindMobileDto.getId());
+        memberUserPo.setMobile(memberUserBindMobileDto.getMobile());
+        return updateById(memberUserPo);
+    }
+
     private static void createMemberLevelChangeRecord(String userId, MemberLevelPo memberLevelPo
             , MemberUserPo memberUserPo, int changeExperience
             , MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum) {
@@ -331,4 +377,11 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
         SpringUtil.publishEvent(new MemberLevelChangeRecordEvent(memberLevelChangeRecordPo));
     }
 
+    private void verifyCode(String code, String type){
+        CommonResult<Boolean> booleanCommonResult = checkCodeClientApi.verifyCode(CheckCodeVerifyReqDto.builder()
+                .type(type).code(code).build());
+        if (!CommonResult.isSuccess(booleanCommonResult)){
+            ExceptionUtil.castServiceException0(booleanCommonResult.getCode(), booleanCommonResult.getMsg());
+        }
+    }
 }

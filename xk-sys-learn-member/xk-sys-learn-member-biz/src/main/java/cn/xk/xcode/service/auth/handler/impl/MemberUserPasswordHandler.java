@@ -1,5 +1,6 @@
 package cn.xk.xcode.service.auth.handler.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.client.CheckCodeClientApi;
 import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
@@ -41,12 +42,12 @@ public class MemberUserPasswordHandler extends AbstractMemberUserLoginHandler {
     private MemberUserPo getMemberUserPoByMobile(MemberUserLoginDto memberUserLoginDto) {
         return memberUserService.getOne(QueryWrapper.create(MemberUserPo.class).where(
                 MEMBER_USER_PO.MOBILE.eq(memberUserLoginDto.getAccount())
-        ).and(MEMBER_USER_PO.PASSWORD.eq(memberUserLoginDto.getPassword())));
+        ).and(MEMBER_USER_PO.PASSWORD.eq(SaSecureUtil.md5(memberUserLoginDto.getPassword()))));
     }
 
     private MemberUserPo getMemberUserPoByEmail(MemberUserLoginDto memberUserLoginDto) {
         return memberUserService.getOne(QueryWrapper.create(MemberUserPo.class).where(
                 MEMBER_USER_PO.EMAIL.eq(memberUserLoginDto.getAccount())
-        ).and(MEMBER_USER_PO.PASSWORD.eq(memberUserLoginDto.getPassword())));
+        ).and(MEMBER_USER_PO.PASSWORD.eq(SaSecureUtil.md5(memberUserLoginDto.getPassword()))));
     }
 }

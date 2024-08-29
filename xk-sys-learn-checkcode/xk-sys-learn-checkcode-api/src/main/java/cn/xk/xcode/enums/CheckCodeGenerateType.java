@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @DictType(dictName = "验证码生成类型枚举", dictType = "CheckCodeGenerateType")
 public enum CheckCodeGenerateType implements IEnumDict, StringEnumValueToArray {
     EMAIL("email", "邮件验证码生成"),
-    PHONE("phone", "手机验证码生成"),
+    MOBILE("mobile", "手机验证码生成"),
     PIC("pic", "图片验证码生成");
     private final String code;
 

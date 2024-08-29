@@ -13,9 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CheckCodeSendTypeConfig
-{
+public class CheckCodeSendTypeConfig {
     private CheckCodeEmailProperties emailConfig;
 
-    private CheckCodePhoneProperties phoneConfig;
+    private CheckCodeMobileProperties mobileConfig;
 }

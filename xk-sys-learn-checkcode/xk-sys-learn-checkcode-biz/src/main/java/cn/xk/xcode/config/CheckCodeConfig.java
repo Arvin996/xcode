@@ -7,7 +7,7 @@ import cn.xk.xcode.handler.CheckCodeHandlerStrategy;
 import cn.xk.xcode.handler.SaveCheckCodeCacheStrategy;
 import cn.xk.xcode.handler.core.CheckCodeAdvisor;
 import cn.xk.xcode.handler.core.EmailCheckCodeHandler;
-import cn.xk.xcode.handler.core.PhoneCheckCodeHandler;
+import cn.xk.xcode.handler.core.MobileCheckCodeHandler;
 import cn.xk.xcode.handler.core.PicCheckCodeHandler;
 import cn.xk.xcode.handler.core.cache.InMemorySaveCodeCache;
 import cn.xk.xcode.handler.core.cache.RedisSaveCodeCache;
@@ -70,13 +70,13 @@ public class CheckCodeConfig {
         Map<String, CheckCodeSendTypeConfig> configMap = checkCodeProperties.getSendType();
         CheckCodeSendTypeConfig checkCodeSendTypeConfig = configMap.values().stream().findFirst().orElse(null);
         if (Objects.isNull(checkCodeSendTypeConfig)){
-            throw new ServiceException(CHECK_CODE_PHONE_NOT_CONFIG);
+            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
         }
-        CheckCodePhoneProperties phone = checkCodeSendTypeConfig.getPhoneConfig();
-        if (Objects.isNull(phone)) {
-            throw new ServiceException(CHECK_CODE_PHONE_NOT_CONFIG);
+        CheckCodeMobileProperties mobileProperties = checkCodeSendTypeConfig.getMobileConfig();
+        if (Objects.isNull(mobileProperties)) {
+            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
         }
-        return DefaultProfile.getProfile(phone.getRegionId(), phone.getAccessKeyId(), phone.getSecret());
+        return DefaultProfile.getProfile(mobileProperties.getRegionId(), mobileProperties.getAccessKeyId(), mobileProperties.getSecret());
     }
 
     @Bean
@@ -119,17 +119,17 @@ public class CheckCodeConfig {
     }
 
     @Bean
-    public PhoneCheckCodeHandler phoneCheckCodeHandler(SaveCheckCodeCacheStrategy saveCheckCodeCacheStrategy,
-                                                       CheckCodeProperties checkCodeProperties,
-                                                       DefaultProfile defaultProfile){
+    public MobileCheckCodeHandler mobileCheckCodeHandler(SaveCheckCodeCacheStrategy saveCheckCodeCacheStrategy,
+                                                                         CheckCodeProperties checkCodeProperties,
+                                                                         DefaultProfile defaultProfile){
         Map<String, CheckCodeSendTypeConfig> configMap = checkCodeProperties.getSendType();
         CheckCodeSendTypeConfig checkCodeSendTypeConfig = configMap.values().stream().findFirst().orElse(null);
         if (Objects.isNull(checkCodeSendTypeConfig)) {
-            throw new ServiceException(CHECK_CODE_PHONE_NOT_CONFIG);
+            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
         }
-        CheckCodePhoneProperties checkCodeSendTypeConfigPhone = checkCodeSendTypeConfig.getPhoneConfig();
+        CheckCodeMobileProperties checkCodeSendTypeConfigPhone = checkCodeSendTypeConfig.getMobileConfig();
         String signName = checkCodeSendTypeConfigPhone.getSignName();
-        return new PhoneCheckCodeHandler(saveCheckCodeCacheStrategy, checkCodeProperties, defaultProfile, signName, checkCodeProperties.getExpiredTime());
+        return new MobileCheckCodeHandler(saveCheckCodeCacheStrategy, checkCodeProperties, defaultProfile, signName, checkCodeProperties.getExpiredTime());
     }
 
     @Bean

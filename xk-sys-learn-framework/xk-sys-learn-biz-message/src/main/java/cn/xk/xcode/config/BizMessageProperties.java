@@ -11,8 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "xk.biz.message")
-public class BizMessageProperties
-{
+public class BizMessageProperties {
     private String dbUrl;
 
     private String password;

@@ -28,7 +28,7 @@ public class GlobalEnumsContext {
     private void initialize() {
         List<BaseEnum> enums = this.transEnumsRegistry.getEnums();
         enums.forEach(e -> {
-            if (enumsMap.containsKey(e.enumType() + e.key())){
+            if (enumsMap.containsKey(e.enumType() + e.key())) {
                 String message = ENUM_ALREADY_EXIST.getMessage();
                 message = String.format(message, e.enumType(), e.key());
                 throw new ServiceException(ENUM_ALREADY_EXIST.getCode(), message);
@@ -37,29 +37,29 @@ public class GlobalEnumsContext {
         });
     }
 
-    public Object getValue(String enumType, Object key){
+    public Object getValue(String enumType, Object key) {
         return this.enumsMap.getOrDefault(enumType + key, null);
     }
 
-    public String getValueAsString(String enumType, Object key){
+    public String getValueAsString(String enumType, Object key) {
         Object value = getValue(enumType, key);
-        if (Objects.isNull(value)){
+        if (Objects.isNull(value)) {
             return null;
         }
         return String.valueOf(value);
     }
 
-    public Integer getValueAsInteger(String enumType, Object key){
+    public Integer getValueAsInteger(String enumType, Object key) {
         Object value = getValue(enumType, key);
-        if (Objects.isNull(value)){
+        if (Objects.isNull(value)) {
             return null;
         }
         return Integer.valueOf(String.valueOf(value));
     }
 
-    public  <T> T getValueAsClass(String enumType, Object key, Class<T> aClass){
+    public <T> T getValueAsClass(String enumType, Object key, Class<T> aClass) {
         Object value = getValue(enumType, key);
-        if (Objects.isNull(value)){
+        if (Objects.isNull(value)) {
             return null;
         }
         return BeanUtil.toBean(value, aClass);

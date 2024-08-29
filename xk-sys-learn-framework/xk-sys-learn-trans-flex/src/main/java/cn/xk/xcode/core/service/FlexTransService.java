@@ -4,8 +4,6 @@ import cn.xk.xcode.core.entity.TransVo;
 import com.mybatisflex.core.BaseMapper;
 import com.mybatisflex.core.mybatis.Mappers;
 import com.mybatisflex.core.query.QueryWrapper;
-import org.springframework.stereotype.Service;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;

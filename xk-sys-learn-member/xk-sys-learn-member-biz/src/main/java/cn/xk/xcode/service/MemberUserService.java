@@ -2,9 +2,7 @@ package cn.xk.xcode.service;
 
 import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
 import cn.xk.xcode.entity.dto.MemberPointChangeReqDto;
-import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
-import cn.xk.xcode.entity.dto.user.MemberUserRegisterDto;
-import cn.xk.xcode.entity.dto.user.MemberUserSignDto;
+import cn.xk.xcode.entity.dto.user.*;
 import cn.xk.xcode.entity.vo.MemberUserResultVo;
 import cn.xk.xcode.entity.vo.user.MemberUserLoginVo;
 import cn.xk.xcode.pojo.LoginVO;
@@ -44,4 +42,12 @@ public interface MemberUserService extends IService<MemberUserPo> {
     MemberUserLoginVo createMemberUserLoginVo(MemberUserPo memberUserPo);
 
     LoginVO userLogin(MemberUserLoginDto memberUserLoginDto);
+
+    Boolean kickout(MemberUserBaseDto memberUserBaseDto);
+
+    Boolean changePassword(MemberUserChangePasswordDto memberUserChangePasswordDto);
+
+    Boolean bindEmail(MemberUserBindEmailDto memberUserBindEmailDto);
+
+    Boolean bindMobile(MemberUserBindMobileDto memberUserBindMobileDto);
 }

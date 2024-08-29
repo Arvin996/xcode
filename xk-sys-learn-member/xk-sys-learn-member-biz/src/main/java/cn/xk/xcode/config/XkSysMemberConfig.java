@@ -4,7 +4,7 @@ import cn.xk.xcode.client.CheckCodeClientApi;
 import cn.xk.xcode.service.MemberUserService;
 import cn.xk.xcode.service.auth.handler.AbstractMemberUserLoginHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginEmailHandler;
-import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginPhoneHandler;
+import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginMobileHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserPasswordHandler;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +25,9 @@ public class XkSysMemberConfig {
     @Resource
     private MemberUserService memberUserService;
 
-    @Bean(name = "login_phone")
-    public AbstractMemberUserLoginHandler memberUserLoginPhoneHandler(CheckCodeClientApi checkCodeClientApi){
-        return new MemberUserLoginPhoneHandler(checkCodeClientApi, memberUserService);
+    @Bean(name = "login_mobile")
+    public AbstractMemberUserLoginHandler memberUserLoginMobileHandler(CheckCodeClientApi checkCodeClientApi){
+        return new MemberUserLoginMobileHandler(checkCodeClientApi, memberUserService);
     }
 
     @Bean(name = "login_email")

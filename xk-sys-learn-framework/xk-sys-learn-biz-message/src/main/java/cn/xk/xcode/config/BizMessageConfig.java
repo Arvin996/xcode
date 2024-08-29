@@ -17,8 +17,7 @@ import javax.annotation.Resource;
 @EnableConfigurationProperties(BizMessageProperties.class)
 @Configuration
 @ConditionalOnBean(value = BizMessageProperties.class)
-public class BizMessageConfig implements InitializingBean
-{
+public class BizMessageConfig implements InitializingBean {
     public static final String  BIZ_MESSAGE_TABLE_SQL;
 
     public static final String HIS_MESSAGE_TABLE_SQL;

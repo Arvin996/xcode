@@ -1,6 +1,5 @@
 package cn.xk.xcode.service.impl.generate;
 
-import cn.hutool.core.io.FileUtil;
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.DataSourceEntity;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
@@ -12,11 +11,11 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import static cn.xk.xcode.config.InfraGlobalErrorCodeConstants.GEN_CODE_FILE_FAILED;
 
 /**
  * @Author xuk
@@ -24,7 +23,7 @@ import java.util.UUID;
  * @Version 1.0
  * @Description CodeGenerate
  */
-public interface CodeGenerate extends ICodeGenerate{
+public interface CodeGenerate extends ICodeGenerate {
 
     default String getTemplatePath() {
         return System.getProperty("java.io.tmpdir");
@@ -40,7 +39,7 @@ public interface CodeGenerate extends ICodeGenerate{
 
     CodeGen createCodeGen(GenerateCodeDto generateCodeDto);
 
-    default DataSourceEntity createDataSourceEntity(GenerateCodeDto generateCodeDto){
+    default DataSourceEntity createDataSourceEntity(GenerateCodeDto generateCodeDto) {
         String url = generateCodeDto.getUrl();
         String dbIp = url.substring(0, url.lastIndexOf(":"));
         String dbPort = url.substring(url.lastIndexOf(":") + 1);
@@ -54,7 +53,7 @@ public interface CodeGenerate extends ICodeGenerate{
                 .build();
     }
 
-    default void doGenerate(GenerateCodeDto generateCodeDto){
+    default void doGenerate(GenerateCodeDto generateCodeDto) {
         Generator generator = new Generator(createDataSource(createDataSourceEntity(generateCodeDto))
                 , createGlobalConfig(createCodeGen(generateCodeDto)));
         //生成代码
@@ -65,23 +64,23 @@ public interface CodeGenerate extends ICodeGenerate{
         // 生成代码
         // 这里要考虑并发问题 文件重复生成的问题
         String pathPrefix = UUID.randomUUID().toString().replace("_", "").substring(0, 6);
-        String code =  generateCodeDto.getCode();
+        String code = generateCodeDto.getCode();
         generateCodeDto.setCode(pathPrefix);
         doGenerate(generateCodeDto);
         // 这里的fileUrl得判断一下了
         String baseFileUrl = getTemplatePath() + "temp/";
         String delFileUrl;
-        String fileUrl = null;
-        if ("xml".equals(code)){
+        String fileUrl;
+        if ("xml".equals(code)) {
             fileUrl = baseFileUrl + generateCodeDto.getCode();
             delFileUrl = fileUrl;
-        }else {
-            if (StringUtils.hasLength(generateCodeDto.getPackageName())){
+        } else {
+            if (StringUtils.hasLength(generateCodeDto.getPackageName())) {
                 String packageName = generateCodeDto.getPackageName();
                 String packUrl = packageName.replace(".", "/");
                 fileUrl = baseFileUrl + packUrl;
                 delFileUrl = baseFileUrl + packageName.substring(0, packageName.indexOf("."));
-            }else {
+            } else {
                 fileUrl = baseFileUrl + generateCodeDto.getCode();
                 delFileUrl = fileUrl;
             }
@@ -90,11 +89,11 @@ public interface CodeGenerate extends ICodeGenerate{
 
         File[] files = file.listFiles();
         if (files == null || 0 == files.length) {
-            throw new ServerException(500, "生成代码失败");
+            throw new ServerException(GEN_CODE_FILE_FAILED);
         }
         //
         File rFile = files[0];
-        String content = FileUtils.readFileToString(rFile,  "UTF-8");
+        String content = FileUtils.readFileToString(rFile, "UTF-8");
         System.out.println(FileSystemUtils.deleteRecursively(Paths.get(delFileUrl)));
         return content;
     }

@@ -7,10 +7,7 @@ import cn.xk.xcode.feignclient.FileApi;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.SysFilesService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -23,8 +20,8 @@ import java.io.IOException;
  */
 @RestController
 @Validated
-public class FilesController implements FileApi
-{
+@RequestMapping("/infra/file")
+public class FilesController implements FileApi {
     @Resource
     private SysFilesService sysFilesService;
 
@@ -33,7 +30,6 @@ public class FilesController implements FileApi
     public CommonResult<FileResultVo> uploadFile(UploadFileDto uploadFileDto) {
         return CommonResult.success(sysFilesService.uploadFile(uploadFileDto));
     }
-
 
     @Override
     @GetMapping("/delFile/{fileId}")
@@ -46,7 +42,6 @@ public class FilesController implements FileApi
     public CommonResult<String> updateFile(UpdateFileDto updateFileDto) {
         return CommonResult.success(sysFilesService.updateFile(updateFileDto));
     }
-
 
     @Override
     @GetMapping("/downloadFile/{fileId}")

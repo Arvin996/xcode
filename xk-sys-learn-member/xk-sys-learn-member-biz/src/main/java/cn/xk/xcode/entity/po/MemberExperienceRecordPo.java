@@ -37,7 +37,7 @@ public class MemberExperienceRecordPo implements Serializable {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 增加或者减少经验的业务类型

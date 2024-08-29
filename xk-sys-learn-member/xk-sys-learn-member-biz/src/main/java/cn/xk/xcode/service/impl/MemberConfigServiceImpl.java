@@ -7,7 +7,6 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.MemberConfigPo;
 import cn.xk.xcode.mapper.MemberConfigMapper;
 import cn.xk.xcode.service.MemberConfigService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -12,8 +12,7 @@ import cn.xk.xcode.pojo.LoginUser;
  * @Version 1.0
  * @Description SaTokenLoginUtils
  */
-public class SaTokenLoginUtils
-{
+public class SaTokenLoginUtils {
     public static final String USER_KEY = "loginUser";
 
     public static void doLogin(LoginUser loginUser, SaLoginModel model){

@@ -23,9 +23,9 @@ import java.util.List;
 public interface MemberAddressClient {
     @Operation(summary = "获取用户所有收货地址")
     @PostMapping("/list")
-    CommonResult<List<MemberAddressResultVo>> getMemberAddressList(@RequestParam("userId") String userId);
+    CommonResult<List<MemberAddressResultVo>> getMemberAddressList(@RequestParam("userId") Long userId);
 
     @Operation(summary = "获取用户默认收货地址")
     @PostMapping("/default-address")
-    CommonResult<MemberAddressResultVo> getMemberDefaultAddress(@RequestParam("userId") String userId);
+    CommonResult<MemberAddressResultVo> getMemberDefaultAddress(@RequestParam("userId") Long userId);
 }

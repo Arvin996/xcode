@@ -34,8 +34,8 @@ public class MemberUserPo implements Serializable {
     /**
      * 用户id
      */
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
-    private String id;
+    @Id(keyType = KeyType.Generator, value = KeyGenerators.flexId)
+    private Long id;
 
     /**
      * 用户密码

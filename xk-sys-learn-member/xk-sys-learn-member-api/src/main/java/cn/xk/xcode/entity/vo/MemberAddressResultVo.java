@@ -18,13 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Schema(description = "用户收获地址返回")
-public class MemberAddressResultVo
-{
+public class MemberAddressResultVo {
     @Schema(description = "收货地址id")
     private Integer id;
 
     @Schema(description = "用户id")
-    private String userId;
+    private Long userId;
 
     @Schema(description = "收件人姓名")
     private String name;

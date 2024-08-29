@@ -37,7 +37,7 @@ public class MemberPointRecordPo implements Serializable {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 变更的业务类型

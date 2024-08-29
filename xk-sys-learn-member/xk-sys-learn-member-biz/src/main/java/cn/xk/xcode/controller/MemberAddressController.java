@@ -30,12 +30,12 @@ public class MemberAddressController implements MemberAddressClient {
     private MemberAddressService memberAddressService;
 
     @Override
-    public CommonResult<List<MemberAddressResultVo>> getMemberAddressList(String userId) {
+    public CommonResult<List<MemberAddressResultVo>> getMemberAddressList(Long userId) {
         return CommonResult.success(memberAddressService.getMemberAddressList(userId));
     }
 
     @Override
-    public CommonResult<MemberAddressResultVo> getMemberDefaultAddress(String userId) {
+    public CommonResult<MemberAddressResultVo> getMemberDefaultAddress(Long userId) {
         return CommonResult.success(memberAddressService.getMemberDefaultAddress(userId));
     }
 

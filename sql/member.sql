@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `member_config` (
 -- 导出  表 xk-learn-member.member_experience_record 结构
 CREATE TABLE IF NOT EXISTS `member_experience_record` (
                                                           `id` int(12) NOT NULL COMMENT '自增id',
-                                                          `user_id` varchar(30) NOT NULL COMMENT '用户id',
+                                                          `user_id` bigint(30) NOT NULL COMMENT '用户id',
                                                           `biz_type` int(2) NOT NULL COMMENT '增加或者减少经验的业务类型',
                                                           `biz_id` varchar(50) DEFAULT NULL COMMENT '业务类型对应的业务id',
                                                           `description` text COMMENT '业务类型对应的描述',
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `member_level` (
 -- 导出  表 xk-learn-member.member_level_change_record 结构
 CREATE TABLE IF NOT EXISTS `member_level_change_record` (
                                                             `id` int(11) DEFAULT NULL,
-                                                            `user_id` varchar(30) NOT NULL,
+                                                            `user_id` bigint(30) NOT NULL,
                                                             `level_id` int(12) NOT NULL,
                                                             `level_name` varchar(50) NOT NULL,
                                                             `total_experience` int(12) NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `member_level_change_record` (
 -- 导出  表 xk-learn-member.member_login_record 结构
 CREATE TABLE IF NOT EXISTS `member_login_record` (
                                                      `id` int(12) NOT NULL COMMENT '自增id',
-                                                     `user_id` varchar(30) NOT NULL COMMENT '用户id',
+                                                     `user_id` bigint(30) NOT NULL COMMENT '用户id',
                                                      `login_ip` varchar(30) NOT NULL COMMENT '登录ip',
                                                      `login_time` datetime NOT NULL COMMENT '登录时间',
                                                      `login_area_id` int(12) NOT NULL COMMENT '登录地区',
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `member_login_record` (
 -- 导出  表 xk-learn-member.member_point_record 结构
 CREATE TABLE IF NOT EXISTS `member_point_record` (
                                                      `id` int(11) NOT NULL COMMENT '自增id',
-                                                     `user_id` varchar(30) NOT NULL COMMENT '用户id',
+                                                     `user_id` bigint(30) NOT NULL COMMENT '用户id',
                                                      `biz_type` int(12) NOT NULL COMMENT '变更的业务类型',
                                                      `biz_id` varchar(50) DEFAULT NULL COMMENT '变更的业务id',
                                                      `title` varchar(255) NOT NULL COMMENT '变更业务类型的标题',
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `member_sign` (
 -- 导出  表 xk-learn-member.member_sign_record 结构
 CREATE TABLE IF NOT EXISTS `member_sign_record` (
                                                     `id` int(12) NOT NULL COMMENT '自增id',
-                                                    `user_id` varchar(50) NOT NULL COMMENT '用户id',
+                                                    `user_id` bigint(30) NOT NULL COMMENT '用户id',
                                                     `day` int(2) NOT NULL COMMENT '第几天签到',
                                                     `point` int(12) NOT NULL COMMENT '签到获得的积分',
                                                     `experience` int(12) NOT NULL COMMENT '签到获得的经验',
@@ -164,30 +164,26 @@ CREATE TABLE IF NOT EXISTS `member_tag` (
 -- 数据导出被取消选择。
 
 -- 导出  表 xk-learn-member.member_user 结构
-CREATE TABLE `member_user` (
-                               `id` VARCHAR(30) NOT NULL COMMENT '用户id' COLLATE 'utf8mb4_general_ci',
-                               `password` VARCHAR(100) NOT NULL COMMENT '用户密码' COLLATE 'utf8mb4_general_ci',
-                               `mobile` CHAR(11) NOT NULL COMMENT '用户手机号' COLLATE 'utf8mb4_general_ci',
-                               `email` VARCHAR(50) NULL DEFAULT NULL COMMENT '用户邮箱' COLLATE 'utf8mb4_general_ci',
-                               `status` CHAR(1) NOT NULL DEFAULT '0' COMMENT ' 0 正常 1禁用' COLLATE 'utf8mb4_general_ci',
-                               `nickname` VARCHAR(50) NOT NULL DEFAULT 'gasada_029' COMMENT '用户昵称' COLLATE 'utf8mb4_general_ci',
-                               `level_id` INT(12) NOT NULL COMMENT '用户等级',
-                               `experience` INT(12) NOT NULL COMMENT '用户经验',
-                               `avatar` TEXT NULL DEFAULT NULL COMMENT '用户头像' COLLATE 'utf8mb4_general_ci',
-                               `point` INT(12) NOT NULL COMMENT '用户积分',
-                               `tag_ids` VARCHAR(255) NULL DEFAULT NULL COMMENT '用户标签' COLLATE 'utf8mb4_general_ci',
-                               `group_id` INT(12) NULL DEFAULT NULL COMMENT '用户分组id',
-                               `sex` CHAR(1) NULL DEFAULT NULL COMMENT '用户性别' COLLATE 'utf8mb4_general_ci',
-                               `birthday` DATE NULL DEFAULT NULL COMMENT '用户生日',
-                               `login_ip` VARCHAR(30) NULL DEFAULT NULL COMMENT '登录ip' COLLATE 'utf8mb4_general_ci',
-                               `login_area_id` INT(12) NULL DEFAULT NULL COMMENT '登录区域',
-                               `login_time` DATETIME NULL DEFAULT NULL COMMENT '登录时间',
-                               PRIMARY KEY (`id`) USING BTREE
-)
-    COMMENT='会员用户表'
-    COLLATE='utf8mb4_general_ci'
-    ENGINE=InnoDB
-;
+CREATE TABLE IF NOT EXISTS `member_user` (
+                                             `id` bigint(30) NOT NULL COMMENT '用户id',
+                                             `password` varchar(100) NOT NULL COMMENT '用户密码',
+                                             `mobile` char(11) NOT NULL COMMENT '用户手机号',
+                                             `email` varchar(50) DEFAULT NULL COMMENT '用户邮箱',
+                                             `status` char(1) NOT NULL DEFAULT '0' COMMENT ' 0 正常 1禁用',
+                                             `nickname` varchar(50) NOT NULL DEFAULT 'gasada_029' COMMENT '用户昵称',
+                                             `level_id` int(12) NOT NULL COMMENT '用户等级',
+                                             `experience` int(12) NOT NULL COMMENT '用户经验',
+                                             `avatar` text COMMENT '用户头像',
+                                             `point` int(12) NOT NULL COMMENT '用户积分',
+                                             `tag_ids` varchar(255) DEFAULT NULL COMMENT '用户标签',
+                                             `group_id` int(12) DEFAULT NULL COMMENT '用户分组id',
+                                             `sex` char(1) DEFAULT NULL COMMENT '用户性别',
+                                             `birthday` date DEFAULT NULL COMMENT '用户生日',
+                                             `login_ip` varchar(30) DEFAULT NULL COMMENT '登录ip',
+                                             `login_area_id` int(12) DEFAULT NULL COMMENT '登录区域',
+                                             `login_time` datetime DEFAULT NULL COMMENT '登录时间',
+                                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员用户表';
 
 -- 数据导出被取消选择。
 

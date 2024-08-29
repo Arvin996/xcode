@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Schema(description = "用户基础dto")
 public class MemberBaseReqDto {
-    @NotBlank(message = "用户id不能为空")
+    @NotNull(message = "用户id不能为空")
     @Schema(description = "用户id")
-    private String userId;
+    private Long userId;
 }

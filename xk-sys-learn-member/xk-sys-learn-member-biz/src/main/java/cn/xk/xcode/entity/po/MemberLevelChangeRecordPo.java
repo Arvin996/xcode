@@ -37,7 +37,7 @@ public class MemberLevelChangeRecordPo implements Serializable {
     /**
      * 用户id
      */
-    private String userId;
+    private Long userId;
 
     /**
      * 变更后的等级id

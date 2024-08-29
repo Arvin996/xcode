@@ -2,7 +2,6 @@ package cn.xk.xcode.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.client.CheckCodeClientApi;
@@ -72,7 +71,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
     private MemberGroupService memberGroupService;
 
     @Override
-    public MemberUserResultVo getMemberUser(String userId) {
+    public MemberUserResultVo getMemberUser(Long userId) {
         MemberUserPo memberUserPo = this.getById(userId);
         if (ObjectUtil.isNull(memberUserPo)) {
             ExceptionUtil.castServiceException(USER_NOT_EXISTS);
@@ -123,7 +122,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
     // todo 待完善
     @Override
     public Boolean userSign(MemberUserSignDto memberUserSignDto) {
-        String userId = memberUserSignDto.getId();
+        Long userId = memberUserSignDto.getId();
         Integer day = memberUserSignDto.getDay();
         MemberSignPo memberSignPo = memberSignService.getOne(MEMBER_SIGN_PO.DAY.eq(day));
         if (ObjectUtil.isNull(memberSignPo)) {
@@ -150,7 +149,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
 
     @Override
     public void memberPointChange(MemberPointChangeReqDto memberPointChangeReqDto) {
-        String userId = memberPointChangeReqDto.getUserId();
+        Long userId = memberPointChangeReqDto.getUserId();
         Integer bizType = memberPointChangeReqDto.getBizType();
         String bizId = memberPointChangeReqDto.getBizId();
         Integer point = memberPointChangeReqDto.getPoint();
@@ -184,7 +183,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
     public void memberExperienceChange(MemberExperienceChangeReqDto memberExperienceChangeReqDto) {
         Integer experience = memberExperienceChangeReqDto.getExperience();
         String bizId = memberExperienceChangeReqDto.getBizId();
-        String userId = memberExperienceChangeReqDto.getUserId();
+        Long userId = memberExperienceChangeReqDto.getUserId();
         MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum = MemberPointChangeBizTypeEnum.getByType(memberExperienceChangeReqDto.getBizType());
         if (ObjectUtil.isNull(memberPointChangeBizTypeEnum)) {
             ExceptionUtil.castServiceException(EXPERIENCE_BIZ_NOT_SUPPORT);
@@ -293,7 +292,6 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
         MemberUserPo memberUserPo = BeanUtil.toBean(memberUserRegisterDto, MemberUserPo.class);
         memberUserPo.setExperience(0);
         memberUserPo.setPassword(SaSecureUtil.md5(memberUserPo.getPassword()));
-        memberUserPo.setId(IdUtil.fastUUID());
         memberUserPo.setPoint(0);
         memberUserPo.setStatus("0");
         QueryWrapper queryWrapper = QueryWrapper.create(MemberLevelPo.class).orderBy(MEMBER_LEVEL_PO.LEVEL, true);
@@ -330,7 +328,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
 
     @Override
     public Boolean changePassword(MemberUserChangePasswordDto memberUserChangePasswordDto) {
-        String id = memberUserChangePasswordDto.getId();
+        Long id = memberUserChangePasswordDto.getId();
         String newPassword = memberUserChangePasswordDto.getNewPassword();
         String oldPassword = memberUserChangePasswordDto.getOldPassword();
         MemberUserPo memberUserPo = getById(id);
@@ -363,7 +361,7 @@ public class MemberUserServiceImpl extends ServiceImpl<MemberUserMapper, MemberU
         return updateById(memberUserPo);
     }
 
-    private static void createMemberLevelChangeRecord(String userId, MemberLevelPo memberLevelPo
+    private static void createMemberLevelChangeRecord(Long userId, MemberLevelPo memberLevelPo
             , MemberUserPo memberUserPo, int changeExperience
             , MemberPointChangeBizTypeEnum memberPointChangeBizTypeEnum) {
         MemberLevelChangeRecordPo memberLevelChangeRecordPo = new MemberLevelChangeRecordPo();

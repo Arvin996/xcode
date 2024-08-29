@@ -21,11 +21,9 @@ import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.xk.xcode.core.utils.IpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
 import static cn.xk.xcode.enums.MemberErrorCodeConstants.*;
 import static cn.xk.xcode.service.auth.enums.LoginTypeEnum.*;
 
@@ -109,7 +107,7 @@ public abstract class AbstractMemberUserLoginHandler {
 
     public LoginUser buildLoginUser(MemberUserPo memberUserPo){
         LoginUser loginUser = new LoginUser();
-        loginUser.setUsername(memberUserPo.getId());
+        loginUser.setUsername(memberUserPo.getId().toString());
         loginUser.setRoles(CollectionUtil.createEmptySet());
         loginUser.setPermissions(CollectionUtil.createEmptySet());
         return loginUser;

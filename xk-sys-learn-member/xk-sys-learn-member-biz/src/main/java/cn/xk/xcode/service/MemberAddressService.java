@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface MemberAddressService extends IService<MemberAddressPo> {
 
-    List<MemberAddressResultVo> getMemberAddressList(String userId);
+    List<MemberAddressResultVo> getMemberAddressList(Long userId);
 
-    MemberAddressResultVo getMemberDefaultAddress(String userId);
+    MemberAddressResultVo getMemberDefaultAddress(Long userId);
 
     Boolean addAddress(MemberAddressAddDto memberAddressAddDto);
 

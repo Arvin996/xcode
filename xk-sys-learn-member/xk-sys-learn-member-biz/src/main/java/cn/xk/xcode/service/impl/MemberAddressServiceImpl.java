@@ -10,7 +10,6 @@ import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.MemberAddressPo;
 import cn.xk.xcode.mapper.MemberAddressMapper;
@@ -35,13 +34,13 @@ import static cn.xk.xcode.enums.MemberErrorCodeConstants.SYSTEM_ERROR;
 public class MemberAddressServiceImpl extends ServiceImpl<MemberAddressMapper, MemberAddressPo> implements MemberAddressService {
 
     @Override
-    public List<MemberAddressResultVo> getMemberAddressList(String userId) {
+    public List<MemberAddressResultVo> getMemberAddressList(Long userId) {
         List<MemberAddressPo> addressPoList = this.list(MEMBER_ADDRESS_PO.USER_ID.eq(userId));
         return CollectionUtil.convertList(addressPoList, bean -> BeanUtil.toBean(bean, MemberAddressResultVo.class));
     }
 
     @Override
-    public MemberAddressResultVo getMemberDefaultAddress(String userId) {
+    public MemberAddressResultVo getMemberDefaultAddress(Long userId) {
         QueryWrapper queryWrapper = QueryWrapper.create(MemberAddressPo.class)
                 .where(MEMBER_ADDRESS_PO.USER_ID.eq(userId))
                 .and(MEMBER_ADDRESS_PO.DEFAULT_ADDRESS.eq("0"));

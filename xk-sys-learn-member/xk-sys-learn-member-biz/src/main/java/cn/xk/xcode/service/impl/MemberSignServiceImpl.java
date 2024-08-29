@@ -13,7 +13,6 @@ import cn.xk.xcode.mapper.MemberSignMapper;
 import cn.xk.xcode.service.MemberSignService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import static cn.xk.xcode.enums.MemberErrorCodeConstants.SIGN_IN_CONFIG_EXISTS;

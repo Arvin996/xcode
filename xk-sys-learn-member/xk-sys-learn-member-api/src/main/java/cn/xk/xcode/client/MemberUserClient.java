@@ -25,8 +25,8 @@ public interface MemberUserClient {
 
     @GetMapping("/getMemberUser")
     @Operation(summary = "获取用户信息")
-    @Parameter(description = "用户id", example = "aak1211n121")
-    CommonResult<MemberUserResultVo> getMemberUser(@RequestParam("userId") String userId);
+    @Parameter(description = "用户id", example = "1231231")
+    CommonResult<MemberUserResultVo> getMemberUser(@RequestParam("userId") Long userId);
 
     @GetMapping("/getMemberUserListByIds")
     @Operation(summary = "获取多用户信息")

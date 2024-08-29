@@ -21,7 +21,7 @@ import java.util.List;
 public interface MemberUserService extends IService<MemberUserPo> {
 
 
-    MemberUserResultVo getMemberUser(String userId);
+    MemberUserResultVo getMemberUser(Long userId);
 
     List<MemberUserResultVo> getMemberUserList(Collection<Long> ids);
 

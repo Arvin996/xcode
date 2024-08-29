@@ -24,7 +24,7 @@ import java.util.List;
 public class MemberUserResultVo {
 
     @Schema(description = "id")
-    private String id;
+    private Long id;
 
     @Schema(description = "用户手机号")
     private String mobile;

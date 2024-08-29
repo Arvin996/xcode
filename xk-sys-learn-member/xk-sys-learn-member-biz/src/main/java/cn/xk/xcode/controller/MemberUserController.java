@@ -33,7 +33,7 @@ public class MemberUserController implements MemberUserClient {
     private MemberUserService memberUserService;
 
     @Override
-    public CommonResult<MemberUserResultVo> getMemberUser(String userId) {
+    public CommonResult<MemberUserResultVo> getMemberUser(Long userId) {
         return CommonResult.success(memberUserService.getMemberUser(userId));
     }
 

@@ -57,21 +57,18 @@ public class MemberTagController
         return CommonResult.success(memberTagService.updateTage(memberTagUpdateDto));
     }
 
-    @SaCheckPermission("getUserTagList")
     @PostMapping("/getUserTagList")
     @Operation(summary = "获取用户标签列表")
     public CommonResult<MemberUserTagsVo> getUserTagList(@Validated @RequestBody MemberListQueryDto memberListQueryDto) {
         return CommonResult.success(memberTagService.getUserTagList(memberListQueryDto));
     }
 
-    @SaCheckPermission("getTag")
     @PostMapping("/getTag")
     @Operation(summary = "获取用户标签列表")
     public CommonResult<MemberTagVo> getTag(@Validated @RequestBody MemberTagBaseDto memberTagBaseDto) {
         return CommonResult.success(BeanUtil.toBean(memberTagService.getById(memberTagBaseDto.getId()), MemberTagVo.class));
     }
 
-    @SaCheckPermission("getTagList")
     @PostMapping("/getTagList")
     @Operation(summary = "获取所有标签列表")
     public CommonResult<List<MemberTagVo>> getTagList() {

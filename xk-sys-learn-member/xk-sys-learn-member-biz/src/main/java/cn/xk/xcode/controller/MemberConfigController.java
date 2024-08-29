@@ -28,6 +28,7 @@ public class MemberConfigController implements MemberConfigClient {
     private MemberConfigService memberConfigService;
 
     @Override
+    @PostMapping("/getMemberConfig")
     public CommonResult<MemberConfigResultVo> getMemberConfig() {
         return CommonResult.success(BeanUtil.toBean(memberConfigService.list().get(0), MemberConfigResultVo.class));
     }

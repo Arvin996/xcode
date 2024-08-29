@@ -31,7 +31,7 @@ public class MemberSignController {
     @Resource
     private MemberSignService memberSignService;
 
-    @Operation(summary = "添加签到")
+    @Operation(summary = "添加签到规则")
     @PostMapping("/addSign")
     @SaCheckPermission("member:sign:add")
     public CommonResult<Boolean> addSign(@Validated @RequestBody MemberSignAddDto memberSignAddDto){
@@ -47,7 +47,6 @@ public class MemberSignController {
 
     @Operation(summary = "获取签到规则")
     @PostMapping("/getSignRules")
-    @SaCheckPermission("member:sign:get")
     public CommonResult<List<MemberSignResultVo>> getSignRule(){
         return CommonResult.success(memberSignService.getSignRule());
     }

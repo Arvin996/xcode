@@ -47,7 +47,7 @@ public class AuthController {
         return CommonResult.success(memberUserService.userLogin(memberUserLoginDto));
     }
 
-    @Operation(summary = "用户推出登录")
+    @Operation(summary = "用户退出登录")
     @PostMapping("/logout")
     public CommonResult<Boolean> userLogout(){
         StpUtil.logout();

@@ -4,6 +4,7 @@ import cn.xk.xcode.client.MemberExperienceClient;
 import cn.xk.xcode.entity.dto.MemberExperienceChangeReqDto;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.MemberUserService;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ public class MemberExperienceController implements MemberExperienceClient {
     private MemberUserService memberUserService;
 
     @Override
+    @PostMapping("/memberExperienceChange")
     public CommonResult<Boolean> memberExperienceChange(MemberExperienceChangeReqDto memberExperienceChangeReqDto) {
         memberUserService.memberExperienceChange(memberExperienceChangeReqDto);
         return CommonResult.success(true);

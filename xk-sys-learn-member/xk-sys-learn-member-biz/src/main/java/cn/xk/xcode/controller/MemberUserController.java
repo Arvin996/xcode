@@ -13,7 +13,9 @@ import cn.xk.xcode.utils.object.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -27,32 +29,38 @@ import java.util.List;
  * @Description MemberUserController
  */
 @RestController
+@RequestMapping("/member-user")
 public class MemberUserController implements MemberUserClient {
 
     @Resource
     private MemberUserService memberUserService;
 
     @Override
+    @GetMapping("/getMemberUser")
     public CommonResult<MemberUserResultVo> getMemberUser(Long userId) {
         return CommonResult.success(memberUserService.getMemberUser(userId));
     }
 
     @Override
+    @GetMapping("/getMemberUserListByIds")
     public CommonResult<List<MemberUserResultVo>> getMemberUserList(Collection<Long> ids) {
         return CommonResult.success(memberUserService.getMemberUserList(ids));
     }
 
     @Override
+    @GetMapping("/getMemberUserListByNickname")
     public CommonResult<List<MemberUserResultVo>> getUserListByNickname(String nickname) {
         return CommonResult.success(memberUserService.getUserListByNickname(nickname));
     }
 
     @Override
+    @GetMapping("/getMemberUserListByMobile")
     public CommonResult<MemberUserResultVo> getUserByMobile(String mobile) {
         return CommonResult.success(memberUserService.getUserByMobile(mobile));
     }
 
     @Override
+    @GetMapping("/getMemberUserListByEmail")
     public CommonResult<MemberUserResultVo> getUserByEmail(String email) {
         return CommonResult.success(memberUserService.getUserByEmail(email));
     }

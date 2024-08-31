@@ -28,11 +28,11 @@ public class RedisMqTemplate {
     @Resource(name = "messageInterceptorHolder")
     private MessageInterceptorHolder messageInterceptorHolder;
 
-    public void sendMessage(String msgType, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll){
+    public void sendMessage(String msgType, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll) {
         sendMessage(msgType, "default", messageContent, fromUser, toUsers, pushAll);
     }
 
-    public void sendMessage(String msgType, String msgChannel, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll){
+    public void sendMessage(String msgType, String msgChannel, Object messageContent, String fromUser, List<String> toUsers, boolean pushAll) {
         MessageEntity messageEntity = new MessageEntity();
         Header header = new Header();
         header.setType(msgType);
@@ -60,7 +60,7 @@ public class RedisMqTemplate {
     }
 
     private void after(MessageEntity message) {
-      messageInterceptorHolder.getSendMessageInterceptor().forEach(
+        messageInterceptorHolder.getSendMessageInterceptor().forEach(
                 interceptor -> interceptor.sendMessageAfter(message)
         );
     }

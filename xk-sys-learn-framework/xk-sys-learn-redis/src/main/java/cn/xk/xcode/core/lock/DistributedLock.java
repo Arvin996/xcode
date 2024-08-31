@@ -23,8 +23,8 @@ public class DistributedLock {
     /**
      * 互斥锁，seconds秒后自动失效
      *
-     * @param key
-     * @param seconds
+     * @param key key
+     * @param seconds 多少秒失效
      */
     public boolean tryLock(String key, long seconds) {
         return tryLock(key, seconds, TimeUnit.SECONDS);
@@ -43,7 +43,7 @@ public class DistributedLock {
     /**
      * 互斥锁，自动续期
      *
-     * @param key
+     * @param key key
      */
     public boolean tryLock(String key) {
         RLock rLock = redissonClient.getLock(key);
@@ -55,7 +55,7 @@ public class DistributedLock {
     /**
      * 手动释放锁
      *
-     * @param key
+     * @param key key
      */
     public void unlock(String key) {
         RLock rLock = redissonClient.getLock(key);

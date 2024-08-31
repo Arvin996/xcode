@@ -1,9 +1,13 @@
 package cn.xk.xcode.config;
 
+import cn.xk.xcode.core.MessageInterceptorHolder;
+import cn.xk.xcode.core.MessageInterceptorRegistry;
 import cn.xk.xcode.core.RedisMqTemplate;
 import cn.xk.xcode.listener.AbstractRedisMessageListener;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -19,13 +23,27 @@ import java.util.List;
  */
 @Configuration
 @Slf4j
-public class RedisMqConsumerConfig
-{
+public class RedisMqConsumerConfig {
+
+    @Bean
+    public MessageInterceptorHolder messageInterceptorHolder(MessageInterceptorConfigurer messageInterceptorConfigurer){
+        MessageInterceptorRegistry messageInterceptorRegistry = new MessageInterceptorRegistry(CollectionUtil.createEmptyList(), CollectionUtil.createEmptyList());
+        messageInterceptorConfigurer.addConsumeMessageInterceptor(messageInterceptorRegistry);
+        messageInterceptorConfigurer.addSendMessageInterceptor(messageInterceptorRegistry);
+        return new MessageInterceptorHolder(messageInterceptorRegistry);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(MessageInterceptorConfigurer.class)
+    public MessageInterceptorConfigurer messageInterceptorConfigurer(){
+        return new DefaultMessageInterceptorConfigurer();
+    }
+
     /**
      * 创建 Redis Pub/Sub 广播消费的容器
      */
     @Bean
-    @ConditionalOnBean(AbstractRedisMessageListener.class) // 只有 AbstractChannelMessageListener 存在的时候，才需要注册 Redis pubsub 监听
+    @ConditionalOnBean(AbstractRedisMessageListener.class) // 只有 AbstractRedisMessageListener 存在的时候，才需要注册 Redis pubsub 监听
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisMqTemplate redisMQTemplate, List<AbstractRedisMessageListener> listeners) {
         // 创建 RedisMessageListenerContainer 对象

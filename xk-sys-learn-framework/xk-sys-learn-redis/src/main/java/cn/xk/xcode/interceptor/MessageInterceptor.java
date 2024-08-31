@@ -8,8 +8,7 @@ import cn.xk.xcode.message.MessageEntity;
  * @Version 1.0
  * @Description MessageInterceptor
  */
-public interface MessageInterceptor
-{
+public interface MessageInterceptor {
     void sendMessageBefore(MessageEntity message);
 
     void sendMessageAfter(MessageEntity message);

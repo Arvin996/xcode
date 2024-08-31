@@ -9,8 +9,7 @@ import cn.xk.xcode.message.MessageEntity;
  * @Description ConsumeMessageInterceptor
  */
 @SuppressWarnings("all")
-public interface ConsumeMessageInterceptor extends MessageInterceptor
-{
+public interface ConsumeMessageInterceptor extends MessageInterceptor {
     @Override
     default void sendMessageBefore(MessageEntity message){
 

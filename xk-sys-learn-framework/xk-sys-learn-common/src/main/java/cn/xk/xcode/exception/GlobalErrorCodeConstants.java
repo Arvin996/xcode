@@ -46,5 +46,7 @@ public interface GlobalErrorCodeConstants
     // ========== 自定义错误段 ==========
     ErrorCode REPEATED_REQUESTS = new IntErrorCode(900, "重复请求，请稍后重试"); // 重复请求
     ErrorCode DEMO_DENY = new IntErrorCode(901, "演示模式，禁止写操作");
+    ErrorCode EXCEL_MESSAGE_ADD_ERROR = new IntErrorCode(902, "往excel导出队列中添加消息失败");
+    IntErrorCode EXCEL_EXPORT_ERROR = new IntErrorCode(903, "导出Excel失败");
     ErrorCode UNKNOWN = new IntErrorCode(999, "未知错误");
 }

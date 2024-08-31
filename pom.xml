@@ -20,6 +20,8 @@
         <module>xk-sys-learn-member</module>
         <module>xk-sys-learn-logger-server</module>
         <module>xk-sys-learn-websocket-server</module>
+        <module>xk-sys-learn-mall</module>
+        <module>xk-sys-learn-pay</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

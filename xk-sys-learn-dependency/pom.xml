@@ -28,8 +28,8 @@
         <rocketmq.version>2.2.0</rocketmq.version>
         <satoken.version>1.38.0</satoken.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <easyexcel.verion>2.2.10</easyexcel.verion>
-        <easy-trans.version>2.2.11</easy-trans.version>
+        <easyexcel.verion>3.1.1</easyexcel.verion>
+        <easy-trans.version>3.3.4</easy-trans.version>
         <redisson.version>3.18.0</redisson.version>
         <mybatis-flex.version>1.9.3</mybatis-flex.version>
         <mysql-conn.version>8.0.31</mysql-conn.version>

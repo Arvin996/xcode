@@ -4,12 +4,16 @@ import cn.xk.xcode.core.aop.TransFlexAnnotationAdvisor;
 import cn.xk.xcode.core.aop.TransFlexAnnotationInterceptor;
 import cn.xk.xcode.core.handler.InitTransEnumsEventHandler;
 import cn.xk.xcode.core.service.FlexTransService;
+import cn.xk.xcode.support.enums.DefaultTransEnumConfigurer;
 import cn.xk.xcode.support.enums.GlobalEnumsContext;
+import cn.xk.xcode.support.enums.TransEnumConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.openfeign.FeignClientBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 
 /**
@@ -22,12 +26,17 @@ import org.springframework.context.annotation.Primary;
 public class TransFlexConfig {
 
     @Bean
+    @ConditionalOnMissingBean(TransEnumConfigurer.class)
+    public TransEnumConfigurer transEnumConfigurer(){
+        return new DefaultTransEnumConfigurer();
+    }
+
+    @Bean
     public GlobalEnumsContext globalEnumsContext() {
         return InitTransEnumsEventHandler.init();
     }
 
     @Bean
-    @ConditionalOnBean(GlobalEnumsContext.class)
     public TransFlexAnnotationInterceptor transFlexAnnotationInterceptor(FeignClientBuilder feignClientBuilder,
                                                                          GlobalEnumsContext globalEnumsContext,
                                                                          FlexTransService flexTransService){

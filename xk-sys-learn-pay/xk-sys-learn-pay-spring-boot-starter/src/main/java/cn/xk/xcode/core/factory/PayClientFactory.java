@@ -1,6 +1,8 @@
 package cn.xk.xcode.core.factory;
 
+import cn.xk.xcode.core.client.AbstractPayClient;
 import cn.xk.xcode.core.client.PayClient;
+import cn.xk.xcode.core.config.PayClientConfig;
 
 /**
  * @Author xuk
@@ -20,14 +22,14 @@ public interface PayClientFactory {
     /**
      * 注册支付客户端
      * @param channel 客户端号
-     * @param payClientClass 客户端
+     * @param payClient 客户端
      */
-    void registerPayClient(String channel, Class<? extends PayClient> payClientClass);
+    <Config extends PayClientConfig> void registerPayClient(String channel, AbstractPayClient<Config> payClient);
 
     /**
      * 更新支付客户端
      * @param channel 支付渠道
      * @param payClient 支付客户端
      */
-    void updatePayClient(String channel, PayClient payClient);
+    <Config extends PayClientConfig> void updatePayClient(String channel, Config config, PayClient payClient);
 }

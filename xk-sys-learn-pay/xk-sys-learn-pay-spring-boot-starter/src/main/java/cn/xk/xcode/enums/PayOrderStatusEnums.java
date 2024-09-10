@@ -3,7 +3,9 @@ package cn.xk.xcode.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author xuk
@@ -33,6 +35,10 @@ public enum PayOrderStatusEnums {
 
     public static Boolean isClosed(Integer status){
         return Objects.equals(status, PAY_CLOSED.getStatus());
+    }
+
+    public static boolean isValid(Integer status){
+        return Arrays.stream(values()).map(PayOrderStatusEnums::getStatus).collect(Collectors.toList()).contains(status);
     }
 
 }

@@ -17,14 +17,14 @@ public interface PayClient {
     String channel();
 
     // 创建订单
-    PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto);
+    PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable;
 
     // 获取订单信息
-    PayOrderResultVo getOrder(String outTradeNo);
+    PayOrderResultVo getOrder(String outTradeNo) throws Throwable;
 
     // 创建退款
-    PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto);
+    PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable;
 
     // 获取退款信息
-    PayRefundResultVo getRefund(String outTradeNo, String outRefundNo);
+    PayRefundResultVo getRefund(String outTradeNo, String outRefundNo) throws Throwable;
 }

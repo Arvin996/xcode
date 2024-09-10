@@ -1,5 +1,7 @@
 package cn.xk.xcode.utils.file;
 
+import cn.hutool.core.util.IdUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -70,5 +72,30 @@ public class FileUtil {
                 bos.close();
             }
         }
+    }
+
+    @SneakyThrows
+    public static File createTempFile(String data) {
+        File file = createTempFile();
+        // 写入内容
+        cn.hutool.core.io.FileUtil.writeUtf8String(data, file);
+        return file;
+    }
+
+    @SneakyThrows
+    public static File createTempFile(byte[] data) {
+        File file = createTempFile();
+        // 写入内容
+        cn.hutool.core.io.FileUtil.writeBytes(data, file);
+        return file;
+    }
+
+    @SneakyThrows
+    public static File createTempFile() {
+        // 创建文件，通过 UUID 保证唯一
+        File file = File.createTempFile(IdUtil.simpleUUID(), null);
+        // 标记 JVM 退出时，自动删除
+        file.deleteOnExit();
+        return file;
     }
 }

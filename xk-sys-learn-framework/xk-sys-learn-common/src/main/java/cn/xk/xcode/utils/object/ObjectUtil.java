@@ -1,9 +1,13 @@
 package cn.xk.xcode.utils.object;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.xk.xcode.exception.ErrorCode;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -40,5 +44,25 @@ public class ObjectUtil
     @SafeVarargs
     public static <T> boolean equalsAny(T obj, T... array) {
         return Arrays.asList(array).contains(obj);
+    }
+
+    public static<T> void ifNullCastServiceException(T object, ErrorCode errorCode, Object... args){
+        if (Objects.isNull(object)){
+           if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServiceException(errorCode);
+           }else {
+               ExceptionUtil.castServiceException(errorCode, args);
+           }
+        }
+    }
+
+    public static<T> void ifNullCastServerException(T object, ErrorCode errorCode, Object... args){
+        if (Objects.isNull(object)){
+            if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServerException(errorCode);
+            }else {
+                ExceptionUtil.castServerException(errorCode, args);
+            }
+        }
     }
 }

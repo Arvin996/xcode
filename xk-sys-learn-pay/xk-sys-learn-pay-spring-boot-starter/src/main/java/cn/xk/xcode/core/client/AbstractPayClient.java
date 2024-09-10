@@ -8,6 +8,7 @@ import cn.xk.xcode.entity.refund.PayCreateRefundDto;
 import cn.xk.xcode.entity.refund.PayRefundResultVo;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
+import com.alipay.api.AlipayApiException;
 import lombok.extern.slf4j.Slf4j;
 
 import static cn.xk.xcode.enums.PayErrorCodeConstants.*;
@@ -34,10 +35,10 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         initClient();
     }
 
-    private final void initClient() {
-        log.info("支付客户端{} 开始初始化", this.getClass().getSimpleName());
+    private void initClient() {
+        log.info("wx支付客户端{} 开始初始化", this.getClass().getSimpleName());
         doInit();
-        log.info("支付客户端{} init success", this.getClass().getSimpleName());
+        log.info("wx支付客户端{} init success", this.getClass().getSimpleName());
     }
 
     public abstract void doInit();
@@ -48,7 +49,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
     }
 
     @Override
-    public PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) {
+    public PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable {
         PayOrderResultVo payOrderResultVo;
         try {
             payOrderResultVo = doCreateOrder(payCreateOrderDto);
@@ -61,10 +62,10 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         return payOrderResultVo;
     }
 
-    public abstract PayOrderResultVo doCreateOrder(PayCreateOrderDto payCreateOrderDto);
+    public abstract PayOrderResultVo doCreateOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable;
 
     @Override
-    public PayOrderResultVo getOrder(String outTradeNo) {
+    public PayOrderResultVo getOrder(String outTradeNo) throws Throwable{
         PayOrderResultVo payOrderResultVo;
         try {
             payOrderResultVo = doGetOrder(outTradeNo);
@@ -77,10 +78,10 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         return payOrderResultVo;
     }
 
-    public abstract PayOrderResultVo doGetOrder(String outTradeNo);
+    public abstract PayOrderResultVo doGetOrder(String outTradeNo) throws Throwable;
 
     @Override
-    public PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) {
+    public PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable{
         PayRefundResultVo payRefundResultVo;
         try {
             payRefundResultVo = doCreateRefund(payCreateRefundDto);
@@ -93,10 +94,10 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         return payRefundResultVo;
     }
 
-    public abstract PayRefundResultVo doCreateRefund(PayCreateRefundDto payCreateRefundDto);
+    public abstract PayRefundResultVo doCreateRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable;
 
     @Override
-    public PayRefundResultVo getRefund(String outTradeNo, String outRefundNo) {
+    public PayRefundResultVo getRefund(String outTradeNo, String outRefundNo) throws Throwable{
         PayRefundResultVo payRefundResultVo;
         try {
             payRefundResultVo = doGetRefund(outTradeNo, outRefundNo);
@@ -109,5 +110,5 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         return payRefundResultVo;
     }
 
-    public abstract PayRefundResultVo doGetRefund(String outTradeNo, String outRefundNo);
+    public abstract PayRefundResultVo doGetRefund(String outTradeNo, String outRefundNo) throws Throwable;
 }

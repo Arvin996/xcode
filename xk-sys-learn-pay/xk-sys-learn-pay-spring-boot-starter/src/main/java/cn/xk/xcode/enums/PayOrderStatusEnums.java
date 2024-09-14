@@ -1,5 +1,7 @@
 package cn.xk.xcode.enums;
 
+import cn.xk.xcode.core.IntEnumValueToArray;
+import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
  **/
 @AllArgsConstructor
 @Getter
-public enum PayOrderStatusEnums {
+public enum PayOrderStatusEnums implements IntEnumValueToArray {
 
     PAY_WAITING(0, "未支付"),
     PAY_SUCCESS(10, "支付成功"),
@@ -41,4 +43,8 @@ public enum PayOrderStatusEnums {
         return Arrays.stream(values()).map(PayOrderStatusEnums::getStatus).collect(Collectors.toList()).contains(status);
     }
 
+    @Override
+    public int[] toIntArray() {
+        return Arrays.stream(values()).mapToInt(PayOrderStatusEnums::getStatus).toArray();
+    }
 }

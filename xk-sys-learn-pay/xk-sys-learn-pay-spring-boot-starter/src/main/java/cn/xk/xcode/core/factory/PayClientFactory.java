@@ -26,10 +26,10 @@ public interface PayClientFactory {
      */
     <Config extends PayClientConfig> void registerPayClient(String channel, AbstractPayClient<Config> payClient);
 
-    /**
-     * 更新支付客户端
-     * @param channel 支付渠道
-     * @param payClient 支付客户端
-     */
-    <Config extends PayClientConfig> void updatePayClient(String channel, Config config, PayClient payClient);
+//    /**
+//     * 更新支付客户端
+//     * @param channel 支付渠道
+//     * @param payClient 支付客户端
+//     */
+//    <Config extends PayClientConfig> void updatePayClient(String channel, Config config, PayClient payClient);
 }

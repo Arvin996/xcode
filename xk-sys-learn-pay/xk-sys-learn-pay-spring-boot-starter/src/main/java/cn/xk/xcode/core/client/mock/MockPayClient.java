@@ -8,6 +8,8 @@ import cn.xk.xcode.entity.refund.PayCreateRefundDto;
 import cn.xk.xcode.entity.refund.PayRefundResultVo;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 /**
  * @Author xuk
  * @Date 2024/9/9 11:18
@@ -34,6 +36,11 @@ public class MockPayClient extends AbstractPayClient<DefaultPayClientConfig> {
     }
 
     @Override
+    protected PayOrderResultVo doParseOrderNotify(Map<String, String> params, String body) throws Throwable {
+        return null;
+    }
+
+    @Override
     public PayOrderResultVo doGetOrder(String outTradeNo) throws Throwable {
         // 直接返回即可
         log.info("模拟测试支付客户端查询订单完成---------");
@@ -44,6 +51,11 @@ public class MockPayClient extends AbstractPayClient<DefaultPayClientConfig> {
     public PayRefundResultVo doCreateRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable {
         // 直接返回即可
         log.info("模拟测试支付客户端创建退款完成---------");
+        return null;
+    }
+
+    @Override
+    protected PayRefundResultVo doParseRefundNotify(Map<String, String> params, String body) throws Throwable {
         return null;
     }
 

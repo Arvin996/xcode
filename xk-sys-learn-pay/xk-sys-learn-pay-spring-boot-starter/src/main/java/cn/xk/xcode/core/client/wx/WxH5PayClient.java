@@ -7,6 +7,8 @@ import cn.xk.xcode.enums.PayOrderDisplayModeEnum;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.exception.WxPayException;
 
@@ -24,7 +26,7 @@ public class WxH5PayClient extends AbstractWxPayClient{
     @Override
     protected PayOrderResultVo doCreateOrderV2(PayCreateOrderDto payCreateOrderDto) throws WxPayException {
         WxPayUnifiedOrderRequest request = buildPayUnifiedOrderRequestV2(payCreateOrderDto);
-        WxPayMwebOrderResult response = client.createOrder(request);
+        WxPayUnifiedOrderResult response = client.createOrder(request);
         return PayOrderResultVo.createWaitingOrderResultVo(
                 PayOrderDisplayModeEnum.URL.getMode(),
                 response.getMwebUrl(),
@@ -36,10 +38,10 @@ public class WxH5PayClient extends AbstractWxPayClient{
     @Override
     protected PayOrderResultVo doCreateOrderV3(PayCreateOrderDto payCreateOrderDto) throws WxPayException {
         WxPayUnifiedOrderV3Request request = buildPayUnifiedOrderRequestV3(payCreateOrderDto);
-        WxPayMwebOrderResult response = client.createOrderV3(TradeTypeEnum.H5,  request);
+        WxPayUnifiedOrderV3Result response = client.createOrderV3(TradeTypeEnum.H5,  request);
         return PayOrderResultVo.createWaitingOrderResultVo(
                 PayOrderDisplayModeEnum.URL.getMode(),
-                response.getMwebUrl(),
+                response.getH5Url(),
                 payCreateOrderDto.getOutTradeNo(),
                 response
         );

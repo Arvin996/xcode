@@ -26,7 +26,7 @@ public class PayClientFactoryImp implements PayClientFactory {
     @Override
     public PayClient getPayClient(String channel) {
         AbstractPayClient<?> payClient = payClientMap.get(channel);
-        if (ObjectUtil.isAllEmpty(payClient)){
+        if (ObjectUtil.isAllEmpty(payClient)) {
             ExceptionUtil.castServiceException(PAY_CLIENT_NOT_EXISTS, channel);
         }
         return payClient;
@@ -37,10 +37,10 @@ public class PayClientFactoryImp implements PayClientFactory {
         payClientMap.put(channel, payClient);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <Config extends PayClientConfig> void updatePayClient(String channel, Config config, PayClient payClient) {
-        AbstractPayClient<Config> client = (AbstractPayClient<Config>) payClientMap.get(channel);
-        client.reloadConfig(config);
-    }
+    // @SuppressWarnings("unchecked")
+//    @Override
+//    public <Config extends PayClientConfig> void updatePayClient(String channel, Config config, PayClient payClient) {
+//        AbstractPayClient<Config> client = (AbstractPayClient<Config>) payClientMap.get(channel);
+//        client.reloadConfig(config);
+//    }
 }

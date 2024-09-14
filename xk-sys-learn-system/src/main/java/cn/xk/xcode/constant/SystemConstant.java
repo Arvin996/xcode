@@ -4,7 +4,7 @@ package cn.xk.xcode.constant;
  * @Author xuk
  * @Date 2024/7/8 09:45
  * @Version 1.0
- * @Description SystemConstent
+ * @Description SystemConstant
  */
 public class SystemConstant
 {

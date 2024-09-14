@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class DataSourceEntity
-{
+public class DataSourceEntity {
+
     private String username;
 
     private String password;

@@ -6,10 +6,15 @@ import cn.xk.xcode.entity.order.PayCreateOrderDto;
 import cn.xk.xcode.entity.order.PayOrderResultVo;
 import cn.xk.xcode.entity.refund.PayCreateRefundDto;
 import cn.xk.xcode.entity.refund.PayRefundResultVo;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
 import com.alipay.api.AlipayApiException;
+import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 import static cn.xk.xcode.enums.PayErrorCodeConstants.*;
 
@@ -19,6 +24,7 @@ import static cn.xk.xcode.enums.PayErrorCodeConstants.*;
  * @date 2024/9/6 21:16
  * @description
  */
+@Data
 @Slf4j
 public abstract class AbstractPayClient<Config extends PayClientConfig> implements PayClient {
 
@@ -30,10 +36,10 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         this.config = config;
     }
 
-    public void reloadConfig(Config config) {
-        this.config = config;
-        initClient();
-    }
+//    public void reloadConfig(Config config) {
+//        this.config = config;
+//        initClient();
+//    }
 
     private void initClient() {
         log.info("wx支付客户端{} 开始初始化", this.getClass().getSimpleName());
@@ -78,6 +84,22 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         return payOrderResultVo;
     }
 
+    @Override
+    public PayOrderResultVo parseOrderNotify(Map<String, String> params, String body) {
+        try {
+            return doParseOrderNotify(params, body);
+        } catch (ServiceException ex) { // 业务异常，都是实现类已经翻译，所以直接抛出即可
+            throw ex;
+        } catch (Throwable ex) {
+            log.error("[parseOrderNotify][客户端({}) params({}) body({}) 解析失败]",
+                    channel, params, body, ex);
+           throw new ServiceException(PARSE_ORDER_NOTIFY_FAILED, ex.getMessage());
+        }
+    }
+
+    protected abstract PayOrderResultVo doParseOrderNotify(Map<String, String> params, String body)
+            throws Throwable;
+
     public abstract PayOrderResultVo doGetOrder(String outTradeNo) throws Throwable;
 
     @Override
@@ -109,6 +131,22 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
         }
         return payRefundResultVo;
     }
+
+    @Override
+    public PayRefundResultVo parseRefundNotify(Map<String, String> params, String body) {
+        try {
+            return doParseRefundNotify(params, body);
+        } catch (ServiceException ex) { // 业务异常，都是实现类已经翻译，所以直接抛出即可
+            throw ex;
+        } catch (Throwable ex) {
+            log.error("[parseRefundNotify][客户端({}) params({}) body({}) 解析失败]",
+                    channel, params, body, ex);
+            throw new ServiceException(PARSE_REFUND_NOTIFY_FAILED, ex.getMessage());
+        }
+    }
+
+    protected abstract PayRefundResultVo doParseRefundNotify(Map<String, String> params, String body)
+            throws Throwable;
 
     public abstract PayRefundResultVo doGetRefund(String outTradeNo, String outRefundNo) throws Throwable;
 }

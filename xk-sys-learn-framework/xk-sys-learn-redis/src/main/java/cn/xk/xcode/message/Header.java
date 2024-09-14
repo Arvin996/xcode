@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Header
-{
+public class Header {
     // 消息类型
     private String type;
 

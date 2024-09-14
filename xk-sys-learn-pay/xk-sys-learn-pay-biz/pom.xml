@@ -5,25 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.xk.xcode</groupId>
-        <artifactId>xk-sys-learn</artifactId>
+        <artifactId>xk-sys-learn-pay</artifactId>
         <version>${revision}</version>
     </parent>
-
     <version>${revision}</version>
-    <artifactId>xk-sys-learn-pay</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>xk-sys-learn-pay-biz</artifactId>
 
-    <description>业务支付模块</description>
-    <modules>
-        <module>xk-sys-learn-pay-spring-boot-starter</module>
-        <module>xk-sys-learn-pay-api</module>
-        <module>xk-sys-learn-pay-biz</module>
-    </modules>
-
+    <description>
+        支付服务的业务实现
+    </description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-pay-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 
 </project>

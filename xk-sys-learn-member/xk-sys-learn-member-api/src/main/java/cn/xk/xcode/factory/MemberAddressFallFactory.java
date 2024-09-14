@@ -20,12 +20,12 @@ public class MemberAddressFallFactory implements FallbackFactory<MemberAddressCl
     public MemberAddressClient create(Throwable cause) {
         return new MemberAddressClient() {
             @Override
-            public CommonResult<List<MemberAddressResultVo>> getMemberAddressList(String userId) {
+            public CommonResult<List<MemberAddressResultVo>> getMemberAddressList(Long userId) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
 
             @Override
-            public CommonResult<MemberAddressResultVo> getMemberDefaultAddress(String userId) {
+            public CommonResult<MemberAddressResultVo> getMemberDefaultAddress(Long userId) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
         };

@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(value = "xk-learn-checkcode", fallback = CheckCodeClientApiFallBackFactory.class)
 @Tag(name = "验证码接口")
 @RequestMapping("/checkcode")
-public interface CheckCodeClientApi
-{
+public interface CheckCodeClientApi {
     @PostMapping("/genCode")
     @Operation(description = "生成验证码")
     CommonResult<CheckCodeGenResultVo> genCheckCode(@Validated CheckCodeGenReqDto checkCodeGenReqDto);

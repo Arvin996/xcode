@@ -19,8 +19,8 @@ import javax.annotation.Resource;
  */
 @EnableConfigurationProperties(DictEnumPackages.class)
 @Configuration
-public class DictConfig
-{
+public class DictConfig {
+
     @Resource
     private DictEnumPackages dictEnumPackages;
 

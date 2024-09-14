@@ -1,10 +1,10 @@
 package cn.xk.xcode.core.client.wx;
 
+import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.core.config.wx.WxPayClientConfig;
 import cn.xk.xcode.entity.order.PayCreateOrderDto;
 import cn.xk.xcode.entity.order.PayOrderResultVo;
 import cn.xk.xcode.enums.PayOrderDisplayModeEnum;
-import com.alibaba.fastjson.JSON;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderV3Request;
@@ -28,7 +28,7 @@ public class WxAppPayClient extends AbstractWxPayClient{
     protected PayOrderResultVo doCreateOrderV2(PayCreateOrderDto payCreateOrderDto) throws WxPayException {
         WxPayUnifiedOrderRequest request = buildPayUnifiedOrderRequestV2(payCreateOrderDto);
         WxPayMpOrderResult response = client.createOrder(request);
-        return PayOrderResultVo.createWaitingOrderResultVo(PayOrderDisplayModeEnum.APP.getMode(), JSON.toJSONString(response),
+        return PayOrderResultVo.createWaitingOrderResultVo(PayOrderDisplayModeEnum.APP.getMode(), JSONUtil.toJsonStr(response),
                 payCreateOrderDto.getOutTradeNo(), response);
     }
 
@@ -36,7 +36,7 @@ public class WxAppPayClient extends AbstractWxPayClient{
     protected PayOrderResultVo doCreateOrderV3(PayCreateOrderDto payCreateOrderDto) throws WxPayException {
         WxPayUnifiedOrderV3Request request = buildPayUnifiedOrderRequestV3(payCreateOrderDto);
         WxPayUnifiedOrderV3Result.AppResult response = client.createOrderV3(TradeTypeEnum.APP, request);
-        return PayOrderResultVo.createWaitingOrderResultVo(PayOrderDisplayModeEnum.APP.getMode(), JSON.toJSONString(response),
+        return PayOrderResultVo.createWaitingOrderResultVo(PayOrderDisplayModeEnum.APP.getMode(), JSONUtil.toJsonStr(response),
                 payCreateOrderDto.getOutTradeNo(), response);
     }
 }

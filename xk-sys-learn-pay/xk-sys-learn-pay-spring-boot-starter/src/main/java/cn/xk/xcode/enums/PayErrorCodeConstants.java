@@ -9,6 +9,18 @@ import cn.xk.xcode.exception.IntErrorCode;
  * @description
  */
 public interface PayErrorCodeConstants {
+    String WX_APP = "APP";
+    String WX_MICROPAY = "MICROPAY";
+    String WX_MWEB = "MWEB";
+    String WX_JSAPI = "JSAPI";
+    String WX_NATIVE = "NATIVE";
+    String ALI_APP = "ali_app";
+    String ALI_BAR = "ali_barcode";
+    String ALI_PC = "ali_pc";
+    String ALI_QR_CODE = "ali_qrcode";
+    String ALI_WAP = "ali_wap";
+
+
     IntErrorCode CREATE_ORDER_FILED = new IntErrorCode(19000_0_500, "客户端渠道{}创建订单失败, 请求信息：{}");
     IntErrorCode QUERY_ORDER_FILED = new IntErrorCode(19000_0_501, "客户端渠道{}查询订单失败, 订单号：{}");
     IntErrorCode CREATE_ORDER_REFUND_FILED = new IntErrorCode(19000_0_502, "客户端渠道{}创建退费订单失败, 订单号：{}， 外部订单号{}，请求信息：{}");
@@ -19,4 +31,7 @@ public interface PayErrorCodeConstants {
     IntErrorCode WX_SYSTEM_ERROR = new IntErrorCode(19000_0_506, "wx接口调用失败，错误码：{}, 错误码信息描述：{},错误信息：{}");
     IntErrorCode AUTH_BAR_CODE_MUST_NOT_NULL = new IntErrorCode(19000_0_507, "扫码支付的条形码code不能为空");
     IntErrorCode JSAPI_REQUEST_OPENID_MUST_NOT_NULL = new IntErrorCode(19000_0_508, "微信jsapi支付的openid不能为空");
+    IntErrorCode PAY_CLIENT_CHANNEL_ALREADY_EXISTS = new IntErrorCode(19000_0_509, "支付客户端{}渠道{}已经存在");
+    IntErrorCode PARSE_ORDER_NOTIFY_FAILED = new IntErrorCode(19000_0_510, "解析订单通知失败，失败信息：{}");
+    IntErrorCode PARSE_REFUND_NOTIFY_FAILED = new IntErrorCode(19000_0_511, "解析退费通知失败，失败信息：{}");
 }

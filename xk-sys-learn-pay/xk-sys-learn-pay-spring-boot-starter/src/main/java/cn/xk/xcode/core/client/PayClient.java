@@ -5,6 +5,8 @@ import cn.xk.xcode.entity.order.PayOrderResultVo;
 import cn.xk.xcode.entity.refund.PayCreateRefundDto;
 import cn.xk.xcode.entity.refund.PayRefundResultVo;
 
+import java.util.Map;
+
 /**
  * @Author xuk
  * @Date 2024/9/3 16:28
@@ -22,9 +24,25 @@ public interface PayClient {
     // 获取订单信息
     PayOrderResultVo getOrder(String outTradeNo) throws Throwable;
 
+    /**
+     * 解析 order 回调数据
+     * @param params HTTP 回调接口 content type 为 application/x-www-form-urlencoded 的所有参数
+     * @param body HTTP 回调接口的 request body
+     * @return 支付订单信息
+     */
+    PayOrderResultVo parseOrderNotify(Map<String, String> params, String body);
+
     // 创建退款
     PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable;
 
     // 获取退款信息
     PayRefundResultVo getRefund(String outTradeNo, String outRefundNo) throws Throwable;
+
+    /**
+     * 解析 refund 回调数据
+     * @param params HTTP 回调接口 content type 为 application/x-www-form-urlencoded 的所有参数
+     * @param body HTTP 回调接口的 request body
+     * @return 支付订单信息
+     */
+    PayRefundResultVo parseRefundNotify(Map<String, String> params, String body);
 }

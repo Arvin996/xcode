@@ -17,6 +17,10 @@ import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.utils.file.FileUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyV3Result;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyV3Result;
 import com.github.binarywang.wxpay.bean.request.*;
 import com.github.binarywang.wxpay.bean.result.*;
 import com.github.binarywang.wxpay.config.WxPayConfig;
@@ -27,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 import java.util.Objects;
 
 import static cn.hutool.core.date.DatePattern.*;
@@ -225,7 +230,7 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
                 .setNotifyUrl(payCreateRefundDto.getNotifyUrl())
                 .setTotalFee(payCreateRefundDto.getPayPrice());
         WxPayRefundResult response = client.refund(request);
-        if (!Objects.equals("SUCCESS", response.getReturnCode())){
+        if (!Objects.equals("SUCCESS", response.getReturnCode())) {
             ExceptionUtil.castServiceException(WX_SYSTEM_ERROR, response.getResultCode(), response.getErrCodeDes(), response.getErrorMessage());
         }
         // V2 情况下，不直接返回退款成功，而是等待异步通知
@@ -279,11 +284,11 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
     private PayRefundResultVo doGetRefundV2(String outTradeNo, String outRefundNo) throws WxPayException {
         WxPayRefundQueryRequest request = WxPayRefundQueryRequest.newBuilder().outTradeNo(outTradeNo).outRefundNo(outRefundNo).build();
         WxPayRefundQueryResult response = client.refundQuery(request);
-        if (!Objects.equals("SUCCESS", response.getReturnCode())){
+        if (!Objects.equals("SUCCESS", response.getReturnCode())) {
             ExceptionUtil.castServiceException(WX_SYSTEM_ERROR, response.getResultCode(), response.getErrCodeDes(), response.getErrorMessage());
         }
         // 请求成功 但是没退费成功
-        if (!"SUCCESS".equals(response.getResultCode())){
+        if (!"SUCCESS".equals(response.getResultCode())) {
             return PayRefundResultVo.createWaitingOfRefundResultVo(null, outRefundNo, response);
         }
         WxPayRefundQueryResult.RefundRecord refund = CollUtil.findOne(response.getRefundRecords(),
@@ -326,6 +331,75 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
         }
     }
 
+    @Override
+    protected PayOrderResultVo doParseOrderNotify(Map<String, String> params, String body) throws Throwable {
+        switch (config.getApiVersion()) {
+            case API_VERSION_V2:
+                return doParseOrderNotifyV2(body);
+            case WxPayClientConfig.API_VERSION_V3:
+                return doParseOrderNotifyV3(body);
+            default:
+                throw new IllegalArgumentException(String.format("未知的 API 版本(%s)", config.getApiVersion()));
+        }
+    }
+
+    private PayOrderResultVo doParseOrderNotifyV3(String body) throws WxPayException {
+        // 1. 解析回调
+        WxPayNotifyV3Result response = client.parseOrderNotifyV3Result(body, null);
+        WxPayNotifyV3Result.DecryptNotifyResult result = response.getResult();
+        // 2. 构建结果
+        Integer status = parseStatus(result.getTradeState());
+        String openid = result.getPayer() != null ? result.getPayer().getOpenid() : null;
+        return PayOrderResultVo.createAnyStatusOrderResultVo(status, result.getTransactionId(), openid, parseDateV3(result.getSuccessTime()),
+                result.getOutTradeNo(), body);
+    }
+
+    private PayOrderResultVo doParseOrderNotifyV2(String body) throws WxPayException {
+        // 1. 解析回调 body是xml参数
+        WxPayOrderNotifyResult response = client.parseOrderNotifyResult(body);
+        // 2. 构建结果
+        // V2 微信支付的回调，只有 SUCCESS 支付成功、CLOSED 支付失败两种情况，无需像支付宝一样解析的比较复杂
+        Integer status = Objects.equals(response.getResultCode(), "SUCCESS") ?
+                PayOrderStatusEnums.PAY_SUCCESS.getStatus() : PayOrderStatusEnums.PAY_CLOSED.getStatus();
+        return PayOrderResultVo.createAnyStatusOrderResultVo(status, response.getTransactionId(), response.getOpenid(), parseDateV2(response.getTimeEnd()),
+                response.getOutTradeNo(), body);
+    }
+
+    @Override
+    protected PayRefundResultVo doParseRefundNotify(Map<String, String> params, String body) throws Throwable {
+        switch (config.getApiVersion()) {
+            case API_VERSION_V2:
+                return doParseRefundNotifyV2(body);
+            case WxPayClientConfig.API_VERSION_V3:
+                return parseRefundNotifyV3(body);
+            default:
+                throw new IllegalArgumentException(String.format("未知的 API 版本(%s)", config.getApiVersion()));
+        }
+    }
+
+    private PayRefundResultVo parseRefundNotifyV3(String body) throws WxPayException {
+        // 1. 解析回调
+        WxPayRefundNotifyV3Result response = client.parseRefundNotifyV3Result(body, null);
+        WxPayRefundNotifyV3Result.DecryptNotifyResult result = response.getResult();
+        // 2. 构建结果
+        if (Objects.equals("SUCCESS", result.getRefundStatus())) {
+            return PayRefundResultVo.createSuccessOfRefundResultVo(result.getRefundId(), parseDateV3(result.getSuccessTime()),
+                    result.getOutRefundNo(), response);
+        }
+        return PayRefundResultVo.createFailureOfRefundResultVo(result.getOutRefundNo(), response);
+    }
+
+    private PayRefundResultVo doParseRefundNotifyV2(String body) throws WxPayException {
+        // 1. 解析回调
+        WxPayRefundNotifyResult response = client.parseRefundNotifyResult(body);
+        WxPayRefundNotifyResult.ReqInfo result = response.getReqInfo();
+        // 2. 构建结果
+        if (Objects.equals("SUCCESS", result.getRefundStatus())) {
+            return PayRefundResultVo.createSuccessOfRefundResultVo(result.getRefundId(), LocalDateTimeUtil.parse(result.getSuccessTime(), NORM_DATETIME_PATTERN),
+                    result.getOutRefundNo(), response);
+        }
+        return PayRefundResultVo.createFailureOfRefundResultVo(result.getOutRefundNo(), response);
+    }
 
     static String getErrorCode(WxPayException e) {
         if (StrUtil.isNotEmpty(e.getErrCode())) {
@@ -345,5 +419,23 @@ public abstract class AbstractWxPayClient extends AbstractPayClient<WxPayClientC
             return e.getCustomErrorMsg();
         }
         return e.getReturnMsg();
+    }
+
+    private static Integer parseStatus(String tradeState) {
+        switch (tradeState) {
+            case "NOTPAY":
+            case "USERPAYING": // 支付中，等待用户输入密码（条码支付独有）
+                return PayOrderStatusEnums.PAY_WAITING.getStatus();
+            case "SUCCESS":
+                return PayOrderStatusEnums.PAY_SUCCESS.getStatus();
+            case "REFUND":
+                return PayOrderStatusEnums.PAY_REFUND.getStatus();
+            case "CLOSED":
+            case "REVOKED": // 已撤销（刷卡支付独有）
+            case "PAYERROR": // 支付失败（其它原因，如银行返回失败）
+                return PayOrderStatusEnums.PAY_CLOSED.getStatus();
+            default:
+                throw new IllegalArgumentException(StrUtil.format("未知的支付状态({})", tradeState));
+        }
     }
 }

@@ -14,9 +14,9 @@ public class TableSqlUtils {
     /**
      * 数据库配置
      */
-    private static  String DATASOURCE_URL ;
-    private static  String DATASOURCE_USERNAME ;
-    private static  String DATASOURCE_PASSWORD;
+    private static String DATASOURCE_URL;
+    private static String DATASOURCE_USERNAME;
+    private static String DATASOURCE_PASSWORD;
 
     public static void init(BizMessageProperties bizMessageProperties) {
         DATASOURCE_URL = bizMessageProperties.getDbUrl();

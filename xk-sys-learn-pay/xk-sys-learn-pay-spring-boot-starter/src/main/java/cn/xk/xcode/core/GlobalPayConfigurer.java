@@ -1,5 +1,6 @@
 package cn.xk.xcode.core;
 
+import cn.xk.xcode.config.PayTypeProperties;
 import cn.xk.xcode.core.config.wx.WxPayClientConfig;
 import cn.xk.xcode.core.config.zfb.AliPayClientConfig;
 
@@ -10,7 +11,6 @@ import cn.xk.xcode.core.config.zfb.AliPayClientConfig;
  * @Description GlobalPayConfigurer
  **/
 public interface GlobalPayConfigurer {
-    AliPayClientConfig registerAliPayClientConfig();
-    WxPayClientConfig registerWxPayClientConfig();
+
     void registerPayClient(GlobalPayClientRegister register);
 }

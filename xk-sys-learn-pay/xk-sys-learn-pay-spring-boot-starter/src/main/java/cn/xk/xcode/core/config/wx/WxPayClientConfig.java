@@ -1,9 +1,8 @@
 package cn.xk.xcode.core.config.wx;
 
 import cn.xk.xcode.core.config.PayClientConfig;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -15,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class WxPayClientConfig implements PayClientConfig {
 
     /**

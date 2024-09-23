@@ -14,6 +14,7 @@ import java.util.List;
  **/
 @AllArgsConstructor
 public class GlobalPayClientRegister {
+
     public List<AbstractPayClient<PayClientConfig>> OTHER_PAY_CLIENTS;
 
     public GlobalPayClientRegister registerPayClient(AbstractPayClient<PayClientConfig>  payClient){

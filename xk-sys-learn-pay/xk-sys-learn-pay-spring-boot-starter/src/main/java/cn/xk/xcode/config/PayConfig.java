@@ -1,5 +1,6 @@
 package cn.xk.xcode.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.core.DefaultGlobalPayConfigurer;
 import cn.xk.xcode.core.GlobalPayClientRegister;
 import cn.xk.xcode.core.GlobalPayConfigurer;
@@ -15,14 +16,18 @@ import cn.xk.xcode.core.factory.PayClientFactory;
 import cn.xk.xcode.core.factory.impl.PayClientFactoryImp;
 import cn.xk.xcode.enums.PayErrorCodeConstants;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.xk.xcode.enums.PayErrorCodeConstants.PAY_CLIENT_CHANNEL_ALREADY_EXISTS;
+import static cn.xk.xcode.enums.PayErrorCodeConstants.*;
 
 /**
  * @Author xuk
@@ -31,7 +36,11 @@ import static cn.xk.xcode.enums.PayErrorCodeConstants.PAY_CLIENT_CHANNEL_ALREADY
  * @Description PayConfig
  **/
 @Configuration
+@EnableConfigurationProperties(PayTypeProperties.class)
 public class PayConfig {
+
+    @Resource
+    private PayTypeProperties payTypeProperties;
 
     @Bean
     @ConditionalOnMissingBean(GlobalPayConfigurer.class)
@@ -45,8 +54,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxAppPayClient wxAppPayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxAppPayClient wxAppPayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
            return null;
         }
@@ -54,8 +64,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxBarCodePayClient wxBarCodePayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxBarCodePayClient wxBarCodePayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
             return null;
         }
@@ -63,8 +74,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxH5PayClient wxH5PayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxH5PayClient wxH5PayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
             return null;
         }
@@ -72,8 +84,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxLitePayClient wxLitePayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxLitePayClient wxLitePayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
             return null;
         }
@@ -81,8 +94,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxPubPayClient wxPubPayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxPubPayClient wxPubPayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
             return null;
         }
@@ -90,8 +104,9 @@ public class PayConfig {
     }
 
     @Bean
-    public WxQrCodePayClient wxQrCodePayClient(GlobalPayConfigurer globalPayConfigurer){
-        WxPayClientConfig wxPayClientConfig = globalPayConfigurer.registerWxPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public WxQrCodePayClient wxQrCodePayClient(){
+        WxPayClientConfig wxPayClientConfig = getWxClientConfig();
         if (Objects.isNull(wxPayClientConfig)){
             return null;
         }
@@ -99,8 +114,9 @@ public class PayConfig {
     }
 
     @Bean
-    public AliAppPayClient aliAppPayClient(GlobalPayConfigurer globalPayConfigurer){
-        AliPayClientConfig aliPayClientConfig = globalPayConfigurer.registerAliPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public AliAppPayClient aliAppPayClient(){
+        AliPayClientConfig aliPayClientConfig = getAliPayClientConfig();
         if (Objects.isNull(aliPayClientConfig)){
             return null;
         }
@@ -108,8 +124,9 @@ public class PayConfig {
     }
 
     @Bean
-    public AliBarCodePayClient aliBarCodePayClient(GlobalPayConfigurer globalPayConfigurer){
-        AliPayClientConfig aliPayClientConfig = globalPayConfigurer.registerAliPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public AliBarCodePayClient aliBarCodePayClient(){
+        AliPayClientConfig aliPayClientConfig = getAliPayClientConfig();
         if (Objects.isNull(aliPayClientConfig)){
             return null;
         }
@@ -117,8 +134,9 @@ public class PayConfig {
     }
 
     @Bean
-    public AliPcPayClient aliPcPayClient(GlobalPayConfigurer globalPayConfigurer){
-        AliPayClientConfig aliPayClientConfig = globalPayConfigurer.registerAliPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public AliPcPayClient aliPcPayClient(){
+        AliPayClientConfig aliPayClientConfig = getAliPayClientConfig();
         if (Objects.isNull(aliPayClientConfig)){
             return null;
         }
@@ -126,8 +144,9 @@ public class PayConfig {
     }
 
     @Bean
-    public AliQrCodePayClient aliQrCodePayClient(GlobalPayConfigurer globalPayConfigurer){
-        AliPayClientConfig aliPayClientConfig = globalPayConfigurer.registerAliPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public AliQrCodePayClient aliQrCodePayClient(){
+        AliPayClientConfig aliPayClientConfig = getAliPayClientConfig();
         if (Objects.isNull(aliPayClientConfig)){
             return null;
         }
@@ -135,8 +154,9 @@ public class PayConfig {
     }
 
     @Bean
-    public AliWapPayClient aliWapPayClient(GlobalPayConfigurer globalPayConfigurer){
-        AliPayClientConfig aliPayClientConfig = globalPayConfigurer.registerAliPayClientConfig();
+    @ConditionalOnBean(PayTypeProperties.class)
+    public AliWapPayClient aliWapPayClient(){
+        AliPayClientConfig aliPayClientConfig = getAliPayClientConfig();
         if (Objects.isNull(aliPayClientConfig)){
             return null;
         }
@@ -157,5 +177,109 @@ public class PayConfig {
             payClientFactory.registerPayClient(client.getChannel(), client);
         });
         return payClientFactory;
+    }
+
+    private AliPayClientConfig getAliPayClientConfig(){
+        PayTypeProperties.zfb zfb = payTypeProperties.getZfb();
+        if (ObjectUtil.isNull(zfb)){
+            return null;
+        }
+        AliPayClientConfig aliPayClientConfig = new AliPayClientConfig();
+        if (!StringUtils.hasText(zfb.getServerUrl())){
+            ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "serverUrl");
+        }
+        if (!StringUtils.hasText(zfb.getAppId())){
+            ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "appId");
+        }
+        if (ObjectUtil.isNull(zfb.getMode())){
+            ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "mode");
+        }
+        aliPayClientConfig.setServerUrl(zfb.getServerUrl());
+        aliPayClientConfig.setAppId(zfb.getAppId());
+        aliPayClientConfig.setSignType(zfb.getSignType());
+        if (!zfb.getMode().equals(AliPayClientConfig.MODE_PUBLIC_KEY) && !zfb.getMode().equals(AliPayClientConfig.MODE_PUBLIC_KEY_AND_CERTIFICATE)){
+            ExceptionUtil.castServerException(ZFB_PAY_CLIENT_MODE_ERROR);
+        }
+        aliPayClientConfig.setMode(zfb.getMode());
+        if (zfb.getMode().equals(AliPayClientConfig.MODE_PUBLIC_KEY)){
+            if (ObjectUtil.isNull(zfb.getPublicKeyMode())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "publicKeyMode");
+            }
+            if (!StringUtils.hasText(zfb.getPublicKeyMode().getPrivateKey())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "privateKey");
+            }
+            if (!StringUtils.hasText(zfb.getPublicKeyMode().getAlipayPublicKey())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "alipayPublicKey");
+            }
+            aliPayClientConfig.setPrivateKey(zfb.getPublicKeyMode().getPrivateKey());
+            aliPayClientConfig.setAlipayPublicKey(zfb.getPublicKeyMode().getAlipayPublicKey());
+        }else {
+            if (ObjectUtil.isNull(zfb.getCertMode())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "certMode");
+            }
+            if (!StringUtils.hasText(zfb.getCertMode().getAppCertContent())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "appCertContent");
+            }
+            if (!StringUtils.hasText(zfb.getCertMode().getAlipayPublicCertContent())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "alipayPublicCertContent");
+            }
+            if (!StringUtils.hasText(zfb.getCertMode().getRootCertContent())){
+                ExceptionUtil.castServerException(ZFB_PAY_CLIENT_CONFIG_ERROR, "rootCertContent");
+            }
+            aliPayClientConfig.setAppCertContent(zfb.getCertMode().getAppCertContent());
+            aliPayClientConfig.setAlipayPublicCertContent(zfb.getCertMode().getAlipayPublicCertContent());
+            aliPayClientConfig.setRootCertContent(zfb.getCertMode().getRootCertContent());
+        }
+        return aliPayClientConfig;
+    }
+
+    private WxPayClientConfig getWxClientConfig(){
+        PayTypeProperties.wx wx = payTypeProperties.getWx();
+        if (ObjectUtil.isNull(wx)){
+            return null;
+        }
+        WxPayClientConfig wxPayClientConfig = new WxPayClientConfig();
+        if (!StringUtils.hasText(wx.getApiVersion())){
+            ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "apiVersion");
+        }
+        if (!StringUtils.hasText(wx.getAppId())){
+            ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "appId");
+        }
+        if (!StringUtils.hasText(wx.getMchId())){
+            ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "mchId");
+        }
+        if (!wx.getApiVersion().equals(WxPayClientConfig.API_VERSION_V2) && !wx.getApiVersion().equals(WxPayClientConfig.API_VERSION_V3)){
+            ExceptionUtil.castServerException(WX_PAY_CLIENT_API_VERSION_ERROR);
+        }
+        if (wx.getApiVersion().equals(WxPayClientConfig.API_VERSION_V2)){
+            if (ObjectUtil.isNull(wx.getWxV2())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "wxV2");
+            }
+            if (!StringUtils.hasText(wx.getWxV2().getMchKey())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "mchKey");
+            }
+            if (!StringUtils.hasText(wx.getWxV2().getKeyContent())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "keyContent");
+            }
+            wxPayClientConfig.setMchKey(wx.getWxV2().getMchKey());
+            wxPayClientConfig.setKeyContent(wx.getWxV2().getKeyContent());
+        }else {
+            if (ObjectUtil.isNull(wx.getWxV3())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "wxV3");
+            }
+            if (!StringUtils.hasText(wx.getWxV3().getApiV3Key())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "apiV3Key");
+            }
+            if (!StringUtils.hasText(wx.getWxV3().getPrivateKeyContent())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "privateKeyContent");
+            }
+            if (!StringUtils.hasText(wx.getWxV3().getPrivateCertContent())){
+                ExceptionUtil.castServerException(WX_PAY_CLIENT_CONFIG_ERROR, "privateCertContent");
+            }
+            wxPayClientConfig.setApiV3Key(wx.getWxV3().getApiV3Key());
+            wxPayClientConfig.setPrivateKeyContent(wx.getWxV3().getPrivateKeyContent());
+            wxPayClientConfig.setPrivateCertContent(wx.getWxV3().getPrivateCertContent());
+        }
+        return wxPayClientConfig;
     }
 }

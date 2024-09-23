@@ -1,6 +1,8 @@
 package cn.xk.xcode.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.enums.CheckCodeCacheType;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.handler.CheckCodeHandlerStrategy;
@@ -21,12 +23,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static cn.xk.xcode.enums.CheckCodeCacheType.REDIS;
+import static cn.xk.xcode.enums.CheckCodeGlobalErrorCodeConstants.EMAIL_CONFIG_PROPERTY_IS_NULL;
+import static cn.xk.xcode.enums.CheckCodeGlobalErrorCodeConstants.MOBILE_CONFIG_PROPERTY_IS_NULL;
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.*;
 
 /**
@@ -67,23 +72,29 @@ public class CheckCodeConfig {
 
     @Bean
     public DefaultProfile defaultProfile() {
-        Map<String, CheckCodeSendTypeConfig> configMap = checkCodeProperties.getSendType();
-        CheckCodeSendTypeConfig checkCodeSendTypeConfig = configMap.values().stream().findFirst().orElse(null);
-        if (Objects.isNull(checkCodeSendTypeConfig)){
-            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
+        CheckCodeProperties.CheckCodeMobileProperties mobileProperties = checkCodeProperties.getMobile();
+        if (ObjectUtil.isNull(mobileProperties)){
+            ExceptionUtil.castServerException(CHECK_CODE_MOBILE_NOT_CONFIG);
         }
-        CheckCodeMobileProperties mobileProperties = checkCodeSendTypeConfig.getMobileConfig();
-        if (Objects.isNull(mobileProperties)) {
-            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
+        if (!StringUtils.hasText(mobileProperties.getSignName())){
+            ExceptionUtil.castServerException(MOBILE_CONFIG_PROPERTY_IS_NULL, "signName");
+        }
+        if (!StringUtils.hasText(mobileProperties.getAccessKeyId())){
+            ExceptionUtil.castServerException(MOBILE_CONFIG_PROPERTY_IS_NULL, "accessKeyId");
+        }
+        if (!StringUtils.hasText(mobileProperties.getSecret())){
+            ExceptionUtil.castServerException(MOBILE_CONFIG_PROPERTY_IS_NULL, "secret");
+        }
+        if (!StringUtils.hasText(mobileProperties.getRegionId())){
+            ExceptionUtil.castServerException(MOBILE_CONFIG_PROPERTY_IS_NULL, "regionId");
         }
         return DefaultProfile.getProfile(mobileProperties.getRegionId(), mobileProperties.getAccessKeyId(), mobileProperties.getSecret());
     }
 
     @Bean
     public JavaMailSenderImpl javaMailSender() {
-        Map<String, CheckCodeSendTypeConfig> configMap = checkCodeProperties.getSendType();
-        CheckCodeSendTypeConfig checkCodeSendTypeConfig = configMap.values().stream().findFirst().orElse(null);
-        JavaMailSenderImpl mailSender = getJavaMailSender(checkCodeSendTypeConfig);
+        CheckCodeProperties.CheckCodeEmailProperties checkCodeEmailProperties = checkCodeProperties.getEmail();
+        JavaMailSenderImpl mailSender = getJavaMailSender(checkCodeEmailProperties);
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", true);
@@ -91,16 +102,27 @@ public class CheckCodeConfig {
         return mailSender;
     }
 
-    private static JavaMailSenderImpl getJavaMailSender(CheckCodeSendTypeConfig checkCodeSendTypeConfig) {
-        if (Objects.isNull(checkCodeSendTypeConfig)) {
-            throw new ServiceException(CHECK_CODE_EMAIL_NOT_CONFIG);
+    private static JavaMailSenderImpl getJavaMailSender(CheckCodeProperties.CheckCodeEmailProperties checkCodeEmailProperties) {
+        if (Objects.isNull(checkCodeEmailProperties)) {
+           ExceptionUtil.castServerException(CHECK_CODE_EMAIL_NOT_CONFIG);
         }
-        CheckCodeEmailProperties emailProperties = checkCodeSendTypeConfig.getEmailConfig();
+        if (!StringUtils.hasText(checkCodeEmailProperties.getUsername())){
+            ExceptionUtil.castServerException(EMAIL_CONFIG_PROPERTY_IS_NULL, "username");
+        }
+        if (!StringUtils.hasText(checkCodeEmailProperties.getHost())){
+            ExceptionUtil.castServerException(EMAIL_CONFIG_PROPERTY_IS_NULL, "host");
+        }
+        if (!StringUtils.hasText(checkCodeEmailProperties.getPassword())){
+            ExceptionUtil.castServerException(EMAIL_CONFIG_PROPERTY_IS_NULL, "password");
+        }
+        if (ObjectUtil.isNull(checkCodeEmailProperties.getPort())){
+            ExceptionUtil.castServerException(EMAIL_CONFIG_PROPERTY_IS_NULL, "port");
+        }
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setUsername(emailProperties.getUsername());
-        mailSender.setHost(emailProperties.getHost());
-        mailSender.setPort(emailProperties.getPort());
-        mailSender.setPassword(emailProperties.getPassword());
+        mailSender.setUsername(checkCodeEmailProperties.getUsername());
+        mailSender.setHost(checkCodeEmailProperties.getHost());
+        mailSender.setPort(checkCodeEmailProperties.getPort());
+        mailSender.setPassword(checkCodeEmailProperties.getPassword());
         return mailSender;
     }
 
@@ -122,12 +144,7 @@ public class CheckCodeConfig {
     public MobileCheckCodeHandler mobileCheckCodeHandler(SaveCheckCodeCacheStrategy saveCheckCodeCacheStrategy,
                                                                          CheckCodeProperties checkCodeProperties,
                                                                          DefaultProfile defaultProfile){
-        Map<String, CheckCodeSendTypeConfig> configMap = checkCodeProperties.getSendType();
-        CheckCodeSendTypeConfig checkCodeSendTypeConfig = configMap.values().stream().findFirst().orElse(null);
-        if (Objects.isNull(checkCodeSendTypeConfig)) {
-            throw new ServiceException(CHECK_CODE_MOBILE_NOT_CONFIG);
-        }
-        CheckCodeMobileProperties checkCodeSendTypeConfigPhone = checkCodeSendTypeConfig.getMobileConfig();
+        CheckCodeProperties.CheckCodeMobileProperties checkCodeSendTypeConfigPhone = checkCodeProperties.getMobile();
         String signName = checkCodeSendTypeConfigPhone.getSignName();
         return new MobileCheckCodeHandler(saveCheckCodeCacheStrategy, checkCodeProperties, defaultProfile, signName, checkCodeProperties.getExpiredTime());
     }

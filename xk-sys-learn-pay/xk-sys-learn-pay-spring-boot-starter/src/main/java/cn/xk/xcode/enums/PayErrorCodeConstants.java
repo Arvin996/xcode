@@ -34,4 +34,8 @@ public interface PayErrorCodeConstants {
     IntErrorCode PAY_CLIENT_CHANNEL_ALREADY_EXISTS = new IntErrorCode(19000_0_509, "支付客户端{}渠道{}已经存在");
     IntErrorCode PARSE_ORDER_NOTIFY_FAILED = new IntErrorCode(19000_0_510, "解析订单通知失败，失败信息：{}");
     IntErrorCode PARSE_REFUND_NOTIFY_FAILED = new IntErrorCode(19000_0_511, "解析退费通知失败，失败信息：{}");
+    IntErrorCode ZFB_PAY_CLIENT_MODE_ERROR = new IntErrorCode(19000_1_512, "支付宝支付客户端模式配置出错，请确认mode的范围为1,2");
+    IntErrorCode ZFB_PAY_CLIENT_CONFIG_ERROR = new IntErrorCode(19000_1_513, "支付宝支付客户端模式配置出错，属性{}不能为空");
+    IntErrorCode WX_PAY_CLIENT_CONFIG_ERROR = new IntErrorCode(19000_1_514, "微信支付客户端模式配置出错，属性{}不能为空");
+    IntErrorCode WX_PAY_CLIENT_API_VERSION_ERROR = new IntErrorCode(19000_1_515, "微信支付客户端版本配置出错，请确认版本为v2或者v3");
 }

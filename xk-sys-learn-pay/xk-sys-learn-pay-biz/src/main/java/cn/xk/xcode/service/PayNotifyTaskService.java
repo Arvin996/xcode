@@ -1,0 +1,14 @@
+package cn.xk.xcode.service;
+
+import com.mybatisflex.core.service.IService;
+import cn.xk.xcode.entity.po.PayNotifyTaskPo;
+
+/**
+ *  服务层。
+ *
+ * @author Administrator
+ * @since 2024-09-23
+ */
+public interface PayNotifyTaskService extends IService<PayNotifyTaskPo> {
+
+}

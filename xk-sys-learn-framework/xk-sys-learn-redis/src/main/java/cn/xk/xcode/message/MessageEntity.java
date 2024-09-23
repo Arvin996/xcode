@@ -16,8 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageEntity
-{
+public class MessageEntity {
     // 携带渠道信息及消息类型
     private Header header;
 

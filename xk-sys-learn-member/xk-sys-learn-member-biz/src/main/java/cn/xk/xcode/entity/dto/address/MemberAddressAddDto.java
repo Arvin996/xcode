@@ -29,7 +29,7 @@ public class MemberAddressAddDto {
 
     @Mobile
     @Schema(description = "收件人手机号", example = "18888888888")
-    @NotBlank
+    @NotBlank(message = "收件人手机号不能为空")
     private String phone;
 
     @Schema(description = "地区id", example = "1")

@@ -1,6 +1,5 @@
 package cn.xk.xcode.service.impl.generate;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import org.springframework.stereotype.Component;

@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class CodeGen
-{
+public class CodeGen {
+
     // todo 配置生成的代码包 而不是直接指定路径
     private String basePackage = "cn.xk.xcode";
 

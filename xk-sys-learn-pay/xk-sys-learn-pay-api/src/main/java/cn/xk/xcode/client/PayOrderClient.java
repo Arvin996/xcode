@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @FeignClient(name = "xk-sys-learn-pay", fallbackFactory = PayOrderClientFallbackFactory.class)
 @Tag(name = "RPC 服务 - 支付下单")
-@RequestMapping("/pay")
+@RequestMapping("/pay/order")
 public interface PayOrderClient {
 
     String PREFIX = "/order";

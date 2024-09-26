@@ -1,5 +1,6 @@
 package cn.xk.xcode.service;
 
+import cn.xk.xcode.entity.dto.app.BindAppChannelDto;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.PayAppChannelPo;
 
@@ -11,4 +12,5 @@ import cn.xk.xcode.entity.po.PayAppChannelPo;
  */
 public interface PayAppChannelService extends IService<PayAppChannelPo> {
 
+    Boolean bindAppChannel(BindAppChannelDto bindAppChannelDto);
 }

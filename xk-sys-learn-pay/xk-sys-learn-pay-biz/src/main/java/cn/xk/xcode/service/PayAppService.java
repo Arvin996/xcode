@@ -1,5 +1,9 @@
 package cn.xk.xcode.service;
 
+import cn.xk.xcode.entity.dto.app.AddPayAppDto;
+import cn.xk.xcode.entity.dto.app.QueryPayAppDto;
+import cn.xk.xcode.entity.dto.app.UpdatePayAppDto;
+import cn.xk.xcode.entity.vo.app.PayAppResultVo;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.PayAppPo;
 
@@ -11,4 +15,9 @@ import cn.xk.xcode.entity.po.PayAppPo;
  */
 public interface PayAppService extends IService<PayAppPo> {
 
+    Boolean addPayApp(AddPayAppDto addPayAppDto);
+
+    Boolean updatePayApp(UpdatePayAppDto updatePayAppDto);
+
+    PayAppResultVo queryPayAppList(QueryPayAppDto queryPayAppDto);
 }

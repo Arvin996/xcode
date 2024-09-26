@@ -44,7 +44,7 @@ public class PayConfig {
 
     @Bean
     @ConditionalOnMissingBean(GlobalPayConfigurer.class)
-    public GlobalPayConfigurer payConfigRegister(){
+    public GlobalPayConfigurer globalPayConfigurer(){
         return new DefaultGlobalPayConfigurer();
     }
 
@@ -170,7 +170,7 @@ public class PayConfig {
         GlobalPayClientRegister globalPayClientRegister = new GlobalPayClientRegister(new ArrayList<>());
         globalPayConfigurer.registerPayClient(globalPayClientRegister);
         Set<String> collect = clients.stream().map(AbstractPayClient::getChannel).collect(Collectors.toSet());
-        globalPayClientRegister.OTHER_PAY_CLIENTS.forEach(client ->{
+        globalPayClientRegister.getPayClientList().forEach(client ->{
             if (collect.contains(client.getChannel())){
                 ExceptionUtil.castServiceException(PAY_CLIENT_CHANNEL_ALREADY_EXISTS, client.getChannel());
             }

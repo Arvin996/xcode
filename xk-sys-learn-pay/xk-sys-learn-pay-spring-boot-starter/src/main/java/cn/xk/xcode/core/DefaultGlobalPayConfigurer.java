@@ -14,6 +14,5 @@ public class DefaultGlobalPayConfigurer implements GlobalPayConfigurer{
 
     @Override
     public void registerPayClient(GlobalPayClientRegister register) {
-
     }
 }

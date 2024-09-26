@@ -18,14 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class TransEnumsRegistry {
-    public final List<BaseEnum> enums;
+    private final List<BaseEnum> enums;
 
     public TransEnumsRegistry register(Class<? extends BaseEnum> aClass) {
         this.addEnumsEntity(aClass);
         return this;
     }
 
-    public void addEnumsEntity(Class<? extends BaseEnum> aClass) {
+    private void addEnumsEntity(Class<? extends BaseEnum> aClass) {
         if (ClassUtil.isEnum(aClass)) {
             BaseEnum[] enumConstants = aClass.getEnumConstants();
             enums.addAll(Arrays.asList(enumConstants));

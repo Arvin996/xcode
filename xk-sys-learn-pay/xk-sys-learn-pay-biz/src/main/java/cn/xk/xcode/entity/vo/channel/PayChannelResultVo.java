@@ -1,6 +1,6 @@
-package cn.xk.xcode.entity.vo.merchant;
+package cn.xk.xcode.entity.vo.channel;
 
-import cn.xk.xcode.entity.po.PayMerchantPo;
+import cn.xk.xcode.entity.po.PayChannelPo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +11,16 @@ import java.util.List;
 
 /**
  * @Author xuk
- * @Date 2024/9/23 16:12
+ * @Date 2024/9/26 15:26
  * @Version 1.0.0
- * @Description MerchantResultVo
+ * @Description PayChannelResultVo
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Schema(description = "商户list vo")
-public class MerchantResultVo {
+@Schema(description = "支付渠道list vo")
+public class PayChannelResultVo {
 
-    private List<PayMerchantPo> payMerchantPoList;
+    private List<PayChannelPo> list;
 }

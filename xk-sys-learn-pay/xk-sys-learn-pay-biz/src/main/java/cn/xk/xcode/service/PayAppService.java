@@ -7,6 +7,8 @@ import cn.xk.xcode.entity.vo.app.PayAppResultVo;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.PayAppPo;
 
+import javax.validation.constraints.NotNull;
+
 /**
  *  服务层。
  *
@@ -20,4 +22,6 @@ public interface PayAppService extends IService<PayAppPo> {
     Boolean updatePayApp(UpdatePayAppDto updatePayAppDto);
 
     PayAppResultVo queryPayAppList(QueryPayAppDto queryPayAppDto);
+
+    PayAppPo checkApp(Integer appId);
 }

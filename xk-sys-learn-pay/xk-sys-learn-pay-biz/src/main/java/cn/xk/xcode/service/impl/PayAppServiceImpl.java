@@ -1,6 +1,8 @@
 package cn.xk.xcode.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.convert.app.PayAppConvert;
+import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.entity.dto.app.AddPayAppDto;
 import cn.xk.xcode.entity.dto.app.QueryPayAppDto;
 import cn.xk.xcode.entity.dto.app.UpdatePayAppDto;
@@ -26,8 +28,7 @@ import java.util.stream.Collectors;
 import static cn.xk.xcode.entity.def.PayAppChannelTableDef.PAY_APP_CHANNEL_PO;
 import static cn.xk.xcode.entity.def.PayAppTableDef.PAY_APP_PO;
 import static cn.xk.xcode.entity.def.PayChannelTableDef.PAY_CHANNEL_PO;
-import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.APP_CODE_ALREADY_EXIST;
-import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.APP_NAME_ALREADY_EXIST;
+import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.*;
 
 /**
  * 服务层实现。
@@ -81,6 +82,19 @@ public class PayAppServiceImpl extends ServiceImpl<PayAppMapper, PayAppPo> imple
                 }
         ).collect(Collectors.toList()));
         return payAppResultVo;
+    }
+
+    @Override
+    public PayAppPo checkApp(Integer appId) {
+        // 校验appId
+        PayAppPo payAppPo = this.getById(appId);
+        if (ObjectUtil.isNull(payAppPo)){
+            ExceptionUtil.castServiceException(PAY_APP_NOT_EXIST);
+        }
+        if (CommonStatusEnum.isDisable(payAppPo.getStatus())){
+            ExceptionUtil.castServiceException(PAY_APP_IS_DISABLED, payAppPo.getAppName());
+        }
+        return payAppPo;
     }
 
     private void validate1(String appCode, String appName) {

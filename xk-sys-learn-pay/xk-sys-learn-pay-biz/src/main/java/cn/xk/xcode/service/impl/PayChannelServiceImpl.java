@@ -1,5 +1,6 @@
 package cn.xk.xcode.service.impl;
 
+import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.entity.dto.channel.AddPayChannelDto;
 import cn.xk.xcode.entity.dto.channel.UpdatePayChannelDto;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -12,8 +13,10 @@ import cn.xk.xcode.mapper.PayChannelMapper;
 import cn.xk.xcode.service.PayChannelService;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 import static cn.xk.xcode.entity.def.PayChannelTableDef.PAY_CHANNEL_PO;
-import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.CHANNEL_CODE_ALREADY_EXIST;
+import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.*;
 
 /**
  * 服务层实现。
@@ -45,6 +48,18 @@ public class PayChannelServiceImpl extends ServiceImpl<PayChannelMapper, PayChan
                 .set(PAY_CHANNEL_PO.STATUS, updatePayChannelDto.getStatus())
                 .where(PAY_CHANNEL_PO.ID.eq(updatePayChannelDto.getId()))
                 .update();
+    }
+
+    @Override
+    public PayChannelPo checkChannel(String channelCode) {
+        PayChannelPo payChannelPo = this.getOne(PAY_CHANNEL_PO.CHANNEL_CODE.eq(channelCode));
+        if (Objects.isNull(payChannelPo)){
+            ExceptionUtil.castServiceException(PAY_CHANNEL_NOT_FOUND, channelCode);
+        }
+        if (CommonStatusEnum.isDisable(payChannelPo.getStatus())){
+            ExceptionUtil.castServiceException(PAY_CHANNEL_IS_DISABLED, channelCode);
+        }
+        return payChannelPo;
     }
 
 }

@@ -62,7 +62,7 @@ public abstract class AbstractMemberUserLoginHandler {
         if (!GlobalStatusEnum.isEnable(Integer.parseInt(user.getStatus()))) {
             ExceptionUtil.castServerException(AUTH_LOGIN_USER_DISABLED);
         }
-        String ip = WebServletUtils.getClientIp();
+        String ip = WebServletUtils.getClientIP();
         user.setLoginIp(StringUtils.hasLength(ip) ? ip : "未知");
         user.setLoginTime(LocalDateTime.now());
         user.setLoginAreaId(StringUtils.hasLength(ip) ?  IpUtils.getAreaId(ip) : 0);

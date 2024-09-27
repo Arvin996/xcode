@@ -17,4 +17,6 @@ public interface PayChannelService extends IService<PayChannelPo> {
     Boolean addPayChannel(AddPayChannelDto addPayChannelDto);
 
     Boolean updatePayChannel(UpdatePayChannelDto updatePayChannelDto);
+
+    PayChannelPo checkChannel(String channelCode);
 }

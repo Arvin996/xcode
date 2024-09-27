@@ -71,7 +71,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
     public abstract PayOrderResultVo doCreateOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable;
 
     @Override
-    public PayOrderResultVo getOrder(String outTradeNo) throws Throwable{
+    public PayOrderResultVo getOrder(String outTradeNo) {
         PayOrderResultVo payOrderResultVo;
         try {
             payOrderResultVo = doGetOrder(outTradeNo);

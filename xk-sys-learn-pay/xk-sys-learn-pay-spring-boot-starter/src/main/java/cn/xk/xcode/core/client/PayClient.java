@@ -22,7 +22,7 @@ public interface PayClient {
     PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable;
 
     // 获取订单信息
-    PayOrderResultVo getOrder(String outTradeNo) throws Throwable;
+    PayOrderResultVo getOrder(String outTradeNo);
 
     /**
      * 解析 order 回调数据

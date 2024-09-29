@@ -1,6 +1,9 @@
 package cn.xk.xcode.controller;
 
 import cn.xk.xcode.client.PayOrderClient;
+import cn.xk.xcode.core.queue.event.AbsQueueExportEventHandler;
+import cn.xk.xcode.core.queue.publisher.ReportExportQueuePublisher;
+import cn.xk.xcode.entity.dto.order.ExportOrderDto;
 import cn.xk.xcode.entity.dto.order.PayCreateOrderDto;
 import cn.xk.xcode.entity.dto.order.PayOrderSubmitReqDto;
 import cn.xk.xcode.entity.vo.order.PayOrderRespVo;
@@ -14,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author xuk
@@ -27,6 +31,9 @@ public class PayOrderController implements PayOrderClient {
 
     @Resource
     private PayOrderService payOrderService;
+
+    @Resource
+    private ReportExportQueuePublisher reportExportQueuePublisher;
 
     @Override
     public CommonResult<Long> createOrder(@Validated @RequestBody PayCreateOrderDto payCreateOrderDto) {
@@ -48,5 +55,11 @@ public class PayOrderController implements PayOrderClient {
     @PostMapping("/submit")
     public CommonResult<PayOrderSubmitRespVO> submitOrder(@Validated @RequestBody PayOrderSubmitReqDto payOrderSubmitReqDto){
         return CommonResult.success(payOrderService.submitOrder(payOrderSubmitReqDto));
+    }
+
+    @Operation(summary = "导出支付订单")
+    @GetMapping("/export-orders")
+    public void exportOrders(@Validated @RequestBody ExportOrderDto exportOrderDto, HttpServletResponse response){
+      //  reportExportQueuePublisher.handleReportExport(response);
     }
 }

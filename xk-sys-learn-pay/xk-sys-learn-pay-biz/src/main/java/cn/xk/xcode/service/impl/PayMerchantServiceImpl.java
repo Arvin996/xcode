@@ -10,7 +10,6 @@ import cn.xk.xcode.entity.po.PayMerchantPo;
 import cn.xk.xcode.mapper.PayMerchantMapper;
 import cn.xk.xcode.service.PayMerchantService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import static cn.xk.xcode.entity.def.PayMerchantTableDef.PAY_MERCHANT_PO;
 import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.MERCHANT_NAME_ALREADY_EXIST;

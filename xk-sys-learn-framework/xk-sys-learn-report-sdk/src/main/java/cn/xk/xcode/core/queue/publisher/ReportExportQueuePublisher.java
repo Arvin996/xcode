@@ -19,16 +19,19 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.EXCEL_MESSAGE_ADD_E
  */
 @Slf4j
 @RequiredArgsConstructor
-public class ReportExportQueuePublisher {
+public class ReportExportQueuePublisher<T, K> {
 
-    private final RingBuffer<ExportModel> ringBuffer;
+    private final RingBuffer<ExportModel<T, K>> ringBuffer;
 
-    private void handleReportExport(HttpServletResponse httpServletResponse){
+    public void handleReportExport(HttpServletResponse httpServletResponse, String fileName, T t, Class<K> kClass){
         long sequence = ringBuffer.next();
         try {
             //给Event填充数据
-            ExportModel event = ringBuffer.get(sequence);
+            ExportModel<T, K> event = ringBuffer.get(sequence);
             event.setResponse(httpServletResponse);
+            event.setFileName(fileName);
+            event.setData(t);
+            event.setKClass(kClass);
             log.info("往消息队列中添加消息：{}", event);
         } catch (Exception e) {
             log.error("failed to add event to messageModelRingBuffer for : e = {},{}", e, e.getMessage());

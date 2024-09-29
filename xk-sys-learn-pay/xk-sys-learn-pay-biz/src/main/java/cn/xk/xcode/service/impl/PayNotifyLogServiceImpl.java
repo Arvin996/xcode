@@ -15,4 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PayNotifyLogServiceImpl extends ServiceImpl<PayNotifyLogMapper, PayNotifyLogPo> implements PayNotifyLogService {
 
+    @Override
+    public void createSuccessNotifyLog(String type, Long orderId) {
+
+    }
 }

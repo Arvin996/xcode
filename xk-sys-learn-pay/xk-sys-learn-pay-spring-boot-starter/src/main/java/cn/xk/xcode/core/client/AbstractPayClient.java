@@ -55,7 +55,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
     }
 
     @Override
-    public PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable {
+    public PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto){
         PayOrderResultVo payOrderResultVo;
         try {
             payOrderResultVo = doCreateOrder(payCreateOrderDto);

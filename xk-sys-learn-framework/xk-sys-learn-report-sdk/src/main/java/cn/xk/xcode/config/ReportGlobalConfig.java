@@ -34,7 +34,7 @@ public class ReportGlobalConfig {
     public static final int BUFFER_SIZE = 1024 * 256;
 
     @Bean("exportModelRingBuffer")
-    public RingBuffer<ExportModel> exportModelRingBuffer(AbsQueueExportEventHandler<?, ?> exportEventHandler) {
+    public <T, K> RingBuffer<ExportModel<T, K>> exportModelRingBuffer(AbsQueueExportEventHandler<T, K> exportEventHandler) {
         //指定事件工厂
         QueueExportEventFactory eventFactory = new QueueExportEventFactory();
         Disruptor<ExportModel> disruptor = new Disruptor<>(

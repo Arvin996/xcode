@@ -2,6 +2,7 @@ package cn.xk.xcode.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
+import cn.xk.xcode.config.PayProperties;
 import cn.xk.xcode.convert.order.OrderConvert;
 import cn.xk.xcode.core.client.PayClient;
 import cn.xk.xcode.core.factory.PayClientFactory;
@@ -12,15 +13,13 @@ import cn.xk.xcode.entity.po.PayChannelPo;
 import cn.xk.xcode.entity.vo.order.PayOrderResultVo;
 import cn.xk.xcode.entity.vo.order.PayOrderSubmitRespVO;
 import cn.xk.xcode.enums.PayOrderStatusEnums;
+import cn.xk.xcode.enums.notify.PayNotifyTypeEnum;
 import cn.xk.xcode.exception.core.ExceptionUtil;
-import cn.xk.xcode.service.PayAppChannelService;
-import cn.xk.xcode.service.PayAppService;
-import cn.xk.xcode.service.PayChannelService;
+import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.WebServletUtils;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.PayOrderPo;
 import cn.xk.xcode.mapper.PayOrderMapper;
-import cn.xk.xcode.service.PayOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,6 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 import static cn.xk.xcode.entity.def.PayAppChannelTableDef.PAY_APP_CHANNEL_PO;
-import static cn.xk.xcode.entity.def.PayChannelTableDef.PAY_CHANNEL_PO;
 import static cn.xk.xcode.entity.def.PayOrderTableDef.PAY_ORDER_PO;
 import static cn.xk.xcode.enums.PayModuleErrorCodeConstants.*;
 
@@ -55,6 +53,15 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrderPo>
     @Resource
     private PayChannelService payChannelService;
 
+    @Resource
+    private PayOutTradeNoRedisGenerateService payOutTradeNoRedisGenerateService;
+
+    @Resource
+    private PayProperties payProperties;
+
+    @Resource
+    private PayNotifyLogService payNotifyLogService;
+
     @Override
     public PayOrderResultVo getCreateOrder(Long orderId) {
         PayOrderPo payOrderPo = this.getById(orderId);
@@ -79,12 +86,65 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrderPo>
         return payOrderPo.getId();
     }
 
+
     @Override
     public PayOrderSubmitRespVO submitOrder(PayOrderSubmitReqDto payOrderSubmitReqDto) {
         PayOrderPo payOrderPo = validateOrderSubmit(payOrderSubmitReqDto.getId());
         PayChannelPo payChannelPo = validateChannelSubmit(payOrderPo.getAppId(), payOrderPo.getChannelCode());
         String ip = WebServletUtils.getClientIP();
-        return null;
+        PayClient payClient = payClientFactory.getPayClient(payChannelPo.getChannelCode());
+        String outTradeNo = payOutTradeNoRedisGenerateService.generateOrderOutTradeNo();
+        PayOrderPo newPayOrderPo = new PayOrderPo();
+        newPayOrderPo.setUserIp(ip);
+        newPayOrderPo.setChannelExtras(JSONUtil.toJsonStr(payOrderSubmitReqDto.getChannelExtras()));
+        newPayOrderPo.setChannelCode(payChannelPo.getChannelCode());
+        newPayOrderPo.setId(payOrderSubmitReqDto.getId());
+        newPayOrderPo.setOutTradeNo(outTradeNo);
+        newPayOrderPo.setNotifyUrl(payOrderSubmitReqDto.getReturnUrl());
+        PayOrderSubmitRespVO payOrderSubmitRespVO = new PayOrderSubmitRespVO();
+        payOrderSubmitRespVO.setDisplayMode(payOrderSubmitReqDto.getDisplayMode());
+        cn.xk.xcode.entity.order.PayCreateOrderDto payCreateOrderDto = cn.xk.xcode.entity.order.PayCreateOrderDto
+                .builder()
+                .body(payOrderPo.getBody())
+                .price(payOrderPo.getPrice())
+                .subject(payOrderPo.getSubject())
+                .notifyUrl(genChannelOrderNotifyUrl(payChannelPo))
+                .displayMode(payOrderSubmitReqDto.getDisplayMode())
+                .channelExtras(payOrderSubmitReqDto.getChannelExtras())
+                .outTradeNo(outTradeNo)
+                .returnUrl(payOrderSubmitReqDto.getReturnUrl())
+                .expireTime(payOrderPo.getExpireTime())
+                .userIp(ip).build();
+        cn.xk.xcode.entity.order.PayOrderResultVo payOrderResultVo = payClient.createOrder(payCreateOrderDto);
+        if (ObjectUtil.isNotNull(payOrderResultVo)) {
+            if (payOrderResultVo.getStatus().equals(PayOrderStatusEnums.PAY_SUCCESS.getStatus())) {
+                newPayOrderPo.setStatus(PayOrderStatusEnums.PAY_SUCCESS.getStatus());
+                newPayOrderPo.setSuccessTime(payOrderResultVo.getSuccessTime());
+                newPayOrderPo.setMerchantOrderId(payOrderPo.getMerchantOrderId());
+                newPayOrderPo.setChannelFeePrice(payOrderPo.getPrice() * (Integer.parseInt(payChannelPo.getFeeRate()) / 100));
+                newPayOrderPo.setChannelNotifyData(JSONUtil.toJsonStr(payOrderResultVo.getRawData()));
+                payOrderSubmitRespVO.setStatus(PayOrderStatusEnums.PAY_SUCCESS.getStatus());
+                this.updateById(newPayOrderPo);
+            }
+            if (payOrderResultVo.getStatus().equals(PayOrderStatusEnums.PAY_CLOSED.getStatus())){
+                newPayOrderPo.setStatus(PayOrderStatusEnums.PAY_CLOSED.getStatus());
+                newPayOrderPo.setChannelNotifyData(JSONUtil.toJsonStr(payOrderResultVo.getRawData()));
+                newPayOrderPo.setChannelErrorCode(payOrderResultVo.getChannelErrorCode());
+                newPayOrderPo.setChannelErrorMsg(payOrderResultVo.getChannelErrorMsg());
+                payOrderSubmitRespVO.setStatus(PayOrderStatusEnums.PAY_CLOSED.getStatus());
+                this.updateById(newPayOrderPo);
+            }
+            if (payOrderResultVo.getStatus().equals(PayOrderStatusEnums.PAY_WAITING.getStatus())){
+                payOrderSubmitRespVO.setStatus(PayOrderStatusEnums.PAY_WAITING.getStatus());
+                payOrderSubmitRespVO.setDisplayContent(payOrderResultVo.getDisplayContent());
+                payNotifyLogService.createPayNotifyTask(PayNotifyTypeEnum.ORDER.getType(), newPayOrderPo.getId());
+            }
+        }
+        return payOrderSubmitRespVO;
+    }
+
+    private String genChannelOrderNotifyUrl(PayChannelPo channel) {
+        return payProperties.getOrderNotifyUrl() + "/" + channel.getChannelCode();
     }
 
     private PayOrderPo validateOrderSubmit(Long id) {
@@ -101,7 +161,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrderPo>
         if (LocalDateTime.now().isAfter(payOrderPo.getExpireTime())) {
             ExceptionUtil.castServiceException(ORDER_IS_ALREADY_EXPIRED);
         }
-        // 这里还要校验三方服务的状态 防止事因为没有及时回调导致
+        // 这里还要校验三方服务的状态 防止是因为没有及时回调导致
         String channelCode = payOrderPo.getChannelCode();
         PayClient payClient = payClientFactory.getPayClient(channelCode);
         cn.xk.xcode.entity.order.PayOrderResultVo order = payClient.getOrder(payOrderPo.getOutTradeNo());

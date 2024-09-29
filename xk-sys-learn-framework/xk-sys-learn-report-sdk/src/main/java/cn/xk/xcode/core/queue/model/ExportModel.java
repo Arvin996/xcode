@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Data
 @Builder
-public class ExportModel {
+public class ExportModel<T, K> {
+
     private String username;
-
     private Long threadId;
-
     private HttpServletResponse response;
+    private String fileName;
+    private T data;
+    private Class<K> kClass;
+
 }

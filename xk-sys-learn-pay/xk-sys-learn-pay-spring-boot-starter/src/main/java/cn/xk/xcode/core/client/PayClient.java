@@ -19,7 +19,7 @@ public interface PayClient {
     String channel();
 
     // 创建订单
-    PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto) throws Throwable;
+    PayOrderResultVo createOrder(PayCreateOrderDto payCreateOrderDto);
 
     // 获取订单信息
     PayOrderResultVo getOrder(String outTradeNo);

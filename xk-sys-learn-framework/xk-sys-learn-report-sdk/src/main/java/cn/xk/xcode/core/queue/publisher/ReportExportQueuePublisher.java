@@ -23,7 +23,7 @@ public class ReportExportQueuePublisher<T, K> {
 
     private final RingBuffer<ExportModel<T, K>> ringBuffer;
 
-    public void handleReportExport(HttpServletResponse httpServletResponse, String fileName, T t, Class<K> kClass){
+    public void handleReportExport(HttpServletResponse httpServletResponse, String fileName, T t, Class<K> kClass, int PageSize){
         long sequence = ringBuffer.next();
         try {
             //给Event填充数据
@@ -32,6 +32,7 @@ public class ReportExportQueuePublisher<T, K> {
             event.setFileName(fileName);
             event.setData(t);
             event.setKClass(kClass);
+            event.setPageSize(PageSize);
             log.info("往消息队列中添加消息：{}", event);
         } catch (Exception e) {
             log.error("failed to add event to messageModelRingBuffer for : e = {},{}", e, e.getMessage());

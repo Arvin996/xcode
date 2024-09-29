@@ -6,6 +6,7 @@ import cn.xk.xcode.core.queue.event.QueueExportEventFactory;
 import cn.xk.xcode.core.queue.model.ExportModel;
 import cn.xk.xcode.core.queue.publisher.ReportExportQueuePublisher;
 import com.lmax.disruptor.BlockingWaitStrategy;
+import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -34,7 +35,7 @@ public class ReportGlobalConfig {
     public static final int BUFFER_SIZE = 1024 * 256;
 
     @Bean("exportModelRingBuffer")
-    public <T, K> RingBuffer<ExportModel<T, K>> exportModelRingBuffer(AbsQueueExportEventHandler<T, K> exportEventHandler) {
+    public <T, K> RingBuffer<ExportModel> exportModelRingBuffer(AbsQueueExportEventHandler<T, K> exportEventHandler) {
         //指定事件工厂
         QueueExportEventFactory eventFactory = new QueueExportEventFactory();
         Disruptor<ExportModel> disruptor = new Disruptor<>(
@@ -45,7 +46,7 @@ public class ReportGlobalConfig {
                 new BlockingWaitStrategy()
         );
         //设置事件业务处理器---消费者
-        disruptor.handleEventsWith(exportEventHandler);
+        disruptor.handleEventsWith((EventHandler<? super ExportModel>) exportEventHandler);
         // 启动disruptor线程
         disruptor.start();
         //获取ringBuffer环，用于接取生产者生产的事件

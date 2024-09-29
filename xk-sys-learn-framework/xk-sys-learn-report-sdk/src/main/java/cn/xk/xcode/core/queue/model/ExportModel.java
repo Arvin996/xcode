@@ -21,5 +21,6 @@ public class ExportModel<T, K> {
     private String fileName;
     private T data;
     private Class<K> kClass;
+    private int pageSize;
 
 }

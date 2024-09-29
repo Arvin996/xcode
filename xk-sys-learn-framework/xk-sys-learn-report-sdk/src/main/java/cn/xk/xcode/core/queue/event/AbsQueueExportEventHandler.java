@@ -30,7 +30,7 @@ public abstract class AbsQueueExportEventHandler<T, K> implements EventHandler<E
     @Override
     public void onEvent(ExportModel exportModel, long l, boolean b) {
         log.info("线程号{}, 用户编号{}开始导出报表", exportModel.getThreadId(), exportModel.getUsername());
-
+        export(exportModel.getResponse(), exportModel.getPageSize(), exportModel.getData(), exportModel.getKClass(), exportModel.getFileName());
     }
 
     /**

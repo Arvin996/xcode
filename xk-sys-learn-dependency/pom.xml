@@ -44,11 +44,19 @@
         <aliyun.sdk.core.version>4.5.16</aliyun.sdk.core.version>
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
         <disruptor.version>3.4.4</disruptor.version>
+        <sensitive-word>0.18.0</sensitive-word>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>sensitive-word</artifactId>
+                <version>${sensitive-word}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>

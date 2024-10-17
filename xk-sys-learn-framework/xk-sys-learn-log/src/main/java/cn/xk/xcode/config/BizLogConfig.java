@@ -2,6 +2,8 @@ package cn.xk.xcode.config;
 
 import cn.xk.xcode.aop.BizLogAnnotationAdvisor;
 import cn.xk.xcode.aop.BizLogAnnotationInterceptor;
+import cn.xk.xcode.aop.UserBizLogMdcAdvisor;
+import cn.xk.xcode.aop.UserBizLogMdcInterceptor;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.support.LogValueParser;
 import org.springframework.context.annotation.Bean;
@@ -31,5 +33,15 @@ public class BizLogConfig
     @Bean
     public BizLogAnnotationAdvisor bizLogAnnotationAdvisor(BizLogAnnotationInterceptor bizLogAnnotationInterceptor){
         return new BizLogAnnotationAdvisor(bizLogAnnotationInterceptor);
+    }
+
+    @Bean
+    public UserBizLogMdcInterceptor userBizLogMdcInterceptor(){
+        return new UserBizLogMdcInterceptor();
+    }
+
+    @Bean
+    public UserBizLogMdcAdvisor userBizLogMdcAdvisor(UserBizLogMdcInterceptor userBizLogMdcInterceptor){
+        return new UserBizLogMdcAdvisor(userBizLogMdcInterceptor);
     }
 }

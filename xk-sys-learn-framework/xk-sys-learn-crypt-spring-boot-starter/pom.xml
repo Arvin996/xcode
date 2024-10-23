@@ -10,7 +10,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>xk-sys-learn-encrypt-spring-boot-starter</artifactId>
+    <artifactId>xk-sys-learn-crypt-spring-boot-starter</artifactId>
 
     <version>${revision}</version>
     <description>提供统一的报文加解密功能</description>

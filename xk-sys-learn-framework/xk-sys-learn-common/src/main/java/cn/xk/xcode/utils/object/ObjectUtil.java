@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @Author xuk
@@ -65,4 +66,53 @@ public class ObjectUtil
             }
         }
     }
+
+    @SuppressWarnings("all")
+    public static <U, T> T computeIfNotNull(U object, ErrorCode errorCode, Function<U, T> func, Object... args){
+        if (Objects.isNull(object)){
+            if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServiceException(errorCode);
+            }else {
+                ExceptionUtil.castServiceException(errorCode, args);
+            }
+        }
+        if (Objects.isNull(func)){
+           return (T) object;
+        }
+        return func.apply(object);
+    }
+
+    public static <U> U computeIfNotNull(U object, ErrorCode errorCode, Object... args){
+        if (Objects.isNull(object)){
+            if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServiceException(errorCode);
+            }else {
+                ExceptionUtil.castServiceException(errorCode, args);
+            }
+        }
+        return computeIfNotNull(object, errorCode, Function.identity(), args);
+    }
+
+    public static <T> T returnIfNotNullCastServiceEx(T object, ErrorCode errorCode, Object... args){
+        if (Objects.isNull(object)){
+            if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServiceException(errorCode);
+            }else {
+                ExceptionUtil.castServiceException(errorCode, args);
+            }
+        }
+        return object;
+    }
+
+    public static <T> T returnIfNotNullCastServerEx(T object, ErrorCode errorCode, Object... args){
+        if (Objects.isNull(object)){
+            if (ArrayUtil.isEmpty(args)){
+                ExceptionUtil.castServerException(errorCode);
+            }else {
+                ExceptionUtil.castServerException(errorCode, args);
+            }
+        }
+        return object;
+    }
+
 }

@@ -1,5 +1,8 @@
 package cn.xk.xcode.annotation;
 
+import cn.xk.xcode.support.mdc.DefaultUserBizExtraMdcSupportBase;
+import cn.xk.xcode.support.mdc.UserBizExtraMdcSupportBase;
+
 import java.lang.annotation.*;
 
 /**
@@ -18,4 +21,6 @@ public @interface UserBizLogMdc {
 
     // 退款订单id
     String refundId() default "";
+
+    Class<? extends UserBizExtraMdcSupportBase> extraMdcProps() default DefaultUserBizExtraMdcSupportBase.class;
 }

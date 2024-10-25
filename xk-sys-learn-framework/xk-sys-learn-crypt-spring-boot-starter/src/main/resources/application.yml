@@ -1,0 +1,4 @@
+xk:
+  sys:
+    crypt:
+      alg-enum: chacha20

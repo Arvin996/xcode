@@ -103,7 +103,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
     public abstract PayOrderResultVo doGetOrder(String outTradeNo) throws Throwable;
 
     @Override
-    public PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable{
+    public PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) {
         PayRefundResultVo payRefundResultVo;
         try {
             payRefundResultVo = doCreateRefund(payCreateRefundDto);

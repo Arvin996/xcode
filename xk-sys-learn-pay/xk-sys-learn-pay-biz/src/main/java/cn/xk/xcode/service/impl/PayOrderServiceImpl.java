@@ -17,6 +17,7 @@ import cn.xk.xcode.enums.notify.PayNotifyTypeEnum;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.WebServletUtils;
+import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.PayOrderPo;
 import cn.xk.xcode.mapper.PayOrderMapper;
@@ -60,7 +61,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrderPo>
     private PayProperties payProperties;
 
     @Resource
-    private PayNotifyLogService payNotifyLogService;
+    private PayNotifyTaskService payNotifyTaskService;
 
     @Override
     public PayOrderResultVo getCreateOrder(Long orderId) {
@@ -137,10 +138,39 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrderPo>
             if (payOrderResultVo.getStatus().equals(PayOrderStatusEnums.PAY_WAITING.getStatus())){
                 payOrderSubmitRespVO.setStatus(PayOrderStatusEnums.PAY_WAITING.getStatus());
                 payOrderSubmitRespVO.setDisplayContent(payOrderResultVo.getDisplayContent());
-                payNotifyLogService.createPayNotifyTask(PayNotifyTypeEnum.ORDER.getType(), newPayOrderPo.getId());
+                payNotifyTaskService.createPayNotifyTask(PayNotifyTypeEnum.ORDER.getType(), newPayOrderPo.getId());
             }
         }
         return payOrderSubmitRespVO;
+    }
+
+    @Override
+    public void updateOrderRefundPrice(Long orderId, Integer refundPrice) {
+        PayOrderPo payOrderPo = this.getById(orderId);
+        if (ObjectUtil.isNull(payOrderPo)){
+            ExceptionUtil.castServiceException(PAY_ORDER_NOT_FOUND);
+        }
+        if (!(PayOrderStatusEnums.isRefund(payOrderPo.getStatus()) ||  PayOrderStatusEnums.isSuccess(payOrderPo.getStatus()))){
+            ExceptionUtil.castServiceException(PAY_ORDER_REFUND_FAIL_STATUS_ERROR);
+        }
+        if (payOrderPo.getRefundPrice() + refundPrice > payOrderPo.getPrice()){
+            ExceptionUtil.castServiceException(PAY_ORDER_REFUND_FAIL_PRICE_ERROR);
+        }
+        // 更新订单
+        PayOrderPo updateObj = PayOrderPo.builder()
+                .refundPrice(payOrderPo.getRefundPrice() + refundPrice)
+                .status(PayOrderStatusEnums.PAY_REFUND.getStatus())
+                .build();
+        boolean update = UpdateChain
+                .of(PayOrderPo.class)
+                .set(PayOrderPo::getRefundPrice, updateObj.getRefundPrice())
+                .set(PayOrderPo::getStatus, updateObj.getStatus())
+                .where(PAY_ORDER_PO.ID.eq(orderId))
+                .and(PAY_ORDER_PO.STATUS.eq(payOrderPo.getStatus()))
+                .update();
+        if (!update) {
+            ExceptionUtil.castServiceException(PAY_ORDER_REFUND_FAIL_STATUS_ERROR);
+        }
     }
 
     private String genChannelOrderNotifyUrl(PayChannelPo channel) {

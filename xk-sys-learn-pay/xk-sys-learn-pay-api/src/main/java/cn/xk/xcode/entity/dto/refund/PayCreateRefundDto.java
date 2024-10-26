@@ -26,7 +26,7 @@ public class PayCreateRefundDto {
 
     @Schema(description = "应用编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1024")
     @NotNull(message = "应用编号不能为空")
-    private Long appId;
+    private Integer appId;
 
     @Schema(description = "用户 IP", requiredMode = Schema.RequiredMode.REQUIRED, example = "127.0.0.1")
     @NotEmpty(message = "用户 IP 不能为空")

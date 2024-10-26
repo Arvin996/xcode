@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
  * @Description ReportGlobalConfig
  */
 @Configuration
-public class ReportGlobalConfig {
+public class ReportGlobalConfig<T, K> {
 
     @Bean
     @ConditionalOnMissingBean(AbsQueueExportEventHandler.class)
@@ -35,10 +35,10 @@ public class ReportGlobalConfig {
     public static final int BUFFER_SIZE = 1024 * 256;
 
     @Bean("exportModelRingBuffer")
-    public <T, K> RingBuffer<ExportModel> exportModelRingBuffer(AbsQueueExportEventHandler<T, K> exportEventHandler) {
+    public RingBuffer<ExportModel<T, K>> exportModelRingBuffer(AbsQueueExportEventHandler<T, K> exportEventHandler) {
         //指定事件工厂
-        QueueExportEventFactory eventFactory = new QueueExportEventFactory();
-        Disruptor<ExportModel> disruptor = new Disruptor<>(
+        QueueExportEventFactory<T, K> eventFactory = new QueueExportEventFactory<>();
+        Disruptor<ExportModel<T, K>> disruptor = new Disruptor<>(
                 eventFactory,
                 BUFFER_SIZE,
                 Executors.defaultThreadFactory(),
@@ -46,7 +46,7 @@ public class ReportGlobalConfig {
                 new BlockingWaitStrategy()
         );
         //设置事件业务处理器---消费者
-        disruptor.handleEventsWith((EventHandler<? super ExportModel>) exportEventHandler);
+        disruptor.handleEventsWith(exportEventHandler);
         // 启动disruptor线程
         disruptor.start();
         //获取ringBuffer环，用于接取生产者生产的事件
@@ -54,7 +54,7 @@ public class ReportGlobalConfig {
     }
 
     @Bean
-    public ReportExportQueuePublisher reportExportQueuePublisher(RingBuffer<ExportModel> ringBuffer){
-        return new ReportExportQueuePublisher(ringBuffer);
+    public ReportExportQueuePublisher<T, K> reportExportQueuePublisher(RingBuffer<ExportModel<T, K>> ringBuffer){
+        return new ReportExportQueuePublisher<>(ringBuffer);
     }
 }

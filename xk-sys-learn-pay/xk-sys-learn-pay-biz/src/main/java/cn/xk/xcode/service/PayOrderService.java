@@ -23,4 +23,6 @@ public interface PayOrderService extends IService<PayOrderPo> {
     Long createOrder(PayCreateOrderDto payCreateOrderDto);
 
     PayOrderSubmitRespVO submitOrder(PayOrderSubmitReqDto payOrderSubmitReqDto);
+
+    void updateOrderRefundPrice(Long orderId, Integer refundPrice);
 }

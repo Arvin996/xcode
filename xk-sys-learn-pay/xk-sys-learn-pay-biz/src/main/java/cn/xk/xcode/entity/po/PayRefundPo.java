@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  *  实体类。
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
  * @since 2024-09-23
  */
 @Data
-@Builder
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("pay_refund")

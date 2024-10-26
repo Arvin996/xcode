@@ -27,4 +27,9 @@ public interface PayModuleErrorCodeConstants {
     ErrorCode PAY_CHANNEL_NOT_FOUND = new IntErrorCode(14000_0_512, "支付渠道%s不存在");
     ErrorCode PAY_CHANNEL_IS_DISABLED = new IntErrorCode(14000_0_513, "支付渠道%s已被禁用");
     ErrorCode PAY_APP_IS_NOT_CONTAINS_CHANNEL = new IntErrorCode(14000_0_514, "支付应用%s不包含支付渠道%s");
+    ErrorCode PAY_ORDER_REFUND_FAIL_STATUS_ERROR = new IntErrorCode(14000_0_515, "支付订单退款失败，原因：状态不是已支付或已退款");
+    ErrorCode PAY_ORDER_REFUND_FAIL_PRICE_ERROR = new IntErrorCode(14000_0_516, "支付订单退款失败，原因：退款金额大于支付金额");
+    ErrorCode REFUND_IS_REFUNDING =  new IntErrorCode(14000_0_517, "退款正在进行中，请勿重复提交");
+    ErrorCode REFUND_IS_NOT_EXISTS =  new IntErrorCode(14000_0_518, "退款订单不存在");
+    ErrorCode REFUND_STATUS_IS_NOT_WAITING =  new IntErrorCode(14000_0_519, "支付退款单不处于待退款");
 }

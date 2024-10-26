@@ -28,7 +28,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.EXCEL_EXPORT_ERROR;
 public abstract class AbsQueueExportEventHandler<T, K> implements EventHandler<ExportModel<T, K>> {
 
     @Override
-    public void onEvent(ExportModel exportModel, long l, boolean b) {
+    public void onEvent(ExportModel<T, K> exportModel, long l, boolean b) {
         log.info("线程号{}, 用户编号{}开始导出报表", exportModel.getThreadId(), exportModel.getUsername());
         export(exportModel.getResponse(), exportModel.getPageSize(), exportModel.getData(), exportModel.getKClass(), exportModel.getFileName());
     }

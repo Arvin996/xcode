@@ -33,7 +33,7 @@ public interface PayClient {
     PayOrderResultVo parseOrderNotify(Map<String, String> params, String body);
 
     // 创建退款
-    PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto) throws Throwable;
+    PayRefundResultVo createRefund(PayCreateRefundDto payCreateRefundDto);
 
     // 获取退款信息
     PayRefundResultVo getRefund(String outTradeNo, String outRefundNo) throws Throwable;

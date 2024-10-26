@@ -10,7 +10,7 @@ import com.lmax.disruptor.EventFactory;
  * @Version V1.0.0
  * @Description QueueExportEventFactory
  */
-public class QueueExportEventFactory implements EventFactory<ExportModel> {
+public class QueueExportEventFactory<T, K> implements EventFactory<ExportModel<T, K>> {
     @Override
     public ExportModel newInstance() {
         return ExportModel.builder().username(StpUtil.getLoginIdAsString()).threadId(Thread.currentThread().getId()).build();

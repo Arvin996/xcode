@@ -1,11 +1,13 @@
 package cn.xk.xcode.controller;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.xk.xcode.client.PayOrderClient;
 import cn.xk.xcode.core.queue.event.AbsQueueExportEventHandler;
 import cn.xk.xcode.core.queue.publisher.ReportExportQueuePublisher;
 import cn.xk.xcode.entity.dto.order.ExportOrderDto;
 import cn.xk.xcode.entity.dto.order.PayCreateOrderDto;
 import cn.xk.xcode.entity.dto.order.PayOrderSubmitReqDto;
+import cn.xk.xcode.entity.po.PayOrderPo;
 import cn.xk.xcode.entity.vo.order.PayOrderRespVo;
 import cn.xk.xcode.entity.vo.order.PayOrderResultVo;
 import cn.xk.xcode.entity.vo.order.PayOrderSubmitRespVO;
@@ -33,7 +35,7 @@ public class PayOrderController implements PayOrderClient {
     private PayOrderService payOrderService;
 
     @Resource
-    private ReportExportQueuePublisher reportExportQueuePublisher;
+    private ReportExportQueuePublisher<ExportOrderDto, PayOrderPo> reportExportQueuePublisher;
 
     @Override
     public CommonResult<Long> createOrder(@Validated @RequestBody PayCreateOrderDto payCreateOrderDto) {
@@ -60,6 +62,7 @@ public class PayOrderController implements PayOrderClient {
     @Operation(summary = "导出支付订单")
     @GetMapping("/export-orders")
     public void exportOrders(@Validated @RequestBody ExportOrderDto exportOrderDto, HttpServletResponse response){
-      //  reportExportQueuePublisher.handleReportExport(response);
+        String filename = "支付订单" + LocalDateTimeUtil.formatNormal(LocalDateTimeUtil.now());
+        reportExportQueuePublisher.handleReportExport(response, filename, exportOrderDto, PayOrderPo.class, exportOrderDto.getPageSize());
     }
 }

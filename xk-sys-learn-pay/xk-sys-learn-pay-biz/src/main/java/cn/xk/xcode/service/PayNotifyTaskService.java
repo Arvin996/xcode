@@ -11,4 +11,5 @@ import cn.xk.xcode.entity.po.PayNotifyTaskPo;
  */
 public interface PayNotifyTaskService extends IService<PayNotifyTaskPo> {
 
+    void createPayNotifyTask(String type, Long id);
 }

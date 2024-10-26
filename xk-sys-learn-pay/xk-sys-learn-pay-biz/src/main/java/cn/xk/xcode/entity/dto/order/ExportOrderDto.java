@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -22,6 +24,11 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Schema(description = "导出订单数据dto")
 public class ExportOrderDto {
+
+    @Schema
+    @NotNull(message = "分页参数不能为空")
+    @Min(value = 1, message = "分页参数不能小于1")
+    private Integer pageSize;
 
     @Schema(description = "应用编号", example = "1024")
     private Long appId;

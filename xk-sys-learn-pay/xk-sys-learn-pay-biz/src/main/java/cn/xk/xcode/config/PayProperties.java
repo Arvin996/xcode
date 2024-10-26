@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 public class PayProperties {
 
     public static final String ORDER_NO_PREFIX = "P";
-    private static final String REFUND_NO_PREFIX = "R";
+    public static final String REFUND_NO_PREFIX = "R";
     public static final String PAY_NO = "pay-no:";
 
     /**

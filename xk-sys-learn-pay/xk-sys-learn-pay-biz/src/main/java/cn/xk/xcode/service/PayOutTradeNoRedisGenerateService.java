@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 import static cn.hutool.core.date.DatePattern.PURE_DATETIME_PATTERN;
-import static cn.xk.xcode.config.PayProperties.ORDER_NO_PREFIX;
-import static cn.xk.xcode.config.PayProperties.PAY_NO;
+import static cn.xk.xcode.config.PayProperties.*;
+
 
 /**
  * @Author xuk
@@ -29,6 +29,14 @@ public class PayOutTradeNoRedisGenerateService {
 
     public String generateOrderOutTradeNo() {
         String prefix = ORDER_NO_PREFIX + DateUtil.format(LocalDateTime.now(), PURE_DATETIME_PATTERN);
+        String key = PAY_NO + prefix;
+        Long no = stringRedisTemplate.opsForValue().increment(key);
+        stringRedisTemplate.expire(key, KEY_EXPIRED_TIME, TimeUnit.SECONDS);
+        return prefix + no;
+    }
+
+    public String generatePayOutRefundNo(){
+        String prefix = REFUND_NO_PREFIX + DateUtil.format(LocalDateTime.now(), PURE_DATETIME_PATTERN);
         String key = PAY_NO + prefix;
         Long no = stringRedisTemplate.opsForValue().increment(key);
         stringRedisTemplate.expire(key, KEY_EXPIRED_TIME, TimeUnit.SECONDS);

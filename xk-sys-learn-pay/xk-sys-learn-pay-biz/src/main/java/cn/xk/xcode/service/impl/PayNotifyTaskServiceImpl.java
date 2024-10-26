@@ -15,4 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PayNotifyTaskServiceImpl extends ServiceImpl<PayNotifyTaskMapper, PayNotifyTaskPo> implements PayNotifyTaskService {
 
+    @Override
+    public void createPayNotifyTask(String type, Long id) {
+
+    }
 }

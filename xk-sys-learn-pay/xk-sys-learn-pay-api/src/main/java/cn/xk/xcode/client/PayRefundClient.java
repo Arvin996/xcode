@@ -7,6 +7,7 @@ import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public interface PayRefundClient {
 
     @PostMapping(PREFIX + "/createRefund")
     @Operation(summary = "创建退款单")
-    CommonResult<Long> createRefund(@Valid @RequestBody PayCreateRefundDto reqDTO);
+    CommonResult<Long> createRefund(@Validated @RequestBody PayCreateRefundDto reqDTO);
 
     @PostMapping(PREFIX + "/getRefund")
     @Operation(summary = "获取退款单")

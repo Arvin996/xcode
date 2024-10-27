@@ -1,6 +1,7 @@
 package cn.xk.xcode.core.crypt;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.SM2;
 import cn.xk.xcode.config.XkSysCryptProperties;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import static cn.xk.xcode.core.CryptGlobalConstant.READ_KEY_ERROR;
+import static cn.xk.xcode.core.CryptGlobalConstant.*;
 
 /**
  * @Author xuk
@@ -24,7 +25,6 @@ public class Sm2Crypt extends AbstractCrypt {
 
     private SM2 sm2;
 
-
     @Override
     public void init() {
         XkSysCryptProperties.SM2 xkSysCryptPropertiesSm2 = xkSysCryptProperties.getSm2();
@@ -33,8 +33,14 @@ public class Sm2Crypt extends AbstractCrypt {
             sm2 = SmUtil.sm2(xkSysCryptPropertiesSm2.getPrivateKey(), xkSysCryptPropertiesSm2.getPublicKey());
         } else {
             // 从文件路径中获取 这里强制要求放在resource下
-            String privateKey = xkSysCryptPropertiesSm2.getPrivateKey();
-            String publicKey = xkSysCryptPropertiesSm2.getPublicKey();
+            String privateKey = xkSysCryptPropertiesSm2.getPrivateKeyPemPathName();
+            String publicKey = xkSysCryptPropertiesSm2.getPublicKeyPemPathName();
+            if (StrUtil.isBlank(privateKey)){
+                ExceptionUtil.castServerException(PRIVATE_KEY_PEM_PATH_IS_NULL);
+            }
+            if (StrUtil.isBlank(publicKey)){
+                ExceptionUtil.castServerException(PUBLIC_KEY_PEM_PATH_IS_NULL);
+            }
             PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);
             PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKey);
             if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)) {

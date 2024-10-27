@@ -26,4 +26,12 @@ public interface CryptGlobalConstant {
     ErrorCode COSTUME_CRYPT_ALG_MUST_BE_UNIQUE  = new IntErrorCode(209_0_511, "自定义加解密算法必须唯一");
     ErrorCode SYMMETRIC_ALG_KEY_MUST_NOT_NULL  = new IntErrorCode(209_0_512, "对称加密算法密钥不能为空");
     ErrorCode COSTUME_SIGN_ALG_MUST_BE_UNIQUE =  new IntErrorCode(209_0_513, "自定义签名算法必须唯一");
+    ErrorCode COSTUME_SIGN_ALG_KEY_MUST_STORE_IN_PEM =  new IntErrorCode(209_0_514, "自定义签名算法的密钥必须使用pem文件存储，不支持字符串");
+    ErrorCode COSTUME_SIGN_ALG_PEM_PATH_MUST_NOT_NULL =  new IntErrorCode(209_0_515, "自定义签名算法密钥的pem文件路径不能为空");
+    ErrorCode COSTUME_CRYPT_ALG_PEM_PATH_MUST_NOT_NULL =  new IntErrorCode(209_0_516, "自定义加解密算法密钥的pem文件路径不能为空");
+    ErrorCode PUBLIC_KEY_PEM_PATH_IS_NULL =  new IntErrorCode(209_0_517, "公钥的pem文件路径不能为空");
+    ErrorCode PRIVATE_KEY_PEM_PATH_IS_NULL =  new IntErrorCode(209_0_518, "私钥的pem文件路径不能为空");
+    ErrorCode SIGN_DATA_IS_NULL =  new IntErrorCode(209_0_519, "签名数据为空");
+    ErrorCode SIGN_FAILED =  new IntErrorCode(209_0_520, "验签失败，签名不正确");
+    ErrorCode RETURN_DATA_NOT_VALID =  new IntErrorCode(209_0_521, "返回数据格式不合法");
 }

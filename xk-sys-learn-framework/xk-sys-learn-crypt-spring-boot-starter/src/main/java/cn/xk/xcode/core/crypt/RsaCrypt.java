@@ -1,6 +1,7 @@
 package cn.xk.xcode.core.crypt;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.xk.xcode.config.XkSysCryptProperties;
@@ -39,8 +40,14 @@ public class RsaCrypt extends AbstractCrypt{
             rsa = new RSA(rsaType.getAlgorithm().getValue(), xkSysCryptPropertiesRsa.getPrivateKey(), xkSysCryptPropertiesRsa.getPublicKey());
         }else {
             // 从文件路径中获取 这里强制要求放在resource下
-            String privateKey = xkSysCryptPropertiesRsa.getPrivateKey();
-            String publicKey = xkSysCryptPropertiesRsa.getPublicKey();
+            String privateKey = xkSysCryptPropertiesRsa.getPrivateKeyPemPathName();
+            String publicKey = xkSysCryptPropertiesRsa.getPublicKeyPemPathName();
+            if (StrUtil.isBlank(privateKey)){
+                ExceptionUtil.castServerException(PRIVATE_KEY_PEM_PATH_IS_NULL);
+            }
+            if (StrUtil.isBlank(publicKey)){
+                ExceptionUtil.castServerException(PUBLIC_KEY_PEM_PATH_IS_NULL);
+            }
             PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);
             PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKey);
             if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)){

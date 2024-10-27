@@ -1,4 +1,6 @@
 xk:
   sys:
     crypt:
-      alg-enum: chacha20
+      cipher-type: costume
+      costume-alg:
+        alg-enum:

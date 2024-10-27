@@ -29,17 +29,14 @@ public class XkSysCryptProperties {
     private ChaCha20 chacha20;
     private CipherType cipherType = CipherType.DEFAULT;
     private AlgEnum algEnum;
-    private boolean isSign = false;
-    private Sign sign;
     private CostumeAlg costumeAlg;
 
     @Data
     public static class CostumeAlg {
-        private String publicKey;
-        private String privateKey;
+        private String publicKeyPemPath;
+        private String privateKeyPemPath;
         private String secretKey;
         private CostumeAlgEnum algEnum = CostumeAlgEnum.ASYMMETRIC;
-        private ASYMMETRIC_KEY_SOURCE sourceKeyType = ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
     }
 
     @Getter
@@ -60,75 +57,11 @@ public class XkSysCryptProperties {
     }
 
     @Data
-    public static class Sign {
-        private String publicKey;
-        private String privateKey;
-        private SignAlgType signAlgType = SignAlgType.MD5withRSA;
-        private SignType signType = SignType.DEFAULT;
-        private SignDateRule signDateRule =  SignDateRule.REQUEST_BODY_ONLY;
-        private final String separator = "&";
-        private String signName = "sign";
-        private SignLocation signLocation = SignLocation.BODY;
-        private ASYMMETRIC_KEY_SOURCE sourceKeyType = ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
-    }
-
-    @AllArgsConstructor
-    @Getter
-    public enum SignLocation {
-        HEADER ("header", "请求头"),
-        PARAM("params", "请求参数"),
-        BODY("body", "请求体");
-        private final String location;
-        private final String desc;
-    }
-
-    @AllArgsConstructor
-    @Getter
-    public enum SignDateRule {
-        REQUEST_BODY_ONLY("body", "仅对请求体进行签名"),
-        REQUEST_URL_PARAMS_ONLY("params", "仅对请求参数进行签名"),
-        REQUEST_BODY_AND_URL_PARAMS("all", "对请求体和请求参数进行签名");
-        private final String rule;
-        private final String desc;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public enum SignType {
-        COSTUME("0", "用户自定义签名算法"),
-        DEFAULT("1", "使用框架支持的默认签名算法");
-        private final String type;
-        private final String desc;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public enum SignAlgType {
-        NONEwithRSA("NONEwithRSA", SignAlgorithm.NONEwithRSA),
-        MD2withRSA("MD2withRSA", SignAlgorithm.MD2withRSA),
-        MD5withRSA("MD5withRSA", SignAlgorithm.MD5withRSA),
-        SHA1withRSA("SHA1withRSA", SignAlgorithm.SHA1withRSA),
-        SHA256withRSA("SHA256withRSA", SignAlgorithm.SHA256withRSA),
-        SHA384withRSA("SHA384withRSA", SignAlgorithm.SHA384withRSA),
-        SHA512withRSA("SHA512withRSA", SignAlgorithm.SHA512withRSA),
-        NONEwithDSA("NONEwithDSA", SignAlgorithm.NONEwithDSA),
-        SHA1withDSA("SHA1withDSA", SignAlgorithm.SHA1withDSA),
-        NONEwithECDSA("NONEwithECDSA", SignAlgorithm.NONEwithECDSA),
-        SHA1withECDSA("SHA1withECDSA", SignAlgorithm.SHA1withECDSA),
-        SHA256withECDSA("SHA256withECDSA", SignAlgorithm.SHA256withECDSA),
-        SHA384withECDSA("SHA384withECDSA", SignAlgorithm.SHA384withECDSA),
-        SHA512withECDSA("SHA512withECDSA", SignAlgorithm.SHA512withECDSA),
-        SHA256withRSA_PSS("SHA256WithRSA/PSS", SignAlgorithm.SHA256withRSA_PSS),
-        SHA384withRSA_PSS("SHA384WithRSA/PSS", SignAlgorithm.SHA384withRSA_PSS),
-        SHA512withRSA_PSS("SHA512WithRSA/PSS", SignAlgorithm.SHA512withRSA_PSS);
-        private final String type;
-        private final SignAlgorithm signAlgorithm;
-    }
-
-    @Data
     public static class SM2 {
         private String publicKey;
         private String privateKey;
+        private String publicKeyPemPathName;
+        private String privateKeyPemPathName;
         private ASYMMETRIC_KEY_SOURCE sourceKeyType = ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
     }
 
@@ -136,6 +69,8 @@ public class XkSysCryptProperties {
     public static class ECIES {
         private String publicKey;
         private String privateKey;
+        private String publicKeyPemPathName;
+        private String privateKeyPemPathName;
         private ASYMMETRIC_KEY_SOURCE sourceKeyType = ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
     }
 
@@ -143,6 +78,8 @@ public class XkSysCryptProperties {
     public static class RSA {
         private String publicKey;
         private String privateKey;
+        private String publicKeyPemPathName;
+        private String privateKeyPemPathName;
         private ASYMMETRIC_KEY_SOURCE sourceKeyType = ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
         private RSA_TYPE rsaType = RSA_TYPE.RSA;
     }
@@ -151,7 +88,7 @@ public class XkSysCryptProperties {
     @AllArgsConstructor
     public enum ASYMMETRIC_KEY_SOURCE {
         PERM_FILE("0", "使用本地文件进行存储"),
-        APPLICATION_FILE("1", "直接放在服务的application配置文件中");
+        APPLICATION_FILE("1", "以base64编码直接放在服务的application配置文件中");
         private final String type;
         private final String desc;
     }

@@ -2,19 +2,21 @@ package cn.xk.xcode.config;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.KeyUtil;
-import cn.hutool.crypto.SecureUtil;
+import cn.xk.xcode.core.aop.CryptAdvisor;
+import cn.xk.xcode.core.aop.CryptInterceptor;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import cn.xk.xcode.core.crypt.CostumeCrypt;
 import cn.xk.xcode.core.enums.AlgEnum;
 import cn.xk.xcode.core.sign.AbstractSignAlgStrange;
 import cn.xk.xcode.core.sign.CostumeSignAlgStrange;
+import cn.xk.xcode.core.sign.DefaultSignAlgStrange;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 
 import javax.annotation.Resource;
 import java.security.PrivateKey;
@@ -32,44 +34,61 @@ import static cn.xk.xcode.core.CryptGlobalConstant.*;
  * @Description XkSysCryptConfig
  **/
 @Configuration
-@EnableConfigurationProperties(XkSysCryptProperties.class)
+@EnableConfigurationProperties({XkSysCryptProperties.class, XkSysSignProperties.class})
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class XkSysCryptConfig {
 
     @Resource
     private XkSysCryptProperties xkSysCryptProperties;
 
+    @Resource
+    private XkSysSignProperties xkSysSignProperties;
+
     @Bean
-    public AbstractCrypt abstractCrypt(){
+    public CryptAdvisor cryptAdvisor(CryptInterceptor cryptInterceptor){
+        return new CryptAdvisor(cryptInterceptor);
+    }
+
+    @Bean
+    public CryptInterceptor cryptInterceptor(AbstractCrypt abstractCrypt, AbstractSignAlgStrange abstractSignAlgStrange){
+        return new CryptInterceptor(abstractCrypt, abstractSignAlgStrange);
+    }
+
+    @Bean
+    public AbstractCrypt abstractCrypt() {
         XkSysCryptProperties.CipherType cipherType = xkSysCryptProperties.getCipherType();
-        if (cipherType.equals(XkSysCryptProperties.CipherType.COSTUME)){
+        if (cipherType.equals(XkSysCryptProperties.CipherType.COSTUME)) {
             ServiceLoader<CostumeCrypt> costumeCrypts = ServiceLoader.load(CostumeCrypt.class);
             List<CostumeCrypt> list = new ArrayList<>();
-            while (costumeCrypts.iterator().hasNext()){
+            while (costumeCrypts.iterator().hasNext()) {
                 list.add(costumeCrypts.iterator().next());
             }
-            if (list.isEmpty()){
+            if (list.isEmpty()) {
                 ExceptionUtil.castServerException(COSTUME_CRYPT_ALG_NOT_CONFIG);
             }
-            if (list.size() > 1){
+            if (list.size() > 1) {
                 ExceptionUtil.castServerException(COSTUME_CRYPT_ALG_MUST_BE_UNIQUE);
             }
             CostumeCrypt costumeCrypt = list.get(0);
             XkSysCryptProperties.CostumeAlg costumeAlg = xkSysCryptProperties.getCostumeAlg();
             XkSysCryptProperties.CostumeAlgEnum algEnum = costumeAlg.getAlgEnum();
-            if (algEnum.equals(XkSysCryptProperties.CostumeAlgEnum.SYMMETRIC)){
+            if (algEnum.equals(XkSysCryptProperties.CostumeAlgEnum.SYMMETRIC)) {
                 String secretKey = costumeAlg.getSecretKey();
-                if (StrUtil.isBlank(secretKey)){
+                if (StrUtil.isBlank(secretKey)) {
                     ExceptionUtil.castServerException(SYMMETRIC_ALG_KEY_MUST_NOT_NULL);
-                }else {
+                } else {
                     costumeCrypt.setSecretKey(secretKey);
                     return costumeCrypt;
                 }
-            }else {
-                String privateKey = costumeAlg.getPrivateKey();
-                String publicKey = costumeAlg.getPublicKey();
+            } else {
+                String privateKey = costumeAlg.getPrivateKeyPemPath();
+                String publicKey = costumeAlg.getPublicKeyPemPath();
+                if (StrUtil.isBlank(privateKey) || StrUtil.isBlank(publicKey)){
+                    ExceptionUtil.castServerException(COSTUME_CRYPT_ALG_PEM_PATH_MUST_NOT_NULL);
+                }
                 PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);
                 PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKey);
-                if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)){
+                if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)) {
                     ExceptionUtil.castServerException(READ_KEY_ERROR);
                 }
                 costumeCrypt.setPrivateKey(privateKeyFromPem);
@@ -86,40 +105,41 @@ public class XkSysCryptConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(value = "xk.sys.crypt.isSign", havingValue = "false")
-    public AbstractSignAlgStrange abstractSignAlgStrange(){
-        XkSysCryptProperties.Sign sign = xkSysCryptProperties.getSign();
-        XkSysCryptProperties.SignType signType = sign.getSignType();
-        if (signType.equals(XkSysCryptProperties.SignType.COSTUME)){
+    public AbstractSignAlgStrange abstractSignAlgStrange() {
+        XkSysSignProperties.SignType signType = xkSysSignProperties.getSignType();
+        if (signType.equals(XkSysSignProperties.SignType.COSTUME)) {
             ServiceLoader<CostumeSignAlgStrange> services = ServiceLoader.load(CostumeSignAlgStrange.class);
             List<CostumeSignAlgStrange> list = new ArrayList<>();
-            while(services.iterator().hasNext()){
-                 list.add(services.iterator().next());
+            while (services.iterator().hasNext()) {
+                list.add(services.iterator().next());
             }
-            if (list.isEmpty()){
-                 ExceptionUtil.castServerException(COSTUME_SIGN_ALG_NOT_CONFIG);
+            if (list.isEmpty()) {
+                ExceptionUtil.castServerException(COSTUME_SIGN_ALG_NOT_CONFIG);
             }
-            if (list.size() > 1){
-                 ExceptionUtil.castServerException(COSTUME_SIGN_ALG_MUST_BE_UNIQUE);
+            if (list.size() > 1) {
+                ExceptionUtil.castServerException(COSTUME_SIGN_ALG_MUST_BE_UNIQUE);
             }
             CostumeSignAlgStrange costumeSignAlgStrange = list.get(0);
-            String privateKey = sign.getPrivateKey();
-            String publicKey = sign.getPublicKey();
-            XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = sign.getSourceKeyType();
-            if (sourceKeyType.equals(XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.PERM_FILE)){
+            String privateKey = xkSysSignProperties.getPrivateKeyPemPath();
+            String publicKey = xkSysSignProperties.getPublicKeyPemPath();
+            if (StrUtil.isBlank(privateKey) || StrUtil.isBlank(publicKey)){
+                ExceptionUtil.castServerException(COSTUME_SIGN_ALG_PEM_PATH_MUST_NOT_NULL);
+            }
+            XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysSignProperties.getSourceKeyType();
+            if (sourceKeyType.equals(XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE)) {
+                ExceptionUtil.castServerException(COSTUME_SIGN_ALG_KEY_MUST_STORE_IN_PEM);
+            }else {
                 PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);
                 PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKey);
-                if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)){
+                if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)) {
                     ExceptionUtil.castServerException(READ_KEY_ERROR);
                 }
                 costumeSignAlgStrange.setPrivateKey(privateKeyFromPem);
                 costumeSignAlgStrange.setPublicKey(publicKeyFromPem);
                 return costumeSignAlgStrange;
-            }else {
-                costumeSignAlgStrange.setPrivateKey(SecureUtil.);
-                costumeSignAlgStrange.setPublicKey();
-                return costumeSignAlgStrange;
             }
         }
+        // 使用内部的签名算法
+        return new DefaultSignAlgStrange(xkSysSignProperties);
     }
 }

@@ -2,16 +2,22 @@ package cn.xk.xcode.core.sign;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SignUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.XkSysSignProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.Getter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Map;
+
+import static cn.xk.xcode.core.CryptGlobalConstant.*;
 
 /**
  * @Author xuk
@@ -24,31 +30,46 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
 
     private final Sign signer;
 
-    public DefaultSignAlgStrange(XkSysCryptProperties xkSysCryptProperties) {
-        this.xkSysCryptProperties = xkSysCryptProperties;
-        XkSysCryptProperties.Sign sign = xkSysCryptProperties.getSign();
-        String publicKey = sign.getPublicKey();
-        String privateKey = sign.getPrivateKey();
-        XkSysCryptProperties.SignAlgType signAlgType = sign.getSignAlgType();
-        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = sign.getSourceKeyType();
+    public DefaultSignAlgStrange(XkSysSignProperties signProperties) {
+        this.xkSysSignProperties = signProperties;
+        XkSysSignProperties.SignAlgType signAlgType = this.xkSysSignProperties.getSignAlgType();
+        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = this.xkSysSignProperties.getSourceKeyType();
         if (sourceKeyType.equals(XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.PERM_FILE)) {
-            PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKey);
-            PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);
+            String privateKeyPemPath = this.xkSysSignProperties.getPrivateKeyPemPath();
+            String publicKeyPemPath = this.xkSysSignProperties.getPublicKeyPemPath();
+            if (StrUtil.isBlank(privateKeyPemPath)){
+                ExceptionUtil.castServerException(PRIVATE_KEY_PEM_PATH_IS_NULL);
+            }
+            if (StrUtil.isBlank(publicKeyPemPath)){
+                ExceptionUtil.castServerException(PUBLIC_KEY_PEM_PATH_IS_NULL);
+            }
+            PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKeyPemPath);
+            PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKeyPemPath);
+            if (ObjectUtil.isNull(privateKeyFromPem) || ObjectUtil.isNull(publicKeyFromPem)) {
+                ExceptionUtil.castServerException(READ_KEY_ERROR);
+            }
             signer = new Sign(signAlgType.getSignAlgorithm(), privateKeyFromPem, publicKeyFromPem);
         } else {
+            String publicKey = xkSysSignProperties.getPublicKey();
+            String privateKey = xkSysSignProperties.getPrivateKey();
+            if (StrUtil.isBlank(privateKey)){
+                ExceptionUtil.castServerException(PRIVATE_KEY_IS_NULL);
+            }
+            if (StrUtil.isBlank(publicKey)){
+                ExceptionUtil.castServerException(PUBLIC_KEY_IS_NULL);
+            }
             signer = SignUtil.sign(signAlgType.getSignAlgorithm(), privateKey, publicKey);
         }
     }
 
     @Override
     public String generateSignData(Map<String, Object> bodyMap, Map<String, Object> requestUrlParmasMap) throws Exception {
-        XkSysCryptProperties.Sign sign = xkSysCryptProperties.getSign();
-        String separator = sign.getSeparator();
-        XkSysCryptProperties.SignDateRule signDateRule = sign.getSignDateRule();
+        String separator = xkSysSignProperties.getSeparator();
+        XkSysSignProperties.SignDateRule signDateRule = xkSysSignProperties.getSignDateRule();
         String res = "";
-        if (signDateRule.equals(XkSysCryptProperties.SignDateRule.REQUEST_BODY_ONLY)) {
+        if (signDateRule.equals(XkSysSignProperties.SignDateRule.REQUEST_BODY_ONLY)) {
             res = handleSignData(bodyMap, null, separator);
-        } else if (signDateRule.equals(XkSysCryptProperties.SignDateRule.REQUEST_URL_PARAMS_ONLY)) {
+        } else if (signDateRule.equals(XkSysSignProperties.SignDateRule.REQUEST_URL_PARAMS_ONLY)) {
             res = handleSignData(null, requestUrlParmasMap, separator);
         } else {
             res = handleSignData(bodyMap, requestUrlParmasMap, separator);

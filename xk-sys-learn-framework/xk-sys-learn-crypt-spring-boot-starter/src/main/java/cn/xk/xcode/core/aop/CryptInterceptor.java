@@ -55,7 +55,7 @@ public class CryptInterceptor implements MethodInterceptor {
             } else {
                 this.decrypt(invocation);
                 object = invocation.proceed();
-                object = this.encrypt(invocation, object);
+                object = this.encrypt(object);
             }
             return object;
         } catch (Throwable e) {
@@ -138,7 +138,7 @@ public class CryptInterceptor implements MethodInterceptor {
         }
     }
 
-    private Object encrypt(MethodInvocation invocation, Object object) {
+    private Object encrypt(Object object) {
         if (!(object instanceof CommonResult)) {
             ExceptionUtil.castServerException(RETURN_DATA_NOT_VALID);
         }

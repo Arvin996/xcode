@@ -1,12 +1,12 @@
 package cn.xk.xcode.config;
 
 import cn.hutool.crypto.asymmetric.AsymmetricAlgorithm;
-import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import cn.xk.xcode.core.enums.AlgEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author xuk
@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  **/
 @Data
 @ConfigurationProperties("xk.sys.crypt")
+@Component
 public class XkSysCryptProperties {
 
     private AES aes;

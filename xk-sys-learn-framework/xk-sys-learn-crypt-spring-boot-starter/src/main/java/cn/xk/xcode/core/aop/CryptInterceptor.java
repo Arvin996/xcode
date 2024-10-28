@@ -9,6 +9,7 @@ import cn.xk.xcode.core.crypt.AbstractCrypt;
 import cn.xk.xcode.core.sign.AbstractSignAlgStrange;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.CommonResult;
+import lombok.Setter;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -33,6 +34,7 @@ import static cn.xk.xcode.core.CryptGlobalConstant.*;
  */
 public class CryptInterceptor implements MethodInterceptor {
 
+    @Setter
     private boolean isSign = false;
     private final AbstractCrypt crypt;
     private final AbstractSignAlgStrange sign;

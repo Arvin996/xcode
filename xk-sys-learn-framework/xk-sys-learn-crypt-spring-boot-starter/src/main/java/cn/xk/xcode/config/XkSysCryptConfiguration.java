@@ -12,6 +12,7 @@ import cn.xk.xcode.core.sign.CostumeSignAlgStrange;
 import cn.xk.xcode.core.sign.DefaultSignAlgStrange;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 
@@ -39,6 +40,9 @@ public class XkSysCryptConfiguration {
     @Resource
     private XkSysSignProperties xkSysSignProperties;
 
+    @Setter
+    private boolean isSign;
+
     @Bean
     public CryptAdvisor cryptAdvisor(CryptInterceptor cryptInterceptor) {
         return new CryptAdvisor(cryptInterceptor);
@@ -46,7 +50,9 @@ public class XkSysCryptConfiguration {
 
     @Bean
     public CryptInterceptor cryptInterceptor(AbstractCrypt abstractCrypt, AbstractSignAlgStrange abstractSignAlgStrange) {
-        return new CryptInterceptor(abstractCrypt, abstractSignAlgStrange);
+        CryptInterceptor cryptInterceptor = new CryptInterceptor(abstractCrypt, abstractSignAlgStrange);
+        cryptInterceptor.setSign(isSign);
+        return cryptInterceptor;
     }
 
     @Bean

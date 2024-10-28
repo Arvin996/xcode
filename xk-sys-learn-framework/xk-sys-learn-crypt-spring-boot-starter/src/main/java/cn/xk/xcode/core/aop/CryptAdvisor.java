@@ -2,7 +2,6 @@ package cn.xk.xcode.core.aop;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;

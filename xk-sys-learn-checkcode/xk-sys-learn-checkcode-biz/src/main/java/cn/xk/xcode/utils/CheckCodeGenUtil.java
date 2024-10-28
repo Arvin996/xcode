@@ -8,7 +8,7 @@ import cn.hutool.core.util.RandomUtil;
  * @Version 1.0
  * @Description CheckCodeGenUtils
  */
-public class CheckCodeGenUtils {
+public class CheckCodeGenUtil {
     public static String genCode(int len){
         if (4 == len){
             return gen4Code();

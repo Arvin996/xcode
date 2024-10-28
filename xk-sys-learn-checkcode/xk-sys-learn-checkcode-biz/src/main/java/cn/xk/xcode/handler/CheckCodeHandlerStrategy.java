@@ -2,6 +2,7 @@ package cn.xk.xcode.handler;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.config.CheckCodeProperties;
+import cn.xk.xcode.entity.GenerateCodeResEntity;
 import cn.xk.xcode.entity.dto.CheckCodeGenReqDto;
 import cn.xk.xcode.entity.dto.CheckCodeVerifyReqDto;
 import cn.xk.xcode.entity.vo.CheckCodeGenResultVo;
@@ -22,32 +23,36 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CHECK_CODE_IS_EXPIR
 @RequiredArgsConstructor
 public abstract class CheckCodeHandlerStrategy {
 
-    private final SaveCheckCodeCacheStrategy saveCheckCodeStrategy;
+    protected final SaveCheckCodeCacheStrategy saveCheckCodeStrategy;
 
-    private final CheckCodeProperties checkCodeProperties;
+    protected final CheckCodeProperties checkCodeProperties;
 
-    public abstract CheckCodeGenResultVo generate(CheckCodeGenReqDto checkCodeGenReqDto, int len);
+    public abstract GenerateCodeResEntity generate(CheckCodeGenReqDto checkCodeGenReqDto, int len);
 
     public CheckCodeGenResultVo doGenerateCode(CheckCodeGenReqDto checkCodeGenReqDto) {
-        CheckCodeGenResultVo checkCodeGenResultVo = generate(checkCodeGenReqDto, checkCodeProperties.getCodeLength());
-        saveCheckCodeStrategy.save(checkCodeGenResultVo.getCode());
-        return checkCodeGenResultVo;
+        GenerateCodeResEntity generateCodeResEntity = generate(checkCodeGenReqDto, checkCodeProperties.getCodeLength());
+        doCodeSave(checkCodeGenReqDto, generateCodeResEntity);
+        return CheckCodeGenResultVo.builder().success(true).picCode(generateCodeResEntity.getPicCode()).build();
     }
 
-    public CommonResult<Boolean> verifyCode(CheckCodeVerifyReqDto checkCodeVerifyReqDto){
+    public abstract void doCodeSave(CheckCodeGenReqDto checkCodeGenReqDto, GenerateCodeResEntity generateCodeResEntity);
+
+    public CommonResult<Boolean> verifyCode(CheckCodeVerifyReqDto checkCodeVerifyReqDto) {
         String code = checkCodeVerifyReqDto.getCode();
-        String localCode = saveCheckCodeStrategy.get(code);
-        if (!StringUtils.hasLength(localCode)){
+        String key = getLocalCodeKey(checkCodeVerifyReqDto);
+        String localCode = saveCheckCodeStrategy.get(key);
+        if (!StringUtils.hasLength(localCode)) {
             return CommonResult.error(CHECK_CODE_IS_EXPIRED);
         }
-
-        if (!StrUtil.equalsIgnoreCase(code, localCode)){
+        if (!StrUtil.equalsIgnoreCase(code, localCode)) {
             return CommonResult.error(CHECK_CODE_IS_ERROR);
         }
 
-        saveCheckCodeStrategy.remove(code);
+        saveCheckCodeStrategy.remove(key);
         return CommonResult.success(true);
     }
+
+    public abstract String getLocalCodeKey(CheckCodeVerifyReqDto checkCodeVerifyReqDto);
 
     public abstract String sendMessage(CheckCodeGenReqDto checkCodeGenReqDto, int len);
 

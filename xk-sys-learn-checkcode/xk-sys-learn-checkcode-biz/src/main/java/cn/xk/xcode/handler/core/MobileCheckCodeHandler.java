@@ -1,20 +1,24 @@
 package cn.xk.xcode.handler.core;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.config.CheckCodeProperties;
+import cn.xk.xcode.entity.GenerateCodeResEntity;
 import cn.xk.xcode.entity.dto.CheckCodeGenReqDto;
-import cn.xk.xcode.entity.vo.CheckCodeGenResultVo;
+import cn.xk.xcode.entity.dto.CheckCodeVerifyReqDto;
 import cn.xk.xcode.enums.CheckCodeGenerateType;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.handler.CheckCodeHandlerStrategy;
 import cn.xk.xcode.handler.SaveCheckCodeCacheStrategy;
-import cn.xk.xcode.utils.CheckCodeGenUtils;
+import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.utils.CheckCodeGenUtil;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
+import org.springframework.util.StringUtils;
 
-import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CHECK_CODE_SEND_ERROR;
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.*;
 
 /**
  * @Author xuk
@@ -40,14 +44,25 @@ public class MobileCheckCodeHandler extends CheckCodeHandlerStrategy {
     }
 
     @Override
-    public CheckCodeGenResultVo generate(CheckCodeGenReqDto checkCodeGenReqDto, int len) {
+    public GenerateCodeResEntity generate(CheckCodeGenReqDto checkCodeGenReqDto, int len) {
         String code = sendMessage(checkCodeGenReqDto, len);
-        return CheckCodeGenResultVo.builder().code(code).picCode(null).build();
+        return GenerateCodeResEntity.builder().code(code).picCode(null).build();
     }
 
     @Override
+    public void doCodeSave(CheckCodeGenReqDto checkCodeGenReqDto, GenerateCodeResEntity generateCodeResEntity) {
+        saveCheckCodeStrategy.save(checkCodeGenReqDto.getMobile(), generateCodeResEntity.getCode());
+    }
+
+    @Override
+    public String getLocalCodeKey(CheckCodeVerifyReqDto checkCodeVerifyReqDto) {
+        return checkCodeVerifyReqDto.getMobile();
+    }
+
+
+    @Override
     public String sendMessage(CheckCodeGenReqDto checkCodeGenReqDto, int len) {
-        String code = CheckCodeGenUtils.genCode(len);
+        String code = CheckCodeGenUtil.genCode(len);
         String phone = checkCodeGenReqDto.getMobile();
         IAcsClient client = new DefaultAcsClient(defaultProfile);
         SendSmsRequest request = new SendSmsRequest();

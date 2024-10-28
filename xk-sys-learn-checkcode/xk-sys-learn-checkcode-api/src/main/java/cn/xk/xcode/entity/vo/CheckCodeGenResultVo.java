@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "验证码返回dto")
-public class CheckCodeGenResultVo
-{
-    @Schema(description = "验证码")
-    private String code;
+public class CheckCodeGenResultVo {
+
+    @Schema(description = "是否生成成功")
+    private boolean success;
 
     @Schema(description = "图片base64验证码")
     private String picCode;

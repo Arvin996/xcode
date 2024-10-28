@@ -8,9 +8,9 @@ package cn.xk.xcode.handler;
  */
 public interface SaveCheckCodeCacheStrategy {
 
-    void save(String code);
+    void save(String k, String v);
 
-    void remove(String code);
+    void remove(String k);
 
-    String get(String code);
+    String get(String k);
 }

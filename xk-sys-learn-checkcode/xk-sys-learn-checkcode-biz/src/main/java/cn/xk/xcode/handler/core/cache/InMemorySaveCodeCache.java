@@ -16,17 +16,17 @@ public class InMemorySaveCodeCache implements SaveCheckCodeCacheStrategy {
    private final Cache<String, String> cache;
 
     @Override
-    public void save(String code) {
-        cache.put(code, code);
+    public void save(String k, String v) {
+        cache.put(k, v);
     }
 
     @Override
-    public void remove(String code) {
-        cache.invalidate(code);
+    public void remove(String k) {
+        cache.invalidate(k);
     }
 
     @Override
-    public String get(String code) {
-        return cache.getIfPresent(code);
+    public String get(String k) {
+        return cache.getIfPresent(k);
     }
 }

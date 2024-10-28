@@ -19,17 +19,17 @@ public class RedisSaveCodeCache implements SaveCheckCodeCacheStrategy {
     private final long expireTime;
 
     @Override
-    public void save(String code) {
-        stringRedisTemplate.opsForValue().set(code, code, expireTime, TimeUnit.SECONDS);
+    public void save(String k, String v) {
+        stringRedisTemplate.opsForValue().set(k, v, expireTime, TimeUnit.SECONDS);
     }
 
     @Override
-    public void remove(String code) {
-        stringRedisTemplate.opsForValue().getAndDelete(code);
+    public void remove(String k) {
+        stringRedisTemplate.opsForValue().getAndDelete(k);
     }
 
     @Override
-    public String get(String code) {
-        return stringRedisTemplate.opsForValue().get(code);
+    public String get(String k) {
+        return stringRedisTemplate.opsForValue().get(k);
     }
 }

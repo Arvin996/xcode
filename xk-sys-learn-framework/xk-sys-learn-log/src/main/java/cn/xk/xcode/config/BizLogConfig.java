@@ -62,6 +62,7 @@ public class BizLogConfig
     }
 
     @Bean
+    @ConditionalOnMissingBean(UserBizExtraMdcSupportBase.class)
     public DefaultUserBizExtraMdcSupportBase defaultUserBizExtraMdcSupportBase(){
         return new DefaultUserBizExtraMdcSupportBase();
     }

@@ -28,6 +28,7 @@
         <module>xk-sys-learn-trace</module>
         <module>xk-sys-learn-trans-flex</module>
         <module>xk-sys-learn-report-sdk</module>
+        <module>xk-sys-learn-crypt-spring-boot-starter</module>
     </modules>
     <description>
         xk-sys-learn-framework 项目框架管理

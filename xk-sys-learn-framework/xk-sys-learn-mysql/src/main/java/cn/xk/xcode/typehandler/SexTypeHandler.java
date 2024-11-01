@@ -1,6 +1,6 @@
 package cn.xk.xcode.typehandler;
 
-import cn.xk.xcode.enums.sex;
+import cn.xk.xcode.enums.Sex;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -23,16 +23,16 @@ public class SexTypeHandler extends BaseTypeHandler<String> {
 
     @Override
     public String getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        return sex.getSexName(Integer.parseInt(rs.getString(columnName)));
+        return Sex.getSexName(rs.getString(columnName));
     }
 
     @Override
     public String getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        return sex.getSexName(Integer.parseInt(rs.getString(columnIndex)));
+        return Sex.getSexName(rs.getString(columnIndex));
     }
 
     @Override
     public String getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return sex.getSexName(Integer.parseInt(cs.getString(columnIndex)));
+        return Sex.getSexName(cs.getString(columnIndex));
     }
 }

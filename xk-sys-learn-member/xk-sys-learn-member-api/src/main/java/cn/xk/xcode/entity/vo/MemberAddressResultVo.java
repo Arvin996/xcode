@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "用户收获地址返回")
+@Schema(description = "用户收货地址返回")
 public class MemberAddressResultVo {
     @Schema(description = "收货地址id")
     private Integer id;

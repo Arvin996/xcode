@@ -1,6 +1,6 @@
 package cn.xk.xcode.entity.po;
 
-import cn.xk.xcode.listener.BaseEntityChangeListener;
+import cn.xk.xcode.listener.BaseStringEntityChangeListener;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(value = "member_tag", onInsert = BaseEntityChangeListener.class, onUpdate = BaseEntityChangeListener.class)
+@Table(value = "member_tag", onInsert = BaseStringEntityChangeListener.class, onUpdate = BaseStringEntityChangeListener.class)
 public class MemberTagPo implements Serializable {
 
     private static final long serialVersionUID = 1L;

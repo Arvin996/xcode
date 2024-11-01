@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 public class PageUtil {
     private static final Object[] ORDER_TYPES = new String[]{SortedField.ORDER_ASC, SortedField.ORDER_DESC};
 
-    public static int getStart(PageParam pageParam){
+    public static long getStart(PageParam pageParam){
         return (pageParam.getPageNo() - 1) * pageParam.getPageSize();
     }
 

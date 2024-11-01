@@ -41,7 +41,7 @@ public class MemberUserLoginVo {
     @Schema(description = "用户等级")
     private Integer levelId;
 
-    @Schema(description = "用户点击实体类")
+    @Schema(description = "用户等级实体类")
     private MemberLevelResultVo memberLevelResultVo;
 
     @Schema(description = "用户经验")

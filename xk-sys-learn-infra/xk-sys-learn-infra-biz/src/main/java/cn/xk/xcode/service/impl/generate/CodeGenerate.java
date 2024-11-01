@@ -4,7 +4,7 @@ import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.DataSourceEntity;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import cn.xk.xcode.exception.core.ServerException;
-import cn.xk.xcode.generate.ICodeGenerate;
+import cn.xk.xcode.generator.ICodeGenerate;
 import com.alibaba.cloud.commons.io.FileUtils;
 import com.mybatisflex.codegen.Generator;
 import org.springframework.util.FileSystemUtils;

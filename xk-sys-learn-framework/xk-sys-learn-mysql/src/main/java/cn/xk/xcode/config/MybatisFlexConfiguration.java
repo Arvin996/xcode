@@ -1,7 +1,9 @@
 package cn.xk.xcode.config;
 
-import cn.xk.xcode.entity.DataObjectBaseEntity;
-import cn.xk.xcode.listener.BaseEntityChangeListener;
+import cn.xk.xcode.entity.DataLongObjectBaseEntity;
+import cn.xk.xcode.entity.DataStringObjectBaseEntity;
+import cn.xk.xcode.listener.BaseLongEntityChangeListener;
+import cn.xk.xcode.listener.BaseStringEntityChangeListener;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;
 import org.slf4j.Logger;
@@ -34,9 +36,13 @@ public class MybatisFlexConfiguration
 
         );
         FlexGlobalConfig config = FlexGlobalConfig.getDefaultConfig();
-        BaseEntityChangeListener listener = new BaseEntityChangeListener();
-        config.registerInsertListener(listener, DataObjectBaseEntity.class);
-        config.registerUpdateListener(listener, DataObjectBaseEntity.class);
-        config.registerSetListener(listener, DataObjectBaseEntity.class);
+        BaseStringEntityChangeListener baseStringEntityChangeListener = new BaseStringEntityChangeListener();
+        config.registerInsertListener(baseStringEntityChangeListener, DataStringObjectBaseEntity.class);
+        config.registerUpdateListener(baseStringEntityChangeListener, DataStringObjectBaseEntity.class);
+        config.registerSetListener(baseStringEntityChangeListener, DataStringObjectBaseEntity.class);
+        BaseLongEntityChangeListener baseLongEntityChangeListener = new BaseLongEntityChangeListener();
+        config.registerInsertListener(baseLongEntityChangeListener, DataLongObjectBaseEntity.class);
+        config.registerUpdateListener(baseLongEntityChangeListener, DataLongObjectBaseEntity.class);
+        config.registerSetListener(baseLongEntityChangeListener, DataLongObjectBaseEntity.class);
     }
 }

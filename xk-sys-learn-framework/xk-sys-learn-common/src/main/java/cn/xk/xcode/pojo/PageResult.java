@@ -28,7 +28,7 @@ public class PageResult<T> implements java.io.Serializable {
 
     private PageParam pageParam;
 
-    public PageResult(int pageNo, int pageSize) {
+    public PageResult(long pageNo, long pageSize) {
         this.pageParam = new PageParam(pageNo, pageSize);
     }
 
@@ -44,13 +44,13 @@ public class PageResult<T> implements java.io.Serializable {
         this.data = data;
     }
 
-    public PageResult(int pageNo, int pageSize, long total) {
+    public PageResult(long pageNo, long pageSize, long total) {
         this.pageParam = new PageParam(pageNo, pageSize);
         this.total = total;
         this.data = new ArrayList<>();
     }
 
-    public PageResult(int pageNo, int pageSize, long total, List<T> data) {
+    public PageResult(long pageNo, long pageSize, long total, List<T> data) {
         this.pageParam = new PageParam(pageNo, pageSize);
         this.total = total;
         this.data = data;

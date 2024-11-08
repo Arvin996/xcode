@@ -1,5 +1,6 @@
 package cn.xk.xcode.client;
 
+import cn.xk.xcode.entity.UpdateStockDto;
 import cn.xk.xcode.entity.dish.TakeoutDishResultVo;
 import cn.xk.xcode.entity.setmeal.TakeoutSetmealResultVo;
 import cn.xk.xcode.factory.TakeoutSetmealClientFallbackFactory;
@@ -7,7 +8,9 @@ import cn.xk.xcode.pojo.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,5 +38,9 @@ public interface TakeoutSetmealClient {
 
     @Operation(summary = "获取指定集合菜品信息")
     @PostMapping("/getSetmeals")
-    CommonResult<List<TakeoutSetmealResultVo>> getSetmeals(@RequestParam("ids") Collection<Long> id);
+    CommonResult<List<TakeoutSetmealResultVo>> getSetmeals(@RequestParam("ids") Collection<Long> ids);
+
+    @Operation(summary = "更新套餐库存")
+    @PostMapping("/updateSetmealStock")
+    CommonResult<Boolean> updateSetmealStock(@Validated @RequestBody UpdateStockDto updateStockDto);
 }

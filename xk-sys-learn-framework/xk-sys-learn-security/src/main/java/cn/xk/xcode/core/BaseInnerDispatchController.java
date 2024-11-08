@@ -1,6 +1,5 @@
 package cn.xk.xcode.core;
 
-import com.gg.midend.web.core.RegisterServiceContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;

@@ -3,6 +3,7 @@ package cn.xk.xcode.utils.spring;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.PageUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -23,8 +24,7 @@ import java.util.Map;
  * @Version 1.0
  * @Description SpringExpressionUtil
  */
-public class SpringExpressionUtil
-{
+public class SpringExpressionUtil {
     /**
      * Spring EL 表达式解析器
      */
@@ -57,16 +57,19 @@ public class SpringExpressionUtil
      * @return 结果，key 为表达式，value 为对应值
      */
     public static Map<String, Object> parseExpressions(JoinPoint joinPoint, List<String> expressionStrings){
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        return parseExpressions(method, joinPoint.getArgs(), expressionStrings);
+    }
+
+    public static Map<String, Object> parseExpressions(Method method, Object[] args, List<String> expressionStrings){
         // 如果为空，则不进行解析
         if (CollUtil.isEmpty(expressionStrings)) {
             return MapUtil.newHashMap();
         }
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Method method = methodSignature.getMethod();
         String[] paramNames = PARAMETER_NAME_DISCOVERER.getParameterNames(method);
         EvaluationContext context = new StandardEvaluationContext();
-        if (ArrayUtil.isNotEmpty(paramNames)) {
-            Object[] args = joinPoint.getArgs();
+        if (ArrayUtil.isNotEmpty(paramNames)){
             for (int i = 0; i < paramNames.length; i++) {
                 context.setVariable(paramNames[i], args[i]);
             }
@@ -80,5 +83,8 @@ public class SpringExpressionUtil
         return result;
     }
 
+    public static Map<String, Object> parseExpressions(Method method, Object[] args, String expression){
+        return parseExpressions(method, args, Collections.singletonList(expression));
+    }
 
 }

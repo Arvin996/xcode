@@ -24,20 +24,20 @@ public @interface FlexTrans {
      * 要给哪个字段做翻译
      * @return 字段名
      */
-    String targetField();
+    String targetField() default "";
 
     /**
      * 当前的属性在Wrapper中的where条件
      * 如现在源头是schoolId,那么这里就是id
      * @return 实际条件字段名
      */
-    String refConditionField();
+    String refConditionField() default "";
 
     /**
      * Wrapper查询出来实体类后，要取哪个属性进行返回翻译
      * @return 属性名
      */
-    String refSourceFiled();
+    String refSourceFiled() default "";
 
     /**
      * 是否是远程调用
@@ -49,5 +49,5 @@ public @interface FlexTrans {
      * 远程调用时需要
      * @return 服务名
      */
-    String serviceName();
+    String serviceName() default "";
 }

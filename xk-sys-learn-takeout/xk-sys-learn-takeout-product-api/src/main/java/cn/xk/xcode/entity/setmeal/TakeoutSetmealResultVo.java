@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.setmeal;
 
 import cn.xk.xcode.entity.DataLongObjectBaseEntity;
+import cn.xk.xcode.entity.dish.TakeoutDishResultVo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author xuk
@@ -19,7 +21,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "用户收货地址返回")
+@Schema(description = "套餐返回")
 public class TakeoutSetmealResultVo extends DataLongObjectBaseEntity {
 
     /**
@@ -42,32 +44,47 @@ public class TakeoutSetmealResultVo extends DataLongObjectBaseEntity {
     private String categoryName;
 
     /**
+     * 套餐菜品
+     */
+    @Schema(description = "套餐菜品")
+    private List<TakeoutDishResultVo> dishList;
+
+    /**
      * 套餐名称
      */
+    @Schema(description = "套餐名称")
     private String name;
 
     /**
      * 套餐价格
      */
+    @Schema(description = "套餐价格")
     private BigDecimal price;
 
     /**
      * 状态 0:启用 1:停用
      */
+    @Schema(description = "状态 0:启用 1:停用")
     private Integer status;
 
     /**
      * 编码
      */
+    @Schema(description = "编码")
     private String code;
 
     /**
      * 描述信息
      */
+    @Schema(description = "描述信息")
     private String description;
 
     /**
      * 图片
      */
+    @Schema(description = "图片")
     private String image;
+
+    @Schema(description = "套餐菜品数据")
+    private List<TakeoutDishResultVo> setmealDishList;
 }

@@ -24,7 +24,7 @@ public class XxlJobConfig {
     private final Logger logger = LoggerFactory.getLogger(XxlJobConfig.class);
 
     @Resource
-     private XxlJobProperties xxlJobProperties;
+    private XxlJobProperties xxlJobProperties;
 
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor() {

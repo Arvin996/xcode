@@ -1,12 +1,13 @@
 package cn.xk.xcode.entity.po;
 
 import cn.xk.xcode.entity.DataLongObjectBaseEntity;
+import cn.xk.xcode.typehandler.ListStringTypeHandler;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.List;
 
 
 import com.mybatisflex.core.keygen.KeyGenerators;
@@ -42,7 +43,8 @@ public class TakeoutFlavorPo extends DataLongObjectBaseEntity implements Seriali
     /**
      * 口味数据list
      */
-    private String value;
+    @Column(typeHandler = ListStringTypeHandler.class)
+    private List<String> value;
 
     /**
      * 是否删除

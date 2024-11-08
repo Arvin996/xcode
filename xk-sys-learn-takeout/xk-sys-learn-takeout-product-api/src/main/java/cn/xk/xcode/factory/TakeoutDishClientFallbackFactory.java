@@ -1,11 +1,13 @@
 package cn.xk.xcode.factory;
 
 import cn.xk.xcode.client.TakeoutDishClient;
+import cn.xk.xcode.entity.UpdateStockDto;
 import cn.xk.xcode.entity.dish.TakeoutDishResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
 import java.util.Collection;
+import java.util.List;
 
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.SERVICE_FALL_BACK;
 
@@ -19,8 +21,9 @@ public class TakeoutDishClientFallbackFactory implements FallbackFactory<Takeout
     @Override
     public TakeoutDishClient create(Throwable cause) {
         return new TakeoutDishClient() {
+
             @Override
-            public CommonResult<TakeoutDishResultVo> getDishList() {
+            public CommonResult<List<TakeoutDishResultVo>> getDishList() {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
 
@@ -30,7 +33,12 @@ public class TakeoutDishClientFallbackFactory implements FallbackFactory<Takeout
             }
 
             @Override
-            public CommonResult<TakeoutDishResultVo> getDishes(Collection<Long> id) {
+            public CommonResult<List<TakeoutDishResultVo>> getDishes(Collection<Long> id) {
+                return CommonResult.error(SERVICE_FALL_BACK);
+            }
+
+            @Override
+            public CommonResult<Boolean> updateDishStock(UpdateStockDto updateStockDto) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
         };

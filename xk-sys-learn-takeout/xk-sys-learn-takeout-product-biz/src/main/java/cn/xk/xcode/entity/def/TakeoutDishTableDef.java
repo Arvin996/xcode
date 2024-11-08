@@ -35,6 +35,11 @@ public class TakeoutDishTableDef extends TableDef {
     public final QueryColumn NAME = new QueryColumn(this, "name");
 
     /**
+     * 菜品库存
+     */
+    public final QueryColumn STOCK = new QueryColumn(this, "stock");
+
+    /**
      * 顺序
      */
     public final QueryColumn SORT = new QueryColumn(this, "sort");
@@ -97,7 +102,7 @@ public class TakeoutDishTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, CATEGORY_ID, PRICE, CODE, IMAGE, DESCRIPTION, STATUS, SORT, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER, IS_DELETED};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, CATEGORY_ID, PRICE, STOCK, CODE, IMAGE, DESCRIPTION, STATUS, SORT, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER, IS_DELETED};
 
     public TakeoutDishTableDef() {
         super("", "takeout_dish");

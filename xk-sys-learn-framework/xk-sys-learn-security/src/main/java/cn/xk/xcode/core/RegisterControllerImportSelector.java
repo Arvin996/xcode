@@ -2,9 +2,8 @@ package cn.xk.xcode.core;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
-import com.gg.midend.web.annotation.AutoRegisterController;
-import com.gg.midend.web.annotation.EnableRegisterController;
-import com.gg.midend.web.core.RegisterControllerConfigure;
+import cn.xk.xcode.annotation.AutoRegisterController;
+import cn.xk.xcode.annotation.EnableRegisterController;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;

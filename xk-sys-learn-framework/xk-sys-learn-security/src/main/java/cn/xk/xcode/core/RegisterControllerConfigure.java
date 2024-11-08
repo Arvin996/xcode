@@ -1,8 +1,7 @@
 package cn.xk.xcode.core;
 
 import cn.hutool.core.util.StrUtil;
-import com.gg.midend.web.annotation.AutoRegisterController;
-import com.gg.midend.web.core.RegisterServiceContext;
+import cn.xk.xcode.annotation.AutoRegisterController;
 import lombok.Getter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;

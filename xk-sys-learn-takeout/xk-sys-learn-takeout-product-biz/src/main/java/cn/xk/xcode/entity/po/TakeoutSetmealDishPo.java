@@ -1,13 +1,11 @@
 package cn.xk.xcode.entity.po;
 
-import cn.xk.xcode.entity.DataLongObjectBaseEntity;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 
 import com.mybatisflex.core.keygen.KeyGenerators;

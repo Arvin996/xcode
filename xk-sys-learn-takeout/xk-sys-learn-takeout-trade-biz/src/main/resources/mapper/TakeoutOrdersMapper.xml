@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xk.xcode.mapper.TakeoutOrdersMapper">
+
+    <resultMap id="orderResultMap" type="cn.xk.xcode.entity.TakeoutOrderResultVo">
+        <result column="orderId" property="id" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="addressId" property="addressId" jdbcType="BIGINT"/>
+        <result column="order_time" property="orderTime" jdbcType="DATE"/>
+        <result column="checkout_time" property="checkoutTime" jdbcType="DATE"/>
+        <result column="pay_method" property="payMethod" jdbcType="INTEGER"/>
+        <result column="orderAmount" property="amount" jdbcType="DECIMAL"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <collection property="orderDetailsList" javaType="List">
+            <result column="orderDetailId" property="id" jdbcType="BIGINT"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="dish_id" property="dishId" jdbcType="BIGINT"/>
+            <result column="image" property="image" jdbcType="VARCHAR"/>
+            <result column="setmeal_id" property="setmealId" jdbcType="VARCHAR"/>
+            <result column="dish_flavor" property="dishFlavor" jdbcType="VARCHAR"/>
+            <result column="number" property="number" jdbcType="INTEGER"/>
+            <result column="orderDetailAmount" property="amount" jdbcType="DECIMAL"/>
+            <result column="itemPrice" property="price" jdbcType="DECIMAL"/>
+            <result column="itemDescription" property="description" jdbcType="VARCHAR"/>
+            <result column="itemCode" property="code" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getTakeoutOrderResult" resultMap="orderResultMap" parameterType="map">
+        select a.id orderId,
+        c.status,
+        user_id,
+        address_id,
+        order_time,
+        checkout_time,
+        pay_method,
+        a.amount orderAmount,
+        remark,
+        phone,
+        address,
+        user_name,
+        consignee,
+        b.id orderDetailId,
+        c.name,
+        c.image,
+        dish_id,
+        setmeal_id,
+        dish_flavor,
+        number,
+        b.amount orderDetailAmount,
+        if(c.code is null , d.code, c.code) itemCode,
+        if(c.description is null , d.description, c.description) itemDescription,
+        if(c.price is null , d.price, c.price) itemPrice
+        from takeout_orders a
+        left join takeout_order_detail b
+        on a.id = b.order_id
+        left join takeout_dish c
+        on c.id = b.dish_id
+        left join takeout_setmeal d
+        on d.id = b.setmeal_id
+        where 1=1
+        <if test="id != null">
+            and a.id = #{id}
+        </if>
+        <if test="ids != null">
+            and a.id in
+            <foreach collection="ids" item="item" index="index" close=")" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="userId != null">
+            and a.user_id = #{userId}
+        </if>
+    </select>
+</mapper>

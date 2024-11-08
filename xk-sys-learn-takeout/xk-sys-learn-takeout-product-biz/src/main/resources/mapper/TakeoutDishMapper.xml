@@ -4,4 +4,61 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.TakeoutDishMapper">
 
+    <resultMap id="takeoutDishMap" type="cn.xk.xcode.entity.dish.TakeoutDishResultVo" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="categoryId" property="categoryId" jdbcType="BIGINT"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="image" property="image" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="DATE"/>
+        <result column="update_time" property="updateTime" jdbcType="DATE"/>
+        <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="update_user" property="createUser" jdbcType="VARCHAR"/>
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR"/>
+        <collection property="flavorList" autoMapping="true" javaType="List">
+            <result property="id" column="flavorId" jdbcType="BIGINT"/>
+            <result property="name" column="flavorName" jdbcType="VARCHAR"/>
+            <result property="value" column="value" jdbcType="VARCHAR" javaType="List" typeHandler="cn.xk.xcode.typehandler.ListStringTypeHandler"/>
+        </collection>
+    </resultMap>
+
+    <select id="getDishList" resultMap="takeoutDishMap" parameterType="map">
+        SELECT a.id,
+               a.name,
+               a.category_id categoryId,
+               price,
+               code,
+               image,
+               description,
+               status,
+               a.sort,
+               a.create_time,
+               a.update_time,
+               a.create_user,
+               a.update_user,
+               b.name        categoryName,
+               d.id flavorId,
+               d.name flavorName,
+               d.value
+        FROM takeout_dish a
+                 LEFT JOIN takeout_category b
+                           ON a.category_id = b.id
+                 LEFT JOIN takeout_dish_flavor c
+                           ON a.id = c.dish_id
+                 LEFT JOIN takeout_flavor d
+                           ON c.flavor_id = d.id
+        WHERE 1=1
+        <if test="id != null">
+            AND a.id = #{id}
+        </if>
+        <if test="ids != null">
+            AND a.id in
+            <foreach collection="ids" open="(" close=")" separator="," index="index" item="item">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 </mapper>

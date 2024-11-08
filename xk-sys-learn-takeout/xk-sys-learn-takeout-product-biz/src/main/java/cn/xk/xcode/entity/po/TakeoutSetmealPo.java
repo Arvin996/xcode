@@ -51,6 +51,11 @@ public class TakeoutSetmealPo extends DataLongObjectBaseEntity implements Serial
     private BigDecimal price;
 
     /**
+     * 套餐库存
+     */
+    private Integer stock;
+
+    /**
      * 状态 0:启用 1:停用
      */
     private Integer status;

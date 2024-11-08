@@ -51,6 +51,11 @@ public class TakeoutDishPo extends DataLongObjectBaseEntity implements Serializa
     private BigDecimal price;
 
     /**
+     * 菜品库存
+     */
+    private Integer stock;
+
+    /**
      * 商品码
      */
     private String code;

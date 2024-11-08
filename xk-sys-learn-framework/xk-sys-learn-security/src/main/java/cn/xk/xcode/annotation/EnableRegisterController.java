@@ -1,6 +1,6 @@
 package cn.xk.xcode.annotation;
 
-import com.gg.midend.web.RegisterControllerImportSelector;
+import cn.xk.xcode.core.RegisterControllerImportSelector;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

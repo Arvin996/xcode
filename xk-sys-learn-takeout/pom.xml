@@ -16,6 +16,8 @@
         <module>xk-sys-learn-takeout-user-biz</module>
         <module>xk-sys-learn-takeout-product-api</module>
         <module>xk-sys-learn-takeout-product-biz</module>
+        <module>xk-sys-learn-takeout-trade-api</module>
+        <module>xk-sys-learn-takeout-trade-biz</module>
     </modules>
     <description>
         外卖系统父pom

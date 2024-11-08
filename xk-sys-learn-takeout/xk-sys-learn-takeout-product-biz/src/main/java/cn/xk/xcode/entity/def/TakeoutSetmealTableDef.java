@@ -35,6 +35,11 @@ public class TakeoutSetmealTableDef extends TableDef {
     public final QueryColumn NAME = new QueryColumn(this, "name");
 
     /**
+     * 菜品库存
+     */
+    public final QueryColumn STOCK = new QueryColumn(this, "stock");
+
+    /**
      * 图片
      */
     public final QueryColumn IMAGE = new QueryColumn(this, "image");
@@ -92,7 +97,7 @@ public class TakeoutSetmealTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, CATEGORY_ID, NAME, PRICE, STATUS, CODE, DESCRIPTION, IMAGE, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER, IS_DELETED};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, CATEGORY_ID, NAME, PRICE, STOCK, STATUS, CODE, DESCRIPTION, IMAGE, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER, IS_DELETED};
 
     public TakeoutSetmealTableDef() {
         super("", "takeout_setmeal");

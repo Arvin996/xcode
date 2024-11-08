@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author xuk
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "用户收货地址返回")
+@Schema(description = "菜品返回")
 public class TakeoutDishResultVo extends DataLongObjectBaseEntity {
 
     /**
@@ -27,6 +28,12 @@ public class TakeoutDishResultVo extends DataLongObjectBaseEntity {
      */
     @Schema(description = "菜品id")
     private Long id;
+
+    /**
+     * 菜品口味list
+     */
+    @Schema(description = "菜品口味list")
+    private List<Flavor> flavorList;
 
     /**
      * 菜品名称
@@ -80,4 +87,24 @@ public class TakeoutDishResultVo extends DataLongObjectBaseEntity {
      * 顺序
      */
     private Integer sort;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Flavor {
+        /**
+         * 主键
+         */
+        private Long id;
+
+        /**
+         * 口味名称
+         */
+        private String name;
+
+        /**
+         * 口味数据list
+         */
+        private List<String> value;
+    }
 }

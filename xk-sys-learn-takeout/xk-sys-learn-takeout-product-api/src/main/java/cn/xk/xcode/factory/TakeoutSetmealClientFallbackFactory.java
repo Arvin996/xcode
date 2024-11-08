@@ -1,6 +1,7 @@
 package cn.xk.xcode.factory;
 
 import cn.xk.xcode.client.TakeoutSetmealClient;
+import cn.xk.xcode.entity.UpdateStockDto;
 import cn.xk.xcode.entity.setmeal.TakeoutSetmealResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -32,6 +33,11 @@ public class TakeoutSetmealClientFallbackFactory implements FallbackFactory<Take
 
             @Override
             public CommonResult<List<TakeoutSetmealResultVo>> getSetmeals(Collection<Long> id) {
+                return CommonResult.error(SERVICE_FALL_BACK);
+            }
+
+            @Override
+            public CommonResult<Boolean> updateSetmealStock(UpdateStockDto updateStockDto) {
                 return CommonResult.error(SERVICE_FALL_BACK);
             }
         };

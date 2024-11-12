@@ -17,7 +17,13 @@ public class DefaultQueueExportEventHandler extends AbsQueueExportEventHandler<O
     }
 
     @Override
-    public List<Object> exportData(Object o) {
+    public List<Object> getExportData(Object object, long StartPageNo) {
         return Collections.emptyList();
     }
+
+    @Override
+    public long getNextStartId(Object object, long currentNo, int pageSize) {
+        return 0;
+    }
+
 }

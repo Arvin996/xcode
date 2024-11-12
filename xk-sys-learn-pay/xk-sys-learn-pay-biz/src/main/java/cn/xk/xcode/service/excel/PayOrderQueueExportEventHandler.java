@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 import static cn.xk.xcode.entity.def.PayOrderTableDef.PAY_ORDER_PO;
@@ -28,12 +29,31 @@ public class PayOrderQueueExportEventHandler extends AbsQueueExportEventHandler<
 
     @Override
     public int totalExportCount(ExportOrderDto exportOrderDto) {
-        return exportData(exportOrderDto).size();
+        return getTotalCount(exportOrderDto);
     }
 
     @Override
-    public List<PayOrderPo> exportData(ExportOrderDto exportOrderDto) {
-        QueryWrapper queryWrapper = QueryWrapper
+    public List<PayOrderPo> getExportData(ExportOrderDto exportOrderDto, long startPageNo) {
+        QueryWrapper queryWrapper = buildQueryWrapper(exportOrderDto).orderBy(PAY_ORDER_PO.ID, true)
+                .and(PAY_ORDER_PO.ID.gt(startPageNo)).limit(exportOrderDto.getPageSize());
+        return payOrderService.list(queryWrapper);
+    }
+
+    @Override
+    public long getNextStartId(ExportOrderDto exportOrderDto, long currentNo, int pageSize) {
+        QueryWrapper queryWrapper = buildQueryWrapper(exportOrderDto)
+                .where(PAY_ORDER_PO.ID.gt(currentNo))
+                .orderBy(PAY_ORDER_PO.ID, true)
+                .limit(pageSize, pageSize + 1);
+        return payOrderService.list(queryWrapper).get(0).getId();
+    }
+
+    public int getTotalCount(ExportOrderDto exportOrderDto) {
+        return (int) payOrderService.count(buildQueryWrapper(exportOrderDto));
+    }
+
+    private QueryWrapper buildQueryWrapper(ExportOrderDto exportOrderDto) {
+        return QueryWrapper
                 .create()
                 .where("1=1")
                 .and(PAY_ORDER_PO.APP_ID.eq(exportOrderDto.getAppId()).when(ObjectUtil.isNotNull(exportOrderDto.getAppId())))
@@ -43,6 +63,5 @@ public class PayOrderQueueExportEventHandler extends AbsQueueExportEventHandler<
                 .and(PAY_ORDER_PO.STATUS.eq(exportOrderDto.getStatus()).when(ObjectUtil.isNotNull(exportOrderDto.getStatus())))
                 .and(PAY_ORDER_PO.CREATE_TIME.le(exportOrderDto.getEndTime()).when(ObjectUtil.isNotNull(exportOrderDto.getEndTime())))
                 .and(PAY_ORDER_PO.CREATE_TIME.ge(exportOrderDto.getStartTime()).when(ObjectUtil.isNotNull(exportOrderDto.getStartTime())));
-        return payOrderService.list(queryWrapper);
     }
 }

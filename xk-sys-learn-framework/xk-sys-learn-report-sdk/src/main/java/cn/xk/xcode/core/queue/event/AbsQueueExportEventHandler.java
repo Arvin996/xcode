@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.FutureTask;
 
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.EXCEL_EXPORT_ERROR;
 
@@ -50,10 +51,22 @@ public abstract class AbsQueueExportEventHandler<T, K> implements EventHandler<E
             if (totalExportCount % pageSize != 0) {
                 pageCount++;
             }
-            List<K> exportData = exportData(t);
+            Long nextPage;
             for (int i = 1; i <= pageCount; i++) {
-                WriteSheet writeSheet = EasyExcel.writerSheet(i, fileName).head(kClass).build();
-                excelWriter.write(getWriteDate(exportData, pageSize, i), writeSheet);
+                int k = i;
+                FutureTask<Long> futureTask = new FutureTask<>(() -> getNextStartId(t, k, pageSize));
+                if (i == 1){
+                    WriteSheet writeSheet = EasyExcel.writerSheet(i, fileName).head(kClass).build();
+                    // 写入本页数据
+                    excelWriter.write(getExportData(t, 0), writeSheet);
+                }else {
+                    nextPage = futureTask.get();
+                    // todo 优化成线程池
+                    new Thread(futureTask).start();
+                    WriteSheet writeSheet = EasyExcel.writerSheet(i, fileName).head(kClass).build();
+                    // 写入本页数据
+                    excelWriter.write(getExportData(t, nextPage), writeSheet);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -65,9 +78,6 @@ public abstract class AbsQueueExportEventHandler<T, K> implements EventHandler<E
         }
     }
 
-    private List<K> getWriteDate(List<K> data, int pageSize, int pageNum) {
-        return data.subList((pageNum - 1) * pageSize, Math.min(pageNum * pageSize, data.size()));
-    }
 
     private ExcelWriter getExcelWriter(HttpServletResponse response, String fileName) throws IOException {
         response.setContentType("application/vnd.ms-excel");
@@ -87,9 +97,11 @@ public abstract class AbsQueueExportEventHandler<T, K> implements EventHandler<E
 
 
     /**
-     * 导出数据
-     *
+     * 导出数据 这里需要分页查询
+     * sql优化需开发者自己去实现
      * @param t 导出条件
      */
-    public abstract List<K> exportData(T t);
+    public abstract List<K> getExportData(T t, long startPageNo);
+
+    public abstract long getNextStartId(T t, long currentNo, int pageSize);
 }

@@ -12,7 +12,7 @@ import com.lmax.disruptor.EventFactory;
  */
 public class QueueExportEventFactory<T, K> implements EventFactory<ExportModel<T, K>> {
     @Override
-    public ExportModel newInstance() {
-        return ExportModel.builder().username(StpUtil.getLoginIdAsString()).threadId(Thread.currentThread().getId()).build();
+    public ExportModel<T, K> newInstance() {
+        return new ExportModel<>(StpUtil.getLoginIdAsString(), Thread.currentThread().getId());
     }
 }

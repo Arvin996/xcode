@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
  * @Description ExportModel
  */
 @Data
-@Builder
 public class ExportModel<T, K> {
 
     private String username;
@@ -22,5 +21,10 @@ public class ExportModel<T, K> {
     private T data;
     private Class<K> kClass;
     private int pageSize;
+
+    public ExportModel(String username, Long threadId){
+        this.username = username;
+        this.threadId = threadId;
+    }
 
 }

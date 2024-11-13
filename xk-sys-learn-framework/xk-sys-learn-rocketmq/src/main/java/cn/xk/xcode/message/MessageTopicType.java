@@ -17,6 +17,7 @@ public enum MessageTopicType
     TOPIC_GW_LOG("gwLog"),
     TOPIC_TRACE_LOG("traceLog"),
     TOPIC_LOGIN_LOG("loginLog"),
+    MONITOR_TOPIC("monitor"),
     TOPIC_OTHER("other");
 
     private final String type;

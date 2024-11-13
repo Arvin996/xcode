@@ -39,6 +39,18 @@
             <artifactId>xk-sys-learn-log</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-monitor</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xk-sys-learn-xxl-job</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -3,8 +3,6 @@ package cn.xk.xcode.core;
 import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.config.RocketEnhanceProperties;
 import cn.xk.xcode.message.BaseMessage;
-import com.alibaba.fastjson.JSONObject;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

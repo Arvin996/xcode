@@ -12,7 +12,7 @@ public class TraceUtil {
 
     private TraceUtil() {}
 
-    public static String getTraceUd(){
+    public static String getTraceId(){
         return TraceContext.traceId();
     }
 }

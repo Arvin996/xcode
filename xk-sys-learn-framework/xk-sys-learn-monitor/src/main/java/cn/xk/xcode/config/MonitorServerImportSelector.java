@@ -5,13 +5,13 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * @Author xuk
- * @Date 2024/11/13 10:49
+ * @Date 2024/11/14 14:35
  * @Version 1.0.0
- * @Description MonitorClientImportSelector
+ * @Description MonitorServerImportSelector
  **/
-public class MonitorClientImportSelector implements ImportSelector {
+public class MonitorServerImportSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-        return new String[]{MonitorClientConfiguration.class.getName()};
+        return new String[]{MonitorServerConfiguration.class.getName()};
     }
 }

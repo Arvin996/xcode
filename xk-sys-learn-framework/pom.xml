@@ -25,10 +25,11 @@
         <module>xk-sys-learn-rocketmq</module>
         <module>xk-sys-learn-protection</module>
         <module>xk-sys-learn-biz-message</module>
-        <module>xk-sys-learn-monitor</module>
+        <module>xk-sys-learn-monitor-parent</module>
         <module>xk-sys-learn-trans-flex</module>
         <module>xk-sys-learn-report-sdk</module>
         <module>xk-sys-learn-crypt-spring-boot-starter</module>
+        <module>xk-sys-learn-monitor-parent</module>
     </modules>
     <description>
         xk-sys-learn-framework 项目框架管理

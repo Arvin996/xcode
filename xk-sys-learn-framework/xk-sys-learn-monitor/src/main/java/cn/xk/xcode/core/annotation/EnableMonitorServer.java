@@ -1,6 +1,6 @@
 package cn.xk.xcode.core.annotation;
 
-import cn.xk.xcode.config.MonitorServerImportSelector;
+import cn.xk.xcode.config.server.MonitorServerImportSelector;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfiguration;

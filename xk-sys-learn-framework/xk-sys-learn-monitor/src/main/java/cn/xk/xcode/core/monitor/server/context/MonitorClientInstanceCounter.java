@@ -1,4 +1,4 @@
-package cn.xk.xcode.core.monitor;
+package cn.xk.xcode.core.monitor.server.context;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,5 +37,9 @@ public class MonitorClientInstanceCounter {
 
     private static boolean containsKey(String k) {
         return INSTANCE_COUNTER.containsKey(k);
+    }
+
+    public static ConcurrentHashMap<String, Integer> getInstanceCounter() {
+        return INSTANCE_COUNTER;
     }
 }

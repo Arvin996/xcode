@@ -1,4 +1,4 @@
-package cn.xk.xcode.core.monitor;
+package cn.xk.xcode.core.monitor.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,9 +5,9 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import cn.xk.xcode.config.MonitorServerProperties;
-import cn.xk.xcode.core.monitor.MonitorClientInstance;
-import cn.xk.xcode.core.monitor.MonitorClientInstanceContext;
+import cn.xk.xcode.config.server.MonitorServerProperties;
+import cn.xk.xcode.core.monitor.client.MonitorClientInstance;
+import cn.xk.xcode.core.monitor.server.context.MonitorClientInstanceContext;
 import cn.xk.xcode.utils.MonitorClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +36,8 @@ public class MonitorHeartbeatTask {
 
     @Scheduled(fixedDelayString = "#{monitorServerProperties.heartbeatInterval}", timeUnit = TimeUnit.SECONDS)
     public void heartbeat() {
-        ConcurrentHashMap<String, MonitorClientInstance> instanceMap = MonitorClientInstanceContext.getInstanceMap();
-        instanceMap.values().forEach(instance -> {
+        ConcurrentHashMap<String, Map<String, MonitorClientInstance>> instanceMap = MonitorClientInstanceContext.getInstanceMap();
+        instanceMap.values().forEach((m -> m.values().forEach(instance -> {
             HttpResponse httpResponse = HttpRequest.get(buildClientHeartbeatUrl(instance)).timeout(monitorServerProperties.getHeartBeatTimeout()).execute();
             if (!httpResponse.isOk()) {
                 log.error("心跳检测服务:{}, ip: {}, 端口号：{}", instance.getApplicationName(), instance.getIp(), instance.getPort());
@@ -52,7 +55,7 @@ public class MonitorHeartbeatTask {
                     instance.setLastUpdateTime(LocalDateTime.now());
                 }
             }
-        });
+        })));
     }
 
     private String buildClientHeartbeatUrl(MonitorClientInstance instance) {

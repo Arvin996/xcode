@@ -1,4 +1,4 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.config.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

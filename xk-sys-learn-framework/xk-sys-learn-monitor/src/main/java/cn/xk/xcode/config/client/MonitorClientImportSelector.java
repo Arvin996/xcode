@@ -1,4 +1,4 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.config.client;
 
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;

@@ -1,11 +1,11 @@
-package cn.xk.xcode.core.monitor;
+package cn.xk.xcode.core.monitor.client;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import cn.xk.xcode.config.MonitorClientProperties;
+import cn.xk.xcode.config.client.MonitorClientProperties;
 import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.IntErrorCode;
 import cn.xk.xcode.exception.core.ExceptionUtil;

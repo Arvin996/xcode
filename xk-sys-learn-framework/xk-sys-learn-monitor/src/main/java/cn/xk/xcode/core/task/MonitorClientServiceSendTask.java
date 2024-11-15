@@ -1,7 +1,7 @@
 package cn.xk.xcode.core.task;
 
-import cn.xk.xcode.config.MonitorClientProperties;
-import cn.xk.xcode.core.monitor.MonitorClientStartLoader;
+import cn.xk.xcode.config.client.MonitorClientProperties;
+import cn.xk.xcode.core.monitor.client.MonitorClientStartLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.concurrent.TimeUnit;
 
-import static cn.xk.xcode.core.monitor.MonitorClientStartLoader.SERVICE_UPDATE_PATH;
+import static cn.xk.xcode.core.monitor.client.MonitorClientStartLoader.SERVICE_UPDATE_PATH;
 
 /**
  * @Author xuk

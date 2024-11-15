@@ -1,6 +1,6 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.config.server;
 
-import cn.xk.xcode.core.monitor.controller.MonitorServerController;
+import cn.xk.xcode.core.monitor.server.controller.MonitorServerController;
 import cn.xk.xcode.core.task.MonitorHeartbeatTask;
 import org.springframework.context.annotation.Bean;
 

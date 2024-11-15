@@ -1,4 +1,4 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.config.server;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

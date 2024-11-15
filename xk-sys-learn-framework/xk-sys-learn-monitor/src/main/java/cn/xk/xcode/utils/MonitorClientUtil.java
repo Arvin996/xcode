@@ -1,7 +1,7 @@
 package cn.xk.xcode.utils;
 
-import cn.xk.xcode.config.MonitorClientProperties;
-import cn.xk.xcode.core.monitor.MonitorClientInstance;
+import cn.xk.xcode.config.client.MonitorClientProperties;
+import cn.xk.xcode.core.monitor.client.MonitorClientInstance;
 import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.IntErrorCode;
 import cn.xk.xcode.exception.core.ExceptionUtil;

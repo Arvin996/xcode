@@ -15,6 +15,10 @@ public class ExceptionUtil {
         throw new ServiceException(code, message);
     }
 
+    public static void castServiceException0(Object code, String message, Object... objs) {
+        throw new ServiceException(code, message, objs);
+    }
+
     public static void castServiceException(ErrorCode errorCode) {
         castServiceException0(errorCode.getCode(), errorCode.getMessage());
     }
@@ -23,16 +27,20 @@ public class ExceptionUtil {
         throw new ServerException(code, message);
     }
 
+    public static void castServerException0(Object code, String message, Object... objs) {
+        throw new ServerException(code, message, objs);
+    }
+
     public static void castServerException(ErrorCode errorCode) {
         castServerException0(errorCode.getCode(), errorCode.getMessage());
     }
 
     public static void castServiceException(ErrorCode errorCode, Object... objs) {
-        throw new ServiceException(errorCode, objs);
+        castServiceException0(errorCode.getCode(), errorCode.getMessage(), objs);
     }
 
     public static void castServerException(ErrorCode errorCode, Object... objs) {
-        throw new ServerException(errorCode, objs);
+        castServerException0(errorCode.getCode(), errorCode.getMessage(), objs);
     }
 
 }

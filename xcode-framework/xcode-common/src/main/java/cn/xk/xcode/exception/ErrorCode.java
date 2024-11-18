@@ -6,8 +6,7 @@ package cn.xk.xcode.exception;
  * @Version 1.0
  * @Description ErrorCode
  */
-public interface ErrorCode
-{
+public interface ErrorCode {
     Object getCode();
 
     String getMessage();

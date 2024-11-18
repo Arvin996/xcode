@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xcode-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>xcode-framework</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <name>xk-sys-learn-framework</name>
+    <modules>
+        <module>xcode-common</module>
+        <module>xcode-spring-boot-starter-security</module>
+        <module>xcode-spring-boot-starter-mysql</module>
+        <module>xcode-spring-boot-starter-dict</module>
+        <module>xcode-spring-boot-starter-redis</module>
+        <module>xcode-spring-boot-starter-websocket</module>
+        <module>xcode-spring-boot-starter-ip</module>
+        <module>xcode-spring-boot-starter-xxl-job</module>
+        <module>xcode-spring-boot-starter-log</module>
+        <module>xcode-spring-boot-starter-rocketmq</module>
+        <module>xcode-spring-boot-starter-protection</module>
+        <module>xcode-spring-boot-starter-biz-message</module>
+        <module>xcode-monitor-parent</module>
+        <module>xcode-spring-boot-starter-trans-flex</module>
+        <module>xcode-spring-boot-starter-report</module>
+        <module>xcode-spring-boot-starter-crypt</module>
+        <module>xcode-monitor-parent</module>
+    </modules>
+    <description>
+        xk-sys-learn-framework 项目框架管理
+        *** 待办 数据权限框架（准备使用flex自带的）
+        *** 待办 用户数据租户管理框架
+    </description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.version>2.6.13</spring-boot.version>
+    </properties>
+
+</project>

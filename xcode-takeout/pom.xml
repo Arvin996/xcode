@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.xk.xcode</groupId>
+        <artifactId>xcode-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <artifactId>xcode-takeout</artifactId>
+    <modules>
+        <module>xcode-takeout-user-api</module>
+        <module>xcode-takeout-user-biz</module>
+        <module>xcode-takeout-product-api</module>
+        <module>xcode-takeout-product-biz</module>
+        <module>xcode-takeout-trade-api</module>
+        <module>xcode-takeout-trade-biz</module>
+    </modules>
+    <description>
+        外卖系统父pom
+    </description>
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-mysql</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+</project>

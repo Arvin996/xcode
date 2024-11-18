@@ -9,8 +9,8 @@
         <relativePath/>
     </parent>
     <modules>
-        <module>xcodearn-dependency</module>
-        <module>xcode-parent/xcode</module>
+        <module>../xcode-dependency</module>
+        <module>../../xcode-parent</module>
     </modules>
     <groupId>cn.xk.xcode</groupId>
     <artifactId>xcode-build</artifactId>

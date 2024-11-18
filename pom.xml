@@ -6,7 +6,7 @@
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-build</artifactId>
         <version>${revision}</version>
-        <relativePath>/xk-sys-learn-build/pom.xml</relativePath>
+        <relativePath>./xcode-build/pom.xml</relativePath>
     </parent>
     <artifactId>xcode-parent</artifactId>
     <version>${revision}</version>

@@ -1,6 +1,7 @@
 package cn.xk.xcode.exception.core;
 
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.xk.xcode.exception.ErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,12 +44,27 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(ErrorCode errorCode, Object... objs) {
-        String msg;
-        try {
-            msg = String.format(errorCode.getMessage(), objs);
-        } catch (IllegalFormatException e) {
-            throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+        String msg = errorCode.getMessage();
+        if (!ArrayUtil.isEmpty(objs)){
+            try {
+                msg = String.format(errorCode.getMessage(), objs);
+            } catch (IllegalFormatException e) {
+                throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+            }
         }
-        throw new ServiceException(errorCode.getCode(), msg);
+        this.code = errorCode.getCode();
+        this.msg = msg;
+    }
+
+    public ServiceException(Object code, String msg , Object... objs) {
+        if (!ArrayUtil.isEmpty(objs)){
+            try {
+                msg = String.format(msg, objs);
+            } catch (IllegalFormatException e) {
+                throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+            }
+        }
+        this.code = code;
+        this.msg = msg;
     }
 }

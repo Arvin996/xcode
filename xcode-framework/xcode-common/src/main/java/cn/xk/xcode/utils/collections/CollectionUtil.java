@@ -231,4 +231,7 @@ public class CollectionUtil {
         return collection == null || collection.isEmpty();
     }
 
+    public static <T> boolean isNotEmpty(Collection<T> collection) {
+        return !isEmpty(collection);
+    }
 }

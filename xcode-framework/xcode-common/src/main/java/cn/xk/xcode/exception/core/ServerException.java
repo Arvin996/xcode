@@ -1,5 +1,6 @@
 package cn.xk.xcode.exception.core;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.xk.xcode.exception.ErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,27 +26,42 @@ public class ServerException extends RuntimeException {
     /**
      * 错误提示
      */
-    private String message;
+    private String msg;
 
-    public ServerException(Object code, String message) {
-        super(message);
+    public ServerException(Object code, String msg) {
+        super(msg);
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
     public ServerException(ErrorCode errorCode) {
         this.code = errorCode.getCode();
-        this.message = errorCode.getMessage();
+        this.msg = errorCode.getMessage();
     }
 
     public ServerException(ErrorCode errorCode, Object... objs) {
-        String msg;
-        try {
-            msg = String.format(errorCode.getMessage(), objs);
-        } catch (IllegalFormatException e) {
-            throw new ServerException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+        String msg = errorCode.getMessage();
+        if (!ArrayUtil.isEmpty(objs)){
+            try {
+                msg = String.format(errorCode.getMessage(), objs);
+            } catch (IllegalFormatException e) {
+                throw new ServerException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+            }
         }
-        throw new ServerException(errorCode.getCode(), msg);
+        this.code = errorCode.getCode();
+        this.msg = msg;
+    }
+
+    public ServerException(Object code, String msg , Object... objs) {
+        if (!ArrayUtil.isEmpty(objs)){
+            try {
+                msg = String.format(msg, objs);
+            } catch (IllegalFormatException e) {
+                throw new ServerException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
+            }
+        }
+        this.code = code;
+        this.msg = msg;
     }
 
 }

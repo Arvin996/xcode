@@ -3,6 +3,7 @@ package cn.xk.xcode.core.crypt;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SmUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.SM2;
 import cn.xk.xcode.config.XkSysCryptProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
@@ -52,12 +53,12 @@ public class Sm2Crypt extends AbstractCrypt {
 
     @Override
     public String doDecrypt(String decryptStr) {
-        return "";
+        return sm2.decryptStr(decryptStr, KeyType.PrivateKey);
     }
 
     @Override
     public String doEncrypt(String encryptStr) {
-        return "";
+        return sm2.encryptBase64(encryptStr, KeyType.PublicKey);
     }
 
     @Override

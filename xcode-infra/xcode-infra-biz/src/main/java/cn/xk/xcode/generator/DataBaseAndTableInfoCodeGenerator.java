@@ -22,10 +22,10 @@ public class DataBaseAndTableInfoCodeGenerator implements ICodeGenerator {
                 .entityGenerateEnable(true)
                 .serviceImplGenerateEnable(true)
                 .tableDefGenerateEnable(true)
-                .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-infra/xk-sys-learn-infra-biz/src/main/java")
+                .sourceDir(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-infra/xcode-infra-biz/src/main/java")
                 .tablePrefix("infra_")
                 .tables(new String[]{"infra_database_conn_info", "infra_table_info"})
-                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-infra/xk-sys-learn-infra-biz/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-infra/xcode-infra-biz/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();
@@ -38,7 +38,7 @@ public class DataBaseAndTableInfoCodeGenerator implements ICodeGenerator {
                 .builder()
                 .dbIp("127.0.0.1")
                 .dbPort("3306")
-                .dbName("xk-learn-infra")
+                .dbName("xcode-infra")
                 .username("root")
                 .password("123456")
                 .build();

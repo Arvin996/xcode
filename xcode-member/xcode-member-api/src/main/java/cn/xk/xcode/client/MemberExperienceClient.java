@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Version 1.0
  * @Description MemberExperienceClient
  */
-@FeignClient(value = "xk-sys-member", fallbackFactory = MemberExperienceFallFactory.class)
+@FeignClient(value = "xcode-member", fallbackFactory = MemberExperienceFallFactory.class)
 @Tag(name = "用户经验rpc接口")
 @RequestMapping("/member-experience")
 public interface MemberExperienceClient {

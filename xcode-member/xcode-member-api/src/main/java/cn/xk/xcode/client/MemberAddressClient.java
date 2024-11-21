@@ -17,7 +17,7 @@ import java.util.List;
  * @Version 1.0
  * @Description MemberAddressClient
  */
-@FeignClient(value = "xk-sys-member", fallbackFactory = MemberAddressFallFactory.class)
+@FeignClient(value = "xcode-member", fallbackFactory = MemberAddressFallFactory.class)
 @Tag(name = "用户地址rpc接口")
 @RequestMapping("/member-address")
 public interface MemberAddressClient {

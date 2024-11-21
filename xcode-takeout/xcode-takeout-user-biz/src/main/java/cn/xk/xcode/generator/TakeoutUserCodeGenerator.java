@@ -21,9 +21,9 @@ public class TakeoutUserCodeGenerator implements ICodeGenerator {
                 .entityGenerateEnable(true)
                 .serviceImplGenerateEnable(true)
                 .tableDefGenerateEnable(true)
-                .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-takeout/xk-sys-learn-takeout-user-biz/src/main/java")
+                .sourceDir(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-takeout/xcode-takeout-user-biz/src/main/java")
                 .tables(new String[]{"takeout_address", "takeout_user", "takeout_permission", "takeout_role_permission", "takeout_role"})
-                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-takeout/xk-sys-learn-takeout-user-biz/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-takeout/xcode-takeout-user-biz/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();
@@ -35,7 +35,7 @@ public class TakeoutUserCodeGenerator implements ICodeGenerator {
                 .builder()
                 .dbIp("127.0.0.1")
                 .dbPort("3306")
-                .dbName("xk-learn-takeout")
+                .dbName("xcode-takeout")
                 .username("root")
                 .password("123456")
                 .build();

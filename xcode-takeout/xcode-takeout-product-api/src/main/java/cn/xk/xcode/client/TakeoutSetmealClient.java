@@ -23,7 +23,7 @@ import java.util.List;
  * @Version 1.0.0
  * @Description TakeoutSetmealClient
  **/
-@FeignClient(value = "xk-sys-learn-takeout-product", fallbackFactory = TakeoutSetmealClientFallbackFactory.class)
+@FeignClient(value = "xcode-takeout-product", fallbackFactory = TakeoutSetmealClientFallbackFactory.class)
 @Tag(name = "外卖平台套餐rpc接口")
 @RequestMapping("/takeout/setmeal")
 public interface TakeoutSetmealClient {

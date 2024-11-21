@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @Version 1.0.0
  * @Description PayOrderClient
  **/
-@FeignClient(name = "xk-sys-learn-pay", fallbackFactory = PayOrderClientFallbackFactory.class)
+@FeignClient(name = "xcode-pay", fallbackFactory = PayOrderClientFallbackFactory.class)
 @Tag(name = "RPC 服务 - 支付下单")
 @RequestMapping("/pay/order")
 public interface PayOrderClient {

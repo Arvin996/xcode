@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  * @Description MemberUserClient
  */
-@FeignClient(value = "xk-sys-member", fallbackFactory = MemberUserFallFactory.class)
+@FeignClient(value = "xcode-member", fallbackFactory = MemberUserFallFactory.class)
 @Tag(name = "用户rpc接口")
 @RequestMapping("/member-user")
 public interface MemberUserClient {

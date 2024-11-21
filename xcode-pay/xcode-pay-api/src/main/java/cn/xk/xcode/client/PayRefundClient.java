@@ -21,7 +21,7 @@ import javax.validation.Valid;
  * @Version 1.0.0
  * @Description PayRefundClient
  **/
-@FeignClient(name = "xk-sys-learn-pay", fallbackFactory = PayRefundClientFallbackFactory.class)
+@FeignClient(name = "xcode-pay", fallbackFactory = PayRefundClientFallbackFactory.class)
 @Tag(name = "RPC 服务 - 退款下单")
 @RequestMapping("/pay")
 public interface PayRefundClient {

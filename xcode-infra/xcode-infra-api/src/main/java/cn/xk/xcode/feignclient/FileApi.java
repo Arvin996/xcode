@@ -19,7 +19,7 @@ import java.io.IOException;
  * @Version 1.0
  * @Description FileApi
  */
-@FeignClient(name = "xk-learn-infra", fallbackFactory = FileApiFallback.class)
+@FeignClient(name = "xcode-infra", fallbackFactory = FileApiFallback.class)
 @Tag(name = "RPC 服务 - 文件")
 @RequestMapping("/infra/file")
 public interface FileApi

@@ -22,10 +22,10 @@ public class PayCodeGenerator implements ICodeGenerator{
                 .entityGenerateEnable(true)
                 .serviceImplGenerateEnable(true)
                 .tableDefGenerateEnable(true)
-                .sourceDir(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-pay/xk-sys-learn-pay-biz/src/main/java")
+                .sourceDir(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-pay/xcode-pay-biz/src/main/java")
                 .tables(new String[]{"pay_app", "pay_app_channel", "pay_merchant", "pay_channel", "pay_notify_log", "pay_notify_task"
                         , "pay_order", "pay_refund"})
-                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xk-sys-learn/xk-sys-learn-pay/xk-sys-learn-pay-biz/src/main/resources/mapper")
+                .mapperXmlPackage(System.getProperty("user.dir") + "/own_module/xcode-parent/xcode-pay/xcode-pay-biz/src/main/resources/mapper")
                 .entityPackage("cn.xk.xcode.entity.po")
                 .tableDefPackage("cn.xk.xcode.entity.def")
                 .entityClassSuffix("Po").build();
@@ -37,7 +37,7 @@ public class PayCodeGenerator implements ICodeGenerator{
                 .builder()
                 .dbIp("127.0.0.1")
                 .dbPort("3306")
-                .dbName("xk-learn-pay")
+                .dbName("xcode-pay")
                 .username("root")
                 .password("123456")
                 .build();

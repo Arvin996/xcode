@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0.0
  * @Description TakeoutAddressClient
  **/
-@FeignClient(value = "xk-sys-takeout-user", fallbackFactory = TakeoutAddressClientFallbackFactory.class)
+@FeignClient(value = "xcode-takeout-user", fallbackFactory = TakeoutAddressClientFallbackFactory.class)
 @Tag(name = "外卖用户用户收货地址rpc接口")
 @RequestMapping("/takeout/address")
 public interface TakeoutAddressClient {

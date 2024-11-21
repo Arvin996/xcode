@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class XkSysLearnInfraApplication {
+public class XcodeInfraApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(XkSysLearnInfraApplication.class, args);
+        SpringApplication.run(XcodeInfraApplication.class, args);
     }
 
 }

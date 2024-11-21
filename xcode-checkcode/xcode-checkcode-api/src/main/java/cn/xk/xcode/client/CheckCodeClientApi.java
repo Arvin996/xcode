@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Version 1.0
  * @Description CheckCodeController
  */
-@FeignClient(value = "xk-learn-checkcode", fallback = CheckCodeClientApiFallBackFactory.class)
+@FeignClient(value = "xcode-checkcode", fallback = CheckCodeClientApiFallBackFactory.class)
 @Tag(name = "验证码接口")
 @RequestMapping("/checkcode")
 public interface CheckCodeClientApi {

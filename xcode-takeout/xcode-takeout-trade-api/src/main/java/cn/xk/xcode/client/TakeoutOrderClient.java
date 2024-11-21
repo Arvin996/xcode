@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0.0
  * @Description TakeoutOrderClient
  **/
-@FeignClient(value = "xk-sys-learn-takeout-trade", fallbackFactory = TakeoutOrderClientFallback.class)
+@FeignClient(value = "xcode-takeout-trade", fallbackFactory = TakeoutOrderClientFallback.class)
 @RequestMapping("/takeout/order")
 @Tag(name = "订单controller")
 public interface TakeoutOrderClient {

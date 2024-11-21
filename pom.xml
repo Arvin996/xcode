@@ -23,6 +23,7 @@
         <module>xcode-mall</module>
         <module>xcode-pay</module>
         <module>xcode-takeout</module>
+        <module>xcode-bpm</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

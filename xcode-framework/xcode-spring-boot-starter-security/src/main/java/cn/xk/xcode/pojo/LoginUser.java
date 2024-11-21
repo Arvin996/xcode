@@ -26,6 +26,6 @@ public class LoginUser {
     private Set<String> permissions = new HashSet<>();
 
     @Schema(description = "角色列表")
-    private Set<String> roles = new HashSet<>();
+    private Set<Integer> roles = new HashSet<>();
 
 }

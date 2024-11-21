@@ -19,6 +19,21 @@ public class CollectionUtil {
         return collection.stream().anyMatch(predicate);
     }
 
+    public static <E, K> Map<K, List<E>> groupByKey(Collection<E> collection, Function<E, K> key) {
+        return groupByKeyFilter(Objects::nonNull, collection, key);
+    }
+
+    public static <T, E, K> Map<K, List<E>> groupByKeyFilter(Predicate<E> predicate, Collection<E> collection, Function<E, K> key) {
+        return isNotEmpty(collection) ? new HashMap<>() : collection.stream().filter(predicate).collect(Collectors.groupingBy(key));
+    }
+
+    public static <E, K, U> Map<K, Map<U, List<E>>> groupBy2Key(Collection<E> collection, Function<E, K> key1, Function<E, U> key2) {
+        return isNotEmpty(collection) ? new HashMap<>() : collection.stream().filter(ObjectUtil::isNotNull).collect(Collectors.groupingBy(key1, Collectors.groupingBy(key2)));
+    }
+
+    public static <E, T, U> Map<T, Map<U, E>> group2Map(Collection<E> collection, Function<E, T> key1, Function<E, U> key2) {
+        return isNotEmpty(collection) && ObjectUtil.isNotNull(key1) && ObjectUtil.isNotNull(key2) ? new HashMap<>() : collection.stream().filter(ObjectUtil::isNotNull).collect(Collectors.groupingBy(key1, Collectors.toMap(key2, Function.identity())));
+    }
 
     public static boolean containsAny(Object source, Object... target) {
         return Arrays.asList(target).contains(source);

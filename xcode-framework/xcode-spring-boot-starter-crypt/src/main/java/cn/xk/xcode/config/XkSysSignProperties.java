@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @description XkSysSignProperties
  */
 @Data
-@ConfigurationProperties("xk.sys.sign")
+@ConfigurationProperties("xcode.sign")
 @Component
 public class XkSysSignProperties {
     private String publicKey;

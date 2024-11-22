@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Description BizMessageProperties
  */
 @Data
-@ConfigurationProperties(prefix = "xk.biz.message")
+@ConfigurationProperties(prefix = "xcode.biz.message")
 public class BizMessageProperties {
     private String dbUrl;
 

@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 
-@ConfigurationProperties(prefix = "xk.sys.pay")
+@ConfigurationProperties(prefix = "xcode.pay")
 @Validated
 @Data
 @Component

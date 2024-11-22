@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0.0
  * @Description TakeoutOrderProperties
  **/
-@ConfigurationProperties("xk.takeout.order.timeout")
+@ConfigurationProperties("xcode.takeout.order.timeout")
 @Data
 @Component
 public class TakeoutOrderProperties {

@@ -3,7 +3,7 @@ package cn.xk.xcode.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "rocketmq.enhance")
+@ConfigurationProperties(prefix = "xcode.rocketmq.enhance")
 @Data
 public class RocketEnhanceProperties {
 

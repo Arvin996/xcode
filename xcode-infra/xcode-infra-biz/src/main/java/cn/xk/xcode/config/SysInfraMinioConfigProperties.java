@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Description SysInfraMinioConfigProperties
  */
 @Data
-@ConfigurationProperties("xk.sys.infra.minio")
+@ConfigurationProperties("xcode.infra.minio")
 public class SysInfraMinioConfigProperties
 {
     private String endpoint;

@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @description
  */
 @Data
-@ConfigurationProperties(prefix = "xk.infra.thread")
+@ConfigurationProperties(prefix = "xcode.infra.thread")
 public class TheadPoolProperties
 {
     private int corePoolSize;

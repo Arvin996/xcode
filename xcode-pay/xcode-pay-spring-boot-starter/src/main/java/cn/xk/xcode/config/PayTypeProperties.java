@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ConfigurationProperties(prefix = "pay.client.config")
+@ConfigurationProperties(prefix = "xcode.pay.client.config")
 public class PayTypeProperties {
 
     private zfb zfb;

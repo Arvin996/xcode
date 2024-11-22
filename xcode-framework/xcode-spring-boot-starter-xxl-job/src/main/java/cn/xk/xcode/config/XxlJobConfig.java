@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableConfigurationProperties(XxlJobProperties.class)
-@ConditionalOnProperty(value = "xk.sys.job.enable", havingValue = "true")
+@ConditionalOnProperty(value = "xcode.job.enable", havingValue = "true")
 public class XxlJobConfig {
     private final Logger logger = LoggerFactory.getLogger(XxlJobConfig.class);
 

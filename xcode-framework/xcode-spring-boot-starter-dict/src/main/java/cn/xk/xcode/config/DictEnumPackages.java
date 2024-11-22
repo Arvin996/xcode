@@ -13,7 +13,7 @@ import java.util.List;
  * @Description DictEnumPackages
  */
 @Data
-@ConfigurationProperties("xk.sys.dict.enum.packages")
+@ConfigurationProperties("xcode.dict.enum.packages")
 public class DictEnumPackages
 {
     private List<String> packages = CollectionUtil.createEmptyList();

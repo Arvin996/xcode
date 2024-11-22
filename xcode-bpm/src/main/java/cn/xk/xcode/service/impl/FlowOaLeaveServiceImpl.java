@@ -10,8 +10,7 @@ import cn.xk.xcode.entity.vo.leave.FlowOaLeaveResultVo;
 import cn.xk.xcode.enums.LeaveTypeEnum;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.PageResult;
-import cn.xk.xcode.utils.PageUtil;
+import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
@@ -36,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -156,11 +154,11 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         // 作为办理人保存到历史记录表 【必传】
         flowParams.handler(StpUtil.getLoginIdAsString());
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser();
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
-        Set<Integer> roles = loginUser.getRoles();
+        Set<String> roles = loginUser.getRoles();
         List<String> permissionList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(roles)) {
             permissionList = roles.stream().map(role -> "role:" + role).collect(Collectors.toList());
@@ -201,11 +199,11 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         flowParams.message(message);
 
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser();
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
-        Set<Integer> roles = loginUser.getRoles();
+        Set<String> roles = loginUser.getRoles();
         List<String> permissionList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(roles)) {
             permissionList = roles.stream().map(role -> "role:" + role).collect(Collectors.toList());
@@ -241,7 +239,7 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         // 设置流转参数
         FlowParams flowParams = new FlowParams();
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser();
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
@@ -250,7 +248,7 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         // 作为办理人保存到历史记录表 【必传】
         flowParams.handler(StpUtil.getLoginIdAsString());
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        Set<Integer> roles = loginUser.getRoles();
+        Set<String> roles = loginUser.getRoles();
         List<String> permissionList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(roles)) {
             permissionList = roles.stream().map(role -> "role:" + role).collect(Collectors.toList());

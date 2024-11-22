@@ -16,4 +16,13 @@ public enum StpType {
     SYSTEM("system"),
     MEMBER("member");
     private final String type;
+
+    public static StpType getType(String type) {
+        for (StpType stpType : StpType.values()) {
+            if (stpType.type.equals(type)) {
+                return stpType;
+            }
+        }
+        return null;
+    }
 }

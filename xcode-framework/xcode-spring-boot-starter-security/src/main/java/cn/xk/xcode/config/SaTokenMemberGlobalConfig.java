@@ -1,13 +1,19 @@
 package cn.xk.xcode.config;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.SaTokenException;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.xk.xcode.core.StpMemberUtil;
+import cn.xk.xcode.core.StpSystemUtil;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.WhitelistProperties;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_TOKEN;
 
 /**
  * @Author xuk
@@ -30,7 +36,11 @@ public class SaTokenMemberGlobalConfig implements WebMvcConfigurer {
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
                     .notMatch("/auth/doLogin", "/webjars/**", "/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**")
                     .notMatch(whitelistProperties.getWhitelist())
-                    .check(r -> StpMemberUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
+                    .check(r -> {
+                        if (!StpMemberUtil.isLogin() && !StpSystemUtil.isLogin()) {
+                            ExceptionUtil.castServerException0(INVALID_TOKEN.getCode(), "请先登录");
+                        }
+                    });        // 要执行的校验动作，可以写完整的 lambda 表达式
 
         })).addPathPatterns("/**");
 

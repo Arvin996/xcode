@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.xk.xcode.core.Handler;
 import cn.xk.xcode.entity.vo.task.FlowTaskInteractiveTypeVo;
 import cn.xk.xcode.pojo.LoginUser;
+import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import org.dromara.warm.flow.core.dto.FlowParams;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 public class DeputeInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean handle(FlowTaskInteractiveTypeVo flowTaskInteractiveTypeVo) {
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser();
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
         if (loginUser == null) {
             return false;
         }

@@ -24,14 +24,14 @@ public class XcodeSecurityBeanImport implements ImportBeanDefinitionRegistrar {
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         StpType stpType = (StpType) Objects.requireNonNull(importingClassMetadata.getAnnotationAttributes(EnableServerSecurity.class.getName())).get("type");
+        StpSystemUtil.setStpLogic(new StpLogicJwtForSimple(StpType.SYSTEM.getType()));
+        StpMemberUtil.setStpLogic(new StpLogicJwtForSimple(StpType.MEMBER.getType()));
         if (Objects.equals(stpType, StpType.SYSTEM)){
-            StpSystemUtil.setStpLogic(new StpLogicJwtForSimple(stpType.getType()));
             SaTokenLoginUtils.setStpLogic(StpSystemUtil.getStpLogic());
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             beanDefinition.setBeanClass(SaTokenSystemGlobalConfig.class);
             registry.registerBeanDefinition("saTokenSystemGlobalConfig", beanDefinition);
         }else {
-            StpMemberUtil.setStpLogic(new StpLogicJwtForSimple(stpType.getType()));
             SaTokenLoginUtils.setStpLogic(StpMemberUtil.getStpLogic());
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             beanDefinition.setBeanClass(SaTokenMemberGlobalConfig.class);

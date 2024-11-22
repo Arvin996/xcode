@@ -1,6 +1,7 @@
 package cn.xk.xcode.core;
 
 import cn.hutool.core.util.ObjUtil;
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
 import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package cn.xk.xcode.validation;
 
-import cn.xk.xcode.core.EnumValueToArray;
-import cn.xk.xcode.core.StringEnumValueToArray;
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

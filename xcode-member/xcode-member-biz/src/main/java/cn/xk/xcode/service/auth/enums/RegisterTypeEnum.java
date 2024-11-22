@@ -1,6 +1,6 @@
 package cn.xk.xcode.service.auth.enums;
 
-import cn.xk.xcode.core.StringEnumValueToArray;
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
 import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

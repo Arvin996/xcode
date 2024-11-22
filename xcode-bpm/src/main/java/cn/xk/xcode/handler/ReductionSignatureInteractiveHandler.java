@@ -1,7 +1,7 @@
 package cn.xk.xcode.handler;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.xk.xcode.core.Handler;
+import cn.xk.xcode.core.annotation.Handler;
 import cn.xk.xcode.entity.vo.task.FlowTaskInteractiveTypeVo;
 import cn.xk.xcode.pojo.LoginUser;
 import cn.xk.xcode.pojo.StpType;

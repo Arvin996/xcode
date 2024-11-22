@@ -1,6 +1,6 @@
 package cn.xk.xcode.enums;
 
-import cn.xk.xcode.core.IntEnumValueToArray;
+import cn.xk.xcode.core.annotation.IntEnumValueToArray;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

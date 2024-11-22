@@ -1,4 +1,4 @@
-package cn.xk.xcode.core;
+package cn.xk.xcode.core.annotation;
 
 /**
  * @Author xuk

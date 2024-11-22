@@ -1,7 +1,7 @@
 package cn.xk.xcode.enums;
 
 import cn.xk.xcode.annotation.DictType;
-import cn.xk.xcode.core.StringEnumValueToArray;
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
 import cn.xk.xcode.entity.IEnumDict;
 import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.AllArgsConstructor;

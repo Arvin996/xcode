@@ -1,4 +1,4 @@
-package cn.xk.xcode.core;
+package cn.xk.xcode.core.annotation;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;

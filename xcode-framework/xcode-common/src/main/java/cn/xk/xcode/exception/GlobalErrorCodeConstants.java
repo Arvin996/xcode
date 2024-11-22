@@ -26,6 +26,7 @@ public interface GlobalErrorCodeConstants
     ErrorCode PARAMETER_VALIDATION_FAIL = new IntErrorCode(418, "参数解析异常");
     ErrorCode ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR = new IntErrorCode(419, "错误码信息占位符个哦实话异常");
     ErrorCode QR_CODE_GEN_ERROR = new IntErrorCode(420, "生成二维码错误");
+    ErrorCode READ_HTTP_BODY_ERROR =  new IntErrorCode(421, "读取http body失败, 异常信息:{}");
 
     ErrorCode LOCKED = new IntErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new IntErrorCode(429, "请求过于频繁，请稍后重试");

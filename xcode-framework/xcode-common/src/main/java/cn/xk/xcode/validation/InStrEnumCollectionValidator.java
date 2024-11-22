@@ -1,7 +1,7 @@
 package cn.xk.xcode.validation;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.xk.xcode.core.StringEnumValueToArray;
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

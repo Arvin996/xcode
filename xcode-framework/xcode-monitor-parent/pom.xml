@@ -14,6 +14,7 @@
         <module>xcode-spring-boot-starter-monitor-client</module>
         <module>xcode-spring-boot-stater-monitor-server</module>
         <module>xcode-monitor-extension-skywalking</module>
+        <module>xcode-monitor-extension-nacos</module>
     </modules>
     <artifactId>xcode-monitor-parent</artifactId>
     <description>

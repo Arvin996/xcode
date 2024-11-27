@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
-            <artifactId>xk-sys-learn-monitor</artifactId>
+            <artifactId>xcode-spring-boot-stater-monitor-server</artifactId>
             <version>${revision}</version>
         </dependency>
 

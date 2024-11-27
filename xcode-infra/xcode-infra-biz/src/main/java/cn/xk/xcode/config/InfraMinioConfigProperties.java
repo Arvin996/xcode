@@ -11,8 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties("xcode.infra.minio")
-public class SysInfraMinioConfigProperties
-{
+public class InfraMinioConfigProperties {
     private String endpoint;
 
     private String accessKey;

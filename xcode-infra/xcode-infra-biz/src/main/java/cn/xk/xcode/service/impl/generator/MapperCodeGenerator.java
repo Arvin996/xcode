@@ -1,4 +1,4 @@
-package cn.xk.xcode.service.impl.generate;
+package cn.xk.xcode.service.impl.generator;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.entity.CodeGen;
@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author xuk
- * @Date 2024/6/25 10:57
+ * @Date 2024/6/25 10:55
  * @Version 1.0
- * @Description ImplCodeGenerate
+ * @Description MapperCodeGenerate
  */
-@Component(value = "implCodeGenerate")
-public class ImplCodeGenerate implements CodeGenerate
-{
+@Component(value = "mapperCodeGenerator")
+public class MapperCodeGenerator implements CodeGenerator{
 
     @Override
     public CodeGen createCodeGen(GenerateCodeDto generateCodeDto) {
@@ -21,19 +20,20 @@ public class ImplCodeGenerate implements CodeGenerate
                 .entityWithLombok(false)
                 .mapperXmlGenerateEnable(false)
                 .serviceGenerateEnable(false)
-                .mapperGenerateEnable(false)
+                .mapperGenerateEnable(true)
                 .entityGenerateEnable(false)
-                .serviceImplGenerateEnable(true)
+                .serviceImplGenerateEnable(false)
                 .tableDefGenerateEnable(false)
                 .sourceDir(getTemplatePath())
-                .serviceImplPackage("temp." + generateCodeDto.getCode())
+                .mapperPackage("temp." + generateCodeDto.getCode())
                 .tablePrefix(generateCodeDto.getTablePre())
                 .tables(new String[]{generateCodeDto.getTableName()})
                 .entityClassSuffix(generateCodeDto.getEntitySuff()).build();
         if (ObjectUtil.isNotNull(generateCodeDto.getPackageName())){
-            codeGen.setServiceImplPackage(generateCodeDto.getPackageName().replace(".", "/"));
+            codeGen.setMapperPackage(generateCodeDto.getPackageName().replace(".", "/"));
             codeGen.setSourceDir(getTemplatePath() + "/" + "temp");
         }
         return codeGen;
+
     }
 }

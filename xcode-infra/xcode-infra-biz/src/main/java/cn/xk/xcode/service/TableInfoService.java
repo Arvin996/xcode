@@ -3,6 +3,7 @@ package cn.xk.xcode.service;
 import cn.xk.xcode.entity.dto.BatchSaveTablesDto;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import cn.xk.xcode.entity.dto.UpdateDatabaseConnInfoPoDto;
+import cn.xk.xcode.entity.vo.GenerateCodeVo;
 import cn.xk.xcode.pojo.CommonResult;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.TableInfoPo;
@@ -21,5 +22,5 @@ public interface TableInfoService extends IService<TableInfoPo> {
 
     List<TableInfoPo> refreshTables(UpdateDatabaseConnInfoPoDto updateDatabaseConnInfoPoDto);
 
-    CommonResult<String> generateCode(GenerateCodeDto generateCodeDto);
+    CommonResult<GenerateCodeVo> generateCode(GenerateCodeDto generateCodeDto);
 }

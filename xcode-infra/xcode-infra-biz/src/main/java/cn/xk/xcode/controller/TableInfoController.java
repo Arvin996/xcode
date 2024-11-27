@@ -6,6 +6,7 @@ import cn.xk.xcode.entity.dto.UpdateDatabaseConnInfoPoDto;
 import cn.xk.xcode.entity.dto.UpdateTableInfoDto;
 import cn.xk.xcode.entity.po.DatabaseConnInfoPo;
 import cn.xk.xcode.entity.po.TableInfoPo;
+import cn.xk.xcode.entity.vo.GenerateCodeVo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.TableInfoService;
 import cn.xk.xcode.utils.object.BeanUtil;
@@ -30,7 +31,7 @@ import static cn.xk.xcode.entity.def.TableInfoTableDef.TABLE_INFO_PO;
  */
 @RestController
 @Tag(name = "数据库表信息接口")
-@RequestMapping("/tbinfo")
+@RequestMapping("/local/tbinfo")
 public class TableInfoController {
     @Resource
     private TableInfoService tableInfoService;
@@ -69,7 +70,7 @@ public class TableInfoController {
 
     @Operation(description = "生成代码")
     @PostMapping("/generateCode")
-    public CommonResult<String> generateCode(@Validated @RequestBody GenerateCodeDto generateCodeDto) {
+    public CommonResult<GenerateCodeVo> generateCode(@Validated @RequestBody GenerateCodeDto generateCodeDto) {
       return tableInfoService.generateCode(generateCodeDto);
     }
 

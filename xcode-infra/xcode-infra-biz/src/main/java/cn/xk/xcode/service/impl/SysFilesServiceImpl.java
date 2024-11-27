@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -165,7 +166,7 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
     }
 
     @Override
-    public byte[] downloadFile(String fileId) throws IOException {
+    public void downloadFile(String fileId, HttpServletResponse response) throws IOException {
         SysFilesPo filesPo = getById(fileId);
         if (ObjectUtil.isNull(filesPo)) {
             throw new ServiceException(500, "文件不存在");
@@ -178,11 +179,13 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
                 throw new ServiceException(500, "文件下载失败");
             }
             bytes = IoUtil.readBytes(inputStream);
+            response.setContentType(filesPo.getFileType());
+            response.setHeader("Content-Disposition", "attachment; filename=" + filesPo.getFileName());
+            response.getOutputStream().write(bytes);
         } finally {
             if (!ObjectUtil.isNull(inputStream)) {
                 inputStream.close();
             }
         }
-        return bytes;
     }
 }

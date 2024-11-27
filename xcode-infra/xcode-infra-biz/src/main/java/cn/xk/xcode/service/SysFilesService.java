@@ -6,6 +6,7 @@ import cn.xk.xcode.entity.vo.FileResultVo;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.SysFilesPo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -22,5 +23,5 @@ public interface SysFilesService extends IService<SysFilesPo> {
 
     String updateFile(UpdateFileDto updateFileDto);
 
-    byte[] downloadFile(String fileId) throws IOException;
+    void downloadFile(String fileId, HttpServletResponse response) throws IOException;
 }

@@ -8,18 +8,18 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 
 @Configuration
-@EnableConfigurationProperties({SysInfraMinioConfigProperties.class})
+@EnableConfigurationProperties({InfraMinioConfigProperties.class})
 public class MinioConfig {
 
     @Resource
-    private SysInfraMinioConfigProperties sysInfraMinioConfigProperties;
+    private InfraMinioConfigProperties infraMinioConfigProperties;
 
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()
-                .endpoint(sysInfraMinioConfigProperties.getEndpoint())
-                .credentials(sysInfraMinioConfigProperties.getAccessKey()
-                        , sysInfraMinioConfigProperties.getSecretKey())
+                .endpoint(infraMinioConfigProperties.getEndpoint())
+                .credentials(infraMinioConfigProperties.getAccessKey()
+                        , infraMinioConfigProperties.getSecretKey())
                 .build();
     }
 }

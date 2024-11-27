@@ -1,6 +1,12 @@
 package cn.xk.xcode.enums;
 
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
+import cn.xk.xcode.utils.collections.ArrayUtil;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @Author xuk
@@ -9,7 +15,7 @@ import lombok.Getter;
  * @Description MinioBucketType
  */
 @Getter
-public enum MinioBucketType
+public enum MinioBucketType implements StringEnumValueToArray
 {
     VIDEO("video"),
 
@@ -24,4 +30,12 @@ public enum MinioBucketType
         this.type = type;
     }
 
+    public static MinioBucketType getByType(String type){
+        return Arrays.stream(values()).filter(v -> v.getType().equals(type)).findFirst().orElse(null);
+    }
+
+    @Override
+    public String[] toArrayString() {
+        return ArrayUtil.toArray(Arrays.stream(values()).map(MinioBucketType::getType).collect(Collectors.toList()));
+    }
 }

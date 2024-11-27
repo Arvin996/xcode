@@ -62,52 +62,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <repositories>
-        <!--阿里云仓库-->
-        <repository>
-            <id>public</id>
-            <url>https://maven.aliyun.com/repository/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <!--华为云仓库-->
-        <repository>
-            <id>huaweicloudmaven</id>
-            <url>https://repo.huaweicloud.com/maven/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <!--腾讯云仓库-->
-        <repository>
-            <id>tencentcloudmaven</id>
-            <url>https://mirrors.tencent.com/nexus/repository/maven-public/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <!--中科大仓库-->
-        <repository>
-            <id>ustcmaven</id>
-            <url>https://maven.ustc.edu.cn/maven2/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <!-- 配置官方Maven中央仓库 -->
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <build>
         <pluginManagement>
             <plugins>

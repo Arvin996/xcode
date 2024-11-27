@@ -5,9 +5,10 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.entity.dto.BatchSaveTablesDto;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import cn.xk.xcode.entity.dto.UpdateDatabaseConnInfoPoDto;
+import cn.xk.xcode.entity.vo.GenerateCodeVo;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.pojo.CommonResult;
-import cn.xk.xcode.service.impl.generate.CodeGenerate;
+import cn.xk.xcode.service.impl.generator.CodeGenerator;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.TableInfoPo;
@@ -92,10 +93,10 @@ public class TableInfoServiceImpl extends ServiceImpl<TableInfoMapper, TableInfo
     }
 
     @Override
-    public CommonResult<String> generateCode(GenerateCodeDto generateCodeDto) {
-        CodeGenerate codeGenerate = SpringUtil.getBean(generateCodeDto.getCode() + "CodeGenerate", CodeGenerate.class);
+    public CommonResult<GenerateCodeVo> generateCode(GenerateCodeDto generateCodeDto) {
+        CodeGenerator codeGenerator = SpringUtil.getBean(generateCodeDto.getCode() + "CodeGenerate", CodeGenerator.class);
         try {
-            return CommonResult.success(codeGenerate.getGenerateFileContent(generateCodeDto));
+            return CommonResult.success(GenerateCodeVo.builder().code(codeGenerator.getGenerateFileContent(generateCodeDto)).build());
         } catch (Exception e) {
             throw new ServiceException("代码生成失败");
         }

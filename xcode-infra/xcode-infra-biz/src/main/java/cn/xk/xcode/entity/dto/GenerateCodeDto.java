@@ -1,5 +1,7 @@
 package cn.xk.xcode.entity.dto;
 
+import cn.xk.xcode.enums.GenerateTypeEnum;
+import cn.xk.xcode.validation.InStrEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @Author xuk
@@ -28,6 +29,7 @@ public class GenerateCodeDto extends UpdateDatabaseConnInfoPoDto
 
     @NotBlank(message = "生成类型不能为空")
     @Schema(description = "生成类型")
+    @InStrEnum(value = GenerateTypeEnum.class, message = "生成类型不正确")
     private String code;
 
     // 这里注意指定的包名 就不能指定路径了哦

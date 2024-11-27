@@ -1,10 +1,10 @@
-package cn.xk.xcode.service.impl.generate;
+package cn.xk.xcode.service.impl.generator;
 
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.DataSourceEntity;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
 import cn.xk.xcode.exception.core.ServerException;
-import cn.xk.xcode.generator.ICodeGenerate;
+import cn.xk.xcode.generator.ICodeGenerator;
 import com.alibaba.cloud.commons.io.FileUtils;
 import com.mybatisflex.codegen.Generator;
 import org.springframework.util.FileSystemUtils;
@@ -23,7 +23,7 @@ import static cn.xk.xcode.config.InfraGlobalErrorCodeConstants.GEN_CODE_FILE_FAI
  * @Version 1.0
  * @Description CodeGenerate
  */
-public interface CodeGenerate extends ICodeGenerate {
+public interface CodeGenerator extends ICodeGenerator {
 
     default String getTemplatePath() {
         return System.getProperty("java.io.tmpdir");

@@ -1,21 +1,19 @@
-package cn.xk.xcode.service.impl.generate;
+package cn.xk.xcode.service.impl.generator;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
-import com.mybatisflex.codegen.config.GlobalConfig;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
 
 /**
  * @Author xuk
- * @Date 2024/6/25 10:55
+ * @Date 2024/6/25 10:57
  * @Version 1.0
- * @Description MapperCodeGenerate
+ * @Description ImplCodeGenerate
  */
-@Component(value = "mapperCodeGenerate")
-public class MapperCodeGenerate implements CodeGenerate{
+@Component(value = "implCodeGenerator")
+public class ImplCodeGenerator implements CodeGenerator
+{
 
     @Override
     public CodeGen createCodeGen(GenerateCodeDto generateCodeDto) {
@@ -23,20 +21,19 @@ public class MapperCodeGenerate implements CodeGenerate{
                 .entityWithLombok(false)
                 .mapperXmlGenerateEnable(false)
                 .serviceGenerateEnable(false)
-                .mapperGenerateEnable(true)
+                .mapperGenerateEnable(false)
                 .entityGenerateEnable(false)
-                .serviceImplGenerateEnable(false)
+                .serviceImplGenerateEnable(true)
                 .tableDefGenerateEnable(false)
                 .sourceDir(getTemplatePath())
-                .mapperPackage("temp." + generateCodeDto.getCode())
+                .serviceImplPackage("temp." + generateCodeDto.getCode())
                 .tablePrefix(generateCodeDto.getTablePre())
                 .tables(new String[]{generateCodeDto.getTableName()})
                 .entityClassSuffix(generateCodeDto.getEntitySuff()).build();
         if (ObjectUtil.isNotNull(generateCodeDto.getPackageName())){
-            codeGen.setMapperPackage(generateCodeDto.getPackageName().replace(".", "/"));
+            codeGen.setServiceImplPackage(generateCodeDto.getPackageName().replace(".", "/"));
             codeGen.setSourceDir(getTemplatePath() + "/" + "temp");
         }
         return codeGen;
-
     }
 }

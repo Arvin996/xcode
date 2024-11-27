@@ -1,4 +1,4 @@
-package cn.xk.xcode.service.impl.generate;
+package cn.xk.xcode.service.impl.generator;
 
 import cn.xk.xcode.entity.CodeGen;
 import cn.xk.xcode.entity.dto.GenerateCodeDto;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * @Description XmlCodeGenerate
  */
-@Component(value = "xmlCodeGenerate")
-public class XmlCodeGenerate implements CodeGenerate {
+@Component(value = "xmlCodeGenerator")
+public class XmlCodeGenerator implements CodeGenerator {
 
     @Override
     public CodeGen createCodeGen(GenerateCodeDto generateCodeDto) {

@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -26,7 +28,9 @@ public interface FileApi
 {
     @Operation(summary = "上传文件")
     @PostMapping("/uploadFile")
-    CommonResult<FileResultVo> uploadFile(@Validated @RequestBody UploadFileDto uploadFileDto);
+    CommonResult<FileResultVo> uploadFile(@RequestPart("file") MultipartFile file,
+                                          @RequestParam("bucketType") String bucketType,
+                                          @RequestParam(value = "isNeedConvertToMp4", required = false) Integer isNeedConvertToMp4);
 
     @Operation(summary = "删除文件")
     @GetMapping("/delFile/{fileId}")
@@ -34,9 +38,10 @@ public interface FileApi
 
     @Operation(summary = "更新文件")
     @PostMapping("/updateFile")
-    CommonResult<String> updateFile(@Validated @RequestBody UpdateFileDto updateFileDto);
+    CommonResult<String> updateFile(@RequestPart("file") MultipartFile file,
+                                    @RequestParam("fileId") String fileId);
 
     @Operation(summary = "下载文件")
     @GetMapping("/downloadFile/{fileId}")
-    CommonResult<byte[]> downloadFile(@PathVariable(name = "fileId") String fileId) throws IOException;
+    void downloadFile(@PathVariable(name = "fileId") String fileId, HttpServletResponse response) throws IOException;
 }

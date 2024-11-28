@@ -14,6 +14,7 @@
     <version>${revision}</version>
 
     <artifactId>xcode-checkcode-biz</artifactId>
+    <name>${project.artifactId}</name>
 
     <description>
         验证码业务实现

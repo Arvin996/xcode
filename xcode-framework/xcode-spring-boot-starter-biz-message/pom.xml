@@ -9,7 +9,7 @@
     </parent>
     <artifactId>xcode-spring-boot-starter-biz-message</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>xk-sys-learn-biz-message</name>
+    <name>${project.artifactId}</name>
     <description>
         xk-sys-learn-biz-message
         使用flex结合xxl实现任务补偿

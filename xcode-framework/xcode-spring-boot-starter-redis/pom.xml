@@ -9,7 +9,7 @@
     </parent>
     <artifactId>xcode-spring-boot-starter-redis</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-redis</name>
+    <name>${project.artifactId}</name>
     <description>xk-sys-learn-redis 1.提供redis的发布订阅功能以便集成spring websocket 2.提供分布式锁功能</description>
     <properties>
         <java.version>1.8</java.version>

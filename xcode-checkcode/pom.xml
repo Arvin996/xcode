@@ -17,7 +17,7 @@
     </modules>
 
     <artifactId>xcode-checkcode</artifactId>
-
+    <name>${project.artifactId}</name>
 
     <description>
         登录时 提供优雅的验证码服务

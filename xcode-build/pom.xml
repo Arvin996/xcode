@@ -14,9 +14,9 @@
     </modules>
     <groupId>cn.xk.xcode</groupId>
     <artifactId>xcode-build</artifactId>
+    <name>${project.artifactId}</name>
     <version>${revision}</version>
-    <name>xk-sys-build</name>
-    <description>xk-sys-build 提供统一版本管理</description>
+    <description>提供统一版本管理</description>
     <packaging>pom</packaging>
     <properties>
         <revision>1.0.0</revision>

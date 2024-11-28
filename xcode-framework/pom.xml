@@ -11,7 +11,7 @@
     <artifactId>xcode-framework</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>xk-sys-learn-framework</name>
+    <name>${project.artifactId}</name>
     <modules>
         <module>xcode-common</module>
         <module>xcode-spring-boot-starter-security</module>

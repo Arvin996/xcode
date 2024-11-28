@@ -9,6 +9,7 @@
         <relativePath>./xcode-build/pom.xml</relativePath>
     </parent>
     <artifactId>xcode-parent</artifactId>
+    <name>${project.artifactId}</name>
     <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>

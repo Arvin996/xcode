@@ -8,7 +8,7 @@
         <artifactId>xcode-framework</artifactId>
         <version>${revision}</version>
     </parent>
-
+    <name>${project.artifactId}</name>
     <artifactId>xcode-spring-boot-starter-log</artifactId>
     <version>${revision}</version>
     <description>提供日志接口服务 集成rocketmq异步传送日志信息</description>

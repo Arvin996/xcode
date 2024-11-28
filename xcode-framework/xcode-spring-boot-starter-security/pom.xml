@@ -9,7 +9,7 @@
     </parent>
     <artifactId>xcode-spring-boot-starter-security</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-security</name>
+    <name>${project.artifactId}</name>
     <description>xk-sys-learn-security</description>
     <packaging>jar</packaging>
     <properties>

@@ -10,7 +10,7 @@
     </parent>
     <artifactId>xcode-gateway</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-gw</name>
+    <name>${project.artifactId}</name>
     <description>提供网关支持 灰度发布 以及统一的swagger接口管理</description>
     <properties>
         <java.version>1.8</java.version>

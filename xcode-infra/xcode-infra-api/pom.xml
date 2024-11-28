@@ -10,7 +10,7 @@
     </parent>
     <artifactId>xcode-infra-api</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-api</name>
+    <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     <description>
         1. 由于此模块的文件接口一定会被其它模块调用，故抽象出此文件公共模块用于其它模块的调用

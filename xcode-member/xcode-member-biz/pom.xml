@@ -8,7 +8,7 @@
         <artifactId>xcode-member</artifactId>
         <version>${revision}</version>
     </parent>
-
+    <name>${project.artifactId}</name>
     <artifactId>xcode-member-biz</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>

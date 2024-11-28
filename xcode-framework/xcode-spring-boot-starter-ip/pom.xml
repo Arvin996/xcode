@@ -10,6 +10,7 @@
     </parent>
     <version>${revision}</version>
     <artifactId>xcode-spring-boot-starter-ip</artifactId>
+    <name>${project.artifactId}</name>
     <description>提供ip解析支持</description>
     <properties>
         <java.version>1.8</java.version>

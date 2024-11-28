@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>xcode-spring-boot-starter-crypt</artifactId>
-
+    <name>${project.artifactId}</name>
     <version>${revision}</version>
     <description>提供统一的报文加解密功能以及验签和加签功能</description>
 

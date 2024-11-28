@@ -10,7 +10,7 @@
     <groupId>com.gg.midend</groupId>
     <artifactId>xcode-spring-boot-starter-trans-flex</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-trans-flex</name>
+    <name>${project.artifactId}</name>
     <description>
         xk-sys-learn-trans-flex
         基于flex的自动翻译框架

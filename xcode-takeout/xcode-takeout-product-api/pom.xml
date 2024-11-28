@@ -10,7 +10,7 @@
     </parent>
     <version>${revision}</version>
     <artifactId>xcode-takeout-product-api</artifactId>
-
+    <name>${project.artifactId}</name>
     <description>
         外卖商品管理 api
     </description>

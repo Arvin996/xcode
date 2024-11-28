@@ -14,7 +14,7 @@
     <description>
         支付api 暴露给其它业务使用 如商城系统
     </description>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

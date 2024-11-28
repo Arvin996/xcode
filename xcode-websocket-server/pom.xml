@@ -9,9 +9,9 @@
     </parent>
     <artifactId>xcode-websocket-server</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-websocket-server</name>
+    <name>${project.artifactId}</name>
     <description>
-        xk-sys-learn-websocket-server 提供长连接服务
+      提供ws长连接服务
     </description>
     <properties>
         <java.version>1.8</java.version>

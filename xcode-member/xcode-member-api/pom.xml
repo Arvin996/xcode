@@ -10,6 +10,7 @@
     </parent>
     <version>${revision}</version>
     <artifactId>xcode-member-api</artifactId>
+    <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     <description>
         提供会员用户外部接口调用

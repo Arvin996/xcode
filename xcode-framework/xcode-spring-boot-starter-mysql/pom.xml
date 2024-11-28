@@ -9,7 +9,7 @@
     </parent>
     <artifactId>xcode-spring-boot-starter-mysql</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-mysql</name>
+    <name>${project.artifactId}</name>
     <description>
         1.每个项目的代码生成统一管理 并提供数据库的相关依赖
         2.mf相关配置

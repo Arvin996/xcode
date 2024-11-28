@@ -11,7 +11,7 @@
     <artifactId>xcode-system</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>xk-sys-learn-system</name>
+    <name>${project.artifactId}</name>
     <description>
         1. 提供字典功能  2. 提供oauth2认证服务器功能 3. 提供用户登录功能 4. 提供用户 角色 权限功能
         2. **** 待办 **** 用户信息新增租户和部门信息管理 ****

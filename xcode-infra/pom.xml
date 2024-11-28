@@ -11,8 +11,8 @@
     <artifactId>xcode-infra</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>xk-sys-learn-infra</name>
-    <description>xk-sys-learn-infra 1.提供统一的文件minio服务 2.提供代码生成功能 实体类 service层等 3.提供服务器信息监测（待办）</description>
+    <name>${project.artifactId}</name>
+    <description> 1.提供统一的文件minio服务 2.提供代码生成功能 实体类 service层等 3.提供服务器信息监测（待办）</description>
     <modules>
         <module>xcode-infra-biz</module>
         <module>xcode-infra-api</module>

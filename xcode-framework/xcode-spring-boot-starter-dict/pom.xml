@@ -9,7 +9,7 @@
     </parent>
     <artifactId>xcode-spring-boot-starter-dict</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-dict</name>
+    <name>${project.artifactId}</name>
     <description>
         xk-sys-learn-dict 提供字典服务以及字典自动转换功能
         目前集成了数据库字典以及枚举类

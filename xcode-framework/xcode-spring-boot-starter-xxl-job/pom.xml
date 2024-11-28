@@ -12,7 +12,7 @@
     <artifactId>xcode-spring-boot-starter-xxl-job</artifactId>
     <version>${revision}</version>
     <description>提供xxl配置</description>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

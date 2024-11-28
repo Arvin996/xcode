@@ -11,6 +11,7 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <artifactId>xcode-takeout</artifactId>
+    <name>${project.artifactId}</name>
     <modules>
         <module>xcode-takeout-user-api</module>
         <module>xcode-takeout-user-biz</module>

@@ -17,7 +17,7 @@
         对外提供rpc接口
     </description>
     <artifactId>xcode-checkcode-api</artifactId>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

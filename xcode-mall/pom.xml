@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>xcode-mall</artifactId>
-
+    <name>${project.artifactId}</name>
     <description>商城服务 包括如下部分 1. 商品服务模块 2. 订单交易服务模块 3. 报表服务模块</description>
 
     <properties>

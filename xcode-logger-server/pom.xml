@@ -9,9 +9,8 @@
     </parent>
     <artifactId>xcode-logger-server</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-logger-server</name>
+    <name>${project.artifactId}</name>
     <description>
-        xk-sys-learn-logger-server
         1. 提供日志服务 主要是通过消息队列消费队列
         2. 后续看再加什么功能
     </description>

@@ -12,7 +12,7 @@
     <version>${revision}</version>
 
     <artifactId>xcode-bpm</artifactId>
-
+    <name>${project.artifactId}</name>
     <description>
         流程管理 使用国产框架warm-flow实现
     </description>

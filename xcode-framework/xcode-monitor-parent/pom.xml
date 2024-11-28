@@ -17,6 +17,7 @@
         <module>xcode-monitor-extension-nacos</module>
     </modules>
     <artifactId>xcode-monitor-parent</artifactId>
+    <name>${project.artifactId}</name>
     <description>
         监控starter父pom
     </description>

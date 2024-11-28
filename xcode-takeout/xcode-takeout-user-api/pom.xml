@@ -11,6 +11,7 @@
     <packaging>jar</packaging>
     <version>${revision}</version>
     <artifactId>xcode-takeout-user-api</artifactId>
+    <name>${project.artifactId}</name>
     <description>外卖用户模块api端</description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

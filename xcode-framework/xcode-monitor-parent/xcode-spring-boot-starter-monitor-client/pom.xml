@@ -10,7 +10,7 @@
     </parent>
     <version>${revision}</version>
     <artifactId>xcode-spring-boot-starter-monitor-client</artifactId>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

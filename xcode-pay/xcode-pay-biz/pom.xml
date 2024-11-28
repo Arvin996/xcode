@@ -10,7 +10,7 @@
     </parent>
     <version>${revision}</version>
     <artifactId>xcode-pay-biz</artifactId>
-
+    <name>${project.artifactId}</name>
     <description>
         支付服务的业务实现
     </description>

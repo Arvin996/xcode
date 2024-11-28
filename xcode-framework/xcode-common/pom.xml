@@ -10,7 +10,7 @@
 
     <artifactId>xcode-common</artifactId>
     <version>${revision}</version>
-    <name>xk-sys-learn-common</name>
+    <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     <description>提供工具类和公共返回类</description>
 

@@ -12,7 +12,7 @@
     <version>${revision}</version>
     <artifactId>xcode-takeout-product-biz</artifactId>
     <description>w外卖商品管理业务</description>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

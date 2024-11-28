@@ -12,7 +12,7 @@
     <version>${revision}</version>
 
     <artifactId>xcode-spring-boot-stater-monitor-server</artifactId>
-
+    <name>${project.artifactId}</name>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

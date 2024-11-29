@@ -30,6 +30,7 @@
         <module>xcode-spring-boot-starter-report</module>
         <module>xcode-spring-boot-starter-crypt</module>
         <module>xcode-monitor-parent</module>
+        <module>xcode-spring-boot-starter-env-isolation</module>
     </modules>
     <description>
         xk-sys-learn-framework 项目框架管理

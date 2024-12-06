@@ -1,6 +1,8 @@
-package cn.xk.xcode.core.filter;
+package cn.xk.xcode.filter;
 
+import cn.xk.xcode.config.XcodeXssProperties;
 import cn.xk.xcode.utils.collections.CollectionUtil;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
@@ -19,20 +21,16 @@ import java.util.List;
  * @Version 1.0.0
  * @Description XssFilter
  **/
+@RequiredArgsConstructor
 public class XssFilter implements Filter {
 
     /**
      * 排除链接
      */
-    public List<String> excludes = new ArrayList<>();
+    private final XcodeXssProperties xcodeXssProperties;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        String tempExcludes = filterConfig.getInitParameter("excludes");
-        if (StringUtils.isNotEmpty(tempExcludes)) {
-            String[] urls = tempExcludes.split(",");
-            excludes.addAll(Arrays.asList(urls));
-        }
     }
 
     @Override
@@ -54,7 +52,7 @@ public class XssFilter implements Filter {
         if (method == null || HttpMethod.GET.matches(method) || HttpMethod.DELETE.matches(method)) {
             return true;
         }
-        return isMatch(url, excludes);
+        return isMatch(url, xcodeXssProperties.getExcludeList());
     }
 
     @Override

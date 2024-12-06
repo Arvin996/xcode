@@ -1,4 +1,4 @@
-package cn.xk.xcode.core.filter;
+package cn.xk.xcode.filter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;

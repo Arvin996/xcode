@@ -1,4 +1,4 @@
-package cn.xk.xcode.core.filter;
+package cn.xk.xcode.filter;
 
 import cn.xk.xcode.core.HttpBodyReader;
 

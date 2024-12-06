@@ -1,11 +1,8 @@
 package cn.xk.xcode.utils.spring;
 
 import cn.hutool.extra.spring.SpringUtil;
-import cn.xk.xcode.utils.http.ServletUtil;
 import org.springframework.context.MessageSource;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
  * @Author xuk
@@ -15,21 +12,15 @@ import java.util.Locale;
  **/
 public class MessageUtil {
 
-    public static String getMessages(String code, Object[] args) {
-        return getMessages(code, args, null);
-    }
-
-    public static String getMessages(String code) {
-        return getMessages(code, null, null);
-    }
-
-    public static String getMessages(String code, Object[] args, Locale locale) {
-        if (locale == null) {
-            HttpServletRequest request = ServletUtil.getRequest();
-            String language = request.getHeader("ss-Language");
-            locale = new Locale(language);
-        }
-        MessageSource messageSource = (MessageSource) SpringUtil.getBean("messageSource");
-        return messageSource.getMessage(code, args, locale);
+    /**
+     * 根据消息键和参数 获取消息 委托给spring messageSource
+     *
+     * @param code 消息键
+     * @param args 参数
+     * @return 获取国际化翻译值
+     */
+    public static String message(String code, Object... args) {
+        MessageSource messageSource = SpringUtil.getBean(MessageSource.class);
+        return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
     }
 }

@@ -41,7 +41,7 @@ public class ServerException extends RuntimeException {
 
     public ServerException(ErrorCode errorCode, Object... objs) {
         String msg = errorCode.getMessage();
-        if (!ArrayUtil.isEmpty(objs)){
+        if (!ArrayUtil.isEmpty(objs)) {
             try {
                 msg = String.format(errorCode.getMessage(), objs);
             } catch (IllegalFormatException e) {
@@ -52,8 +52,8 @@ public class ServerException extends RuntimeException {
         this.msg = msg;
     }
 
-    public ServerException(Object code, String msg , Object... objs) {
-        if (!ArrayUtil.isEmpty(objs)){
+    public ServerException(Object code, String msg, Object... objs) {
+        if (!ArrayUtil.isEmpty(objs)) {
             try {
                 msg = String.format(msg, objs);
             } catch (IllegalFormatException e) {

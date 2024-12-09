@@ -17,7 +17,7 @@
         <module>xcode-infra</module>
         <module>xcode-system</module>
         <module>xcode-gateway</module>
-        <module>xcode-checkcode</module>
+        <module>xcode-captcha</module>
         <module>xcode-member</module>
         <module>xcode-logger-server</module>
         <module>xcode-websocket-server</module>

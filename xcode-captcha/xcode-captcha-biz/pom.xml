@@ -5,16 +5,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.xk.xcode</groupId>
-        <artifactId>xcode-member</artifactId>
+        <artifactId>xcode-captcha</artifactId>
         <version>${revision}</version>
     </parent>
-    <name>${project.artifactId}</name>
-    <artifactId>xcode-member-biz</artifactId>
-    <version>${revision}</version>
+
     <packaging>jar</packaging>
+
+    <version>${revision}</version>
+
+    <artifactId>xcode-captcha-biz</artifactId>
+    <name>${project.artifactId}</name>
+
     <description>
-        用户会员业务实现
+        验证码业务实现
     </description>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -22,29 +27,30 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+        </dependency>
 
         <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-mysql</artifactId>
-            <version>${revision}</version>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-security</artifactId>
+            <artifactId>xcode-spring-boot-starter-redis</artifactId>
             <version>${revision}</version>
         </dependency>
 
         <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-ip</artifactId>
-            <version>${revision}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-member-api</artifactId>
-            <version>${revision}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -53,6 +59,16 @@
             <version>${revision}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-dict</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

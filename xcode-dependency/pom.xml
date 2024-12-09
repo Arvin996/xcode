@@ -40,7 +40,6 @@
         <google.javase.version>3.3.3</google.javase.version>
         <knife4j-gw.version>4.3.0</knife4j-gw.version>
         <ip2region.version>2.7.0</ip2region.version>
-        <kaptcha.version>2.3.2</kaptcha.version>
         <caffeine.version>2.9.3</caffeine.version>
         <aliyun.sdk.core.version>4.5.16</aliyun.sdk.core.version>
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
@@ -155,11 +154,7 @@
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.penggle</groupId>
-                <artifactId>kaptcha</artifactId>
-                <version>${kaptcha.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>

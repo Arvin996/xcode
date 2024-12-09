@@ -1,6 +1,6 @@
 package cn.xk.xcode;
 
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Version 1.0.0
  * @Description TakeoutUserBizApplication
  **/
-@EnableFeignClients(clients = {CheckCodeClientApi.class})
+@EnableFeignClients(clients = {CaptchaClientApi.class})
 @SpringBootApplication
 public class TakeoutUserBizApplication {
 

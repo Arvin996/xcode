@@ -1,6 +1,6 @@
 package cn.xk.xcode.service.auth.handler.impl;
 
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
 import cn.xk.xcode.entity.po.MemberUserPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -19,8 +19,8 @@ import static cn.xk.xcode.enums.MemberErrorCodeConstants.USER_PHONE_NOT_REGISTER
  */
 public class MemberUserLoginMobileHandler extends AbstractMemberUserLoginHandler {
 
-    public MemberUserLoginMobileHandler(CheckCodeClientApi checkCodeClientApi, MemberUserService memberUserService) {
-        super(checkCodeClientApi, memberUserService);
+    public MemberUserLoginMobileHandler(CaptchaClientApi captchaClientApi, MemberUserService memberUserService) {
+        super(captchaClientApi, memberUserService);
     }
 
     @Override

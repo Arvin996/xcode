@@ -1,6 +1,6 @@
 package cn.xk.xcode.service.auth.handler.impl;
 
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
 import cn.xk.xcode.entity.po.MemberUserPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -18,8 +18,8 @@ import static cn.xk.xcode.enums.MemberErrorCodeConstants.USER_EMAIL_NOT_REGISTER
  */
 public class MemberUserLoginEmailHandler extends AbstractMemberUserLoginHandler {
 
-    public MemberUserLoginEmailHandler(CheckCodeClientApi checkCodeClientApi, MemberUserService memberUserService) {
-        super(checkCodeClientApi, memberUserService);
+    public MemberUserLoginEmailHandler(CaptchaClientApi captchaClientApi, MemberUserService memberUserService) {
+        super(captchaClientApi, memberUserService);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package cn.xk.xcode.service.impl.auth;
 
-import cn.xk.xcode.client.CheckCodeClientApi;
-import cn.xk.xcode.entity.dto.CheckCodeVerifyReqDto;
+import cn.xk.xcode.client.CaptchaClientApi;
+import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
 import cn.xk.xcode.entity.dto.user.UserLoginDto;
 import cn.xk.xcode.entity.po.TakeoutUserPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -24,8 +24,8 @@ import static cn.xk.xcode.entity.def.TakeoutUserTableDef.TAKEOUT_USER_PO;
 @Service("mobile_loginHandler")
 public class MobileTakeoutUserLoginHandler extends AbstractTakeoutUserLoginHandler {
 
-    public MobileTakeoutUserLoginHandler(CheckCodeClientApi checkCodeClientApi, TakeoutUserService takeoutUserService, TakeoutRoleService takeoutRoleService) {
-        super(checkCodeClientApi, takeoutUserService, takeoutRoleService);
+    public MobileTakeoutUserLoginHandler(CaptchaClientApi captchaClientApi, TakeoutUserService takeoutUserService, TakeoutRoleService takeoutRoleService) {
+        super(captchaClientApi, takeoutUserService, takeoutRoleService);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MobileTakeoutUserLoginHandler extends AbstractTakeoutUserLoginHandl
         if (Objects.isNull(takeoutUserPo)) {
             ExceptionUtil.castServiceException(MOBILE_NOT_EXISTS, userLoginDto.getMobile());
         }
-        CommonResult<Boolean> commonResult = checkCodeClientApi.verifyCode(CheckCodeVerifyReqDto
+        CommonResult<Boolean> commonResult = captchaClientApi.verifyCode(CaptchaVerifyReqDto
                 .builder()
                 .code(userLoginDto.getCode())
                 .mobile(userLoginDto.getMobile())

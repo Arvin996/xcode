@@ -70,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserPo> implements 
         LoginUser loginUser = new LoginUser();
         loginUser.setUsername(userPo.getUsername());
         List<RolePo> roles = queryRolesByUserId(userPo.getId()).getData();
-        loginUser.setRoles(CollectionUtil.convertSet(roles, RolePo::getId));
+        loginUser.setRoles(CollectionUtil.convertSet(roles, RolePo::getName));
         Set<String> recourses = new HashSet<>();
         for (RolePo role : roles) {
             recourses.addAll(CollectionUtil.convertSet(roleService.queryResourcesByRole(role.getId()).getData(), ResourcePo::getResourceCode));

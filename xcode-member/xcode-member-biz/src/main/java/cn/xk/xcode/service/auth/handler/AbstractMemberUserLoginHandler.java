@@ -3,8 +3,8 @@ package cn.xk.xcode.service.auth.handler;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.xk.xcode.client.CheckCodeClientApi;
-import cn.xk.xcode.entity.dto.CheckCodeVerifyReqDto;
+import cn.xk.xcode.client.CaptchaClientApi;
+import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
 import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
 import cn.xk.xcode.entity.po.MemberUserPo;
 import cn.xk.xcode.entity.vo.user.MemberUserLoginVo;
@@ -36,7 +36,7 @@ import static cn.xk.xcode.service.auth.enums.LoginTypeEnum.*;
 @RequiredArgsConstructor
 public abstract class AbstractMemberUserLoginHandler {
 
-    protected final CheckCodeClientApi checkCodeClientApi;
+    protected final CaptchaClientApi captchaClientApi;
     protected final MemberUserService memberUserService;
 
     public LoginVO doLogin(MemberUserLoginDto memberUserLoginDto){
@@ -80,7 +80,7 @@ public abstract class AbstractMemberUserLoginHandler {
         if (ObjectUtil.equals(LoginTypeEnum.getLoginTypeEnum(memberUserLoginDto.getLoginType()), PASSWORD)){
             return CommonResult.success(true);
         }
-        return checkCodeClientApi.verifyCode(CheckCodeVerifyReqDto.builder().code(memberUserLoginDto.getCode()).type(memberUserLoginDto.getLoginType()).build());
+        return captchaClientApi.verifyCode(CaptchaVerifyReqDto.builder().code(memberUserLoginDto.getCode()).type(memberUserLoginDto.getLoginType()).build());
     }
 
     public SaLoginModel bulidSaLoginModel(MemberUserPo memberUserPo, MemberUserLoginDto memberUserLoginDto){

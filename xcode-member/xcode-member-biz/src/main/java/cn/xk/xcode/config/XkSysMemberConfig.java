@@ -1,6 +1,6 @@
 package cn.xk.xcode.config;
 
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.service.MemberUserService;
 import cn.xk.xcode.service.auth.handler.AbstractMemberUserLoginHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginEmailHandler;
@@ -19,24 +19,24 @@ import javax.annotation.Resource;
  * @Description XkSysMemberConfig
  */
 @Configuration
-@EnableFeignClients(clients = {CheckCodeClientApi.class})
+@EnableFeignClients(clients = {CaptchaClientApi.class})
 public class XkSysMemberConfig {
 
     @Resource
     private MemberUserService memberUserService;
 
     @Bean(name = "login_mobile")
-    public AbstractMemberUserLoginHandler memberUserLoginMobileHandler(CheckCodeClientApi checkCodeClientApi){
-        return new MemberUserLoginMobileHandler(checkCodeClientApi, memberUserService);
+    public AbstractMemberUserLoginHandler memberUserLoginMobileHandler(CaptchaClientApi captchaClientApi){
+        return new MemberUserLoginMobileHandler(captchaClientApi, memberUserService);
     }
 
     @Bean(name = "login_email")
-    public AbstractMemberUserLoginHandler memberUserLoginEmailHandler(CheckCodeClientApi checkCodeClientApi){
-        return new MemberUserLoginEmailHandler(checkCodeClientApi, memberUserService);
+    public AbstractMemberUserLoginHandler memberUserLoginEmailHandler(CaptchaClientApi captchaClientApi){
+        return new MemberUserLoginEmailHandler(captchaClientApi, memberUserService);
     }
 
     @Bean(name = "login_password")
-    public AbstractMemberUserLoginHandler memberUserPasswordHandler(CheckCodeClientApi checkCodeClientApi){
-        return new MemberUserPasswordHandler(checkCodeClientApi, memberUserService);
+    public AbstractMemberUserLoginHandler memberUserPasswordHandler(CaptchaClientApi captchaClientApi){
+        return new MemberUserPasswordHandler(captchaClientApi, memberUserService);
     }
 }

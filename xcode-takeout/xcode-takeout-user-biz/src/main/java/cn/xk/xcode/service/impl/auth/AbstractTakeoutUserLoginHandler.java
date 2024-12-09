@@ -2,7 +2,7 @@ package cn.xk.xcode.service.impl.auth;
 
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.entity.dto.role.QueryRoleDto;
 import cn.xk.xcode.entity.dto.user.UserLoginDto;
@@ -34,7 +34,7 @@ import static cn.xk.xcode.entity.def.TakeoutRoleTableDef.TAKEOUT_ROLE_PO;
 @RequiredArgsConstructor
 public abstract class AbstractTakeoutUserLoginHandler {
 
-    protected final CheckCodeClientApi checkCodeClientApi;
+    protected final CaptchaClientApi captchaClientApi;
     protected final TakeoutUserService takeoutUserService;
     protected final TakeoutRoleService takeoutRoleService;
 

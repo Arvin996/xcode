@@ -2,7 +2,7 @@ package cn.xk.xcode.service.auth.handler.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.xk.xcode.client.CheckCodeClientApi;
+import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.entity.dto.user.MemberUserLoginDto;
 import cn.xk.xcode.entity.po.MemberUserPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -21,8 +21,8 @@ import static cn.xk.xcode.enums.MemberErrorCodeConstants.AUTH_LOGIN_BAD_CREDENTI
  */
 public class MemberUserPasswordHandler extends AbstractMemberUserLoginHandler {
 
-    public MemberUserPasswordHandler(CheckCodeClientApi checkCodeClientApi, MemberUserService memberUserService) {
-        super(checkCodeClientApi, memberUserService);
+    public MemberUserPasswordHandler(CaptchaClientApi captchaClientApi, MemberUserService memberUserService) {
+        super(captchaClientApi, memberUserService);
     }
 
     @Override

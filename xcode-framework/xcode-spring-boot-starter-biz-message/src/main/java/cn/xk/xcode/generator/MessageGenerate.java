@@ -9,7 +9,7 @@ import cn.xk.xcode.entity.DataSourceEntity;
  * @Version 1.0
  * @Description MessageGenerate
  */
-public final class MessageGenerate implements ICodeGenerate{
+public final class MessageGenerate implements ICodeGenerator{
 
     @Override
     public CodeGen createCodeGen() {

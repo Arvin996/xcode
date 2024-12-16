@@ -1,7 +1,7 @@
 package cn.xk.xcode.entity.dto;
 
 import cn.hutool.core.util.StrUtil;
-import cn.xk.xcode.enums.CheckCodeGenerateType;
+import cn.xk.xcode.enums.CaptchaGenerateType;
 import cn.xk.xcode.validation.Email;
 import cn.xk.xcode.validation.InStrEnum;
 import cn.xk.xcode.validation.Mobile;
@@ -33,7 +33,7 @@ public class CaptchaVerifyReqDto {
 
     @NotNull(message = "验证码生成类型不能为空")
     @Schema(description = "生成类型", example = "email")
-    @InStrEnum(CheckCodeGenerateType.class)
+    @InStrEnum(CaptchaGenerateType.class)
     private String type;
 
     @Email

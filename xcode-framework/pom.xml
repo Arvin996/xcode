@@ -32,6 +32,7 @@
         <module>xcode-monitor-parent</module>
         <module>xcode-spring-boot-starter-env-isolation</module>
         <module>xcode-spring-boot-starter-web</module>
+        <module>xcode-spring-boot-stater-tenant</module>
     </modules>
     <description>
         xk-sys-learn-framework 项目框架管理

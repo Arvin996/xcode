@@ -54,11 +54,18 @@
         <druid.version>1.2.23</druid.version>
         <velocity.version>2.3</velocity.version>
         <cglib.version>3.1</cglib.version>
+        <transmittable.version>2.14.5</transmittable.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>

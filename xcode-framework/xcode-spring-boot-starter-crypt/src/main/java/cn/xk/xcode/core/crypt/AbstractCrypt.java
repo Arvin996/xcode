@@ -1,6 +1,6 @@
 package cn.xk.xcode.core.crypt;
 
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ import static cn.xk.xcode.core.CryptGlobalConstant.ERROR_ENCRYPT;
 @Setter
 public abstract class AbstractCrypt {
 
-    protected XkSysCryptProperties xkSysCryptProperties;
+    protected CryptProperties cryptProperties;
 
     public abstract void init();
 

@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.DESede;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +25,7 @@ public class DESEdeCrypt extends AbstractCrypt {
 
     @Override
     public void init() {
-        XkSysCryptProperties.DESEde xkSysCryptPropertiesDesEde = xkSysCryptProperties.getDesEde();
+        CryptProperties.DESEde xkSysCryptPropertiesDesEde = cryptProperties.getDesEde();
         String key = xkSysCryptPropertiesDesEde.getKey();
         String iv = xkSysCryptPropertiesDesEde.getIv();
         if (StrUtil.isBlankIfStr(key)){

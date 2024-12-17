@@ -2,7 +2,7 @@ package cn.xk.xcode.core.crypt;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.symmetric.ChaCha20;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +24,7 @@ public class ChaCha20Crypt extends AbstractCrypt{
 
     @Override
     public void init() {
-        XkSysCryptProperties.ChaCha20 chacha20 = xkSysCryptProperties.getChacha20();
+        CryptProperties.ChaCha20 chacha20 = cryptProperties.getChacha20();
         String key = chacha20.getKey();
         if (StrUtil.isBlankIfStr(key)){
             ExceptionUtil.castServerException(CRYPT_KEY_MUST_NOT_NULL);

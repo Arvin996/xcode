@@ -16,18 +16,18 @@ import org.springframework.stereotype.Component;
 @Data
 @ConfigurationProperties("xcode.sign")
 @Component
-public class XkSysSignProperties {
+public class SignProperties {
     private String publicKey;
     private String privateKey;
     private String publicKeyPemPath;
     private String privateKeyPemPath;
-    private XkSysSignProperties.SignAlgType signAlgType = XkSysSignProperties.SignAlgType.MD5withRSA;
-    private XkSysSignProperties.SignType signType = XkSysSignProperties.SignType.DEFAULT;
-    private XkSysSignProperties.SignDateRule signDateRule =  XkSysSignProperties.SignDateRule.REQUEST_BODY_ONLY;
+    private SignProperties.SignAlgType signAlgType = SignProperties.SignAlgType.MD5withRSA;
+    private SignProperties.SignType signType = SignProperties.SignType.DEFAULT;
+    private SignProperties.SignDateRule signDateRule =  SignProperties.SignDateRule.REQUEST_BODY_ONLY;
     private final String separator = "&";
     private String signName = "sign";
-    private XkSysSignProperties.SignLocation signLocation = XkSysSignProperties.SignLocation.BODY;
-    private XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
+    private SignProperties.SignLocation signLocation = SignProperties.SignLocation.BODY;
+    private CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
 
     @Getter
     @AllArgsConstructor

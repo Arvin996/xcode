@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.ECIES;
 import cn.hutool.crypto.asymmetric.KeyType;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
@@ -27,9 +27,9 @@ public class ECIESCrypt extends AbstractCrypt {
 
     @Override
     public void init() {
-        XkSysCryptProperties.ECIES xkSysCryptPropertiesEcies = xkSysCryptProperties.getEcies();
-        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesEcies.getSourceKeyType();
-        if (XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)) {
+        CryptProperties.ECIES xkSysCryptPropertiesEcies = cryptProperties.getEcies();
+        CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesEcies.getSourceKeyType();
+        if (CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)) {
             ecies = new ECIES(xkSysCryptPropertiesEcies.getPrivateKey(), xkSysCryptPropertiesEcies.getPublicKey());
         } else {
             // 从文件路径中获取 这里强制要求放在resource下

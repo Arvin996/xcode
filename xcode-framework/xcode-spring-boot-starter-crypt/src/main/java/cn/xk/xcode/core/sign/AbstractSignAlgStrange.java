@@ -1,7 +1,6 @@
 package cn.xk.xcode.core.sign;
 
-import cn.xk.xcode.config.XkSysCryptProperties;
-import cn.xk.xcode.config.XkSysSignProperties;
+import cn.xk.xcode.config.SignProperties;
 import lombok.Getter;
 
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
 @Getter
 public abstract class AbstractSignAlgStrange {
 
-    protected XkSysSignProperties xkSysSignProperties;
+    protected SignProperties signProperties;
 
     public abstract String generateSignData(Map<String, Object> bodyMap, Map<String, Object> requestUrlParmasMap) throws Exception;
 

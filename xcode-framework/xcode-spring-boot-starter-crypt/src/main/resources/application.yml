@@ -1,6 +1,0 @@
-xk:
-  sys:
-    crypt:
-      cipher-type: costume
-      costume-alg:
-        alg-enum:

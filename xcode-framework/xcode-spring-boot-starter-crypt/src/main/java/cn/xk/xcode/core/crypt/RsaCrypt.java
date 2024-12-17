@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
@@ -27,16 +27,16 @@ public class RsaCrypt extends AbstractCrypt{
 
     @Override
     public void init() {
-        XkSysCryptProperties.RSA xkSysCryptPropertiesRsa = xkSysCryptProperties.getRsa();
-        XkSysCryptProperties.RSA_TYPE rsaType = xkSysCryptPropertiesRsa.getRsaType();
-        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesRsa.getSourceKeyType();
+        CryptProperties.RSA xkSysCryptPropertiesRsa = cryptProperties.getRsa();
+        CryptProperties.RSA_TYPE rsaType = xkSysCryptPropertiesRsa.getRsaType();
+        CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesRsa.getSourceKeyType();
         if (ObjectUtil.isNull(xkSysCryptPropertiesRsa.getPrivateKey())){
             ExceptionUtil.castServerException(PRIVATE_KEY_IS_NULL);
         }
         if (ObjectUtil.isNull(xkSysCryptPropertiesRsa.getPublicKey())){
             ExceptionUtil.castServerException(PUBLIC_KEY_IS_NULL);
         }
-        if (XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)){
+        if (CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)){
             rsa = new RSA(rsaType.getAlgorithm().getValue(), xkSysCryptPropertiesRsa.getPrivateKey(), xkSysCryptPropertiesRsa.getPublicKey());
         }else {
             // 从文件路径中获取 这里强制要求放在resource下

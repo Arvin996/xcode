@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Data
 @ConfigurationProperties("xcode.crypt")
 @Component
-public class XkSysCryptProperties {
+public class CryptProperties {
 
     private AES aes;
     private SM4 sm4;

@@ -6,8 +6,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SignUtil;
 import cn.hutool.crypto.asymmetric.Sign;
-import cn.xk.xcode.config.XkSysCryptProperties;
-import cn.xk.xcode.config.XkSysSignProperties;
+import cn.xk.xcode.config.CryptProperties;
+import cn.xk.xcode.config.SignProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.Getter;
@@ -30,13 +30,13 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
 
     private final Sign signer;
 
-    public DefaultSignAlgStrange(XkSysSignProperties signProperties) {
-        this.xkSysSignProperties = signProperties;
-        XkSysSignProperties.SignAlgType signAlgType = this.xkSysSignProperties.getSignAlgType();
-        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = this.xkSysSignProperties.getSourceKeyType();
-        if (sourceKeyType.equals(XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.PERM_FILE)) {
-            String privateKeyPemPath = this.xkSysSignProperties.getPrivateKeyPemPath();
-            String publicKeyPemPath = this.xkSysSignProperties.getPublicKeyPemPath();
+    public DefaultSignAlgStrange(SignProperties signProperties) {
+        this.signProperties = signProperties;
+        SignProperties.SignAlgType signAlgType = this.signProperties.getSignAlgType();
+        CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = this.signProperties.getSourceKeyType();
+        if (sourceKeyType.equals(CryptProperties.ASYMMETRIC_KEY_SOURCE.PERM_FILE)) {
+            String privateKeyPemPath = this.signProperties.getPrivateKeyPemPath();
+            String publicKeyPemPath = this.signProperties.getPublicKeyPemPath();
             if (StrUtil.isBlank(privateKeyPemPath)){
                 ExceptionUtil.castServerException(PRIVATE_KEY_PEM_PATH_IS_NULL);
             }
@@ -50,8 +50,8 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
             }
             signer = new Sign(signAlgType.getSignAlgorithm(), privateKeyFromPem, publicKeyFromPem);
         } else {
-            String publicKey = xkSysSignProperties.getPublicKey();
-            String privateKey = xkSysSignProperties.getPrivateKey();
+            String publicKey = signProperties.getPublicKey();
+            String privateKey = signProperties.getPrivateKey();
             if (StrUtil.isBlank(privateKey)){
                 ExceptionUtil.castServerException(PRIVATE_KEY_IS_NULL);
             }
@@ -64,12 +64,12 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
 
     @Override
     public String generateSignData(Map<String, Object> bodyMap, Map<String, Object> requestUrlParmasMap) throws Exception {
-        String separator = xkSysSignProperties.getSeparator();
-        XkSysSignProperties.SignDateRule signDateRule = xkSysSignProperties.getSignDateRule();
+        String separator = signProperties.getSeparator();
+        SignProperties.SignDateRule signDateRule = signProperties.getSignDateRule();
         String res = "";
-        if (signDateRule.equals(XkSysSignProperties.SignDateRule.REQUEST_BODY_ONLY)) {
+        if (signDateRule.equals(SignProperties.SignDateRule.REQUEST_BODY_ONLY)) {
             res = handleSignData(bodyMap, null, separator);
-        } else if (signDateRule.equals(XkSysSignProperties.SignDateRule.REQUEST_URL_PARAMS_ONLY)) {
+        } else if (signDateRule.equals(SignProperties.SignDateRule.REQUEST_URL_PARAMS_ONLY)) {
             res = handleSignData(null, requestUrlParmasMap, separator);
         } else {
             res = handleSignData(bodyMap, requestUrlParmasMap, separator);

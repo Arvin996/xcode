@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.SM2;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
@@ -28,9 +28,9 @@ public class Sm2Crypt extends AbstractCrypt {
 
     @Override
     public void init() {
-        XkSysCryptProperties.SM2 xkSysCryptPropertiesSm2 = xkSysCryptProperties.getSm2();
-        XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesSm2.getSourceKeyType();
-        if (XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)) {
+        CryptProperties.SM2 xkSysCryptPropertiesSm2 = cryptProperties.getSm2();
+        CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysCryptPropertiesSm2.getSourceKeyType();
+        if (CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE.equals(sourceKeyType)) {
             sm2 = SmUtil.sm2(xkSysCryptPropertiesSm2.getPrivateKey(), xkSysCryptPropertiesSm2.getPublicKey());
         } else {
             // 从文件路径中获取 这里强制要求放在resource下

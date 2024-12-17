@@ -22,7 +22,7 @@ public class CryptImportSelector implements ImportBeanDefinitionRegistrar{
         // 注册bean
         boolean isSign = (boolean) Objects.requireNonNull(importingClassMetadata.getAnnotationAttributes(EnableCrypt.class.getName())).getOrDefault("isSign", false);
         GenericBeanDefinition genericBeanDefinition = new GenericBeanDefinition();
-        genericBeanDefinition.setBeanClass(XkSysCryptConfiguration.class);
+        genericBeanDefinition.setBeanClass(CryptConfiguration.class);
         MutablePropertyValues propertyValues = new MutablePropertyValues();
         propertyValues.add("sign", isSign);
         genericBeanDefinition.setPropertyValues(propertyValues);

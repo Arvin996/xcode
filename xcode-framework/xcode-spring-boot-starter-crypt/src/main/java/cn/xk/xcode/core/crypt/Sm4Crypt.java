@@ -24,13 +24,13 @@ public class Sm4Crypt extends AbstractCrypt {
 
     @Override
     public void init() {
-        String key = xkSysCryptProperties.getSm4().getKey();
-        String iv = xkSysCryptProperties.getSm4().getIv();
+        String key = cryptProperties.getSm4().getKey();
+        String iv = cryptProperties.getSm4().getIv();
         if (StrUtil.isBlankIfStr(key)) {
             ExceptionUtil.castServerException(CRYPT_KEY_MUST_NOT_NULL);
         }
-        Mode modeType = xkSysCryptProperties.getSm4().getMode().getMODE_TYPE();
-        Padding pad = xkSysCryptProperties.getSm4().getPadding().getPADDING_TYPE();
+        Mode modeType = cryptProperties.getSm4().getMode().getMODE_TYPE();
+        Padding pad = cryptProperties.getSm4().getPadding().getPADDING_TYPE();
         if (StrUtil.isEmptyIfStr(iv)) {
             sm4 = new SM4(modeType, pad, key.getBytes(StandardCharsets.UTF_8));
         } else {

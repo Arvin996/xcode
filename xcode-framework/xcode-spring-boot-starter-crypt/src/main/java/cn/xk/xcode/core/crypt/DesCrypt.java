@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.DES;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +25,7 @@ public class DesCrypt extends AbstractCrypt {
 
     @Override
     public void init() {
-        XkSysCryptProperties.DES xkSysCryptPropertiesDes = xkSysCryptProperties.getDes();
+        CryptProperties.DES xkSysCryptPropertiesDes = cryptProperties.getDes();
         String key = xkSysCryptPropertiesDes.getKey();
         String iv = xkSysCryptPropertiesDes.getIv();
         if (StrUtil.isBlankIfStr(key)){

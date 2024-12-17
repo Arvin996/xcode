@@ -7,6 +7,7 @@ import cn.xk.xcode.core.aop.CryptInterceptor;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import cn.xk.xcode.core.crypt.CostumeCrypt;
 import cn.xk.xcode.core.enums.AlgEnum;
+import cn.xk.xcode.core.filter.DecryptFilter;
 import cn.xk.xcode.core.sign.AbstractSignAlgStrange;
 import cn.xk.xcode.core.sign.CostumeSignAlgStrange;
 import cn.xk.xcode.core.sign.DefaultSignAlgStrange;
@@ -14,9 +15,11 @@ import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;
+import javax.servlet.DispatcherType;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -29,19 +32,30 @@ import static cn.xk.xcode.core.CryptGlobalConstant.*;
  * @Author xuk
  * @Date 2024/10/24 9:38
  * @Version 1.0.0
- * @Description XkSysCryptConfig
+ * @Description CryptConfiguration
  **/
 @Slf4j
-public class XkSysCryptConfiguration {
+public class CryptConfiguration {
 
     @Resource
-    private XkSysCryptProperties xkSysCryptProperties;
+    private CryptProperties xkSysCryptProperties;
 
     @Resource
-    private XkSysSignProperties xkSysSignProperties;
+    private SignProperties xkSysSignProperties;
 
     @Setter
     private boolean isSign;
+
+    @Bean
+    public FilterRegistrationBean<DecryptFilter> cryptoFilterRegistration(AbstractCrypt abstractCrypt){
+        FilterRegistrationBean<DecryptFilter> registration = new FilterRegistrationBean<>();
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new DecryptFilter(abstractCrypt));
+        registration.addUrlPatterns("/*");
+        registration.setName("cryptoFilter");
+        registration.setOrder(FilterRegistrationBean.HIGHEST_PRECEDENCE);
+        return registration;
+    }
 
     @Bean
     public CryptAdvisor cryptAdvisor(CryptInterceptor cryptInterceptor) {
@@ -57,8 +71,8 @@ public class XkSysCryptConfiguration {
 
     @Bean
     public AbstractCrypt abstractCrypt() {
-        XkSysCryptProperties.CipherType cipherType = xkSysCryptProperties.getCipherType();
-        if (cipherType.equals(XkSysCryptProperties.CipherType.COSTUME)) {
+        CryptProperties.CipherType cipherType = xkSysCryptProperties.getCipherType();
+        if (cipherType.equals(CryptProperties.CipherType.COSTUME)) {
             ServiceLoader<CostumeCrypt> costumeCrypts = ServiceLoader.load(CostumeCrypt.class);
             List<CostumeCrypt> list = new ArrayList<>();
             while (costumeCrypts.iterator().hasNext()) {
@@ -71,9 +85,9 @@ public class XkSysCryptConfiguration {
                 ExceptionUtil.castServerException(COSTUME_CRYPT_ALG_MUST_BE_UNIQUE);
             }
             CostumeCrypt costumeCrypt = list.get(0);
-            XkSysCryptProperties.CostumeAlg costumeAlg = xkSysCryptProperties.getCostumeAlg();
-            XkSysCryptProperties.CostumeAlgEnum algEnum = costumeAlg.getAlgEnum();
-            if (algEnum.equals(XkSysCryptProperties.CostumeAlgEnum.SYMMETRIC)) {
+            CryptProperties.CostumeAlg costumeAlg = xkSysCryptProperties.getCostumeAlg();
+            CryptProperties.CostumeAlgEnum algEnum = costumeAlg.getAlgEnum();
+            if (algEnum.equals(CryptProperties.CostumeAlgEnum.SYMMETRIC)) {
                 String secretKey = costumeAlg.getSecretKey();
                 if (StrUtil.isBlank(secretKey)) {
                     ExceptionUtil.castServerException(SYMMETRIC_ALG_KEY_MUST_NOT_NULL);
@@ -100,15 +114,15 @@ public class XkSysCryptConfiguration {
         // 自定义的算法
         AlgEnum algEnum = xkSysCryptProperties.getAlgEnum();
         AbstractCrypt abstractCrypt = algEnum.getAbstractCrypt();
-        abstractCrypt.setXkSysCryptProperties(xkSysCryptProperties);
+        abstractCrypt.setCryptProperties(xkSysCryptProperties);
         abstractCrypt.init();
         return abstractCrypt;
     }
 
     @Bean
     public AbstractSignAlgStrange abstractSignAlgStrange() {
-        XkSysSignProperties.SignType signType = xkSysSignProperties.getSignType();
-        if (signType.equals(XkSysSignProperties.SignType.COSTUME)) {
+        SignProperties.SignType signType = xkSysSignProperties.getSignType();
+        if (signType.equals(SignProperties.SignType.COSTUME)) {
             ServiceLoader<CostumeSignAlgStrange> services = ServiceLoader.load(CostumeSignAlgStrange.class);
             List<CostumeSignAlgStrange> list = new ArrayList<>();
             while (services.iterator().hasNext()) {
@@ -126,8 +140,8 @@ public class XkSysCryptConfiguration {
             if (StrUtil.isBlank(privateKey) || StrUtil.isBlank(publicKey)) {
                 ExceptionUtil.castServerException(COSTUME_SIGN_ALG_PEM_PATH_MUST_NOT_NULL);
             }
-            XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysSignProperties.getSourceKeyType();
-            if (sourceKeyType.equals(XkSysCryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE)) {
+            CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = xkSysSignProperties.getSourceKeyType();
+            if (sourceKeyType.equals(CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE)) {
                 ExceptionUtil.castServerException(COSTUME_SIGN_ALG_KEY_MUST_STORE_IN_PEM);
             } else {
                 PrivateKey privateKeyFromPem = CryptUtil.getPrivateKeyFromPem(privateKey);

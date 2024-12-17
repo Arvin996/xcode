@@ -2,7 +2,7 @@ package cn.xk.xcode.core.crypt;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.symmetric.AES;
-import cn.xk.xcode.config.XkSysCryptProperties;
+import cn.xk.xcode.config.CryptProperties;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +23,7 @@ public class AesCrypt extends AbstractCrypt{
 
     @Override
     public void init() {
-        XkSysCryptProperties.AES cryptPropertiesAes = xkSysCryptProperties.getAes();
+        CryptProperties.AES cryptPropertiesAes = cryptProperties.getAes();
         String key = cryptPropertiesAes.getKey();
         String iv = cryptPropertiesAes.getIv();
         if (StrUtil.isBlankIfStr(key)){

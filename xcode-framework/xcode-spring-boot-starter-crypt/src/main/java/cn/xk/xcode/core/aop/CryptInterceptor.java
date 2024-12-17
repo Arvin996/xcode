@@ -3,7 +3,7 @@ package cn.xk.xcode.core.aop;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.*;
 import cn.hutool.json.JSONUtil;
-import cn.xk.xcode.config.XkSysSignProperties;
+import cn.xk.xcode.config.SignProperties;
 import cn.xk.xcode.core.annotation.IgnoreCrypt;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import cn.xk.xcode.core.sign.AbstractSignAlgStrange;
@@ -55,7 +55,7 @@ public class CryptInterceptor implements MethodInterceptor {
             if (method.isAnnotationPresent(IgnoreCrypt.class) || clazz.isAnnotationPresent(IgnoreCrypt.class)) {
                 object = invocation.proceed();
             } else {
-                this.decrypt(invocation);
+                handlerSign(invocation);
                 object = invocation.proceed();
                 object = this.encrypt(object);
             }
@@ -65,28 +65,8 @@ public class CryptInterceptor implements MethodInterceptor {
         }
     }
 
-    private void decrypt(MethodInvocation invocation) throws Throwable {
+    private void handlerSign(MethodInvocation invocation) throws Throwable {
         Object[] arguments = invocation.getArguments();
-        if (ArrayUtil.isEmpty(arguments)) {
-            return;
-        }
-        Object arg;
-        for (int i = 0; i < arguments.length; i++) {
-            arg = arguments[i];
-            // 1. 解密
-            String decryptStr = crypt.decrypt(arg.toString());
-            boolean isJson = JSONUtil.isTypeJSON(decryptStr);
-            if (isJson) {
-                if (JSONUtil.isTypeJSONObject(decryptStr)) {
-                    arguments[i] = JSONUtil.parseObj(decryptStr);
-                } else {
-                    arguments[i] = JSONUtil.parseArray(decryptStr);
-                }
-            } else {
-                // 基本类型
-                arguments[i] = decryptStr;
-            }
-        }
         if (isSign) {
             try {
                 handleSign(arguments, invocation);
@@ -112,17 +92,17 @@ public class CryptInterceptor implements MethodInterceptor {
                 paramsMap.put((String) k, v);
             });
         }
-        XkSysSignProperties xkSysSignProperties = sign.getXkSysSignProperties();
-        String signName = xkSysSignProperties.getSignName();
-        XkSysSignProperties.SignLocation signLocation = xkSysSignProperties.getSignLocation();
+        SignProperties signProperties = sign.getSignProperties();
+        String signName = signProperties.getSignName();
+        SignProperties.SignLocation signLocation = signProperties.getSignLocation();
         String signData = "";
-        if (signLocation.equals(XkSysSignProperties.SignLocation.BODY)) {
+        if (signLocation.equals(SignProperties.SignLocation.BODY)) {
             for (int i = 0; i < arguments.length; i++) {
                 if (parameterNames[i].equals(signName)) {
                     signData = arguments[i].toString();
                 }
             }
-        } else if (signLocation.equals(XkSysSignProperties.SignLocation.PARAM)) {
+        } else if (signLocation.equals(SignProperties.SignLocation.PARAM)) {
             if (Objects.nonNull(urlBuilder)) {
                 signData = (String) urlBuilder.getQuery().get(signName);
             }
@@ -152,9 +132,9 @@ public class CryptInterceptor implements MethodInterceptor {
         stringCommonResult.setCode(commonResult.getCode());
         stringCommonResult.setMsg(commonResult.getMsg());
         if (ObjectUtil.isNotNull(data)) {
-            if (ObjUtil.isBasicType(data)){
+            if (ObjUtil.isBasicType(data)) {
                 stringCommonResult.setData(crypt.encrypt(data.toString()));
-            }else {
+            } else {
                 stringCommonResult.setData(JSONUtil.toJsonStr(data));
             }
         }

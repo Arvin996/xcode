@@ -22,5 +22,5 @@ public abstract class BaseMessage {
     protected LocalDateTime sendTime;
 
     // 重试次数 用于判断重试次数，超过重试次数发送异常警告 没有超过则会发送延时消息重复消费
-    protected Integer retryTimes;
+    protected Integer retryTimes = 0;
 }

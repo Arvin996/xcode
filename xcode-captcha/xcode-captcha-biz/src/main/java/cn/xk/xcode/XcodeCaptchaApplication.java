@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Author xuk
  * @Date 2024/11/18 15:17
  * @Version 1.0.0
- * @Description XcodeCheckcodeApplication
+ * @Description XcodeCaptchaApplication
  **/
 @SpringBootApplication
-public class XcodeCheckcodeApplication {
+public class XcodeCaptchaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(XcodeCheckcodeApplication.class, args);
+        SpringApplication.run(XcodeCaptchaApplication.class, args);
     }
 }

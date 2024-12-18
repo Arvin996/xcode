@@ -45,6 +45,10 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
+    public boolean isSuccess() {
+        return isSuccess(this.code);
+    }
+
     public static boolean isSuccess(Object code) {
         return Objects.equals(code, GlobalErrorCodeConstants.SUCCESS.getCode());
     }

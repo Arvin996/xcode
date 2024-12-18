@@ -17,8 +17,6 @@ import cn.xk.xcode.handler.core.cache.RedisSaveCaptchaCache;
 import com.aliyuncs.profile.DefaultProfile;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.google.code.kaptcha.impl.DefaultKaptcha;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

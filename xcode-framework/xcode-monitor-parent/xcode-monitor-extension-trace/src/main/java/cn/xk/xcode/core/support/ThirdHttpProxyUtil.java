@@ -1,9 +1,13 @@
 package cn.xk.xcode.core.support;
 
+import cn.hutool.extra.spring.SpringUtil;
+import cn.xk.xcode.config.TraceConfiguration;
 import cn.xk.xcode.core.aop.proxy.CglibProxyFactory;
 import cn.xk.xcode.core.aop.proxy.JdkProxyFactory;
 import cn.xk.xcode.core.aop.proxy.SpringCglibProxyFactory;
 import cn.xk.xcode.core.entity.ProxyType;
+
+import java.util.Objects;
 
 /**
  * @Author xuk
@@ -21,6 +25,10 @@ public class ThirdHttpProxyUtil {
     }
 
     public static <T> T createProxy(ProxyType proxyType, T t, BaseThirdRequestAspect baseThirdRequestAspect) {
+        TraceConfiguration bean = SpringUtil.getBean(TraceConfiguration.class);
+        if (Objects.isNull(bean)){
+            return t;
+        }
         if (proxyType == ProxyType.JDK) {
             return JdkProxyFactory.createProxy(t, baseThirdRequestAspect);
         } else if (proxyType == ProxyType.CGLIB) {

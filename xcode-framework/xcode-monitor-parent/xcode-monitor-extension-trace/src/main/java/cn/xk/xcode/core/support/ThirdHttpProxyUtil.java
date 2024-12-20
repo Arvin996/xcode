@@ -20,21 +20,21 @@ public class ThirdHttpProxyUtil {
     private ThirdHttpProxyUtil() {
     }
 
-    public static <T> T createProxy(T t, BaseThirdRequestAspect baseThirdRequestAspect) {
-        return createProxy(ProxyType.SPRING, t, baseThirdRequestAspect);
+    public static <T> T createProxy(T t, AbstractThirdRequestAspect abstractThirdRequestAspect) {
+        return createProxy(ProxyType.SPRING, t, abstractThirdRequestAspect);
     }
 
-    public static <T> T createProxy(ProxyType proxyType, T t, BaseThirdRequestAspect baseThirdRequestAspect) {
+    public static <T> T createProxy(ProxyType proxyType, T t, AbstractThirdRequestAspect abstractThirdRequestAspect) {
         TraceConfiguration bean = SpringUtil.getBean(TraceConfiguration.class);
         if (Objects.isNull(bean)){
             return t;
         }
         if (proxyType == ProxyType.JDK) {
-            return JdkProxyFactory.createProxy(t, baseThirdRequestAspect);
+            return JdkProxyFactory.createProxy(t, abstractThirdRequestAspect);
         } else if (proxyType == ProxyType.CGLIB) {
-            return CglibProxyFactory.createProxy(t, baseThirdRequestAspect);
+            return CglibProxyFactory.createProxy(t, abstractThirdRequestAspect);
         } else {
-            return SpringCglibProxyFactory.createProxy(t, baseThirdRequestAspect);
+            return SpringCglibProxyFactory.createProxy(t, abstractThirdRequestAspect);
         }
     }
 }

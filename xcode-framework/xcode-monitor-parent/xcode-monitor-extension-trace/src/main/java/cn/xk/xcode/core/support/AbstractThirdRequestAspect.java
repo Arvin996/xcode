@@ -12,7 +12,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +22,9 @@ import static cn.xk.xcode.message.MessageTopicType.TOPIC_TRACE_LOG;
  * @Author xuk
  * @Date 2024/12/18 9:22
  * @Version 1.0.0
- * @Description ThirdRequestAspect
+ * @Description AbstractThirdRequestAspect
  **/
-public abstract class BaseThirdRequestAspect implements Aspect {
+public abstract class AbstractThirdRequestAspect implements Aspect {
 
     @Value("${spring.application.name}")
     private String serviceName;
@@ -36,7 +35,7 @@ public abstract class BaseThirdRequestAspect implements Aspect {
     @Setter
     private String thirdRequestUrl;
 
-    public BaseThirdRequestAspect(RocketMQEnhanceTemplate rocketMQEnhanceTemplate) {
+    public AbstractThirdRequestAspect(RocketMQEnhanceTemplate rocketMQEnhanceTemplate) {
         this.rocketMQEnhanceTemplate = rocketMQEnhanceTemplate;
     }
 

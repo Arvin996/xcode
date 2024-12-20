@@ -59,5 +59,16 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 </project>

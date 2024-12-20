@@ -28,4 +28,9 @@ public class LoginUser {
     @Schema(description = "角色列表")
     private Set<String> roles = new HashSet<>();
 
+    @Schema(description = "用户部门")
+    private Set<Long> deptIds;
+
+    @Schema(description = "用户部门及子部门")
+    private Set<Long> deptIdsAndChildren;
 }

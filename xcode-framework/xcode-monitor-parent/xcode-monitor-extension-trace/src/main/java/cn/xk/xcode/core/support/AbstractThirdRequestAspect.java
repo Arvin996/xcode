@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,8 +52,9 @@ public abstract class AbstractThirdRequestAspect implements Aspect {
         traceRecord.setTraceId(TraceContextHolder.getTraceId());
         traceRecord.setRequestTime(LocalDateTimeUtil.formatNormal(LocalDateTime.now()));
         Map<String, Object> map = new HashMap<>();
-        for (int i = 0; i < var2.getParameters().length; i++) {
-            map.put(var2.getParameters()[i].getName(), var3[i]);
+        Parameter[] parameters = var2.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            map.put(parameters[i].getName(), var3[i]);
         }
         traceRecord.setRequestParam(JSON.toJSONString(map));
         traceRecord.setCallServiceName(serviceName);

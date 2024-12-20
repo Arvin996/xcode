@@ -2,6 +2,7 @@ package cn.xk.xcode.exception.core;
 
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.exception.ErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,7 +48,7 @@ public class ServiceException extends RuntimeException {
         String msg = errorCode.getMessage();
         if (!ArrayUtil.isEmpty(objs)){
             try {
-                msg = String.format(errorCode.getMessage(), objs);
+                msg = StrUtil.format(errorCode.getMessage(), objs);
             } catch (IllegalFormatException e) {
                 throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
             }
@@ -59,7 +60,7 @@ public class ServiceException extends RuntimeException {
     public ServiceException(Object code, String msg , Object... objs) {
         if (!ArrayUtil.isEmpty(objs)){
             try {
-                msg = String.format(msg, objs);
+                msg = StrUtil.format(msg, objs);
             } catch (IllegalFormatException e) {
                 throw new ServiceException(ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR);
             }

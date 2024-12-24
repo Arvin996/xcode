@@ -5,6 +5,8 @@ import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +30,8 @@ public class BizMessagePo implements Serializable {
     /**
      * 消息id
      */
-    @Id(keyType = KeyType.Auto)
-    private Integer id;
+    @Id(keyType = KeyType.Generator, value = KeyGenerators.flexId)
+    private Long id;
 
     /**
      * 消息类型

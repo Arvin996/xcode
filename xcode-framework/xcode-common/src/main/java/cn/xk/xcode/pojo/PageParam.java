@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageParam implements java.io.Serializable {
+
     public static final long PAGE_NO_DEFAULT = 1;
 
     public static final long PAGE_SIZE_DEFAULT = 10;

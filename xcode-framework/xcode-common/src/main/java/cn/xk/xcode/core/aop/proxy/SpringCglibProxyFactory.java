@@ -39,7 +39,6 @@ public class SpringCglibProxyFactory extends ProxyFactory {
                 finalException = e;
             }
         }
-
         if (null != finalException) {
             throw finalException;
         } else {

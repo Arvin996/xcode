@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class EncryptUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(EncryptUtil.class);
 
     public static String encodeBase64(byte[] bytes) {

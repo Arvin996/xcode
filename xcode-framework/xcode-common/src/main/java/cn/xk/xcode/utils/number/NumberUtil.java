@@ -13,6 +13,7 @@ import java.math.RoundingMode;
  * @Description NumberUtil
  */
 public class NumberUtil {
+
     public static Long parseLong(String str) {
         return StringUtils.isEmpty(str) ? null : cn.hutool.core.util.NumberUtil.parseLong(str);
     }

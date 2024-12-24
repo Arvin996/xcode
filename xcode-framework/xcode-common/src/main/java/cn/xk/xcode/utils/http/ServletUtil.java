@@ -2,6 +2,8 @@ package cn.xk.xcode.utils.http;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import cn.xk.xcode.exception.core.ServerException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,12 +21,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
+
 /**
  * @Author xuk
  * @Date 2024/11/22 16:52
  * @Version 1.0.0
  * @Description ServletUtil
  **/
+@Slf4j
 public class ServletUtil {
     /**
      * 获取String参数
@@ -132,7 +137,8 @@ public class ServletUtil {
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+            throw new ServerException(INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
         }
     }
 

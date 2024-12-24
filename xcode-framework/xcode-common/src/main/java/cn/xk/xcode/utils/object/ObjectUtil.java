@@ -17,8 +17,7 @@ import java.util.function.Function;
  * @Version 1.0
  * @Description ObjectUtil
  */
-public class ObjectUtil
-{
+public class ObjectUtil {
     /**
      * 复制对象，并忽略 Id 编号
      *

@@ -50,4 +50,5 @@ public interface GlobalErrorCodeConstants
     ErrorCode EXCEL_MESSAGE_ADD_ERROR = new IntErrorCode(902, "往excel导出队列中添加消息失败");
     IntErrorCode EXCEL_EXPORT_ERROR = new IntErrorCode(903, "导出Excel失败");
     ErrorCode UNKNOWN = new IntErrorCode(999, "未知错误");
+    ErrorCode BUNDLE_MESSAGE_NOT_FOUND = new IntErrorCode(998, "对应的国际化资源文件未找到信息code{}");
 }

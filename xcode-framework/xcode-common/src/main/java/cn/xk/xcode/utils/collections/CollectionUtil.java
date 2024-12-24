@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * @Description CollectionUtil
  */
 public class CollectionUtil {
+
     public static <T> boolean anyMatch(Collection<T> collection, Predicate<T> predicate) {
         return collection.stream().anyMatch(predicate);
     }

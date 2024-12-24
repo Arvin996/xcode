@@ -42,7 +42,6 @@ public class QRCodeUtil {
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
             //设置图片的边距
             hints.put(EncodeHintType.MARGIN, 1);
-
             try {
                 // zxing生成二维码核心类
                 QRCodeWriter writer = new QRCodeWriter();

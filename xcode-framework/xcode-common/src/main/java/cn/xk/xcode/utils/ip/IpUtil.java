@@ -1,6 +1,7 @@
 package cn.xk.xcode.utils.ip;
 
 import cn.xk.xcode.utils.http.ServletUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import java.util.Objects;
  * @Version 1.0.0
  * @Description IpUtil
  **/
+@Slf4j
 public class IpUtil {
 
     private IpUtil() {
@@ -106,9 +108,8 @@ public class IpUtil {
                     return true;
                 }
             case SECTION_5:
-                switch (b1) {
-                    case SECTION_6:
-                        return true;
+                if (b1 == SECTION_6) {
+                    return true;
                 }
             default:
                 return false;
@@ -122,7 +123,7 @@ public class IpUtil {
      * @return byte 字节
      */
     public static byte[] textToNumericFormatV4(String text) {
-        if (text.length() == 0) {
+        if (text.isEmpty()) {
             return null;
         }
 
@@ -198,6 +199,7 @@ public class IpUtil {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
+            log.error(e.getMessage());
         }
         return "127.0.0.1";
     }
@@ -211,6 +213,7 @@ public class IpUtil {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
+            log.error(e.getMessage());
         }
         return "未知";
     }
@@ -226,7 +229,7 @@ public class IpUtil {
         if (ip != null && ip.indexOf(",") > 0) {
             final String[] ips = ip.trim().split(",");
             for (String subIp : ips) {
-                if (false == isUnknown(subIp)) {
+                if (!isUnknown(subIp)) {
                     ip = subIp;
                     break;
                 }

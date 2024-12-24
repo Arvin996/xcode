@@ -6,8 +6,8 @@ package cn.xk.xcode.core.annotation;
  * @Version 1.0
  * @Description IntEnumValueToArray
  */
-public interface IntEnumValueToArray extends EnumValueToArray
-{
+public interface IntEnumValueToArray extends EnumValueToArray {
+
     @Override
     default String[] toArrayString() {
         return new String[0];

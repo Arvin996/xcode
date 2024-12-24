@@ -6,8 +6,7 @@ package cn.xk.xcode.core.annotation;
  * @Version 1.0
  * @Description EnumValueToArray
  */
-public interface EnumValueToArray
-{
+public interface EnumValueToArray {
     int[] toIntArray();
 
     String[] toArrayString();

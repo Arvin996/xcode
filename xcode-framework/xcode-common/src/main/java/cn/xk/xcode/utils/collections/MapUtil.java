@@ -12,8 +12,8 @@ import java.util.function.Consumer;
  * @Version 1.0
  * @Description MapUtil
  */
-public class MapUtil
-{
+public class MapUtil {
+
     public static <K, V> List<V> getList(Map<K, V> multimap, Collection<K> keys){
         List<V> list = new ArrayList<>(Collections.emptyList());
         keys.forEach(key -> list.add(multimap.get(key)));

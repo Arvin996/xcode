@@ -4,11 +4,13 @@ package cn.xk.xcode.exception.core;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.exception.ErrorCode;
+import cn.xk.xcode.utils.spring.MessageUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.IllegalFormatException;
 
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.BUNDLE_MESSAGE_NOT_FOUND;
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR;
 
 /**
@@ -42,6 +44,15 @@ public class ServiceException extends RuntimeException {
     public ServiceException(ErrorCode errCode) {
         this.code = errCode.getCode();
         this.msg = errCode.getMessage();
+    }
+
+    public ServiceException(String code, Object... objs){
+        String message = MessageUtil.getMessage(code, objs);
+        if (StrUtil.isBlank(message)){
+            throw new ServerException(BUNDLE_MESSAGE_NOT_FOUND, code);
+        }
+        this.code = code;
+        this.msg = message;
     }
 
     public ServiceException(ErrorCode errorCode, Object... objs) {

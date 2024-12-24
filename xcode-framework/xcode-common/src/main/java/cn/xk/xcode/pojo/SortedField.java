@@ -15,8 +15,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SortedField implements Serializable
-{
+public class SortedField implements Serializable {
+
     /**
      * 顺序 - 升序
      */

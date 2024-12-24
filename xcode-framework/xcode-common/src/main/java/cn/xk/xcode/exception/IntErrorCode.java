@@ -1,7 +1,6 @@
 package cn.xk.xcode.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * @Author xuk
@@ -10,8 +9,8 @@ import lombok.Data;
  * @Description IntErrorCode
  */
 @AllArgsConstructor
-public class IntErrorCode implements ErrorCode
-{
+public class IntErrorCode implements ErrorCode {
+
     int code;
 
     String msg;

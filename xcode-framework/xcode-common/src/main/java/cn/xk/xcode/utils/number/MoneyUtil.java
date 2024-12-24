@@ -11,8 +11,7 @@ import java.math.RoundingMode;
  * @Version 1.0
  * @Description MoneyUtil
  */
-public class MoneyUtil
-{
+public class MoneyUtil {
     /**
      * 金额的小数位数
      */

@@ -21,6 +21,7 @@ import static cn.xk.xcode.utils.collections.CollectionUtil.createEmptySet;
  * @Description ArrayUtil
  */
 public class ArrayUtil {
+
     @SuppressWarnings("unchecked")
     public static <T> T[] toArray(Collection<T> from) {
         if (CollectionUtil.isEmpty(from)) {

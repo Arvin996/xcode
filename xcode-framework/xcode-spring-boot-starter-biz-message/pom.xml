@@ -8,7 +8,7 @@
         <version>${revision}</version>
     </parent>
     <artifactId>xcode-spring-boot-starter-biz-message</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>${project.artifactId}</name>
     <description>
         xk-sys-learn-biz-message

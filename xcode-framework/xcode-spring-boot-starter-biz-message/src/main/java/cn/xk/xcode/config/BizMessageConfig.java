@@ -14,9 +14,7 @@ import javax.annotation.Resource;
  * @Version 1.0
  * @Description BizMessageConfig 项目启动的时候自动检测创建表
  */
-@EnableConfigurationProperties(BizMessageProperties.class)
 @Configuration
-@ConditionalOnBean(value = BizMessageProperties.class)
 public class BizMessageConfig implements InitializingBean {
     public static final String  BIZ_MESSAGE_TABLE_SQL;
 
@@ -57,10 +55,7 @@ public class BizMessageConfig implements InitializingBean {
                 ") ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;";
     }
 
-    @Resource
-    private BizMessageProperties bizMessageProperties;
-
-    public BizMessageConfig(){
+    public BizMessageConfig(BizMessageProperties bizMessageProperties){
         TableSqlUtils.init(bizMessageProperties);
     }
 
@@ -71,9 +66,9 @@ public class BizMessageConfig implements InitializingBean {
         if (!StringUtils.hasLength(bizTable)){
             TableSqlUtils.executeSql(CollectionUtil.createSingleList(BIZ_MESSAGE_TABLE_SQL));
         }
-        String hisBizTable =  TableSqlUtils.getSpecificTableName(BIZ_MESSAGE_TABLE_NAME);
+        String hisBizTable =  TableSqlUtils.getSpecificTableName(HIS_MESSAGE_TABLE_NAME);
         if (!StringUtils.hasLength(hisBizTable)){
-            TableSqlUtils.executeSql(CollectionUtil.createSingleList(HIS_MESSAGE_TABLE_NAME));
+            TableSqlUtils.executeSql(CollectionUtil.createSingleList(HIS_MESSAGE_TABLE_SQL));
         }
     }
 }

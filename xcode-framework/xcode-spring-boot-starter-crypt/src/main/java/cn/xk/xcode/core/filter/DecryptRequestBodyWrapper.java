@@ -1,11 +1,12 @@
 package cn.xk.xcode.core.filter;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.net.url.UrlBuilder;
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
+import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriUtils;
 
 import javax.servlet.ReadListener;
@@ -16,7 +17,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -26,6 +26,7 @@ import java.util.Map;
  * @Version 1.0.0
  * @Description DecryptRequestBodyWrapper
  **/
+@Slf4j
 public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
 
     private byte[] body = null;
@@ -33,6 +34,7 @@ public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
     private Map<String, String[]> parameterMap;
     private final int count;
     private static final int FIRST_PATH_VARIABLE_INDEX = 3;
+    private static final String BODY_KEY = "body";
 
     public DecryptRequestBodyWrapper(HttpServletRequest request, AbstractCrypt crypt, int count) throws IOException {
         super(request);
@@ -45,8 +47,14 @@ public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
         // 解密
         String decryptBody;
         if (StrUtil.isNotEmpty(requestBody)) {
-            decryptBody = crypt.decrypt(requestBody);
-            body = UriUtils.decode(decryptBody, StandardCharsets.UTF_8).getBytes(StandardCharsets.UTF_8);
+            JSONObject jsonObject = JSONObject.parseObject(requestBody);
+            String bodyStr = jsonObject.getString(BODY_KEY);
+            if (StrUtil.isNotBlank(bodyStr)) {
+                decryptBody = crypt.decrypt(bodyStr);
+                body = UriUtils.decode(decryptBody, StandardCharsets.UTF_8).getBytes(StandardCharsets.UTF_8);
+            }else {
+                log.warn("请求报文未空，或者情况报文中不包含key为body的值，格式错误");
+            }
         }
     }
 
@@ -149,7 +157,7 @@ public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
         return buildURI(requestURI);
     }
 
-    public String buildURI(String requestURI){
+    public String buildURI(String requestURI) {
         // 使用”/“进行分割
         String[] split = requestURI.split("/");
         StringBuilder stringBuilder = new StringBuilder();

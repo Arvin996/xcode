@@ -47,7 +47,7 @@ public class CryptConfiguration {
     private boolean isSign;
 
     @Bean
-    public FilterRegistrationBean<DecryptFilter> cryptoFilterRegistration(AbstractCrypt abstractCrypt){
+    public FilterRegistrationBean<DecryptFilter> cryptoFilterRegistration(AbstractCrypt abstractCrypt) {
         FilterRegistrationBean<DecryptFilter> registration = new FilterRegistrationBean<>();
         registration.setDispatcherTypes(DispatcherType.REQUEST);
         registration.setFilter(new DecryptFilter(abstractCrypt));
@@ -63,7 +63,8 @@ public class CryptConfiguration {
     }
 
     @Bean
-    public CryptInterceptor cryptInterceptor(AbstractCrypt abstractCrypt, AbstractSignAlgStrange abstractSignAlgStrange) {
+    public CryptInterceptor cryptInterceptor(AbstractCrypt abstractCrypt) {
+        AbstractSignAlgStrange abstractSignAlgStrange = abstractSignAlgStrange();
         CryptInterceptor cryptInterceptor = new CryptInterceptor(abstractCrypt, abstractSignAlgStrange);
         cryptInterceptor.setSign(isSign);
         return cryptInterceptor;
@@ -119,8 +120,10 @@ public class CryptConfiguration {
         return abstractCrypt;
     }
 
-    @Bean
     public AbstractSignAlgStrange abstractSignAlgStrange() {
+        if (!isSign) {
+            return null;
+        }
         SignProperties.SignType signType = xkSysSignProperties.getSignType();
         if (signType.equals(SignProperties.SignType.COSTUME)) {
             ServiceLoader<CostumeSignAlgStrange> services = ServiceLoader.load(CostumeSignAlgStrange.class);

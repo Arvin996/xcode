@@ -126,8 +126,6 @@ public class CryptInterceptor implements MethodInterceptor {
         }
         CommonResult<?> commonResult = (CommonResult<?>) object;
         Object data = commonResult.getData();
-        commonResult.setMsg(crypt.encrypt(commonResult.getMsg()));
-        commonResult.setCode(crypt.encrypt(commonResult.getCode().toString()));
         CommonResult<String> stringCommonResult = new CommonResult<>();
         stringCommonResult.setCode(commonResult.getCode());
         stringCommonResult.setMsg(commonResult.getMsg());
@@ -135,7 +133,7 @@ public class CryptInterceptor implements MethodInterceptor {
             if (ObjUtil.isBasicType(data)) {
                 stringCommonResult.setData(crypt.encrypt(data.toString()));
             } else {
-                stringCommonResult.setData(JSONUtil.toJsonStr(data));
+                stringCommonResult.setData(crypt.encrypt(JSONUtil.toJsonStr(data)));
             }
         }
         return stringCommonResult;

@@ -4,6 +4,7 @@ import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.GlobalErrorCodeConstants;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +46,7 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
+    @JsonIgnore
     public boolean isSuccess() {
         return isSuccess(this.code);
     }

@@ -37,10 +37,10 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
         if (sourceKeyType.equals(CryptProperties.ASYMMETRIC_KEY_SOURCE.PERM_FILE)) {
             String privateKeyPemPath = this.signProperties.getPrivateKeyPemPath();
             String publicKeyPemPath = this.signProperties.getPublicKeyPemPath();
-            if (StrUtil.isBlank(privateKeyPemPath)){
+            if (StrUtil.isBlank(privateKeyPemPath)) {
                 ExceptionUtil.castServerException(PRIVATE_KEY_PEM_PATH_IS_NULL);
             }
-            if (StrUtil.isBlank(publicKeyPemPath)){
+            if (StrUtil.isBlank(publicKeyPemPath)) {
                 ExceptionUtil.castServerException(PUBLIC_KEY_PEM_PATH_IS_NULL);
             }
             PublicKey publicKeyFromPem = CryptUtil.getPublicKeyFromPem(publicKeyPemPath);
@@ -52,10 +52,10 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
         } else {
             String publicKey = signProperties.getPublicKey();
             String privateKey = signProperties.getPrivateKey();
-            if (StrUtil.isBlank(privateKey)){
+            if (StrUtil.isBlank(privateKey)) {
                 ExceptionUtil.castServerException(PRIVATE_KEY_IS_NULL);
             }
-            if (StrUtil.isBlank(publicKey)){
+            if (StrUtil.isBlank(publicKey)) {
                 ExceptionUtil.castServerException(PUBLIC_KEY_IS_NULL);
             }
             signer = SignUtil.sign(signAlgType.getSignAlgorithm(), privateKey, publicKey);
@@ -80,10 +80,18 @@ public class DefaultSignAlgStrange extends AbstractSignAlgStrange {
     private String handleSignData(Map<String, Object> bodyMap, Map<String, Object> requestUrlParmasMap, String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         if (ObjUtil.isNotEmpty(bodyMap)) {
-            bodyMap.forEach((k, v) -> stringBuilder.append(k).append("=").append(v).append(separator));
+            bodyMap.forEach((k, v) -> {
+                if (!k.equals(signProperties.getSignName())) {
+                    stringBuilder.append(k).append("=").append(v).append(separator);
+                }
+            });
         }
         if (ObjUtil.isNotEmpty(requestUrlParmasMap)) {
-            requestUrlParmasMap.forEach((k, v) -> stringBuilder.append(k).append("=").append(v).append(separator));
+            requestUrlParmasMap.forEach((k, v) -> {
+                if (!k.equals(signProperties.getSignName())){
+                    stringBuilder.append(k).append("=").append(v).append(separator);
+                }
+            });
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         return stringBuilder.toString();

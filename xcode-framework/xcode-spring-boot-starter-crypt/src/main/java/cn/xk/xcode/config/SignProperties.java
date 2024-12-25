@@ -24,10 +24,11 @@ public class SignProperties {
     private SignProperties.SignAlgType signAlgType = SignProperties.SignAlgType.MD5withRSA;
     private SignProperties.SignType signType = SignProperties.SignType.DEFAULT;
     private SignProperties.SignDateRule signDateRule =  SignProperties.SignDateRule.REQUEST_BODY_ONLY;
-    private final String separator = "&";
+    private String separator = "&";
     private String signName = "sign";
     private SignProperties.SignLocation signLocation = SignProperties.SignLocation.BODY;
     private CryptProperties.ASYMMETRIC_KEY_SOURCE sourceKeyType = CryptProperties.ASYMMETRIC_KEY_SOURCE.APPLICATION_FILE;
+    private Boolean isDecryptRequestParam = false;
 
     @Getter
     @AllArgsConstructor

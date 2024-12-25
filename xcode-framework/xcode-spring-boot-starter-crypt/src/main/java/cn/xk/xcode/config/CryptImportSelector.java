@@ -27,5 +27,8 @@ public class CryptImportSelector implements ImportBeanDefinitionRegistrar{
         propertyValues.add("sign", isSign);
         genericBeanDefinition.setPropertyValues(propertyValues);
         registry.registerBeanDefinition("xkSysCryptConfiguration", genericBeanDefinition);
+        GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+        beanDefinition.setBeanClass(WebArgumentResolverConfiguration.class);
+        registry.registerBeanDefinition("webPathArgumentConfiguration", beanDefinition);
     }
 }

@@ -1,7 +1,6 @@
 package cn.xk.xcode.core.filter;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import com.alibaba.fastjson2.JSONObject;
@@ -18,7 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author xuk
@@ -30,17 +29,10 @@ import java.util.Map;
 public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
 
     private byte[] body = null;
-    private final AbstractCrypt crypt;
-    private Map<String, String[]> parameterMap;
-    private final int count;
-    private static final int FIRST_PATH_VARIABLE_INDEX = 3;
     private static final String BODY_KEY = "body";
 
-    public DecryptRequestBodyWrapper(HttpServletRequest request, AbstractCrypt crypt, int count) throws IOException {
+    public DecryptRequestBodyWrapper(HttpServletRequest request, AbstractCrypt crypt) throws IOException {
         super(request);
-        parameterMap = request.getParameterMap();
-        this.crypt = crypt;
-        this.count = count;
         byte[] readBytes = IoUtil.readBytes(request.getInputStream(), false);
         // 获取加密body
         String requestBody = new String(readBytes, StandardCharsets.UTF_8);
@@ -109,67 +101,71 @@ public class DecryptRequestBodyWrapper extends HttpServletRequestWrapper {
         };
     }
 
-    @Override
-    public String[] getParameterValues(String name) {
-        String[] values = parameterMap.get(name);
-        if (values != null && values.length > 0) {
-            for (int i = 0; i < values.length; i++) {
-                values[i] = modifyParam(values[i]);
-            }
-        }
-        return values;
-    }
+//    @Override
+//    public String[] getParameterValues(String name) {
+//        if (paramsName.contains(name)){
+//            String[] values = parameterMap.get(name);
+//            if (values != null && values.length > 0) {
+//                for (int i = 0; i < values.length; i++) {
+//                    values[i] = modifyParam(values[i]);
+//                }
+//            }
+//            return values;
+//        }else {
+//            return parameterMap.get(name);
+//        }
+//    }
 
-    @Override
-    public String getParameter(String name) {
-        String[] strings = parameterMap.get(name);
-        if (strings != null && strings.length > 0) {
-            return modifyParam(strings[0]);
-        }
-        return super.getParameter(name);
-    }
+//    @Override
+//    public Enumeration<String> getHeaders(String name){
+//        Enumeration<String> headers = super.getHeaders(name);
+//        if (headerName.contains(name)){
+//            List<String> list= new ArrayList<>();
+//            while (headers.hasMoreElements()){
+//                String element = headers.nextElement();
+//                if(StrUtil.isNotBlank(element)){
+//                    list.add(modifyParam(element));
+//                }else {
+//                    list.add(element);
+//                }
+//            }
+//            return Collections.enumeration(list);
+//        }else {
+//            return headers;
+//        }
+//
+//    }
+//
+//    @Override
+//    public String getHeader(String name){
+//        String header = super.getHeader(name);
+//        if (headerName.contains(name)){
+//            if (StrUtil.isNotBlank(header)){
+//                return modifyParam(header);
+//            }
+//            return header;
+//        }else {
+//            return header;
+//        }
+//    }
 
-    private String modifyParam(String param) {
-        return crypt.decrypt(param);
-    }
 
-    @Override
-    public StringBuffer getRequestURL() {
-        StringBuffer requestURL = super.getRequestURL();
-        if (count == 0) {
-            return requestURL;
-        }
-        // 去除前缀http:// 或者https://
-        int index1 = requestURL.indexOf(":");
-        int index2 = index1 + FIRST_PATH_VARIABLE_INDEX;
-        String newStr = requestURL.substring(index2);
-        String s = buildURI(newStr);
-        s = s.substring(1);
-        return new StringBuffer(requestURL.substring(0, index2) + s);
-    }
 
-    @Override
-    public String getRequestURI() {
-        String requestURI = super.getRequestURI();
-        if (count == 0) {
-            return requestURI;
-        }
-        return buildURI(requestURI);
-    }
+//    @Override
+//    public String getParameter(String name) {
+//        String[] strings = parameterMap.get(name);
+//        if (strings != null && strings.length > 0) {
+//            if (parameterMap.containsKey(name)){
+//                return modifyParam(strings[0]);
+//            }else {
+//                return strings[0];
+//            }
+//        }
+//        return super.getParameter(name);
+//    }
 
-    public String buildURI(String requestURI) {
-        // 使用”/“进行分割
-        String[] split = requestURI.split("/");
-        StringBuilder stringBuilder = new StringBuilder();
-        int len = split.length - 1;
-        for (int i = 0; i < count; i++) {
-            split[len] = crypt.decrypt(split[len]);
-            len--;
-        }
-        for (String s : split) {
-            stringBuilder.append("/").append(s);
-        }
-        return stringBuilder.toString();
-    }
+//    private String modifyParam(String param) {
+//        return crypt.decrypt(param);
+//    }
 
 }

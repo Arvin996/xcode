@@ -3,11 +3,12 @@ package cn.xk.xcode.core.filter;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.annotation.IgnoreCrypt;
+import cn.xk.xcode.core.annotation.IgnoreParamCrypt;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Author xuk
@@ -52,13 +55,21 @@ public class DecryptFilter implements Filter {
         if (StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
             // 处理@PathVariable 的参数
             Parameter[] parameters = method.getParameters();
-            int count = 0;
+            Set<String> headerName = new HashSet<>();
+            Set<String> paramsName = new HashSet<>();
             for (Parameter parameter : parameters) {
-                if (parameter.isAnnotationPresent(PathVariable.class)) {
-                    count++;
+                if (parameter.isAnnotationPresent(RequestParam.class)){
+                    if (!parameter.isAnnotationPresent(IgnoreParamCrypt.class)){
+                        paramsName.add(parameter.getName());
+                    }
+                }
+                if (parameter.isAnnotationPresent(RequestHeader.class)){
+                    if (!parameter.isAnnotationPresent(IgnoreParamCrypt.class)){
+                        headerName.add(parameter.getName());
+                    }
                 }
             }
-            requestWrapper = new DecryptRequestBodyWrapper(request, crypt, count);
+            requestWrapper = new DecryptRequestBodyWrapper(request, crypt);
             filterChain.doFilter(requestWrapper, servletResponse);
             return;
         }

@@ -2,6 +2,7 @@ package cn.xk.xcode.config;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.aop.CryptAdvisor;
 import cn.xk.xcode.core.aop.CryptInterceptor;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
@@ -13,10 +14,15 @@ import cn.xk.xcode.core.sign.CostumeSignAlgStrange;
 import cn.xk.xcode.core.sign.DefaultSignAlgStrange;
 import cn.xk.xcode.core.utils.CryptUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.DispatcherType;

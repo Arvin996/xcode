@@ -1,8 +1,13 @@
 package cn.xk.xcode.core.utils;
 
 import cn.hutool.crypto.PemUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -18,7 +23,7 @@ public class CryptUtil {
 
     public static PrivateKey getPrivateKeyFromPem(String fileName) {
         try {
-           return PemUtil.readPemPrivateKey(CryptUtil.class.getClassLoader().getResourceAsStream(fileName));
+            return PemUtil.readPemPrivateKey(Files.newInputStream(Paths.get(fileName)));
         } catch (Exception e) {
             ExceptionUtil.castServerException(READ_PRIVATE_KEY_ERROR, fileName, e.getMessage());
         }
@@ -27,7 +32,7 @@ public class CryptUtil {
 
     public static PublicKey getPublicKeyFromPem(String fileName) {
         try {
-            return PemUtil.readPemPublicKey(CryptUtil.class.getClassLoader().getResourceAsStream(fileName));
+            return PemUtil.readPemPublicKey(Files.newInputStream(Paths.get(fileName)));
         } catch (Exception e) {
             ExceptionUtil.castServerException(READ_PUBLIC_KEY_ERROR, fileName, e.getMessage());
         }

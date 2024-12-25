@@ -4,6 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.Validator;
@@ -17,6 +18,11 @@ import java.util.Properties;
  **/
 @Configuration
 public class ValidatorConfig {
+
+    @Bean
+    public MessageSource messageSource(){
+        return new ResourceBundleMessageSource();
+    }
 
     /**
      * 配置校验框架 快速返回模式

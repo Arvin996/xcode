@@ -8,6 +8,7 @@ import cn.xk.xcode.core.crypt.AbstractCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.HandlerMethod;
@@ -53,20 +54,12 @@ public class DecryptFilter implements Filter {
         ServletRequest requestWrapper;
         // 是否为 json 请求
         if (StringUtils.startsWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
-            // 处理@PathVariable 的参数
             Parameter[] parameters = method.getParameters();
-            Set<String> headerName = new HashSet<>();
-            Set<String> paramsName = new HashSet<>();
             for (Parameter parameter : parameters) {
-                if (parameter.isAnnotationPresent(RequestParam.class)){
-                    if (!parameter.isAnnotationPresent(IgnoreParamCrypt.class)){
-                        paramsName.add(parameter.getName());
-                    }
-                }
-                if (parameter.isAnnotationPresent(RequestHeader.class)){
-                    if (!parameter.isAnnotationPresent(IgnoreParamCrypt.class)){
-                        headerName.add(parameter.getName());
-                    }
+                if (parameter.isAnnotationPresent(RequestBody.class)
+                && parameter.isAnnotationPresent(IgnoreParamCrypt.class)){
+                    filterChain.doFilter(servletRequest, servletResponse);
+                    return;
                 }
             }
             requestWrapper = new DecryptRequestBodyWrapper(request, crypt);

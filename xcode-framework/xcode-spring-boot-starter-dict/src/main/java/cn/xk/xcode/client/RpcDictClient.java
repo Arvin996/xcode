@@ -1,6 +1,6 @@
 package cn.xk.xcode.client;
 
-import cn.xk.xcode.entity.DataTableDict;
+import cn.xk.xcode.entity.DictDataEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -13,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface RpcDictClient
 {
     @PostMapping("/rpc/trans")
-    public String rpcTrans(@RequestBody DataTableDict dataTableDict);
+    String rpcTrans(@RequestBody DictDataEntity dictDataEntity);
 }

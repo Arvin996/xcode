@@ -1,6 +1,7 @@
 package cn.xk.xcode.handler;
 
-import cn.xk.xcode.entity.DataTableDict;
+
+import cn.xk.xcode.entity.DictDataEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,12 +10,12 @@ import java.util.List;
  * @Author xuk
  * @Date 2024/5/30 15:37
  * @Version 1.0
- * @Description DefaultDataBaseDictLoader
+ * @Description DefaultDataSourceLoader
  */
-public class DefaultDataBaseDictLoader implements DataBaseDictLoader{
+public class DefaultDataSourceLoader implements DataSourceDictLoader{
 
     @Override
-    public List<DataTableDict> loadDataBaseDict() {
+    public List<DictDataEntity> loadDataBaseDict() {
         return Collections.emptyList();
     }
 }

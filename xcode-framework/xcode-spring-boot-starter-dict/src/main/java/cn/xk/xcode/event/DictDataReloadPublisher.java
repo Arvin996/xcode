@@ -13,13 +13,12 @@ import javax.annotation.Resource;
  * @Description DataTableReloadPublisher
  */
 @Component
-public class DataTableReloadPublisher
-{
+public class DictDataReloadPublisher {
+
     @Resource
     private ApplicationContext applicationContext;
 
-    public void publish()
-    {
-        applicationContext.publishEvent(new TableDictEvent(new Object()));
+    public void publish() {
+        applicationContext.publishEvent(new DictDataReloadEvent(this));
     }
 }

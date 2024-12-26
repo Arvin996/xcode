@@ -1,13 +1,9 @@
 package cn.xk.xcode.event;
 
-import cn.xk.xcode.handler.DataBaseDictHandler;
 import cn.xk.xcode.handler.DataDictHandlerStartLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 /**
  * @Author xuk
@@ -15,12 +11,8 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * @Description DictStartLoadRunner
  */
-@Component
-@Order(3)
-@ConditionalOnBean(DataBaseDictHandler.class)
 @Slf4j
-public class DictStartLoadRunner implements ApplicationRunner {
-
+public class DictDataStartLoadRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         DataDictHandlerStartLoader.startLoad();

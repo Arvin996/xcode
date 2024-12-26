@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @Author xuk
  * @Date 2024/5/30 15:13
@@ -15,21 +17,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataTableDict
-{
+public class DictDataEntity implements Serializable {
+
+    // 字典code
     private String code;
 
+    // 字典code名称
     private String name;
 
-    private String pad1;
+    // 字典类型
+    private String dictType;
 
-    private String pad;
+    // 字典code功能描述
+    private String desc;
 
-    private String parId;
-
-    private String note;
-
-    private String pad2;
-
-    private String pad3;
 }

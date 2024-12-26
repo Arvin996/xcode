@@ -4,14 +4,12 @@ import java.lang.annotation.*;
 
 /**
  * @Author xuk
- * @Date 2024/6/3 08:41
- * @Version 1.0
- * @Description ListDictTrans
- */
+ * @Date 2024/12/26 14:40
+ * @Version 1.0.0
+ * @Description IgnoreTrans 递归
+ **/
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ListDictTrans
-{
-
+public @interface IgnoreRecursionTrans {
 }

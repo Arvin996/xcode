@@ -1,14 +1,8 @@
 package cn.xk.xcode.handler;
-
-import cn.xk.xcode.entity.DataTableDict;
-import cn.xk.xcode.event.TableDictEvent;
+import cn.xk.xcode.cache.DictCacheStrategy;
+import cn.xk.xcode.event.DictDataReloadEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.EventListener;
-
-import java.util.*;
-
-import static cn.xk.xcode.context.DictContext.GLOBAL_DICT_CACHE;
 
 /**
  * @Author xuk
@@ -17,47 +11,27 @@ import static cn.xk.xcode.context.DictContext.GLOBAL_DICT_CACHE;
  * @Description AbstractDataDictHandler
  */
 @Slf4j
-public abstract class AbstractDataDictHandler implements ApplicationListener<TableDictEvent> {
+public abstract class AbstractDataDictHandler implements ApplicationListener<DictDataReloadEvent> {
 
-    // 这个要唯一 要修改
-    protected Map<String, List<DataTableDict>> cache;
+    protected final DictCacheStrategy dictCacheStrategy;
 
-    public AbstractDataDictHandler() {
-        cache = GLOBAL_DICT_CACHE;
+    public AbstractDataDictHandler(DictCacheStrategy dictCacheStrategy) {
+        this.dictCacheStrategy = dictCacheStrategy;
     }
 
     @Override
-    public void onApplicationEvent(TableDictEvent event) {
+    public void onApplicationEvent(DictDataReloadEvent event) {
         reloadDictCache();
     }
 
     /**
-     * 功能描述: 重新加载缓存 <br/>
+     * 重新加载缓存
      */
     public void reloadDictCache() {
-        cache.clear();
+        dictCacheStrategy.clearCache();
         log.info("数据库字典缓存刷新");
         loadDictCache();
     }
 
-    protected void put(String parentId, DataTableDict dataTableDict) {
-        List<DataTableDict> dataTableDictList = cache.getOrDefault(parentId, null);
-        if (Objects.isNull(dataTableDictList)) {
-            List<DataTableDict> list = new ArrayList<>();
-            list.add(dataTableDict);
-            cache.put(parentId, list);
-        } else {
-            dataTableDictList.add(dataTableDict);
-        }
-    }
-
-    protected void remove(String parentId, String code) {
-        List<DataTableDict> dataTableDictList = cache.getOrDefault(parentId, null);
-        if (Objects.isNull(dataTableDictList)) {
-            return;
-        }
-        dataTableDictList.removeIf(dataTableDict -> dataTableDict.getCode().equals(code));
-    }
-
-    abstract void loadDictCache();
+    public abstract void loadDictCache();
 }

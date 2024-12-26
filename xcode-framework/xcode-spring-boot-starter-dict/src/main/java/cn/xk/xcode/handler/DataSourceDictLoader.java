@@ -1,6 +1,6 @@
 package cn.xk.xcode.handler;
 
-import cn.xk.xcode.entity.DataTableDict;
+import cn.xk.xcode.entity.DictDataEntity;
 
 import java.util.List;
 
@@ -10,7 +10,6 @@ import java.util.List;
  * @Version 1.0
  * @Description DataBaseDictLoader 数据库字段读取接口
  */
-public interface DataBaseDictLoader
-{
-    List<DataTableDict> loadDataBaseDict();
+public interface DataSourceDictLoader {
+    List<DictDataEntity> loadDataBaseDict();
 }

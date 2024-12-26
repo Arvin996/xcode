@@ -12,9 +12,14 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface DictType
-{
+public @interface DictType {
+
     String dictType();
 
     String dictName();
+
+    String dictDesc();
+
+    String dictCode();
+
 }

@@ -8,9 +8,9 @@ import org.springframework.context.ApplicationEvent;
  * @Version 1.0
  * @Description TableDictEvent
  */
-public class TableDictEvent extends ApplicationEvent
-{
-    public TableDictEvent(Object source) {
+public class DictDataReloadEvent extends ApplicationEvent {
+
+    public DictDataReloadEvent(Object source) {
         super(source);
     }
 }

@@ -10,8 +10,7 @@ import java.util.Map;
  * @Version 1.0
  * @Description DataDictHandlerStartLoader
  */
-public class DataDictHandlerStartLoader
-{
+public class DataDictHandlerStartLoader {
     public static void startLoad(){
         Map<String, AbstractDataDictHandler> abstractDataDictHandlerMap = SpringUtil.getBeansOfType(AbstractDataDictHandler.class);
         abstractDataDictHandlerMap.values().forEach(

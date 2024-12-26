@@ -30,4 +30,8 @@ public class MapUtil {
         }
         consumer.accept(v);
     }
+
+    public static <K, V> boolean isEmpty(Map<K, V> map){
+        return null == map || map.isEmpty();
+    }
 }

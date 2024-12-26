@@ -5,9 +5,7 @@ import cn.xk.xcode.core.annotation.IgnoreParamCrypt;
 import cn.xk.xcode.core.crypt.AbstractCrypt;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.MethodParameter;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.annotation.RequestHeaderMapMethodArgumentResolver;
 import org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver;
 
 /**
@@ -16,7 +14,7 @@ import org.springframework.web.method.annotation.RequestHeaderMethodArgumentReso
  * @Version 1.0.0
  * @Description CryptRequestHeaderMethodArgumentResolver
  **/
-public class CryptRequestHeaderMethodArgumentResolver extends RequestHeaderMethodArgumentResolver {
+public class CryptRequestHeaderMethodArgumentResolver extends RequestHeaderMethodArgumentResolver implements BaseCryptMethodArgumentResolver{
 
     private final AbstractCrypt abstractCrypt;
 
@@ -35,6 +33,9 @@ public class CryptRequestHeaderMethodArgumentResolver extends RequestHeaderMetho
         Object content = super.resolveName(name, parameter, request);
         // 解析
         if (ObjectUtil.isNotEmpty(content)){
+            if (!deterDecrypt(parameter)){
+                return content;
+            }
             if (parameter.hasParameterAnnotation(IgnoreParamCrypt.class)){
                 return content;
             }else {

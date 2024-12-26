@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodA
  * @Description CryptoPathVariableMethodArgumentResolver
  **/
 @RequiredArgsConstructor
-public class CryptPathVariableMethodArgumentResolver extends PathVariableMethodArgumentResolver {
+public class CryptPathVariableMethodArgumentResolver extends PathVariableMethodArgumentResolver implements BaseCryptMethodArgumentResolver{
 
     private final AbstractCrypt abstractCrypt;
 
@@ -29,6 +29,9 @@ public class CryptPathVariableMethodArgumentResolver extends PathVariableMethodA
         Object content = super.resolveName(name, parameter, request);
         // 解析
         if (ObjectUtil.isNotEmpty(content)){
+            if (!deterDecrypt(parameter)){
+                return content;
+            }
             if (parameter.hasParameterAnnotation(IgnoreParamCrypt.class)){
                 return content;
             }else {

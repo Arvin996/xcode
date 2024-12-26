@@ -14,7 +14,7 @@ import org.springframework.web.method.annotation.RequestParamMethodArgumentResol
  * @Version 1.0.0
  * @Description CryptRequestParamMethodArgumentResolver
  **/
-public class CryptRequestParamMethodArgumentResolver extends RequestParamMethodArgumentResolver {
+public class CryptRequestParamMethodArgumentResolver extends RequestParamMethodArgumentResolver implements BaseCryptMethodArgumentResolver{
 
     private final AbstractCrypt abstractCrypt;
 
@@ -33,6 +33,9 @@ public class CryptRequestParamMethodArgumentResolver extends RequestParamMethodA
         Object content = super.resolveName(name, parameter, request);
         // 解析
         if (ObjectUtil.isNotEmpty(content)){
+            if (!deterDecrypt(parameter)){
+                return content;
+            }
             if (parameter.hasParameterAnnotation(IgnoreParamCrypt.class)){
                 return content;
             }else {

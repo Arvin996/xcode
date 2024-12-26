@@ -1,17 +1,17 @@
 package cn.xk.xcode.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.xk.xcode.cache.DictCacheStrategy;
 import cn.xk.xcode.client.SystemDictClient;
-import cn.xk.xcode.context.DictContext;
 import cn.xk.xcode.convert.DictConvert;
+import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.entity.SystemDictResultVo;
 import cn.xk.xcode.entity.dto.dict.QueryDictDto;
 import cn.xk.xcode.entity.dto.dict.UpdateDictDto;
 import cn.xk.xcode.entity.po.DictPo;
-import cn.xk.xcode.event.DataTableReloadPublisher;
+import cn.xk.xcode.event.DictDataReloadPublisher;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.DictService;
-import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import cn.xk.xcode.entity.DataTableDict;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -36,8 +35,8 @@ import static cn.xk.xcode.entity.def.DictTableDef.DICT_PO;
 @RestController
 @RequestMapping("/dict")
 @Tag(name = "字典接口")
-public class DictController implements SystemDictClient
-{
+public class DictController implements SystemDictClient {
+
     @Resource
     private DictService dictService;
 
@@ -45,20 +44,23 @@ public class DictController implements SystemDictClient
     private DictConvert dictConvert;
 
     @Resource
-    private DataTableReloadPublisher dataTableReloadPublisher;
+    private DictDataReloadPublisher dictDataReloadPublisher;
+
+    @Resource
+    private DictCacheStrategy dictCacheStrategy;
 
     @Operation(summary = "根据字典code和父code查询字典")
     @PostMapping("/queryByCodeAndPid")
     public CommonResult<String> queryByCodeAndPid(@RequestBody QueryDictDto queryDictDto)
     {
-        return CommonResult.success(DictContext.getValue(queryDictDto.getParId(), queryDictDto.getCode()));
+        return CommonResult.success(dictCacheStrategy.getDictName(queryDictDto.getParId(), queryDictDto.getCode()));
     }
 
     @Operation(summary = "根据字典code查询该code所有子节点的值")
     @PostMapping("/queryDictValuesByPid")
     public CommonResult<List<String>> queryDictValuesByPid(@RequestBody QueryDictDto queryDictDto)
     {
-        return CommonResult.success(DictContext.getListCodeByProperty(queryDictDto.getParId(), DataTableDict::getName));
+        return CommonResult.success(dictCacheStrategy.getPropertiesByDictType(queryDictDto.getParId(), DictDataEntity::getName));
     }
 
     @SaCheckPermission("dict::updateDict")
@@ -68,7 +70,7 @@ public class DictController implements SystemDictClient
     {
         DictPo dictPo = dictConvert.dictDtoToPo(updateDictDto);
         dictService.update(dictPo, DICT_PO.CODE.eq(dictPo.getCode()).and(DICT_PO.PAR_ID.eq(dictPo.getParId())));
-        dataTableReloadPublisher.publish();
+        dictDataReloadPublisher.publish();
         return CommonResult.success(dictService.list());
     }
 
@@ -78,7 +80,7 @@ public class DictController implements SystemDictClient
     public CommonResult<List<DictPo>> delDict(@Validated @RequestBody UpdateDictDto updateDictDto)
     {
         dictService.remove(DICT_PO.CODE.eq(updateDictDto.getCode()).and(DICT_PO.PAR_ID.eq(updateDictDto.getParId())));
-        dataTableReloadPublisher.publish();
+        dictDataReloadPublisher.publish();
         return CommonResult.success(dictService.list());
     }
 
@@ -89,18 +91,18 @@ public class DictController implements SystemDictClient
     {
         DictPo dictPo = dictConvert.dictDtoToPo(updateDictDto);
         dictService.save(dictPo);
-        dataTableReloadPublisher.publish();
+        dictDataReloadPublisher.publish();
         return CommonResult.success(dictService.list());
     }
 
     @Override
     public CommonResult<String> getDictValue(String dictType, String dictCode) {
-        return CommonResult.success(DictContext.getValue(dictType, dictCode));
+        return CommonResult.success(dictCacheStrategy.getDictName(dictType, dictCode));
     }
 
     @Override
     public CommonResult<List<SystemDictResultVo>> getDictTypeValues(String dictType) {
-        List<DataTableDict> data = DictContext.getListBtParId(dictType);
+        List<DictDataEntity> data = dictCacheStrategy.getDictTypeList(dictType);
         return CommonResult.success(BeanUtil.toBean(data, SystemDictResultVo.class));
     }
 }

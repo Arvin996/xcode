@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @AllArgsConstructor
-@DictType(dictName = "验证码生成类型枚举", dictType = "CaptchaGenerateType")
+//@DictType(dictName = "验证码生成类型枚举", dictType = "CaptchaGenerateType")
 public enum CaptchaGenerateType implements IEnumDict, StringEnumValueToArray {
     EMAIL("email", "邮件验证码生成"),
     MOBILE("mobile", "手机验证码生成"),
@@ -30,5 +30,10 @@ public enum CaptchaGenerateType implements IEnumDict, StringEnumValueToArray {
     @Override
     public String[] toArrayString() {
         return ArrayUtil.toArray(Arrays.stream(values()).map(CaptchaGenerateType::getCode).collect(Collectors.toList()));
+    }
+
+    @Override
+    public String getDesc() {
+        return "";
     }
 }

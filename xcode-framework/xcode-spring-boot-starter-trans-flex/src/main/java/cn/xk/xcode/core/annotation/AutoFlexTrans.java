@@ -8,8 +8,8 @@ import java.lang.annotation.*;
  * @date 2024/8/16 13:27
  * @description 标记为自动翻译方法
  */
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AutoTransMethod {
+public @interface AutoFlexTrans {
 }

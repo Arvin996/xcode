@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface EnumTrans {
+public @interface FlexEnumTrans {
     /**
      * 目标属性
      * @return 目标属性

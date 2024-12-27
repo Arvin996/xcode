@@ -1,7 +1,7 @@
 package cn.xk.xcode.core.handler;
 
 import cn.hutool.core.util.ReflectUtil;
-import cn.xk.xcode.core.annotation.EnumTrans;
+import cn.xk.xcode.core.annotation.FlexEnumTrans;
 import cn.xk.xcode.core.client.TransFlexClient;
 import cn.xk.xcode.core.entity.EnumTransDto;
 import cn.xk.xcode.exception.core.ServerException;
@@ -26,7 +26,7 @@ public class TransEnumHandler {
     private TransEnumHandler() {
     }
 
-    public static void resolveEnumLocalTrans(EnumTrans enumTrans, Field field, Object proceed, GlobalEnumsContext globalEnumsContext) {
+    public static void resolveEnumLocalTrans(FlexEnumTrans enumTrans, Field field, Object proceed, GlobalEnumsContext globalEnumsContext) {
         if (validate(enumTrans, proceed)) {
             return;
         }
@@ -48,7 +48,7 @@ public class TransEnumHandler {
         }
     }
 
-    public static void resolveEnumRpcTrans(EnumTrans enumTrans, Field field, Object proceed, FeignClientBuilder feignClientBuilder) {
+    public static void resolveEnumRpcTrans(FlexEnumTrans enumTrans, Field field, Object proceed, FeignClientBuilder feignClientBuilder) {
         if (validate(enumTrans, proceed)) {
             return;
         }
@@ -74,7 +74,7 @@ public class TransEnumHandler {
         }
     }
 
-    private static boolean validate(EnumTrans enumTrans, Object proceed) {
+    private static boolean validate(FlexEnumTrans enumTrans, Object proceed) {
         String enumType = enumTrans.enumType();
         if (!StringUtils.hasLength(enumType)) {
             log.error("枚举类型未定义，翻译失败");

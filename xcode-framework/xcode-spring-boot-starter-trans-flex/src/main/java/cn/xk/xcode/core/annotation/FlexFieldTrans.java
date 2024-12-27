@@ -8,36 +8,36 @@ import java.lang.annotation.*;
  * @author xukai
  * @version 1.0
  * @date 2024/8/16 13:26
- * @description
+ * @description FlexFieldTrans
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface FlexTrans {
+public @interface FlexFieldTrans {
     /**
      * 用于entity查询的实体类型
      * @return 实体类型
      */
-    Class<? extends TransVo> ref() default TransVo.class;
+    Class<? extends TransVo> ref();
 
     /**
      * 要给哪个字段做翻译
      * @return 字段名
      */
-    String targetField() default "";
+    String targetField();
 
     /**
      * 当前的属性在Wrapper中的where条件
      * 如现在源头是schoolId,那么这里就是id
      * @return 实际条件字段名
      */
-    String refConditionField() default "";
+    String refConditionField();
 
     /**
      * Wrapper查询出来实体类后，要取哪个属性进行返回翻译
      * @return 属性名
      */
-    String refSourceFiled() default "";
+    String refSourceFiled();
 
     /**
      * 是否是远程调用

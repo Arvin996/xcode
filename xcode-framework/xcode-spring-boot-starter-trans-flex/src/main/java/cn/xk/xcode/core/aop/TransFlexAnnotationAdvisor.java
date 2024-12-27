@@ -1,6 +1,6 @@
 package cn.xk.xcode.core.aop;
 
-import cn.xk.xcode.core.annotation.AutoTransMethod;
+import cn.xk.xcode.core.annotation.AutoFlexTrans;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +29,8 @@ public class TransFlexAnnotationAdvisor extends AbstractPointcutAdvisor {
     }
 
     protected Pointcut buildPointcut() {
-        Pointcut classPointcut = new AnnotationMatchingPointcut(AutoTransMethod.class, true);
-        Pointcut methodPointcut = new AnnotationMatchingPointcut(null, AutoTransMethod.class, true);
+        Pointcut classPointcut = new AnnotationMatchingPointcut(AutoFlexTrans.class, true);
+        Pointcut methodPointcut = new AnnotationMatchingPointcut(null, AutoFlexTrans.class, true);
         return new ComposablePointcut(classPointcut).union(methodPointcut);
     }
 }

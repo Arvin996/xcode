@@ -1,7 +1,7 @@
 package cn.xk.xcode.core.aop;
 
-import cn.xk.xcode.core.annotation.EnumTrans;
-import cn.xk.xcode.core.annotation.FlexTrans;
+import cn.xk.xcode.core.annotation.FlexEnumTrans;
+import cn.xk.xcode.core.annotation.FlexFieldTrans;
 import cn.xk.xcode.core.handler.TransEnumHandler;
 import cn.xk.xcode.core.handler.TransFlexHandler;
 import cn.xk.xcode.core.service.FlexTransService;
@@ -47,27 +47,27 @@ public class TransFlexAnnotationInterceptor implements MethodInterceptor {
         if (proceed instanceof CommonResult) {
             data = ((CommonResult<?>) proceed).getData();
             if (data instanceof List) {
-                ((List<?>) data).forEach(this::handlerSingleObject);
+                ((List<?>) data).forEach(this::handleSingleObject);
             } else {
-                handlerSingleObject(data);
+                handleSingleObject(data);
             }
         }
         return proceed;
     }
 
-    private void handlerSingleObject(Object proceed) {
-        Field[] fields = proceed.getClass().getFields();
+    private void handleSingleObject(Object proceed) {
+        Field[] fields = proceed.getClass().getDeclaredFields();
         for (Field field : fields) {
-            if (field.isAnnotationPresent(EnumTrans.class)) {
-                handlerEnumTrans(field, proceed);
-            } else if (field.isAnnotationPresent(FlexTrans.class)) {
-                handlerFlexTrans(field, proceed);
+            if (field.isAnnotationPresent(FlexEnumTrans.class)) {
+                handleEnumTrans(field, proceed);
+            } else if (field.isAnnotationPresent(FlexFieldTrans.class)) {
+                handleFlexTrans(field, proceed);
             }
         }
     }
 
-    private void handlerFlexTrans(Field field, Object proceed) {
-        FlexTrans flexTrans = field.getAnnotation(FlexTrans.class);
+    private void handleFlexTrans(Field field, Object proceed) {
+        FlexFieldTrans flexTrans = field.getAnnotation(FlexFieldTrans.class);
         if (flexTrans.isRpc()) {
             TransFlexHandler.resolveFlexRpcTrans(flexTrans, field, proceed, feignClientBuilder);
         } else {
@@ -75,8 +75,8 @@ public class TransFlexAnnotationInterceptor implements MethodInterceptor {
         }
     }
 
-    private void handlerEnumTrans(Field field, Object proceed) {
-        EnumTrans enumTrans = field.getAnnotation(EnumTrans.class);
+    private void handleEnumTrans(Field field, Object proceed) {
+        FlexEnumTrans enumTrans = field.getAnnotation(FlexEnumTrans.class);
         if (enumTrans.isRpc()) {
             TransEnumHandler.resolveEnumRpcTrans(enumTrans, field, proceed, feignClientBuilder);
         } else {

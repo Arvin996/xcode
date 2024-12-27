@@ -7,7 +7,6 @@
         <artifactId>xcode-framework</artifactId>
         <version>${revision}</version>
     </parent>
-    <groupId>com.gg.midend</groupId>
     <artifactId>xcode-spring-boot-starter-trans-flex</artifactId>
     <version>${revision}</version>
     <name>${project.artifactId}</name>

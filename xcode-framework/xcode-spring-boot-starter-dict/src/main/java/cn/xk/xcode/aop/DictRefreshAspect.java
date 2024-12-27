@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.Ordered;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.Objects;
 @Slf4j
 @Aspect
 @RequiredArgsConstructor
-public class DictRefreshAspect {
+public class DictRefreshAspect implements Ordered {
 
     private final DictCacheStrategy dictCacheStrategy;
 
@@ -39,30 +40,44 @@ public class DictRefreshAspect {
         expressionList.add(dictType);
         expressionList.add(dictCode);
         expressionList.add(dictName);
+        boolean flag = true;
         if (StrUtil.isNotBlank(dictDesc)) {
             expressionList.add(dictDesc);
         }
+        DictDataEntity dictDataEntity = new DictDataEntity();
         Map<String, Object> parsedExpressions = SpringExpressionUtil.parseExpressions(joinPoint, expressionList);
         if (!dictCacheStrategy.containsKey(parsedExpressions.getOrDefault(dictType, "").toString())) {
             log.warn("字典类型{}不存在", dictType);
+            flag = false;
         } else {
             if (Objects.isNull(parsedExpressions.get(dictCode)) || Objects.isNull(parsedExpressions.get(dictName))) {
                 log.warn("字典code{}或者字典name{}解析失败", dictCode, dictName);
+                flag = false;
             } else {
-                DictDataEntity dictDataEntity = new DictDataEntity();
                 dictDataEntity.setCode(parsedExpressions.get(dictCode).toString());
                 dictDataEntity.setName(parsedExpressions.get(dictName).toString());
                 dictDataEntity.setDictType(parsedExpressions.get(dictType).toString());
                 dictDataEntity.setDesc(parsedExpressions.get(dictDesc).toString());
-                dictCacheStrategy.saveOrUpdateDictData(dictDataEntity);
+
             }
         }
         Object proceed;
         try {
             proceed = joinPoint.proceed();
+            if (flag){
+                dictCacheStrategy.saveOrUpdateDictData(dictDataEntity);
+            }
         } catch (Throwable e) {
+            if (refreshDict.isExceptionRefresh()){
+                dictCacheStrategy.saveOrUpdateDictData(dictDataEntity);
+            }
             throw new RuntimeException(e);
         }
         return proceed;
+    }
+
+    @Override
+    public int getOrder() {
+        return 6;
     }
 }

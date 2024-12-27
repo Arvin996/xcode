@@ -1,5 +1,6 @@
 package cn.xk.xcode.cache;
 
+import cn.xk.xcode.config.XcodeDictProperties;
 import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 
@@ -61,4 +62,6 @@ public interface DictCacheStrategy {
         }
         return dictTypeList.stream().map(func).collect(Collectors.toList());
     }
+
+    XcodeDictProperties.CacheType type();
 }

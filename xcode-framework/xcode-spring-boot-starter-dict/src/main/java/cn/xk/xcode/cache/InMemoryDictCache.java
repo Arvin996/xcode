@@ -1,6 +1,7 @@
 package cn.xk.xcode.cache;
 
 import cn.hutool.core.util.StrUtil;
+import cn.xk.xcode.config.XcodeDictProperties;
 import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.collections.MapUtil;
@@ -85,5 +86,10 @@ public class InMemoryDictCache implements DictCacheStrategy{
     @Override
     public void removeDictType(String dictType) {
         LOCAL_DICT_CACHE.remove(dictType);
+    }
+
+    @Override
+    public XcodeDictProperties.CacheType type() {
+        return XcodeDictProperties.CacheType.LOCAL;
     }
 }

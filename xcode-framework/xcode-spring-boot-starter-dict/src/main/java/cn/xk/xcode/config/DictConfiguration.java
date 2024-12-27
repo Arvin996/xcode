@@ -65,7 +65,7 @@ public class DictConfiguration {
             template.setConnectionFactory(redisConnectionFactory);
             Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
             template.setKeySerializer(new StringRedisSerializer());
-            template.setValueSerializer(jackson2JsonRedisSerializer);
+            template.setValueSerializer(new DictRedisJacksonSerializer());
             template.setHashKeySerializer(new StringRedisSerializer());
             template.setHashValueSerializer(jackson2JsonRedisSerializer);
             template.afterPropertiesSet();

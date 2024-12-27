@@ -7,6 +7,7 @@ import cn.xk.xcode.annotation.DictFieldTrans;
 import cn.xk.xcode.annotation.IgnoreRecursionTrans;
 import cn.xk.xcode.cache.DictCacheStrategy;
 import cn.xk.xcode.client.RpcDictClient;
+import cn.xk.xcode.config.XcodeDictProperties;
 import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.entity.DictTranType;
 import cn.xk.xcode.entity.TransPojo;
@@ -21,6 +22,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.cloud.openfeign.FeignClientBuilder;
+import org.springframework.core.Ordered;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Aspect
 @Slf4j
-public class DictTranAspect {
+public class DictTranAspect implements Ordered {
 
     private final FeignClientBuilder feignClientBuilder;
     private final DictCacheStrategy dictCacheStrategy;
@@ -103,10 +105,14 @@ public class DictTranAspect {
                     if (dictTranType.equals(DictTranType.LOCAL)) {
                         tatgetClassField.set(transPojo, dictCacheStrategy.getDictName(fieldValue, dictType));
                     } else {
-                        String servicedName = dictFieldTrans.serviceName();
-                        RpcDictClient rpcDictClient = feignClientBuilder.forType(RpcDictClient.class, servicedName).build();
-                        // 远程调用
-                        tatgetClassField.set(transPojo, rpcDictClient.rpcTrans(DictDataEntity.builder().dictType(dictType).code(fieldValue).build()));
+                        if (dictCacheStrategy.type().equals(XcodeDictProperties.CacheType.LOCAL)) {
+                            String servicedName = dictFieldTrans.serviceName();
+                            RpcDictClient rpcDictClient = feignClientBuilder.forType(RpcDictClient.class, servicedName).build();
+                            // 远程调用
+                            tatgetClassField.set(transPojo, rpcDictClient.rpcTrans(DictDataEntity.builder().dictType(dictType).code(fieldValue).build()));
+                        } else {
+                            tatgetClassField.set(transPojo, dictCacheStrategy.getDictName(fieldValue, dictType));
+                        }
                     }
                 }
             } else {
@@ -142,4 +148,8 @@ public class DictTranAspect {
         return transPojo;
     }
 
+    @Override
+    public int getOrder() {
+        return 5;
+    }
 }

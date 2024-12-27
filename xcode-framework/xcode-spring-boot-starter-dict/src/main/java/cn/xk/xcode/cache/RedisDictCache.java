@@ -1,10 +1,12 @@
 package cn.xk.xcode.cache;
 
 import cn.hutool.core.util.StrUtil;
+import cn.xk.xcode.config.XcodeDictProperties;
 import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.collections.MapUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.*;
@@ -16,6 +18,7 @@ import java.util.function.Function;
  * @Version 1.0.0
  * @Description RedisDictCache
  **/
+@Slf4j
 @RequiredArgsConstructor
 public class RedisDictCache implements DictCacheStrategy {
 
@@ -34,6 +37,7 @@ public class RedisDictCache implements DictCacheStrategy {
             if (Objects.isNull(dataEntity)){
                 map.put(dictDataEntity.getCode(), dictDataEntity);
             }else {
+                log.warn("字典类型{}的code{}的值将被替换成{}", dataEntity.getDictType(), dataEntity.getCode(), dictDataEntity.getName());
                 String name = dictDataEntity.getName();
                 String desc = dictDataEntity.getDesc();
                 dataEntity.setName(name);
@@ -86,5 +90,10 @@ public class RedisDictCache implements DictCacheStrategy {
     @Override
     public void removeDictType(String dictType) {
         redisTemplate.delete(REDIS_DICT_CACHE_KEY + dictType);
+    }
+
+    @Override
+    public XcodeDictProperties.CacheType type() {
+        return XcodeDictProperties.CacheType.REDIS;
     }
 }

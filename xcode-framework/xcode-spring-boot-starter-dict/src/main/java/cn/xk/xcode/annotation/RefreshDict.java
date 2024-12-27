@@ -26,4 +26,7 @@ public @interface RefreshDict {
 
     @Language("SpEL")
     String dictDesc() default "";
+
+    // 出现了异常是否继续刷新
+    boolean isExceptionRefresh() default false;
 }

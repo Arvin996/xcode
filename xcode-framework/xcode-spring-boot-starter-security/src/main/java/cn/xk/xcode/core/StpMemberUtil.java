@@ -8,19 +8,17 @@ import cn.dev33.satoken.session.TokenSign;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.pojo.StpType;
-import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
-/**
- * @Author xuk
- * @Date 2024/11/22 9:58
- * @Version 1.0.0
- * @Description StpMemberUtil
- **/
+
+@Component
 public class StpMemberUtil {
+
+    private StpMemberUtil() {}
 
     /**
      * 多账号体系下的类型标识
@@ -29,13 +27,8 @@ public class StpMemberUtil {
 
     /**
      * 底层使用的 StpLogic 对象
-     * -- GETTER --
-     *  获取 StpLogic 对象
-     *
-
      */
-    @Getter
-    public static StpLogic stpLogic;
+    public static StpLogic stpLogic = new StpLogic(TYPE);
 
     /**
      * 获取当前 StpLogic 的账号类型
@@ -65,6 +58,15 @@ public class StpMemberUtil {
 
         // 3、$$ 发布事件：更新了 stpLogic 对象
         SaTokenEventCenter.doSetStpLogic(stpLogic);
+    }
+
+    /**
+     * 获取 StpLogic 对象
+     *
+     * @return /
+     */
+    public static StpLogic getStpLogic() {
+        return stpLogic;
     }
 
 
@@ -217,11 +219,11 @@ public class StpMemberUtil {
      * @return 返回会话令牌
      */
     public static String getOrCreateLoginSession(Object id) {
-        SaSession session = stpLogic.getSessionByLoginId(id);
-        if (Objects.isNull(session)){
-            return createLoginSession(id);
+        String tokenValueByLoginId = getTokenValueByLoginId(id);
+        if (StrUtil.isNotEmpty(tokenValueByLoginId)) {
+            return tokenValueByLoginId;
         }
-        return getTokenValueByLoginId(id);
+        return createLoginSession(id);
     }
 
     // --- 注销
@@ -1248,4 +1250,5 @@ public class StpMemberUtil {
     public static void closeSafe(String service) {
         stpLogic.closeSafe(service);
     }
+
 }

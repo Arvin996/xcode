@@ -8,35 +8,26 @@ import cn.dev33.satoken.session.TokenSign;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.pojo.StpType;
-import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
-/**
- * Sa-Token 权限认证工具类（User版）
- *
- * @author click33
- * @since 1.0.0
- */
+@Component
 public class StpSystemUtil {
 
-	public StpSystemUtil() {
+	private StpSystemUtil() {}
 
-	}
-
+	/**
+	 * 多账号体系下的类型标识
+	 */
 	public static final String TYPE = StpType.SYSTEM.getType();
 
 	/**
 	 * 底层使用的 StpLogic 对象
-     * -- GETTER --
-     *  获取 StpLogic 对象
-     *
-
-     */
-	@Getter
-    private static StpLogic stpLogic;
+	 */
+	public static StpLogic stpLogic = new StpLogic(TYPE);
 
 	/**
 	 * 获取当前 StpLogic 的账号类型
@@ -68,8 +59,17 @@ public class StpSystemUtil {
 		SaTokenEventCenter.doSetStpLogic(stpLogic);
 	}
 
+	/**
+	 * 获取 StpLogic 对象
+	 *
+	 * @return /
+	 */
+	public static StpLogic getStpLogic() {
+		return stpLogic;
+	}
 
-    // ------------------- 获取 token 相关 -------------------
+
+	// ------------------- 获取 token 相关 -------------------
 
 	/**
 	 * 返回 token 名称，此名称在以下地方体现：Cookie 保存 token 时的名称、提交 token 时参数的名称、存储 token 时的 key 前缀
@@ -213,15 +213,16 @@ public class StpSystemUtil {
 
 	/**
 	 * 获取指定账号 id 的登录会话数据，如果获取不到则创建并返回
+	 *
 	 * @param id 账号id，建议的类型：（long | int | String）
 	 * @return 返回会话令牌
 	 */
 	public static String getOrCreateLoginSession(Object id) {
-		SaSession session = stpLogic.getSessionByLoginId(id);
-		if (Objects.isNull(session)){
-			return createLoginSession(id);
+		String tokenValueByLoginId = getTokenValueByLoginId(id);
+		if (StrUtil.isNotEmpty(tokenValueByLoginId)) {
+			return tokenValueByLoginId;
 		}
-		return getTokenValueByLoginId(id);
+		return createLoginSession(id);
 	}
 
 	// --- 注销

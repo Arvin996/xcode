@@ -2,7 +2,7 @@ package cn.xk.xcode.core.controller;
 
 import cn.xk.xcode.core.entity.EnumTransDto;
 import cn.xk.xcode.core.entity.FlexTransDto;
-import cn.xk.xcode.core.entity.TransVo;
+import cn.xk.xcode.core.entity.TransPo;
 import cn.xk.xcode.core.service.FlexTransService;
 import cn.xk.xcode.support.enums.GlobalEnumsContext;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ public class TransFlexInnerController {
     private final GlobalEnumsContext globalEnumsContext;
 
     @PostMapping("/trans/flex")
-    public TransVo flexTrans(@RequestBody FlexTransDto flexTransDto){
+    public TransPo flexTrans(@RequestBody FlexTransDto flexTransDto){
         return flexTransService.findById(flexTransDto.getId(), flexTransDto.getTargetClazz(), flexTransDto.getConditionField());
     }
 
     @PostMapping("/trans/flex/list")
-    public List<? extends TransVo> flexTransList(@RequestBody FlexTransDto flexTransDto){
+    public List<? extends TransPo> flexTransList(@RequestBody FlexTransDto flexTransDto){
         return flexTransService.findList(flexTransDto.getId(), flexTransDto.getTargetClazz(), flexTransDto.getConditionField());
     }
 

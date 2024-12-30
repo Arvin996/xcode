@@ -18,7 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlexTransDto {
-    private Class<? extends TransVo> targetClazz;
+    private Class<? extends TransPo> targetClazz;
     private Serializable id;
     private String conditionField;
 }

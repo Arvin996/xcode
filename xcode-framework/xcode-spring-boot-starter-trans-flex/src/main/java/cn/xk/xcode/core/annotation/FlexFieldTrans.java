@@ -1,6 +1,6 @@
 package cn.xk.xcode.core.annotation;
 
-import cn.xk.xcode.core.entity.TransVo;
+import cn.xk.xcode.core.entity.TransPo;
 
 import java.lang.annotation.*;
 
@@ -18,7 +18,7 @@ public @interface FlexFieldTrans {
      * 用于entity查询的实体类型
      * @return 实体类型
      */
-    Class<? extends TransVo> ref();
+    Class<? extends TransPo> ref();
 
     /**
      * 要给哪个字段做翻译

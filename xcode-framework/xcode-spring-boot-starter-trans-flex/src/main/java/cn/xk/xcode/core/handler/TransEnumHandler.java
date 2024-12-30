@@ -4,6 +4,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.xk.xcode.core.annotation.FlexEnumTrans;
 import cn.xk.xcode.core.client.TransFlexClient;
 import cn.xk.xcode.core.entity.EnumTransDto;
+import cn.xk.xcode.core.entity.TransVo;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.support.enums.GlobalEnumsContext;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class TransEnumHandler {
     private TransEnumHandler() {
     }
 
-    public static void resolveEnumLocalTrans(FlexEnumTrans enumTrans, Field field, Object proceed, GlobalEnumsContext globalEnumsContext) {
+    public static void resolveEnumLocalTrans(FlexEnumTrans enumTrans, Field field, TransVo proceed, GlobalEnumsContext globalEnumsContext) {
         if (validate(enumTrans, proceed)) {
             return;
         }
@@ -48,7 +49,7 @@ public class TransEnumHandler {
         }
     }
 
-    public static void resolveEnumRpcTrans(FlexEnumTrans enumTrans, Field field, Object proceed, FeignClientBuilder feignClientBuilder) {
+    public static void resolveEnumRpcTrans(FlexEnumTrans enumTrans, Field field, TransVo proceed, FeignClientBuilder feignClientBuilder) {
         if (validate(enumTrans, proceed)) {
             return;
         }
@@ -74,7 +75,7 @@ public class TransEnumHandler {
         }
     }
 
-    private static boolean validate(FlexEnumTrans enumTrans, Object proceed) {
+    private static boolean validate(FlexEnumTrans enumTrans, TransVo proceed) {
         String enumType = enumTrans.enumType();
         if (!StringUtils.hasLength(enumType)) {
             log.error("枚举类型未定义，翻译失败");

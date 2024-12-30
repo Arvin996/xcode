@@ -4,6 +4,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.xk.xcode.core.annotation.FlexFieldTrans;
 import cn.xk.xcode.core.client.TransFlexClient;
 import cn.xk.xcode.core.entity.FlexTransDto;
+import cn.xk.xcode.core.entity.TransPo;
 import cn.xk.xcode.core.entity.TransVo;
 import cn.xk.xcode.core.service.FlexTransService;
 import cn.xk.xcode.exception.core.ServerException;
@@ -32,7 +33,7 @@ public class TransFlexHandler {
     }
 
     @SuppressWarnings("unchecked")
-    public static void resolveFlexLocalTrans(FlexFieldTrans flexTrans, Field field, Object proceed, FlexTransService flexTransService) {
+    public static void resolveFlexLocalTrans(FlexFieldTrans flexTrans, Field field, TransVo proceed, FlexTransService flexTransService) {
         if (!validate(flexTrans, proceed)) {
             return;
         }
@@ -40,7 +41,7 @@ public class TransFlexHandler {
         tagetField.setAccessible(true);
         String refSourceFiled = flexTrans.refSourceFiled();
         if (List.class.isAssignableFrom(field.getType())) {
-            List<? extends TransVo> list = flexTransService.findList((Collection<Serializable>) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
+            List<? extends TransPo> list = flexTransService.findList((Collection<Serializable>) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
             if (Objects.isNull(list) || list.isEmpty()) {
                 log.warn("list翻译对象为空");
                 return;
@@ -62,7 +63,7 @@ public class TransFlexHandler {
             }
         } else {
             if (List.class.isAssignableFrom(tagetField.getType())) {
-                List<? extends TransVo> list = flexTransService.findList((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
+                List<? extends TransPo> list = flexTransService.findList((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
                 if (Objects.isNull(list) || list.isEmpty()) {
                     log.warn("list翻译对象为空");
                     return;
@@ -75,13 +76,13 @@ public class TransFlexHandler {
                 }
 
             } else {
-                TransVo transVo = flexTransService.findById((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
-                if (Objects.isNull(transVo)) {
+                TransPo transPo = flexTransService.findById((Serializable) ReflectUtil.getFieldValue(proceed, field), flexTrans.ref(), flexTrans.refConditionField());
+                if (Objects.isNull(transPo)) {
                     log.warn("transVo翻译对象为空");
                     return;
                 }
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(transVo, refSourceFiled));
+                    tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -90,7 +91,7 @@ public class TransFlexHandler {
         }
     }
 
-    public static void resolveFlexRpcTrans(FlexFieldTrans flexTrans, Field field, Object proceed, FeignClientBuilder feignClientBuilder) {
+    public static void resolveFlexRpcTrans(FlexFieldTrans flexTrans, Field field, TransVo proceed, FeignClientBuilder feignClientBuilder) {
         if (validate(flexTrans, proceed)) {
             return;
         }
@@ -104,7 +105,7 @@ public class TransFlexHandler {
         String refSourceFiled = flexTrans.refSourceFiled();
         TransFlexClient transFlexClient = feignClientBuilder.forType(TransFlexClient.class, serviceName).build();
         if (List.class.isAssignableFrom(field.getType())) {
-            List<? extends TransVo> list = transFlexClient.flexTransList(FlexTransDto.builder().
+            List<? extends TransPo> list = transFlexClient.flexTransList(FlexTransDto.builder().
                     targetClazz(flexTrans.ref()).
                     id((Serializable) ReflectUtil.getFieldValue(proceed, field)).
                     conditionField(flexTrans.refConditionField()).build());
@@ -129,7 +130,7 @@ public class TransFlexHandler {
             }
         } else {
             if (List.class.isAssignableFrom(tagetField.getType())) {
-                List<? extends TransVo> list = transFlexClient.flexTransList(FlexTransDto.builder().
+                List<? extends TransPo> list = transFlexClient.flexTransList(FlexTransDto.builder().
                         targetClazz(flexTrans.ref()).
                         id((Serializable) ReflectUtil.getFieldValue(proceed, field)).
                         conditionField(flexTrans.refConditionField()).build());
@@ -144,16 +145,16 @@ public class TransFlexHandler {
                     throw new ServerException(TRANS_FAILED);
                 }
             } else {
-                TransVo transVo = transFlexClient.flexTrans(FlexTransDto.builder().
+                TransPo transPo = transFlexClient.flexTrans(FlexTransDto.builder().
                         targetClazz(flexTrans.ref()).
                         id((Serializable) ReflectUtil.getFieldValue(proceed, field)).
                         conditionField(flexTrans.refConditionField()).build());
-                if (Objects.isNull(transVo)) {
+                if (Objects.isNull(transPo)) {
                     log.warn("transVo翻译对象为空");
                     return;
                 }
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(transVo, refSourceFiled));
+                    tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -162,7 +163,7 @@ public class TransFlexHandler {
         }
     }
 
-    private static boolean validate(FlexFieldTrans flexTrans, Object proceed) {
+    private static boolean validate(FlexFieldTrans flexTrans, TransVo proceed) {
         String targetField = flexTrans.targetField();
         String refConditionField = flexTrans.refConditionField();
         if (!StringUtils.hasLength(targetField)) {

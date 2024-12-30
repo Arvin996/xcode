@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class TransEnumsRegistry {
+
     private final List<BaseEnum> enums;
 
     public TransEnumsRegistry register(Class<? extends BaseEnum> aClass) {

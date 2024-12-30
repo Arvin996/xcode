@@ -7,6 +7,7 @@ package cn.xk.xcode.support.enums;
  * @description
  */
 public interface TransEnumConfigurer {
+
     default void registry(TransEnumsRegistry registry) {
     }
 }

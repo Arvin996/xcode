@@ -34,5 +34,5 @@ public @interface FlexEnumTrans {
      * 远程调用时需要
      * @return 服务名
      */
-    String serviceName();
+    String serviceName() default "";
 }

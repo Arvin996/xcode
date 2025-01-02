@@ -13,6 +13,7 @@
     <name>${project.artifactId}</name>
     <artifactId>xcode-demo</artifactId>
     <description>测试示例模块</description>
+    <packaging>pom</packaging>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

@@ -16,7 +16,6 @@
         <module>xcode-monitor-extension-skywalking</module>
         <module>xcode-monitor-extension-nacos</module>
         <module>xcode-monitor-extension-trace</module>
-        <module>../../../test1-module</module>
     </modules>
     <artifactId>xcode-monitor-parent</artifactId>
     <name>${project.artifactId}</name>

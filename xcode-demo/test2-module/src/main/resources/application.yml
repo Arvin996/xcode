@@ -1,0 +1,14 @@
+server:
+  port: 1001
+spring:
+  application:
+    name: test2-module
+  cloud:
+    nacos:
+      password: Geit@86970000
+      username: nacos
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: public
+logging:
+  config: classpath:log4j2.xml

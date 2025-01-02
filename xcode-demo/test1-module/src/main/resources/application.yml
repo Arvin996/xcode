@@ -1,0 +1,80 @@
+server:
+  port: 1000
+spring:
+  # redis配置
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 1
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    # password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: test1-module
+  cloud:
+    nacos:
+      password: Geit@86970000
+      username: nacos
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: public
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/xcode-test1?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&connectTimeout=60000&socketTimeout=60000&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+
+
+logging:
+  config: classpath:log4j2.xml
+xcode:
+  biz:
+    message:
+      username: root
+      password: 123456
+      db-url: jdbc:mysql://127.0.0.1:3306/xcode-test1?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&connectTimeout=60000&socketTimeout=60000&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+  crypt:
+    sm4:
+      iv: bd993e635dc34889
+      key: c1e05a0ed9b04f54
+      mode: cbc
+      padding: pkcs5padding
+    cipher-type: default
+    alg-enum: sm4
+  sign:
+    signAlgType: MD5withRSA
+    signType: default
+    signDateRule: request_body_only
+    separator: "&"
+    signName: sign
+    signLocation: param
+    sourceKeyType: perm_file
+    public-key-pem-path: D:/midend-service-center/own_module/test1-module/src/main/resources/pem/public.pem
+    private-key-pem-path: D:/midend-service-center/own_module/test1-module/src/main/resources/pem/private.pem
+    is-decrypt-request-param: true
+  dict:
+    cache-type: redis
+    enable: false
+    enum-dict-packages:
+      - cn.xk.xcode.enums
+    super-dict-type: "##"
+
+

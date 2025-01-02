@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties("xk.web.thread.pool")
+@ConfigurationProperties("xcode.web.thread.pool")
 public class WebThreadPoolTaskProperties {
 
     private int corePoolSize = Runtime.getRuntime().availableProcessors();

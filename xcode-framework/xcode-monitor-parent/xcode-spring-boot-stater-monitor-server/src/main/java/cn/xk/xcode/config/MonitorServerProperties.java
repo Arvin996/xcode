@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Description MonitorServerProperties
  **/
 @SuppressWarnings("all")
-@ConfigurationProperties("xk.sys.monitor.server")
+@ConfigurationProperties("xcode.monitor.server")
 @Data
 public class MonitorServerProperties {
 

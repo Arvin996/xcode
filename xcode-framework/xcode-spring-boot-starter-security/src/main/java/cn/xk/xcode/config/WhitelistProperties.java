@@ -1,4 +1,4 @@
-package cn.xk.xcode.pojo;
+package cn.xk.xcode.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Data
-@ConfigurationProperties(prefix = "xk.sys.learn.whitelist")
+@ConfigurationProperties(prefix = "xcode.security.whitelist")
 @Component
 public class WhitelistProperties {
 

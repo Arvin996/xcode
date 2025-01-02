@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @Description MonitorProperties
  **/
 @SuppressWarnings("all")
-@ConfigurationProperties("xk.sys.monitor.client")
+@ConfigurationProperties("xcode.monitor.client")
 @Data
 public class MonitorClientProperties {
 

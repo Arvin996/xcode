@@ -7,6 +7,7 @@ import cn.xk.xcode.entity.message.OrderCancelMessage;
 import cn.xk.xcode.entity.po.TakeoutOrdersPo;
 import cn.xk.xcode.service.TakeoutOrdersService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.springframework.stereotype.Component;
 
@@ -63,5 +64,10 @@ public class OrderTimeoutCancelConsumer extends AbstractEnhanceMessageConsumer<O
     @Override
     protected boolean throwException() {
         return true;
+    }
+
+    @Override
+    public String getThisConsumerInstanceName() {
+        return "OrderTimeoutCancelConsumer";
     }
 }

@@ -1,8 +1,11 @@
 package cn.xk.xcode.mq.consumer;
 
 import cn.xk.xcode.consumer.AbstractEnhanceMessageConsumer;
+import cn.xk.xcode.entity.BizAccessLog;
 import cn.xk.xcode.entity.GwAccessLog;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,9 +14,9 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * @Description MqGwLogMessageConsumer
  */
-@RocketMQMessageListener(consumerGroup = "gwLogConsumerGroup", topic = "gwLog")
+@RocketMQMessageListener(consumerGroup = "xcode-log-all-group", topic = "gwLog")
 @Component
-public class MqGwLogMessageConsumer extends AbstractEnhanceMessageConsumer<GwAccessLog> {
+public class MqGwLogMessageConsumer extends AbstractEnhanceMessageConsumer<GwAccessLog> implements RocketMQListener<GwAccessLog> {
 
     @Override
     protected void handleMessage(GwAccessLog message) throws Exception {
@@ -33,5 +36,15 @@ public class MqGwLogMessageConsumer extends AbstractEnhanceMessageConsumer<GwAcc
     @Override
     protected boolean throwException() {
         return false;
+    }
+
+    @Override
+    public String getThisConsumerInstanceName() {
+        return "MqGwLogMessageConsumer";
+    }
+
+    @Override
+    public void onMessage(GwAccessLog gwAccessLog) {
+        dispatchMessage(gwAccessLog);
     }
 }

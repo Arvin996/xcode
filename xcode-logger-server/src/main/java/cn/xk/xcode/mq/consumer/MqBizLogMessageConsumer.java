@@ -2,7 +2,9 @@ package cn.xk.xcode.mq.consumer;
 
 import cn.xk.xcode.consumer.AbstractEnhanceMessageConsumer;
 import cn.xk.xcode.entity.BizAccessLog;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,9 +13,9 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * @Description MqBizLogMessageConsumer
  */
-@RocketMQMessageListener(consumerGroup = "bizLogConsumerGroup", topic = "bizLog")
+@RocketMQMessageListener(consumerGroup = "xcode-log-all-group", topic = "bizLog")
 @Component
-public class MqBizLogMessageConsumer extends AbstractEnhanceMessageConsumer<BizAccessLog> {
+public class MqBizLogMessageConsumer  extends AbstractEnhanceMessageConsumer<BizAccessLog> implements RocketMQListener<BizAccessLog>{
 
     @Override
     protected void handleMessage(BizAccessLog message) throws Exception {
@@ -34,5 +36,16 @@ public class MqBizLogMessageConsumer extends AbstractEnhanceMessageConsumer<BizA
     protected boolean throwException() {
         // 如果抛出了异常就不会重试了 看怎么优化
         return false;
+    }
+
+
+    @Override
+    public String getThisConsumerInstanceName() {
+        return "MqBizLogMessageConsumer";
+    }
+
+    @Override
+    public void onMessage(BizAccessLog bizAccessLog) {
+        dispatchMessage(bizAccessLog);
     }
 }

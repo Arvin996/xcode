@@ -4,11 +4,16 @@ import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.message.BaseMessage;
+import cn.xk.xcode.utils.object.BeanUtil;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
 
 import javax.annotation.Resource;
 
@@ -21,14 +26,10 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.MQ_MESSAGE_SEND_FAI
  * @Description AbstractEnhanceMessageConsumer 消费者抽取
  */
 @Slf4j
-public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> implements RocketMQListener<T> {
+@SuppressWarnings("all")
+public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> implements RocketMQPushConsumerLifecycleListener {
 
     public static final int MAX_RETRY_TIMES = 5;
-
-    @Override
-    public void onMessage(T message) {
-        dispatchMessage(message);
-    }
 
     private static final int DELAY_LEVEL = 2;
 
@@ -39,6 +40,7 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
 
     /**
      * 消息处理
+     *
      * @param message 待处理消息
      * @throws Exception 消费异常
      */
@@ -60,7 +62,6 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
     protected boolean filter(T message) {
         return false;
     }
-
 
 
     /**
@@ -100,7 +101,7 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
      */
     public void dispatchMessage(T message) {
         // 基础日志记录被父类处理了
-        log.info("消费者收到消息[{}]", JSONUtil.toJsonStr(message));
+        log.info("消费者收到消息[{}]", JSON.toJSONString(message));
         if (filter(message)) {
             log.info("消息id{}不满足消费条件，已过滤。", message.getBizKey());
             return;
@@ -135,18 +136,19 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
         if (annotation == null) {
             return;
         }
+        BaseMessage baseMessage = (BaseMessage) message;
         //重新构建消息体
-        String messageSource = message.getMessageSource();
+        String messageSource = baseMessage.getMessageSource();
         if (!messageSource.startsWith(RETRY_PREFIX)) {
-            message.setMessageSource(RETRY_PREFIX + messageSource);
+            baseMessage.setMessageSource(RETRY_PREFIX + messageSource);
         }
-        message.setRetryTimes(message.getRetryTimes() + 1);
+        baseMessage.setRetryTimes(baseMessage.getRetryTimes() + 1);
 
         SendResult sendResult;
 
         try {
             // 如果消息发送不成功，则再次重新发送，如果发送异常则抛出由MQ再次处理(异常时不走延迟消息)
-            sendResult = rocketMQEnhanceTemplate.sendDelay(annotation.topic(), annotation.selectorExpression(), message, getDelayLevel());
+            sendResult = rocketMQEnhanceTemplate.sendDelay(annotation.topic(), annotation.selectorExpression(), baseMessage, getDelayLevel());
         } catch (Exception ex) {
             // 此处捕获之后，相当于此条消息被消息完成然后重新发送新的消息
             //由生产者直接发送
@@ -158,5 +160,12 @@ public abstract class AbstractEnhanceMessageConsumer<T extends BaseMessage> impl
         }
 
     }
+
+    @Override
+    public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
+        defaultMQPushConsumer.setInstanceName(getThisConsumerInstanceName());
+    }
+
+    public abstract String getThisConsumerInstanceName();
 
 }

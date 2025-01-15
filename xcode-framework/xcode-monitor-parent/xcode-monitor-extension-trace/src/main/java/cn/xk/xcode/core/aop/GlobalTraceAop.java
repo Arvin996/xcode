@@ -2,12 +2,13 @@ package cn.xk.xcode.core.aop;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.core.annotation.ThirdApi;
 import cn.xk.xcode.core.context.TraceContextHolder;
-import cn.xk.xcode.core.entity.TraceRecord;
+import cn.xk.xcode.entity.TraceRecord;
 import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.IntErrorCode;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,21 +62,28 @@ public class GlobalTraceAop {
         Integer traceSort = TraceContextHolder.getTraceSort();
         TraceRecord traceRecord = new TraceRecord();
         traceRecord.setTraceSort(traceSort);
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        Parameter[] parameters = method.getParameters();
         traceRecord.setRequestTime(LocalDateTimeUtil.formatNormal(LocalDateTime.now()));
         Object[] args = joinPoint.getArgs();
         Map<String, Object> map = new HashMap<>();
-        for (Object arg : args) {
+        for (int i = 0; i < args.length; i++) {
+            Object arg = args[i];
             // 文件上传不需要记录参数
             if (arg instanceof MultipartFile || arg instanceof HttpServletRequest || arg instanceof HttpServletResponse) {
                 continue;
             }
-            map.put(arg.getClass().getName(), arg);
+            if (ClassUtil.isBasicType(parameters[i].getType()) || String.class.isAssignableFrom(parameters[i].getType())){
+                map.put(parameters[i].getName(), arg);
+                continue;
+            }
+            map.put(parameters[i].getName(), JSON.toJSONString(arg));
         }
+        traceRecord.setRequestUrl(TraceContextHolder.getRequestUrl());
         traceRecord.setRequestParam(JSON.toJSONString(map));
         traceRecord.setCallServiceName(callService);
         traceRecord.setBeCalledServiceName(serviceName);
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        Method method = methodSignature.getMethod();
         traceRecord.setCallMethod(method.getName());
         Object result;
         try {

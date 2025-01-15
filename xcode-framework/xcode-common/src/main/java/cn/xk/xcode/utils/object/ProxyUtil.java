@@ -1,8 +1,12 @@
 package cn.xk.xcode.utils.object;
 
 import cn.hutool.core.util.ClassUtil;
+import cn.xk.xcode.core.aop.interceptor.ProxyType;
+import cn.xk.xcode.core.aop.proxy.CglibProxyFactory;
+import cn.xk.xcode.core.aop.proxy.JdkProxyFactory;
 import cn.xk.xcode.core.aop.proxy.ProxyFactory;
 import cn.xk.xcode.core.aop.aspect.Aspect;
+import cn.xk.xcode.core.aop.proxy.SpringCglibProxyFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -16,6 +20,16 @@ import java.lang.reflect.Proxy;
 public class ProxyUtil {
 
     private ProxyUtil() {
+    }
+
+    public static ProxyFactory getProxyFactory(ProxyType proxyType) {
+        if (proxyType == ProxyType.CGLIB) {
+            return CglibProxyFactory.getInstance();
+        } else if (proxyType == ProxyType.JDK) {
+            return JdkProxyFactory.getInstance();
+        }else {
+            return SpringCglibProxyFactory.getInstance();
+        }
     }
 
     public static <T> T proxy(T target, Class<? extends Aspect> aspectClass) {

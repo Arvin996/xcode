@@ -1,11 +1,11 @@
-package cn.xk.xcode.core.support;
+package cn.xk.xcode.core.support.proxy;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.core.aop.aspect.Aspect;
 import cn.xk.xcode.core.context.TraceContextHolder;
-import cn.xk.xcode.core.entity.TraceRecord;
+import cn.xk.xcode.entity.TraceRecord;
 import cn.xk.xcode.exception.core.ServiceException;
 import com.alibaba.fastjson2.JSON;
 import lombok.Setter;
@@ -58,6 +58,7 @@ public abstract class AbstractThirdRequestAspect implements Aspect {
         }
         traceRecord.setRequestParam(JSON.toJSONString(map));
         traceRecord.setCallServiceName(serviceName);
+        traceRecord.setRequestUrl(thirdRequestUrl);
         traceRecord.setBeCalledServiceName("三方服务:" + thirdRequestUrl);
         traceRecord.setCallMethod(var2.getName());
         return true;

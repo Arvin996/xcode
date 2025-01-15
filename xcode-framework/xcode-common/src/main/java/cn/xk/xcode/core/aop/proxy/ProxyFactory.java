@@ -1,9 +1,10 @@
 package cn.xk.xcode.core.aop.proxy;
 
+
+
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.ServiceLoaderUtil;
 import cn.xk.xcode.core.aop.aspect.Aspect;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -13,22 +14,24 @@ import java.io.Serializable;
  * @Version 1.0.0
  * @Description ProxyFactory
  **/
-@NoArgsConstructor
 public abstract class ProxyFactory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public abstract <T> T proxy(T target, Aspect aspect);
+    public ProxyFactory() {
+    }
 
     public <T> T proxy(T target, Class<? extends Aspect> aspectClass) {
-        return proxy(target, ReflectUtil.newInstance(aspectClass));
+        return this.proxy(target, ReflectUtil.newInstanceIfPossible(aspectClass));
     }
+
+    public abstract <T> T proxy(T var1, Aspect var2);
 
     public static <T> T createProxy(T target, Class<? extends Aspect> aspectClass) {
         return createProxy(target, ReflectUtil.newInstance(aspectClass));
     }
 
-    public static <T> T createProxy(T target,Aspect aspect) {
+    public static <T> T createProxy(T target, Aspect aspect) {
         return create().proxy(target, aspect);
     }
 

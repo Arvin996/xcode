@@ -36,6 +36,7 @@ public class JdkInterceptor implements InvocationHandler, Serializable {
         Object result = null;
         if (aspect.before(target, method, args)) {
             ReflectUtil.setAccessible(method);
+
             try {
                 result = method.invoke(ClassUtil.isStatic(method) ? null : target, args);
             } catch (InvocationTargetException e) {
@@ -43,7 +44,12 @@ public class JdkInterceptor implements InvocationHandler, Serializable {
                     throw e;
                 }
             }
+
+            if (aspect.after(target, method, args, result)) {
+                return result;
+            }
         }
-        return aspect.after(target, method, args, result) ? result : null;
+
+        return null;
     }
 }

@@ -27,6 +27,7 @@ public class CglibInterceptor implements MethodInterceptor, Serializable {
         this.aspect = aspect;
     }
 
+    @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         Object target = this.target;
         Object result = null;

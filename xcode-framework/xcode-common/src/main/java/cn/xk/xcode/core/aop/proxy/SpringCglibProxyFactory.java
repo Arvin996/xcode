@@ -1,5 +1,6 @@
 package cn.xk.xcode.core.aop.proxy;
 
+
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.xk.xcode.core.aop.aspect.Aspect;
@@ -14,7 +15,19 @@ import java.lang.reflect.Constructor;
  * @Version 1.0.0
  * @Description SpringCglibProxyFactory
  **/
+@SuppressWarnings("unchecked")
 public class SpringCglibProxyFactory extends ProxyFactory {
+
+    private static final long serialVersionUID = 1L;
+
+    private SpringCglibProxyFactory() {
+    }
+
+    private static final SpringCglibProxyFactory INSTANCE = new SpringCglibProxyFactory();
+
+    public static SpringCglibProxyFactory getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public <T> T proxy(T target, Aspect aspect) {
@@ -22,7 +35,7 @@ public class SpringCglibProxyFactory extends ProxyFactory {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(targetClass);
         enhancer.setCallback(new SpringCglibInterceptor(target, aspect));
-        return (T)create(enhancer, targetClass);
+        return create(enhancer, targetClass);
     }
 
     private static <T> T create(Enhancer enhancer, Class<?> targetClass) {
@@ -39,6 +52,7 @@ public class SpringCglibProxyFactory extends ProxyFactory {
                 finalException = e;
             }
         }
+
         if (null != finalException) {
             throw finalException;
         } else {

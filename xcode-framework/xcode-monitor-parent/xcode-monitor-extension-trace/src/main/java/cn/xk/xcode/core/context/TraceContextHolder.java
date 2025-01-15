@@ -17,6 +17,15 @@ public class TraceContextHolder {
     private static final ThreadLocal<String> TRACE_ID = new TransmittableThreadLocal<>();
     private static final ThreadLocal<Integer> TRACE_SORT = new TransmittableThreadLocal<>();
     private static final ThreadLocal<String> CALL_SERVICE = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<String> REQUEST_URL = new TransmittableThreadLocal<>();
+
+    public static void setRequestUrl(String requestUrl) {
+        REQUEST_URL.set(requestUrl);
+    }
+
+    public static String getRequestUrl() {
+        return REQUEST_URL.get();
+    }
 
     public static void setCallService(String callService) {
         CALL_SERVICE.set(callService);
@@ -46,6 +55,7 @@ public class TraceContextHolder {
         TRACE_ID.remove();
         TRACE_SORT.remove();
         CALL_SERVICE.remove();
+        REQUEST_URL.remove();
     }
 
 }

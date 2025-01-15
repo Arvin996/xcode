@@ -1,12 +1,7 @@
-package cn.xk.xcode.core.entity;
+package cn.xk.xcode.entity;
 
 import cn.xk.xcode.message.BaseMessage;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 
 /**
  * @Author xuk
@@ -14,6 +9,7 @@ import java.time.LocalDateTime;
  * @Version 1.0.0
  * @Description TraceRecord
  **/
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +28,8 @@ public class TraceRecord extends BaseMessage {
     private String callServiceName;
     // 被调服务
     private String beCalledServiceName;
+    // 调用url
+    private String requestUrl;
     // 调用方法
     private String callMethod;
     // 响应结果

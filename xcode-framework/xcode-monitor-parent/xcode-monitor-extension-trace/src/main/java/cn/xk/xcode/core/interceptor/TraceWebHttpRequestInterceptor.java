@@ -23,6 +23,7 @@ public class TraceWebHttpRequestInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod)){
             return true;
         }
+        TraceContextHolder.setRequestUrl(request.getRequestURL().toString());
         String traceId = request.getHeader(TRACE_ID_KEY);
         String traceSort = request.getHeader(TRACE_SORT_KEY);
         String callService = request.getHeader(CALL_SERVICE_KEY);

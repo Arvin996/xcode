@@ -28,23 +28,24 @@ public class SpringCglibInterceptor implements MethodInterceptor, Serializable {
     }
 
     @Override
-    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+    public Object intercept(Object o, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         Object target = this.target;
         Object result = null;
-        if (this.aspect.before(target, method, objects)) {
+        if (this.aspect.before(target, method, args)) {
             try {
-                result = methodProxy.invoke(target, objects);
+                result = proxy.invoke(target, args);
             } catch (Throwable e) {
                 Throwable throwable = e;
                 if (e instanceof InvocationTargetException) {
                     throwable = ((InvocationTargetException)e).getTargetException();
                 }
 
-                if (this.aspect.afterException(target, method, objects, throwable)) {
+                if (this.aspect.afterException(target, method, args, throwable)) {
                     throw e;
                 }
             }
         }
-        return this.aspect.after(target, method, objects, result) ? result : null;
+
+        return this.aspect.after(target, method, args, result) ? result : null;
     }
 }

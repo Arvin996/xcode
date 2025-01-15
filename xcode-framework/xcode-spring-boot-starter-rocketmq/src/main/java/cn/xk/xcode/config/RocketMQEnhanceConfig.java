@@ -9,12 +9,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -25,16 +27,13 @@ import java.util.List;
  */
 @EnableConfigurationProperties(RocketEnhanceProperties.class)
 @Configuration
-public class RocketMQEnhanceConfig
-{
+public class RocketMQEnhanceConfig {
+
     @Resource
     private RocketEnhanceProperties rocketEnhanceProperties;
 
-    @Resource
-    private RocketMQTemplate rocketMQTemplate;
-
     @Bean
-    public RocketMQEnhanceTemplate rocketMQEnhanceTemplate(){
+    public RocketMQEnhanceTemplate rocketMQEnhanceTemplate(RocketMQTemplate rocketMQTemplate){
         return new RocketMQEnhanceTemplate(rocketMQTemplate, rocketEnhanceProperties);
     }
 

@@ -7,7 +7,9 @@ import cn.xk.xcode.entity.message.OrderCancelMessage;
 import cn.xk.xcode.entity.po.TakeoutOrdersPo;
 import cn.xk.xcode.service.TakeoutOrdersService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,7 +27,7 @@ import static cn.xk.xcode.service.impl.TakeoutOrdersServiceImpl.ORDER_CANCEL_TOP
 @RocketMQMessageListener(consumerGroup = "takeoutOrderConsumerGroup", topic = ORDER_CANCEL_TOPIC)
 @Component
 @Slf4j
-public class OrderTimeoutCancelConsumer extends AbstractEnhanceMessageConsumer<OrderCancelMessage> {
+public class OrderTimeoutCancelConsumer extends AbstractEnhanceMessageConsumer<OrderCancelMessage> implements RocketMQListener<OrderCancelMessage> {
 
     @Resource
     private TakeoutOrdersService takeoutOrdersService;
@@ -63,5 +65,15 @@ public class OrderTimeoutCancelConsumer extends AbstractEnhanceMessageConsumer<O
     @Override
     protected boolean throwException() {
         return true;
+    }
+
+    @Override
+    public String getThisConsumerInstanceName() {
+        return "OrderTimeoutCancelConsumer";
+    }
+
+    @Override
+    public void onMessage(OrderCancelMessage orderCancelMessage) {
+        dispatchMessage(orderCancelMessage);
     }
 }

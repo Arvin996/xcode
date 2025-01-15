@@ -11,7 +11,7 @@ import javax.annotation.Resource;
  * @Author xuk
  * @Date 2024/7/2 15:32
  * @Version 1.0
- * @Description RedisMessageConsum
+ * @Description DefaultRedisMessageListener
  */
 @Component
 public class DefaultRedisMessageListener extends AbstractRedisMessageListener {

@@ -74,7 +74,12 @@ xcode:
     cache-type: redis
     enable: false
     enum-dict-packages:
-      - cn.xk.xcode.enums
-    super-dict-type: "##"
+      - cn.xk.xcode.enum
+# RocketMq
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: producer-group
+
 
 

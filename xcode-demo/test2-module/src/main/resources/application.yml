@@ -12,3 +12,7 @@ spring:
         namespace: public
 logging:
   config: classpath:log4j2.xml
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: producer-group

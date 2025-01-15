@@ -1,5 +1,6 @@
 package cn.xk.xcode;
 
+import cn.xk.xcode.core.annotation.EnableTrace;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

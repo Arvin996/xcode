@@ -1,9 +1,10 @@
 package cn.xk.xcode.config;
 
+import cn.xk.xcode.core.EnhanceXxlJobService;
+import cn.xk.xcode.core.XxlJobAutoRegisterLoader;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,22 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableConfigurationProperties(XxlJobProperties.class)
-@ConditionalOnProperty(value = "xcode.job.enable", havingValue = "true")
+@ConditionalOnProperty(value = "xcode.xxl.job.enable", havingValue = "true")
 public class XxlJobConfig {
     private final Logger logger = LoggerFactory.getLogger(XxlJobConfig.class);
 
     @Resource
     private XxlJobProperties xxlJobProperties;
+
+    @Bean
+    public EnhanceXxlJobService enhanceXxlJobService() {
+        return new EnhanceXxlJobService(xxlJobProperties);
+    }
+
+    @Bean
+    public XxlJobAutoRegisterLoader xxlJobAutoRegisterLoader(EnhanceXxlJobService enhanceXxlJobService) {
+        return new XxlJobAutoRegisterLoader(enhanceXxlJobService);
+    }
 
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor() {

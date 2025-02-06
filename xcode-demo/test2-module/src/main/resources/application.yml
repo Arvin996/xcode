@@ -10,9 +10,21 @@ spring:
       server-addr: 127.0.0.1:8848
       discovery:
         namespace: public
+        enabled: false
 logging:
   config: classpath:log4j2.xml
 rocketmq:
   name-server: 127.0.0.1:9876
   producer:
     group: producer-group
+xcode:
+  xxl:
+    job:
+      access-token: default_token
+      appname: xxl-test
+      port: 9999
+      username: admin
+      password: 123456
+      enable: true
+      executorTitle: 测试执行器
+      admin-address: http://127.0.0.1:8080/xxl-job-admin

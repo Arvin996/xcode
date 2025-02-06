@@ -14,6 +14,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.DigestUtils;
 
 import java.net.HttpCookie;
 import java.util.List;
@@ -44,9 +45,9 @@ public class EnhanceXxlJobService {
     private static final String ADD_XXL_JOB_INFO = "/jobinfo/add";
 
     private void getAndSetJobCookie() {
-        String loginUrl = xxlJobProperties.getAdminAddresses() + XXL_JOB_LOGIN_URL;
+        String loginUrl = xxlJobProperties.getAdminAddress() + XXL_JOB_LOGIN_URL;
         HttpResponse httpResponse = HttpRequest.post(loginUrl)
-                .form("username", xxlJobProperties.getUsername())
+                .form("userName", xxlJobProperties.getUsername())
                 .form("password", xxlJobProperties.getPassword())
                 .execute();
         if (!httpResponse.isOk()) {
@@ -61,7 +62,7 @@ public class EnhanceXxlJobService {
         for (int i = 0; i < GET_COOKIE_COUNT; i++) {
             String cookie = LOGIN_COOKIE_MAP.get(XXL_JOB_COOKIE_NAME);
             if (StrUtil.isNotBlank(cookie)) {
-                return cookie;
+                return XXL_JOB_COOKIE_NAME + "=" + cookie;
             }
             getAndSetJobCookie();
         }
@@ -71,7 +72,7 @@ public class EnhanceXxlJobService {
     public List<XxlJobGroup> getJobGroupList() {
         String title = xxlJobProperties.getExecutorTitle();
         String appname = xxlJobProperties.getAppname();
-        String jobGroupUrl = xxlJobProperties.getAdminAddresses() + XXL_JOB_GROUPS_URL;
+        String jobGroupUrl = xxlJobProperties.getAdminAddress() + XXL_JOB_GROUPS_URL;
         HttpResponse httpResponse = HttpRequest.post(jobGroupUrl)
                 .form("title", title)
                 .form("appname", appname)
@@ -93,7 +94,7 @@ public class EnhanceXxlJobService {
 
     // 自动注册执行器
     public boolean autoRegisterJobGroup() {
-        String saveJobGroupUrl = xxlJobProperties.getAdminAddresses() + SAVE_XXL_JOB_GROUP_URL;
+        String saveJobGroupUrl = xxlJobProperties.getAdminAddress() + SAVE_XXL_JOB_GROUP_URL;
         HttpResponse httpResponse = HttpRequest.post(saveJobGroupUrl)
                 .form("appname", xxlJobProperties.getAppname())
                 .form("title", xxlJobProperties.getExecutorTitle())
@@ -111,10 +112,11 @@ public class EnhanceXxlJobService {
      * @return 返回符合条件的任务
      */
     public List<XxlJobInfo> getJobInfoList(Integer jobGroupId, String executorHandler) {
-        String jobInfoUrl = xxlJobProperties.getAdminAddresses() + GET_XXL_JOB_INFO;
+        String jobInfoUrl = xxlJobProperties.getAdminAddress() + GET_XXL_JOB_INFO;
         HttpResponse httpResponse = HttpRequest.post(jobInfoUrl)
                 .form("jobGroup", jobGroupId)
                 .form("executorHandler", executorHandler)
+                .form("triggerStatus", -1)
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
@@ -133,7 +135,7 @@ public class EnhanceXxlJobService {
      */
     public Integer registerJob(XxlJobInfo xxlJobInfo) {
         // 获取添加任务信息的URL
-        String addJobInfoUrl = xxlJobProperties.getAdminAddresses() + ADD_XXL_JOB_INFO;
+        String addJobInfoUrl = xxlJobProperties.getAdminAddress() + ADD_XXL_JOB_INFO;
 
         // 将任务信息对象转换为Map
         Map<String, Object> map = BeanUtil.beanToMap(xxlJobInfo);
@@ -157,7 +159,7 @@ public class EnhanceXxlJobService {
         String code = jsonObject.getString("code");
 
         // 如果状态码为200，表示任务注册成功
-        if ("200".equals(code)) {
+        if (!"200".equals(code)) {
             // 返回任务ID
             ExceptionUtil.castServerException(REGISTER_XXL_JOB_ERROR);
         }

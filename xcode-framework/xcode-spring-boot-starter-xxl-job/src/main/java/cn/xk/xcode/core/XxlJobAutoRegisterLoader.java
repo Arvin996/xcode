@@ -9,6 +9,7 @@ import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.ApplicationArguments;
@@ -71,13 +72,24 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner, BeanPostProc
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setJobGroup(xxlJobGroup.getId());
         xxlJobInfo.setJobDesc(autoRegisterXxlJob.jobDesc());
-        xxlJobInfo.setAddTime(new Date());
-        xxlJobInfo.setScheduleConf(autoRegisterXxlJob.cron());
-        xxlJobInfo.setScheduleType("CRON");
-        xxlJobInfo.setGlueType("BEAN");
         xxlJobInfo.setAuthor(autoRegisterXxlJob.author());
-        xxlJobInfo.setAlarmEmail(StrUtil.isBlank(autoRegisterXxlJob.warnEmail()) ? null : autoRegisterXxlJob.warnEmail());
+        xxlJobInfo.setAlarmEmail(autoRegisterXxlJob.warnEmail());
+        xxlJobInfo.setScheduleType("CRON");
+        xxlJobInfo.setScheduleConf(autoRegisterXxlJob.cron());
+        xxlJobInfo.setMisfireStrategy(autoRegisterXxlJob.misfireStrategy().getValue());
+        xxlJobInfo.setExecutorRouteStrategy(autoRegisterXxlJob.executorRouteStrategy().getValue());
         xxlJobInfo.setExecutorHandler(xxlJob.value());
+        xxlJobInfo.setExecutorParam(autoRegisterXxlJob.executorParam());
+        xxlJobInfo.setExecutorBlockStrategy(autoRegisterXxlJob.executorBlockStrategy().getValue());
+        xxlJobInfo.setExecutorTimeout(autoRegisterXxlJob.executorTimeout());
+        xxlJobInfo.setExecutorFailRetryCount(autoRegisterXxlJob.executorFailRetryCount());
+        xxlJobInfo.setGlueType("BEAN");
+        xxlJobInfo.setGlueSource("");
+        xxlJobInfo.setGlueRemark("初始化");
+        xxlJobInfo.setChildJobId(autoRegisterXxlJob.childJobIds().length == 0 ? "" : StringUtils.join(StrUtil.COMMA, autoRegisterXxlJob.childJobIds()));
+        xxlJobInfo.setTriggerStatus(0);
+        xxlJobInfo.setTriggerLastTime(0);
+        xxlJobInfo.setTriggerNextTime(0);
         return xxlJobInfo;
     }
 

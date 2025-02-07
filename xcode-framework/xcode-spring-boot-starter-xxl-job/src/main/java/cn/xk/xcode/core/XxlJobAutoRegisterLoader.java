@@ -6,18 +6,19 @@ import cn.xk.xcode.annotation.AutoRegisterXxlJob;
 import cn.xk.xcode.entity.XxlJobGroup;
 import cn.xk.xcode.entity.XxlJobInfo;
 import cn.xk.xcode.utils.collections.CollectionUtil;
+import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.handler.annotation.XxlJob;
+import com.xxl.job.core.handler.impl.MethodJobHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
 import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author xuk
@@ -27,7 +28,7 @@ import java.util.List;
  **/
 @Slf4j
 @RequiredArgsConstructor
-public class XxlJobAutoRegisterLoader implements ApplicationRunner, BeanPostProcessor {
+public class XxlJobAutoRegisterLoader implements ApplicationRunner {
 
     private final EnhanceXxlJobService enhanceXxlJobService;
 
@@ -39,36 +40,76 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner, BeanPostProc
         addJobInfo();
     }
 
+    @SuppressWarnings("all")
     private void addJobInfo() {
         XxlJobGroup xxlJobGroup = enhanceXxlJobService.getJobGroupList().get(0);
         // 获取所有bean
         String[] beanNamesForType = SpringUtil.getBeanNamesForType(Object.class);
         for (String beanName : beanNamesForType) {
             Object bean = SpringUtil.getBean(beanName);
-            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(bean.getClass(), XxlJob.class);
+            List<Method> methods = MethodUtils.getMethodsListWithAnnotation(bean.getClass(), AutoRegisterXxlJob.class);
             if (CollectionUtil.isNotEmpty(methods)) {
                 for (Method method : methods) {
-                    if (method.isAnnotationPresent(AutoRegisterXxlJob.class)) {
+                    AutoRegisterXxlJob autoRegisterXxlJob = method.getAnnotation(AutoRegisterXxlJob.class);
+                    if (method.isAnnotationPresent(XxlJob.class)) {
+                        // 此时让xxl-job core自动注册 不需要我们重复处理 我们只需要往数据库插入一下数据即可
                         XxlJob xxlJob = method.getAnnotation(XxlJob.class);
-                        AutoRegisterXxlJob autoRegisterXxlJob = method.getAnnotation(AutoRegisterXxlJob.class);
-                        List<XxlJobInfo> jobInfoList = enhanceXxlJobService.getJobInfoList(xxlJobGroup.getId(), xxlJob.value());
-                        if (CollectionUtil.isNotEmpty(jobInfoList)) {
-                            if (jobInfoList.stream().anyMatch(o -> o.getExecutorHandler().equals(xxlJob.value()))) {
-                                log.info("xxl-job 任务{}已经存在，不需要再次注册", xxlJob.value());
-                                continue;
+                        registerJobToDb(xxlJobGroup, xxlJob.value(), autoRegisterXxlJob);
+                    } else {
+                        Method initMethod = null;
+                        Method destroyMethod = null;
+                        // 没有@xxl-job 注解 但是有@AutoRegisterXxlJob 注解 自动注册 如果
+                        String handler = autoRegisterXxlJob.executorHandler();
+                        if (StringUtils.isEmpty(handler)) {
+                            log.warn("【警告】 方法{}没有@XxlJob注解，也没有@AutoRegisterXxlJob注解中的executorHandler属性, 将会以方法名称作为任务名称", method.getName());
+                            handler = method.getName();
+                        }
+                        String init = autoRegisterXxlJob.init();
+                        if (StringUtils.isNotEmpty(init)) {
+                            try {
+                                initMethod = bean.getClass().getDeclaredMethod(init);
+                                initMethod.setAccessible(true);
+                            } catch (NoSuchMethodException e) {
+                                log.error("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
                             }
                         }
-                        // 注册
-                        XxlJobInfo xxlJobInfo = createXxlJobInfo(xxlJobGroup, xxlJob, autoRegisterXxlJob);
-                        Integer registerJob = enhanceXxlJobService.registerJob(xxlJobInfo);
-                        log.info("xxl-job 任务{}注册成功，任务ID为{}", xxlJob.value(), registerJob);
+                        String destroy = autoRegisterXxlJob.destroy();
+                        if (StringUtils.isNotEmpty(destroy)) {
+                            try {
+                                destroyMethod = bean.getClass().getDeclaredMethod(destroy);
+                                destroyMethod.setAccessible(true);
+                            } catch (NoSuchMethodException e) {
+                                log.error("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
+                            }
+                        }
+                        // 1. 内存注册处理器
+                        if (Objects.isNull(XxlJobSpringExecutor.loadJobHandler(handler))) {
+                            XxlJobSpringExecutor.registJobHandler(handler, new MethodJobHandler(bean, method, initMethod, destroyMethod));
+                        }else {
+                            log.warn("xxl-job 任务{}已经存在，请检查是否有重复注册", handler);
+                        }
+                        // 2. 数据库注册任务
+                        registerJobToDb(xxlJobGroup, handler, autoRegisterXxlJob);
                     }
                 }
             }
         }
     }
 
-    private XxlJobInfo createXxlJobInfo(XxlJobGroup xxlJobGroup, XxlJob xxlJob, AutoRegisterXxlJob autoRegisterXxlJob) {
+    private void registerJobToDb(XxlJobGroup xxlJobGroup, String executorHandler, AutoRegisterXxlJob autoRegisterXxlJob) {
+        List<XxlJobInfo> jobInfoList = enhanceXxlJobService.getJobInfoList(xxlJobGroup.getId(), executorHandler);
+        if (CollectionUtil.isNotEmpty(jobInfoList)) {
+            if (jobInfoList.stream().anyMatch(o -> o.getExecutorHandler().equals(executorHandler))) {
+                log.info("xxl-job 任务{}已经存在，不需要再次注册", executorHandler);
+                return;
+            }
+        }
+        XxlJobInfo xxlJobInfo = createXxlJobInfo(xxlJobGroup, executorHandler, autoRegisterXxlJob);
+        Integer registerJob = enhanceXxlJobService.registerJob(xxlJobInfo);
+        log.info("xxl-job 任务{}注册成功，任务ID为{}", executorHandler, registerJob);
+    }
+
+    private XxlJobInfo createXxlJobInfo(XxlJobGroup xxlJobGroup, String executorHandler, AutoRegisterXxlJob autoRegisterXxlJob) {
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setJobGroup(xxlJobGroup.getId());
         xxlJobInfo.setJobDesc(autoRegisterXxlJob.jobDesc());
@@ -78,7 +119,7 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner, BeanPostProc
         xxlJobInfo.setScheduleConf(autoRegisterXxlJob.cron());
         xxlJobInfo.setMisfireStrategy(autoRegisterXxlJob.misfireStrategy().getValue());
         xxlJobInfo.setExecutorRouteStrategy(autoRegisterXxlJob.executorRouteStrategy().getValue());
-        xxlJobInfo.setExecutorHandler(xxlJob.value());
+        xxlJobInfo.setExecutorHandler(executorHandler);
         xxlJobInfo.setExecutorParam(autoRegisterXxlJob.executorParam());
         xxlJobInfo.setExecutorBlockStrategy(autoRegisterXxlJob.executorBlockStrategy().getValue());
         xxlJobInfo.setExecutorTimeout(autoRegisterXxlJob.executorTimeout());
@@ -87,7 +128,7 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner, BeanPostProc
         xxlJobInfo.setGlueSource("");
         xxlJobInfo.setGlueRemark("初始化");
         xxlJobInfo.setChildJobId(autoRegisterXxlJob.childJobIds().length == 0 ? "" : StringUtils.join(StrUtil.COMMA, autoRegisterXxlJob.childJobIds()));
-        xxlJobInfo.setTriggerStatus(0);
+        xxlJobInfo.setTriggerStatus(autoRegisterXxlJob.triggerStatus());
         xxlJobInfo.setTriggerLastTime(0);
         xxlJobInfo.setTriggerNextTime(0);
         return xxlJobInfo;

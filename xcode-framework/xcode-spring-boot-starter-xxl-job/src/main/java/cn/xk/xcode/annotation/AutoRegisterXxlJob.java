@@ -14,11 +14,21 @@ import java.lang.annotation.*;
  **/
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
+@Inherited
 public @interface AutoRegisterXxlJob {
+    // 这个等价于@XxlJob("xxx")中的xxx 如果忘记填了 默认是方法名称
+    String executorHandler() default "";
+
+    // 这个等价于@XxlJob(init = "xxx")中的xxx
+    String init() default "";
+
+    // 这个等价于@XxlJob(destroy = "xxx")中的xxx
+    String destroy() default "";
+
     String cron();
     String jobDesc();
     String author();
+    int triggerStatus() default 0;
     String warnEmail() default "";
     ExecutorRouteStrategyEnum executorRouteStrategy() default ExecutorRouteStrategyEnum.FIRST;
     ExecutorBlockStrategyEnum executorBlockStrategy() default ExecutorBlockStrategyEnum.SERIAL_EXECUTION;

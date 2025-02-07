@@ -1,7 +1,6 @@
 package cn.xk.xcode.task;
 
 import cn.xk.xcode.annotation.AutoRegisterXxlJob;
-import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class xxlTest {
 
-    @XxlJob("xxlTest")
-    @AutoRegisterXxlJob(cron = "0/5 * * * * ?", jobDesc = "xxlTest", author = "xuk")
+ //   @XxlJob("xxlTest")
+    @AutoRegisterXxlJob(executorHandler = "xxxxx", cron = "0/5 * * * * ?", jobDesc = "xxlTest", author = "xuk", triggerStatus = 1)
     public void xxlJobTest(){
         System.out.println("xxlJobTest");
     }

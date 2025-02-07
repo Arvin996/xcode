@@ -21,7 +21,10 @@ public class ValidatorConfig {
 
     @Bean
     public MessageSource messageSource(){
-        return new ResourceBundleMessageSource();
+        ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setBasename("i18n/messages");
+        resourceBundleMessageSource.setDefaultEncoding("UTF-8");
+        return resourceBundleMessageSource;
     }
 
     /**

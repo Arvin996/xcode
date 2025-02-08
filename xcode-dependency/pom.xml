@@ -22,12 +22,12 @@
         <commons-io.version>2.15.1</commons-io.version>
         <knife4j.version>4.3.0</knife4j.version>
         <lombok.version>1.18.24</lombok.version>
-        <satoken.version>1.38.0</satoken.version>
+        <satoken.version>1.40.0</satoken.version>
         <druid.version>1.2.21</druid.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.5</mybatis-plus-generator.version>
         <rocketmq.version>2.2.0</rocketmq.version>
-        <satoken.version>1.38.0</satoken.version>
+        <satoken.version>1.40.0</satoken.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <easyexcel.verion>3.1.1</easyexcel.verion>
         <easy-trans.version>3.3.4</easy-trans.version>

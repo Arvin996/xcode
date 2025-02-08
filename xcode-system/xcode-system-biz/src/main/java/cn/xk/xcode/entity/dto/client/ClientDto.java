@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author xukai
@@ -45,5 +47,38 @@ public class ClientDto {
      * 授权类型
      */
     @Schema(description = "授权类型", example = "password")
-    private String grantType;
+    private List<String> grantType;
+
+    /**
+     * 状态 0 可用 1不可用
+     */
+    @Schema(description = "状态 0 可用 1不可用", example = "0")
+    private Integer status = 0;
+
+    /**
+     * 访问令牌过期时间
+     */
+    @Schema(description = "访问令牌过期时间", example = "3600")
+    private Integer accessTokenValidity = 3600;
+
+    /**
+     * 刷新令牌过期时间
+     */
+    @Schema(description = "刷新令牌过期时间", example = "3600")
+    private Integer refreshTokenValidity = 3600;
+
+    /**
+     * 允许的scope
+     */
+    @Schema(description = "允许的scopes", example = "all")
+    @NotBlank(message = "scopes cannot be null")
+    private List<String> scopes;
+
+    /**
+     * 允许重定向的地址
+     */
+    @Schema(description = "允许重定向的地址", example = "http://localhost:8080/oauth2/callback")
+    @NotBlank(message = "redirectUris cannot be null")
+    private String redirectUris;
+
 }

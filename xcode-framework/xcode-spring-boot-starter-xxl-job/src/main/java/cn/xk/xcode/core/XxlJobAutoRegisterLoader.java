@@ -61,8 +61,8 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
                         // 没有@xxl-job 注解 但是有@AutoRegisterXxlJob 注解 自动注册 如果
                         String handler = autoRegisterXxlJob.executorHandler();
                         if (StringUtils.isEmpty(handler)) {
-                            log.warn("【警告】 方法{}没有@XxlJob注解，也没有@AutoRegisterXxlJob注解中的executorHandler属性, 将会以方法名称作为任务名称", method.getName());
-                            handler = method.getName();
+                            log.warn("【警告】 方法{}没有@XxlJob注解，也没有@AutoRegisterXxlJob注解中的executorHandler属性, 将会以类名_方法名称作为任务名称", method.getName());
+                            handler = bean.getClass().getSimpleName() + "_" + method.getName();
                         }
                         String init = autoRegisterXxlJob.init();
                         if (StringUtils.isNotEmpty(init)) {

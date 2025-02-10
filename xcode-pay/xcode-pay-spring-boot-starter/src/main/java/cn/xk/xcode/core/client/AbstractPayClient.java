@@ -6,6 +6,7 @@ import cn.xk.xcode.entity.order.PayCreateOrderDto;
 import cn.xk.xcode.entity.order.PayOrderResultVo;
 import cn.xk.xcode.entity.refund.PayCreateRefundDto;
 import cn.xk.xcode.entity.refund.PayRefundResultVo;
+import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
@@ -63,7 +64,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
             throw e;
         } catch (Throwable e) {
             log.error("创建订单失败，失败信息：{}", e.getMessage());
-            throw new ServerException(CREATE_ORDER_FILED, channel, JSONUtil.toJsonStr(payCreateOrderDto));
+            throw new ServerException(CREATE_ORDER_FILED, (Object) channel, JSONUtil.toJsonStr(payCreateOrderDto));
         }
         return payOrderResultVo;
     }
@@ -79,7 +80,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
             throw e;
         } catch (Throwable e) {
             log.error("查询订单失败，订单号：{}，失败信息：{}", outTradeNo, e.getMessage());
-            throw new ServerException(QUERY_ORDER_FILED, channel, outTradeNo);
+            throw new ServerException(QUERY_ORDER_FILED, (Object) channel, outTradeNo);
         }
         return payOrderResultVo;
     }
@@ -111,7 +112,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
             throw e;
         } catch (Throwable e) {
             log.error("创建退费订单失败，订单号：{}，退费单号：{}， 失败信息：{}", payCreateRefundDto.getOutRefundNo(), payCreateRefundDto.getOutRefundNo(), e.getMessage());
-            throw new ServerException(CREATE_ORDER_REFUND_FILED, payCreateRefundDto.getOutRefundNo(), payCreateRefundDto.getOutRefundNo(), JSONUtil.toJsonStr(payCreateRefundDto));
+            throw new ServerException(CREATE_ORDER_REFUND_FILED, (Object) payCreateRefundDto.getOutRefundNo(), payCreateRefundDto.getOutRefundNo(), JSONUtil.toJsonStr(payCreateRefundDto));
         }
         return payRefundResultVo;
     }
@@ -127,7 +128,7 @@ public abstract class AbstractPayClient<Config extends PayClientConfig> implemen
             throw e;
         } catch (Throwable e) {
             log.error("查询退费订单失败，订单号：{}，退费订单号：{}，失败信息：{}", outTradeNo, outRefundNo, e.getMessage());
-            throw new ServerException(QUERY_REFUND_ORDER_FILED, outTradeNo, outRefundNo);
+            throw new ServerException(QUERY_REFUND_ORDER_FILED, (Object) outTradeNo, outRefundNo);
         }
         return payRefundResultVo;
     }

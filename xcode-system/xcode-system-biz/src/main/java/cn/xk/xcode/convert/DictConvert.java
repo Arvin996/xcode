@@ -1,6 +1,6 @@
 package cn.xk.xcode.convert;
 
-import cn.xk.xcode.entity.DataTableDict;
+import cn.xk.xcode.entity.DictDataEntity;
 import cn.xk.xcode.entity.dto.dict.UpdateDictDto;
 import cn.xk.xcode.entity.po.DictPo;
 import org.mapstruct.Mapper;
@@ -21,7 +21,7 @@ public interface DictConvert {
     @Mapping(target = "pad3", ignore = true)
     @Mapping(target = "pad2", ignore = true)
     @Mapping(target = "pad1", ignore = true)
-    List<DataTableDict> dictDoToTableDict(List<DictPo> dictPoList);
+    List<DictDataEntity> dictDoToTableDict(List<DictPo> dictPoList);
 
     DictPo dictDtoToPo(UpdateDictDto dictDto);
 

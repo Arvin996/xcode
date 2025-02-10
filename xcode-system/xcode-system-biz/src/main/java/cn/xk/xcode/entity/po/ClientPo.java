@@ -59,19 +59,14 @@ public class ClientPo implements Serializable {
     /**
      * 授权类型
      */
-    private String grantType;
+    @Column(typeHandler = ListStringTypeHandler.class)
+    private List<String> grantType;
 
     /**
      * 允许重定向的地址
      */
     @Column(typeHandler = ListStringTypeHandler.class)
     private List<String> redirectUris;
-
-    /**
-     * 允许的scope
-     */
-    @Column(typeHandler = ListStringTypeHandler.class)
-    private List<String> scope;
 
     /**
      * 访问令牌过期时间

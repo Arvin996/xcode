@@ -21,6 +21,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-mysql</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

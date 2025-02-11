@@ -1,9 +1,10 @@
-package cn.xk.xcode.log;
+package cn.xk.xcode.filter;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.json.JSONUtil;
+import cn.xk.xcode.entity.GwAccessLog;
 import cn.xk.xcode.utils.WebFrameworkUtils;
 import com.alibaba.nacos.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;

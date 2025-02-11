@@ -1,4 +1,4 @@
-package cn.xk.xcode.log;
+package cn.xk.xcode.entity;
 
 import lombok.Data;
 import org.springframework.cloud.gateway.route.Route;
@@ -35,7 +35,6 @@ public class GwAccessLog
     private String Address;
     /**
      * 路由
-     *
      * 类似 ApiAccessLogCreateReqDTO 的 applicationName
      */
     private Route route;
@@ -71,7 +70,6 @@ public class GwAccessLog
 
     /**
      * 响应体
-     *
      * 类似 ApiAccessLogCreateReqDTO 的 resultCode + resultMsg
      */
     private String responseBody;

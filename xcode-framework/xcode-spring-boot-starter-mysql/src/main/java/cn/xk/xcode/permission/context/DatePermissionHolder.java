@@ -26,12 +26,16 @@ public class DatePermissionHolder {
         return DATE_SCOPE_HOLDER.get().peekLast();
     }
 
-    public static DataScopeEntity remove(){
-        DataScopeEntity dataScopeEntity = DATE_SCOPE_HOLDER.get().removeLast();
-        if (DATE_SCOPE_HOLDER.get().isEmpty()) {
+    public static void remove(){
+        LinkedList<DataScopeEntity> linkedList = DATE_SCOPE_HOLDER.get();
+        if (linkedList.isEmpty()) {
+            DATE_SCOPE_HOLDER.remove();
+            return;
+        }
+        linkedList.removeLast();
+        if (linkedList.isEmpty()) {
             DATE_SCOPE_HOLDER.remove();
         }
-        return dataScopeEntity;
     }
 
 

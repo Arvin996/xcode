@@ -5,16 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.xk.xcode</groupId>
-        <artifactId>xcode-parent</artifactId>
-        <version>${revision}</version>
+        <artifactId>xcode-mall</artifactId>
+        <version>1.0.0</version>
     </parent>
 
-    <artifactId>xcode-mall</artifactId>
+    <artifactId>xcode-mall-product</artifactId>
     <packaging>pom</packaging>
-    <name>${project.artifactId}</name>
-    <description>商城服务 包括如下部分 1. 商品服务模块 2. 订单交易服务模块 3. 报表服务模块</description>
     <modules>
-        <module>xcode-mall-product</module>
+        <module>xcode-mall-product-api</module>
+        <module>xcode-mall-product-biz</module>
     </modules>
 
     <properties>
@@ -22,5 +21,13 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

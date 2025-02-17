@@ -4,8 +4,6 @@ import cn.xk.xcode.core.MonitorClientStartLoader;
 import cn.xk.xcode.core.task.MonitorClientServiceSendTask;
 import org.springframework.context.annotation.Bean;
 
-import javax.annotation.Resource;
-
 /**
  * @Author xuk
  * @Date 2024/11/14 8:58

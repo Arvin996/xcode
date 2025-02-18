@@ -8,19 +8,11 @@
         <artifactId>xcode-framework</artifactId>
         <version>${revision}</version>
     </parent>
+
     <version>${revision}</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>xcode-spring-boot-starter-monitor-client</module>
-        <module>xcode-spring-boot-stater-monitor-server</module>
-        <module>xcode-monitor-extension-skywalking</module>
-        <module>xcode-monitor-extension-trace</module>
-    </modules>
-    <artifactId>xcode-monitor-parent</artifactId>
     <name>${project.artifactId}</name>
-    <description>
-        监控starter父pom
-    </description>
+    <artifactId>xcode-spring-boot-stater-oss</artifactId>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -35,14 +27,20 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3-transfer-manager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk.crt</groupId>
+            <artifactId>aws-crt</artifactId>
         </dependency>
     </dependencies>
+
 
 </project>

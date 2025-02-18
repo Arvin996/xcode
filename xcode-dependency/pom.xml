@@ -57,11 +57,33 @@
         <transmittable.version>2.14.5</transmittable.version>
         <justAuth.version>1.16.7</justAuth.version>
         <bcprov-jdk15to18.version>1.75</bcprov-jdk15to18.version>
+        <s3.version>2.25.15</s3.version>
+        <aws-crt.version>0.31.3</aws-crt.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${s3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3-transfer-manager</artifactId>
+                <version>${s3.version}</version>
+            </dependency>
+
+            <!-- 使用AWS基于 CRT 的 S3 客户端 -->
+            <dependency>
+                <groupId>software.amazon.awssdk.crt</groupId>
+                <artifactId>aws-crt</artifactId>
+                <version>0.31.3</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15to18</artifactId>

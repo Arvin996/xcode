@@ -1,7 +1,10 @@
 package cn.xk.xcode.config;
 
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
 
 /**
  * @Author xuk
@@ -34,6 +37,12 @@ public class XcodeOssProperties {
 
     // 域名
     private String domain;
+
+    // 默认的bucket 若是不传 框架默认是这个 用来解决只有一个bucket的项目
+    private String defaultBucket;
+
+    // 项目启动需要初始化的bucket defaultBucket也会初始化
+    private List<String> initBuckets = CollectionUtil.createEmptyList();
 
     // 文件名称方式
     private FileNamingEnum naming = FileNamingEnum.ORIGINAL;

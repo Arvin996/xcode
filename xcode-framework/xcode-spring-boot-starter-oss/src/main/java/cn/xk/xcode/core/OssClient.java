@@ -134,7 +134,7 @@ public class OssClient implements InitializingBean {
                     .uploadId(checkChunkFileExistsReqDto.getUploadId())
                     .build();
             List<Part> parts = s3Client.listParts(listPartsRequest).parts();
-            boolean b = parts.stream().anyMatch(part -> Objects.equals(part.partNumber(), checkChunkFileExistsReqDto.getChunkName()) && part.eTag().equals(checkChunkFileExistsReqDto.getETag()));
+            boolean b = parts.stream().anyMatch(part -> Objects.equals(part.partNumber(), checkChunkFileExistsReqDto.getCurrentChunk()) && part.eTag().equals(checkChunkFileExistsReqDto.getETag()));
             return CommonResult.success(b);
         } catch (Exception e) {
             log.error("检查分片文件是否存在失败, 错误信息:{}, 分片参数：{}", e.getMessage(), checkChunkFileExistsReqDto);

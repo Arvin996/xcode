@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class CheckChunkFileExistsReqDto {
 
     private String uploadId;
-    private Integer chunkName;
+    private Integer currentChunk;
     private String objectName;
     private String bucketName;
     private String eTag;

@@ -1,0 +1,11 @@
+# xcode-monitor-extension-trace模块为自定义的链路监控模块
+## 使用了拦截器 aop TransmittableThreadLocal保存数据 动态代理以及反射
+1. 首先通过拦截器拦截所有请求（只拦截HandlerMethod 如静态资源等请求不会拦截），将http
+请求头中链路的信息保存在threadlocal中，然后通过aop生成traceRecord对象，使用kafka发送链路信息
+2. 对于服务间调用 我们使用的open-feign 通过open-feign的拦截器 直接在请求头中放入链路信息
+3. 对于三方http客户端主动发起调用，如huool HttpRequest等，我们不可能给每一个客户端都生成一个拦截器处理
+我们使用了反射的思想，通过ThirdRequestWrapper类，把调用的对象 方法，参数等信息传入构造出wrapper类，执行execute方法
+即可记录链路，通过了反射的思想直接执行方法，并在方法执行前后进行切面
+4. 另外一种就是使用自定义aop,实现AbstractThirdRequestAspect类，即可返回你的http对象，直接调用即可
+5. 对于异步调用的接口，不可能传递traceId 使用@ThirdApi注解标记，指定autoGenTraceId属性表示是否自动生成traceId
+如果不自动生成traceId,请手动在代码中使用TraceContextHolder填入traceId。

@@ -42,7 +42,7 @@ public class BizTraceInterceptor implements MethodInterceptor {
         Method method = invocation.getMethod();
         BizTrace bizTrace = method.getAnnotation(BizTrace.class);
         Span span;
-        if (ObjectUtil.isNotNull(bizTrace)) {
+        if (ObjectUtil.isNull(bizTrace)) {
             // 设置
             return invocation.proceed();
         }
@@ -56,7 +56,7 @@ public class BizTraceInterceptor implements MethodInterceptor {
                 Tags.ERROR.set(span, Boolean.TRUE);
                 span.log(errorLogs(throwable));
             }
-            throw new Throwable(throwable);
+            throw throwable;
         } finally {
             if (span != null) {
                 setBizTag(span, bizTrace, invocation);
@@ -82,7 +82,7 @@ public class BizTraceInterceptor implements MethodInterceptor {
     }
 
     private static Map<String, Object> errorLogs(Throwable throwable) {
-        Map<String, Object> errorLogs = new HashMap<String, Object>(10);
+        Map<String, Object> errorLogs = new HashMap<>(10);
         errorLogs.put("event", Tags.ERROR.getKey());
         errorLogs.put("error.object", throwable);
         errorLogs.put("error.kind", throwable.getClass().getName());

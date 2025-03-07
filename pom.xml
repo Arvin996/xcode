@@ -26,6 +26,7 @@
         <module>xcode-takeout</module>
         <module>xcode-bpm</module>
         <module>xcode-demo</module>
+        <module>xcode-message</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

@@ -51,4 +51,7 @@ public interface GlobalErrorCodeConstants
     IntErrorCode EXCEL_EXPORT_ERROR = new IntErrorCode(903, "导出Excel失败");
     ErrorCode UNKNOWN = new IntErrorCode(999, "未知错误");
     ErrorCode BUNDLE_MESSAGE_NOT_FOUND = new IntErrorCode(998, "对应的国际化资源文件未找到信息code{}");
+    ErrorCode TASK_CONTEXT_IS_NULL =  new IntErrorCode(997, "任务上下文为空");
+    ErrorCode TASK_CONTEXT_BIZ_CODE_IS_NULL =  new IntErrorCode(996, "任务上下文业务编码为空");
+    ErrorCode TASK_HANDLER_LIST_IS_NULL =  new IntErrorCode(995, "任务编码{}对应的任务执行器列表为空");
 }

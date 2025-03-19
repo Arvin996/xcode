@@ -23,7 +23,7 @@ public class DistributedLock {
     /**
      * 互斥锁，seconds秒后自动失效
      *
-     * @param key key
+     * @param key     key
      * @param seconds 多少秒失效
      */
     public boolean tryLock(String key, long seconds) {
@@ -35,6 +35,22 @@ public class DistributedLock {
         RLock rLock = redissonClient.getLock(key);
         try {
             return rLock.tryLock(time, timeUnit);
+        } catch (InterruptedException e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param key       锁key
+     * @param waitTime  等待时间
+     * @param leaseTime 锁时间
+     * @param timeUnit  时间单位
+     * @return 是否获取到锁
+     */
+    public boolean tryLock(String key, long waitTime, long leaseTime, TimeUnit timeUnit) {
+        RLock rLock = redissonClient.getLock(key);
+        try {
+            return rLock.tryLock(waitTime, leaseTime, timeUnit);
         } catch (InterruptedException e) {
             return false;
         }

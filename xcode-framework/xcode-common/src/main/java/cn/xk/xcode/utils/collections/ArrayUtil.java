@@ -30,6 +30,14 @@ public class ArrayUtil {
         return cn.hutool.core.util.ArrayUtil.toArray(from, (Class<T>) IterUtil.getElementType(from.iterator()));
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T, U> U[] toArray(T[] arr, Function<T, U> func) {
+        if (isNonArr(arr)) {
+            return (U[]) (new Object[0]);
+        }
+        return (U[]) Arrays.stream(arr).map(func).toArray();
+    }
+
     public static <T> boolean isNonArr(T[] arr) {
         return ObjectUtil.isNull(arr) || arr.length == 0;
     }

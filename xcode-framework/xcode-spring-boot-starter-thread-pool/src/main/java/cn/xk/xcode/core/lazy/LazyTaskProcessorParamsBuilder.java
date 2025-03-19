@@ -28,6 +28,10 @@ public class LazyTaskProcessorParamsBuilder<T> {
      */
     private Long timeThreshold;
 
+    public static <T> LazyTaskProcessorParamsBuilder<T> create() {
+        return new LazyTaskProcessorParamsBuilder<>();
+    }
+
     public LazyTaskProcessorParamsBuilder<T> executorService(ExecutorService executorService) {
         this.executorService = executorService;
         return this;

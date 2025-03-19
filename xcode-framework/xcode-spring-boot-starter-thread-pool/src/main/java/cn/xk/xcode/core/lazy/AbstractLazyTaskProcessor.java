@@ -3,6 +3,7 @@ package cn.xk.xcode.core.lazy;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.factory.ThreadPoolProduceDecider;
 import cn.xk.xcode.core.factory.ThreadPoolTypeEnums;
+import com.google.common.base.Throwables;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public abstract class AbstractLazyTaskProcessor<T> {
 
-    private LazyTaskProcessorParams<T> params;
+    protected LazyTaskProcessorParams<T> params;
     /**
      * 批量装载任务
      */
@@ -41,13 +42,8 @@ public abstract class AbstractLazyTaskProcessor<T> {
      */
     private volatile Boolean stop = false;
 
-    public AbstractLazyTaskProcessor(LazyTaskProcessorParams<T> params) {
-        this.params = params;
-    }
+    public AbstractLazyTaskProcessor(){}
 
-    public AbstractLazyTaskProcessor(LazyTaskProcessorParamsBuilder<T> builder) {
-        this(builder.build());
-    }
 
     public static <T> LazyTaskProcessorParamsBuilder<T> builder() {
         return new LazyTaskProcessorParamsBuilder<>();
@@ -80,6 +76,15 @@ public abstract class AbstractLazyTaskProcessor<T> {
                 }
             }
         });
+    }
+
+    public void push(T t) {
+        try {
+            params.getQueue().put(t);
+        } catch (InterruptedException e) {
+            log.error("Pending#pending error:{}", Throwables.getStackTraceAsString(e));
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void process(List<T> taskRef) {

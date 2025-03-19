@@ -15,17 +15,8 @@ import java.util.concurrent.ExecutorService;
 public abstract class AbstractThreadPoolFactory {
     public static final String PRE_FIX = "xcode.";
     protected final ThreadPoolRegister register;
-    protected static final String DEFAULT_CODE =  "default";
 
     public abstract ExecutorService createThreadPool(boolean coreThreadRecycle, String threadUniqueCode);
-
-    public ExecutorService createThreadPool(boolean coreThreadRecycle) {
-        return createThreadPool(coreThreadRecycle, DEFAULT_CODE);
-    }
-
-    public ExecutorService createThreadPool(String threadUniqueCode) {
-        return createThreadPool(false, threadUniqueCode);
-    }
 
     public abstract ThreadPoolTypeEnums threadPoolType();
 }

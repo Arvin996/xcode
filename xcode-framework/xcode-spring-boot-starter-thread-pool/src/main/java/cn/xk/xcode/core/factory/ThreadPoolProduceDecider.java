@@ -13,6 +13,8 @@ import java.util.concurrent.ExecutorService;
  **/
 public class ThreadPoolProduceDecider {
 
+    private static final String DEFAULT_CODE =  "default";
+
     public ThreadPoolProduceDecider(List<AbstractThreadPoolFactory> threadPoolProducerList) {
         threadPoolProducerList.forEach(factory -> {
             threadPoolProducerMap.put(factory.threadPoolType(), factory);
@@ -26,10 +28,10 @@ public class ThreadPoolProduceDecider {
     }
 
     public ExecutorService decide(ThreadPoolTypeEnums threadPoolTypeEnums, boolean coreThreadRecycle) {
-        return threadPoolProducerMap.get(threadPoolTypeEnums).createThreadPool(coreThreadRecycle);
+        return decide(threadPoolTypeEnums, coreThreadRecycle, DEFAULT_CODE);
     }
 
     public ExecutorService decide(ThreadPoolTypeEnums threadPoolTypeEnums, String threadUniqueCode) {
-        return threadPoolProducerMap.get(threadPoolTypeEnums).createThreadPool(threadUniqueCode);
+        return decide(threadPoolTypeEnums, false, threadUniqueCode);
     }
 }

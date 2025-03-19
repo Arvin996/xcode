@@ -61,11 +61,33 @@
         <aws-crt.version>0.31.3</aws-crt.version>
         <dynamic-tp.version>1.0.2</dynamic-tp.version>
         <guava.version>31.0.1-jre</guava.version>
+        <dingding.version>2.0.0</dingding.version>
+        <sensitive-word.version>0.21.0</sensitive-word.version>
+        <tencentcloud-sdk-java.version>3.1.510</tencentcloud-sdk-java.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java</artifactId>
+                <version>${tencentcloud-sdk-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>sensitive-word</artifactId>
+                <version>${sensitive-word.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+                <version>${dingding.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>

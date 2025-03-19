@@ -5,6 +5,8 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.annotation.AutoRegisterXxlJob;
 import cn.xk.xcode.entity.XxlJobGroup;
 import cn.xk.xcode.entity.XxlJobInfo;
+import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -42,7 +44,16 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
 
     @SuppressWarnings("all")
     private void addJobInfo() {
-        XxlJobGroup xxlJobGroup = enhanceXxlJobService.getJobGroupList().get(0);
+        CommonResult<List<XxlJobGroup>> jobGroupList = enhanceXxlJobService.getJobGroupList();
+        if (!jobGroupList.isSuccess()) {
+            log.error("xxl-job 获取执行器信息失败，请检查是否配置正确");
+            return;
+        }
+        if (CollectionUtil.isEmpty(jobGroupList.getData())) {
+            log.error("xxl-job 执行器不存在，请检查是否配置正确");
+            return;
+        }
+        XxlJobGroup xxlJobGroup = jobGroupList.getData().get(0);
         // 获取所有bean
         String[] beanNamesForType = SpringUtil.getBeanNamesForType(Object.class);
         for (String beanName : beanNamesForType) {
@@ -97,16 +108,23 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
     }
 
     private void registerJobToDb(XxlJobGroup xxlJobGroup, String executorHandler, AutoRegisterXxlJob autoRegisterXxlJob) {
-        List<XxlJobInfo> jobInfoList = enhanceXxlJobService.getJobInfoList(xxlJobGroup.getId(), executorHandler);
-        if (CollectionUtil.isNotEmpty(jobInfoList)) {
-            if (jobInfoList.stream().anyMatch(o -> o.getExecutorHandler().equals(executorHandler))) {
+        CommonResult<List<XxlJobInfo>> jobInfoList = enhanceXxlJobService.getJobInfoList(xxlJobGroup.getId(), executorHandler);
+        if (!jobInfoList.isSuccess()) {
+            log.error("xxl-job 获取任务信息失败，请检查是否配置正确");
+            return;
+        }
+        if (CollectionUtil.isNotEmpty(jobInfoList.getData())) {
+            if (jobInfoList.getData().stream().anyMatch(o -> o.getExecutorHandler().equals(executorHandler))) {
                 log.info("xxl-job 任务{}已经存在，不需要再次注册", executorHandler);
                 return;
             }
         }
         XxlJobInfo xxlJobInfo = createXxlJobInfo(xxlJobGroup, executorHandler, autoRegisterXxlJob);
-        Integer registerJob = enhanceXxlJobService.registerJob(xxlJobInfo);
-        log.info("xxl-job 任务{}注册成功，任务ID为{}", executorHandler, registerJob);
+        CommonResult<Integer> integerCommonResult = enhanceXxlJobService.registerJob(xxlJobInfo);
+        if (!integerCommonResult.isSuccess()) {
+            log.error("xxl-job 任务{}注册失败，请检查是否配置正确", executorHandler);
+        }
+        log.info("xxl-job 任务{}注册成功，任务ID为{}", executorHandler, integerCommonResult.getData());
     }
 
     private XxlJobInfo createXxlJobInfo(XxlJobGroup xxlJobGroup, String executorHandler, AutoRegisterXxlJob autoRegisterXxlJob) {
@@ -139,7 +157,7 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
             log.info("xxl-job 执行器已经存在，不需要再次注册");
             return;
         }
-        if (enhanceXxlJobService.autoRegisterJobGroup()) {
+        if (CommonResult.isSuccess(enhanceXxlJobService.autoRegisterJobGroup())) {
             log.info("xxl-job 执行器注册成功");
         }
     }

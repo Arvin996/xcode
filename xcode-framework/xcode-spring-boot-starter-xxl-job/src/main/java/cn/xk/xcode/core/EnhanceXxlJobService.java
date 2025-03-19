@@ -1,6 +1,7 @@
 package cn.xk.xcode.core;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -9,14 +10,15 @@ import cn.xk.xcode.entity.XxlJobGroup;
 import cn.xk.xcode.entity.XxlJobInfo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+import com.xxl.job.core.biz.model.ReturnT;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.DigestUtils;
 
 import java.net.HttpCookie;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,6 +33,7 @@ import static cn.xk.xcode.config.XxlJobGlobalConstants.*;
  * @Description EnhanceXxlJobService
  **/
 @RequiredArgsConstructor
+@SuppressWarnings("all")
 public class EnhanceXxlJobService {
 
     public static final ConcurrentHashMap<String, String> LOGIN_COOKIE_MAP = new ConcurrentHashMap<>();
@@ -39,10 +42,83 @@ public class EnhanceXxlJobService {
 
     private static final String XXL_JOB_LOGIN_URL = "/login";
     private static final String XXL_JOB_COOKIE_NAME = "XXL_JOB_LOGIN_IDENTITY";
+    /**
+     * 执行器组接口路径
+     */
     private static final String XXL_JOB_GROUPS_URL = "/jobgroup/pageList";
     private static final String SAVE_XXL_JOB_GROUP_URL = "/jobgroup/save";
+    /**
+     * 任务信息接口路径
+     */
     private static final String GET_XXL_JOB_INFO = "/jobinfo/pageList";
     private static final String ADD_XXL_JOB_INFO = "/jobinfo/add";
+    public static final String UPDATE_URL = "/jobinfo/update";
+    public static final String DELETE_URL = "/jobinfo/remove";
+    public static final String RUN_URL = "/jobinfo/start";
+    public static final String STOP_URL = "/jobinfo/stop";
+
+    public CommonResult<Boolean> updateXxlJob(XxlJobInfo xxlJobInfo) {
+        String updateUrl = xxlJobProperties.getAdminAddress() + UPDATE_URL;
+        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(xxlJobInfo);
+        HttpResponse httpResponse = HttpRequest.post(updateUrl).form(stringObjectMap).cookie(getJobCookie()).execute();
+        if (!httpResponse.isOk()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return CommonResult.success(true);
+        } else {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+    }
+
+    public CommonResult<Boolean> deleteXxlJob(Integer jobId) {
+        String deleteUrl = xxlJobProperties.getAdminAddress() + DELETE_URL;
+        HashMap<String, Object> params = MapUtil.newHashMap();
+        params.put("id", jobId);
+        HttpResponse httpResponse = HttpRequest.post(deleteUrl).form(params).cookie(getJobCookie()).execute();
+        if (!httpResponse.isOk()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return CommonResult.success(true);
+        } else {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+    }
+
+    public CommonResult<Boolean> startXxlJob(Integer jobId) {
+        String startUrl = xxlJobProperties.getAdminAddress() + RUN_URL;
+        HashMap<String, Object> params = MapUtil.newHashMap();
+        params.put("id", jobId);
+        HttpResponse httpResponse = HttpRequest.post(startUrl).form(params).cookie(getJobCookie()).execute();
+        if (!httpResponse.isOk()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return CommonResult.success(true);
+        } else {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+    }
+
+    public CommonResult<Boolean> stopXxlJob(Integer jobId) {
+        String stopUrl = xxlJobProperties.getAdminAddress() + STOP_URL;
+        HashMap<String, Object> params = MapUtil.newHashMap();
+        params.put("id", jobId);
+        HttpResponse httpResponse = HttpRequest.post(stopUrl).form(params).cookie(getJobCookie()).execute();
+        if (!httpResponse.isOk()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return CommonResult.success(true);
+        } else {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+    }
 
     private void getAndSetJobCookie() {
         String loginUrl = xxlJobProperties.getAdminAddress() + XXL_JOB_LOGIN_URL;
@@ -69,7 +145,7 @@ public class EnhanceXxlJobService {
         throw new ServerException(XXL_JOB_COOKIE_ERROR);
     }
 
-    public List<XxlJobGroup> getJobGroupList() {
+    public CommonResult<List<XxlJobGroup>> getJobGroupList() {
         String title = xxlJobProperties.getExecutorTitle();
         String appname = xxlJobProperties.getAppname();
         String jobGroupUrl = xxlJobProperties.getAdminAddress() + XXL_JOB_GROUPS_URL;
@@ -79,21 +155,29 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
         }
         String body = httpResponse.body();
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
         JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
-        return jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobGroup.class)).collect(Collectors.toList());
+        return CommonResult.success(jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobGroup.class)).collect(Collectors.toList()));
     }
 
     public boolean preciselyCheck() {
         String title = xxlJobProperties.getExecutorTitle();
         String appname = xxlJobProperties.getAppname();
-        return getJobGroupList().stream().anyMatch(o -> o.getAppname().equals(appname) && o.getTitle().equals(title));
+        CommonResult<List<XxlJobGroup>> jobGroupList = getJobGroupList();
+        if (!CommonResult.isSuccess(jobGroupList)) {
+            return false;
+        }
+        return jobGroupList.getData().stream().anyMatch(o -> o.getAppname().equals(appname) && o.getTitle().equals(title));
     }
 
     // 自动注册执行器
-    public boolean autoRegisterJobGroup() {
+    public CommonResult<Boolean> autoRegisterJobGroup() {
         String saveJobGroupUrl = xxlJobProperties.getAdminAddress() + SAVE_XXL_JOB_GROUP_URL;
         HttpResponse httpResponse = HttpRequest.post(saveJobGroupUrl)
                 .form("appname", xxlJobProperties.getAppname())
@@ -101,9 +185,14 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
         }
-        return httpResponse.isOk();
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
+            return CommonResult.success(true);
+        } else {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
     }
 
     /**
@@ -111,7 +200,7 @@ public class EnhanceXxlJobService {
      * @param executorHandler 执行器处理器名称 也就是@XxlJob("xxx)中的xxx
      * @return 返回符合条件的任务
      */
-    public List<XxlJobInfo> getJobInfoList(Integer jobGroupId, String executorHandler) {
+    public CommonResult<List<XxlJobInfo>> getJobInfoList(Integer jobGroupId, String executorHandler) throws ServerException {
         String jobInfoUrl = xxlJobProperties.getAdminAddress() + GET_XXL_JOB_INFO;
         HttpResponse httpResponse = HttpRequest.post(jobInfoUrl)
                 .form("jobGroup", jobGroupId)
@@ -120,11 +209,15 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+        }
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
         }
         String body = httpResponse.body();
         JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
-        return jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobInfo.class)).collect(Collectors.toList());
+        return CommonResult.success(jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobInfo.class)).collect(Collectors.toList()));
     }
 
     /**
@@ -133,39 +226,27 @@ public class EnhanceXxlJobService {
      * @param xxlJobInfo 要注册的任务信息
      * @return 返回注册成功后返回的任务ID
      */
-    public Integer registerJob(XxlJobInfo xxlJobInfo) {
+    public CommonResult<Integer> registerJob(XxlJobInfo xxlJobInfo) {
         // 获取添加任务信息的URL
         String addJobInfoUrl = xxlJobProperties.getAdminAddress() + ADD_XXL_JOB_INFO;
-
         // 将任务信息对象转换为Map
         Map<String, Object> map = BeanUtil.beanToMap(xxlJobInfo);
-
         // 发送POST请求，将任务信息提交到XxlJob管理端
         HttpResponse httpResponse = HttpRequest.post(addJobInfoUrl)
                 .form(map)
                 .cookie(getJobCookie())
                 .execute();
-
         // 检查HTTP响应是否成功
         if (!httpResponse.isOk()) {
             // 如果响应不成功，抛出服务器异常
-            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
         }
-
-        // 将HTTP响应体解析为JSON对象
-        JSONObject jsonObject = JSON.parseObject(httpResponse.body());
-
-        // 获取响应中的状态码
-        String code = jsonObject.getString("code");
-
-        // 如果状态码为200，表示任务注册成功
-        if (!"200".equals(code)) {
-            // 返回任务ID
-            ExceptionUtil.castServerException(REGISTER_XXL_JOB_ERROR);
+        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
+        if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
         }
-
         // 返回任务ID
-        return jsonObject.getIntValue("content");
+        return CommonResult.success(Integer.parseInt(returnT.getContent().toString()));
     }
 
 

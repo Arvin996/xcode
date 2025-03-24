@@ -64,32 +64,34 @@ public class ArrayUtil {
         return convertList(arr, func, Objects::nonNull);
     }
 
+    public static <T> List<T> convertList(T[] arr) {
+        return convertList(arr, Function.identity(), Objects::nonNull);
+    }
+
+
     public static <T, K> Map<K, T> convertMap(T[] arr, Function<T, K> keyFunc) {
-        if (isNonArr(arr)) {
-            return new HashMap<>();
-        }
         return convertMap(arr, keyFunc, Function.identity());
     }
 
     public static <T, K, V> Map<K, V> convertMap(T[] arr, Function<T, K> keyFunc, Function<T, V> valueFunc) {
-        if (isNonArr(arr)) {
-            return new HashMap<>();
-        }
         return convertMap(arr, keyFunc, valueFunc, (v1, v2) -> v1);
     }
 
     public static <T, K, V> Map<K, V> convertMap(T[] arr, Function<T, K> keyFunc, Function<T, V> valueFunc, BinaryOperator<V> mergeFunction) {
+        if (isNonArr(arr)) {
+            return new HashMap<>();
+        }
         return convertMap(arr, keyFunc, valueFunc, mergeFunction, HashMap::new);
     }
 
     public static <T, K, V> Map<K, V> convertMap(T[] arr, Function<T, K> keyFunc, Function<T, V> valueFunc, Supplier<? extends Map<K, V>> supplier) {
-        if (isNonArr(arr)) {
-            return supplier.get();
-        }
         return convertMap(arr, keyFunc, valueFunc, (v1, v2) -> v1, supplier);
     }
 
     public static <T, K, V> Map<K, V> convertMap(T[] arr, Function<T, K> keyFunc, Function<T, V> valueFunc, BinaryOperator<V> mergeFunction, Supplier<? extends Map<K, V>> supplier) {
+        if (isNonArr(arr)) {
+            return supplier.get();
+        }
         return Arrays.stream(arr).collect(Collectors.toMap(keyFunc, valueFunc, mergeFunction, supplier));
     }
 }

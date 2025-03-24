@@ -44,7 +44,6 @@
         <aliyun.sdk.core.version>4.5.16</aliyun.sdk.core.version>
         <aliyun.sdk.dysmsapi.version>2.1.0</aliyun.sdk.dysmsapi.version>
         <disruptor.version>3.4.4</disruptor.version>
-        <sensitive-word>0.18.0</sensitive-word>
         <skywalking.version>8.12.0</skywalking.version>
         <opentracing.version>0.33.0</opentracing.version>
         <micrometer.prometheus.version>1.9.17</micrometer.prometheus.version>

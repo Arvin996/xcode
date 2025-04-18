@@ -5,12 +5,9 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.annotation.AutoRegisterXxlJob;
 import cn.xk.xcode.entity.XxlJobGroup;
 import cn.xk.xcode.entity.XxlJobInfo;
-import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.collections.CollectionUtil;
-import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.handler.annotation.XxlJob;
-import com.xxl.job.core.handler.impl.MethodJobHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +17,6 @@ import org.springframework.boot.ApplicationRunner;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Author xuk
@@ -67,39 +63,9 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
                         XxlJob xxlJob = method.getAnnotation(XxlJob.class);
                         registerJobToDb(xxlJobGroup, xxlJob.value(), autoRegisterXxlJob);
                     } else {
-                        Method initMethod = null;
-                        Method destroyMethod = null;
-                        // 没有@xxl-job 注解 但是有@AutoRegisterXxlJob 注解 自动注册 如果
-                        String handler = autoRegisterXxlJob.executorHandler();
-                        if (StringUtils.isEmpty(handler)) {
-                            log.warn("【警告】 方法{}没有@XxlJob注解，也没有@AutoRegisterXxlJob注解中的executorHandler属性, 将会以类名_方法名称作为任务名称", method.getName());
-                            handler = bean.getClass().getSimpleName() + "_" + method.getName();
-                        }
-                        String init = autoRegisterXxlJob.init();
-                        if (StringUtils.isNotEmpty(init)) {
-                            try {
-                                initMethod = bean.getClass().getDeclaredMethod(init);
-                                initMethod.setAccessible(true);
-                            } catch (NoSuchMethodException e) {
-                                log.error("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
-                            }
-                        }
-                        String destroy = autoRegisterXxlJob.destroy();
-                        if (StringUtils.isNotEmpty(destroy)) {
-                            try {
-                                destroyMethod = bean.getClass().getDeclaredMethod(destroy);
-                                destroyMethod.setAccessible(true);
-                            } catch (NoSuchMethodException e) {
-                                log.error("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + method.getName() + "] .");
-                            }
-                        }
-                        // 1. 内存注册处理器
-                        if (Objects.isNull(XxlJobSpringExecutor.loadJobHandler(handler))) {
-                            XxlJobSpringExecutor.registJobHandler(handler, new MethodJobHandler(bean, method, initMethod, destroyMethod));
-                        }else {
-                            log.warn("xxl-job 任务{}已经存在，请检查是否有重复注册", handler);
-                        }
-                        // 2. 数据库注册任务
+                        // 首先注册到xxl内存里面
+                        String handler = enhanceXxlJobService.registerJobHandlerToLocalCahce(autoRegisterXxlJob.executorHandler(), bean, method, autoRegisterXxlJob.init(), autoRegisterXxlJob.destroy());
+                        // 然后放数据库里面
                         registerJobToDb(xxlJobGroup, handler, autoRegisterXxlJob);
                     }
                 }

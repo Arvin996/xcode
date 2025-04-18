@@ -15,12 +15,18 @@ import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
+import com.xxl.job.core.handler.impl.MethodJobHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -34,6 +40,7 @@ import static cn.xk.xcode.config.XxlJobGlobalConstants.*;
  **/
 @RequiredArgsConstructor
 @SuppressWarnings("all")
+@Slf4j
 public class EnhanceXxlJobService {
 
     public static final ConcurrentHashMap<String, String> LOGIN_COOKIE_MAP = new ConcurrentHashMap<>();
@@ -249,5 +256,36 @@ public class EnhanceXxlJobService {
         return CommonResult.success(Integer.parseInt(returnT.getContent().toString()));
     }
 
-
+    public String registerJobHandlerToLocalCahce(String handler, Object target, Method targetMethod, String initMethodName, String destroyMethodName) {
+        Method initMethod = null;
+        Method destroyMethod = null;
+        // 没有@xxl-job 注解 但是有@AutoRegisterXxlJob 注解 自动注册 如果
+        if (StringUtils.isEmpty(handler)) {
+            log.warn("【警告】 方法{}没有@XxlJob注解，也没有@AutoRegisterXxlJob注解中的executorHandler属性, 将会以类名_方法名称作为任务名称", targetMethod.getName());
+            handler = target.getClass().getSimpleName() + "_" + targetMethod.getName();
+        }
+        if (StringUtils.isNotEmpty(initMethodName)) {
+            try {
+                initMethod = handler.getClass().getDeclaredMethod(initMethodName);
+                initMethod.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                log.error("xxl-job method-jobhandler initMethod invalid, for[" + target.getClass() + "#" + initMethodName + "] .");
+            }
+        }
+        if (StringUtils.isNotEmpty(destroyMethodName)) {
+            try {
+                destroyMethod = target.getClass().getDeclaredMethod(destroyMethodName);
+                destroyMethod.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                log.error("xxl-job method-jobhandler initMethod invalid, for[" + target.getClass() + "#" + destroyMethodName + "] .");
+            }
+        }
+        // 1. 内存注册处理器
+        if (Objects.isNull(XxlJobSpringExecutor.loadJobHandler(handler))) {
+            XxlJobSpringExecutor.registJobHandler(handler, new MethodJobHandler(target, targetMethod, initMethod, destroyMethod));
+        } else {
+            log.warn("xxl-job 任务{}已经存在，请检查是否有重复注册", handler);
+        }
+        return handler;
+    }
 }

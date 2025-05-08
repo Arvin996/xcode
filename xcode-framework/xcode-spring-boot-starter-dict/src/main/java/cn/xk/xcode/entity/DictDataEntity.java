@@ -19,10 +19,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class DictDataEntity implements Serializable {
 
-    // 字典code
+    // 字典code 对应value
     private String code;
 
-    // 字典code名称
+    // 字典code名称 对应label
     private String name;
 
     // 字典类型

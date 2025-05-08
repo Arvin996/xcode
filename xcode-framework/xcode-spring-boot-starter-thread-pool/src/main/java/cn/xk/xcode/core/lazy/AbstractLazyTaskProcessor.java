@@ -42,7 +42,8 @@ public abstract class AbstractLazyTaskProcessor<T> {
      */
     private volatile Boolean stop = false;
 
-    public AbstractLazyTaskProcessor(){}
+    public AbstractLazyTaskProcessor() {
+    }
 
 
     public static <T> LazyTaskProcessorParamsBuilder<T> builder() {

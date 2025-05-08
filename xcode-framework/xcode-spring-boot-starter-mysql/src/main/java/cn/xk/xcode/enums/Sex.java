@@ -16,7 +16,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public enum Sex {
     MAN("0", "男"),
-    FEMALE("1", "女")
+    FEMALE("1", "女"),
+    UNKNOWN("2", "未知")
     ;
     private final String sex;
 

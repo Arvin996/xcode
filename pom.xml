@@ -27,6 +27,7 @@
         <module>xcode-bpm</module>
         <module>xcode-demo</module>
         <module>xcode-message</module>
+        <module>xcode-distribution-card-platform</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

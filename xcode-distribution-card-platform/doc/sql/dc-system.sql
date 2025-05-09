@@ -92,6 +92,20 @@ CREATE TABLE IF NOT EXISTS `system_menu` (
 
 -- 正在导出表  xcode-distribution-card-system.system_menu 的数据：~0 rows (大约)
 
+-- 导出  表 xcode-distribution-card-system.system_operate_log 结构
+CREATE TABLE IF NOT EXISTS `system_operate_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `api_id` int(12) NOT NULL COMMENT '调用的api详情',
+  `username` varchar(50) NOT NULL COMMENT '操作用户',
+  `state` char(50) NOT NULL DEFAULT '0' COMMENT '操作结果 0成功 1失败',
+  `fail_msg` text COMMENT '失败原因',
+  `operate_time` datetime NOT NULL COMMENT '操作时间',
+  PRIMARY KEY (`id`),
+  KEY `key_username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统操作日志表';
+
+-- 正在导出表  xcode-distribution-card-system.system_operate_log 的数据：~0 rows (大约)
+
 -- 导出  表 xcode-distribution-card-system.system_role 结构
 CREATE TABLE IF NOT EXISTS `system_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -127,6 +141,20 @@ CREATE TABLE IF NOT EXISTS `system_role_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色-菜单绑定表';
 
 -- 正在导出表  xcode-distribution-card-system.system_role_menu 的数据：~0 rows (大约)
+
+-- 导出  表 xcode-distribution-card-system.system_station_notice 结构
+CREATE TABLE IF NOT EXISTS `system_station_notice` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `title` text COMMENT '消息titile',
+  `to_user` varchar(50) NOT NULL COMMENT '接收人',
+  `message` text COMMENT '消息正文',
+  `is_read` char(50) NOT NULL DEFAULT '0' COMMENT '0 未读 1已读',
+  `type` char(1) NOT NULL DEFAULT '0' COMMENT '通知类型 0公告 1通知',
+  `create_time` datetime DEFAULT NULL COMMENT '发送时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统通知站内信';
+
+-- 正在导出表  xcode-distribution-card-system.system_station_notice 的数据：~0 rows (大约)
 
 -- 导出  表 xcode-distribution-card-system.system_user 结构
 CREATE TABLE IF NOT EXISTS `system_user` (

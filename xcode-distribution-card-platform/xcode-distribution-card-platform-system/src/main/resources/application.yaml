@@ -1,0 +1,12 @@
+server:
+  port: 4001
+
+grpc:
+  client:
+    captcha-server:
+      #    address: "static://127.0.0.1:9999"
+      address: 'discovery:///rpc-server'
+      negotiation-type: plaintext
+      #  TCP相关设置
+      enable-keep-alive: true
+      keep-alive-without-calls: true

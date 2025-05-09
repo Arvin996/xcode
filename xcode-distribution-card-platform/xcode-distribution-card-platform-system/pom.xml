@@ -54,6 +54,12 @@
             <artifactId>JustAuth</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-captcha-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

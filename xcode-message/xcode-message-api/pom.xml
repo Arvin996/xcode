@@ -6,9 +6,10 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-message</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
+        <relativePath>../../xcode-message/pom.xml</relativePath>
     </parent>
-
+    <version>${revision}</version>
     <artifactId>xcode-message-api</artifactId>
 
     <properties>

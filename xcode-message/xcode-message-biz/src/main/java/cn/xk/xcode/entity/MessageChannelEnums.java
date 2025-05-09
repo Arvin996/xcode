@@ -19,6 +19,7 @@ public enum MessageChannelEnums {
     EMAIL("email"),
     WX("wx"),
     DINGDING("dingding"),
+    GE_TUI("getui"),
     WXLIVE("wxlive");
     private final String channel;
 

@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS `system_dict_data` (
 -- 导出  表 xcode-distribution-card-system.system_dict_type 结构
 CREATE TABLE IF NOT EXISTS `system_dict_type` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '字典类型名称',
-  `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '字典类型码',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典类型名称',
+  `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '字典类型码',
+  `status` char(1) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '0 正常 1禁用',
   `remark` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
   `is_deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除 0未删除 1已删除',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
@@ -159,12 +159,17 @@ CREATE TABLE IF NOT EXISTS `system_station_notice` (
 -- 导出  表 xcode-distribution-card-system.system_user 结构
 CREATE TABLE IF NOT EXISTS `system_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `role_id` int(12) NOT NULL COMMENT '角色id',
   `username` varchar(50) NOT NULL COMMENT '登录用户名',
   `password` varchar(128) NOT NULL COMMENT '登录密码',
   `nickname` varchar(128) NOT NULL COMMENT '用户昵称',
   `sex` char(1) DEFAULT NULL COMMENT '0 男  1女 2未知',
   `age` int(3) DEFAULT NULL COMMENT '年龄',
   `mobile` char(10) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(256) DEFAULT NULL COMMENT '邮箱',
+  `qq_webhook_token` text COMMENT 'qq webhook token',
+  `ding_talk_webhook_token` text COMMENT '钉钉 webhook token',
+  `feishu_webhook_token` text COMMENT '飞书 webhook token',
   `avatar` text COMMENT '头像',
   `status` char(1) NOT NULL DEFAULT '0' COMMENT '账号状态 0正常 1停用',
   `last_login_ip` varchar(128) DEFAULT NULL COMMENT '最后登录ip',

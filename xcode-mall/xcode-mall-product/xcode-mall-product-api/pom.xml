@@ -6,9 +6,10 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-mall-product</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
+        <relativePath>../../xcode-mall-product/pom.xml</relativePath>
     </parent>
-
+    <version>${revision}</version>
     <artifactId>xcode-mall-product-api</artifactId>
 
     <properties>

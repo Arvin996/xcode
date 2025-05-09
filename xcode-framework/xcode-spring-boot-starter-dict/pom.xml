@@ -10,6 +10,7 @@
     <artifactId>xcode-spring-boot-starter-dict</artifactId>
     <version>${revision}</version>
     <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
     <description>
         xk-sys-learn-dict 提供字典服务以及字典自动转换功能
         目前集成了数据库字典以及枚举类
@@ -20,7 +21,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
-    <packaging>jar</packaging>
 
     <dependencies>
 

@@ -6,11 +6,12 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-mall-product</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
+        <relativePath>../../xcode-mall-product/pom.xml</relativePath>
     </parent>
 
     <artifactId>xcode-mall-product-biz</artifactId>
-
+    <version>${revision}</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

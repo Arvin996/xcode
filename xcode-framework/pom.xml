@@ -25,7 +25,6 @@
         <module>xcode-spring-boot-starter-rocketmq</module>
         <module>xcode-spring-boot-starter-protection</module>
         <module>xcode-spring-boot-starter-biz-message</module>
-        <module>xcode-monitor-parent</module>
         <module>xcode-spring-boot-starter-trans-flex</module>
         <module>xcode-spring-boot-starter-report</module>
         <module>xcode-spring-boot-starter-crypt</module>

@@ -12,6 +12,7 @@
     <artifactId>xcode-monitor-extension-trace</artifactId>
     <version>${revision}</version>
     <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
     <description>
         自定义的全链路监控
     </description>

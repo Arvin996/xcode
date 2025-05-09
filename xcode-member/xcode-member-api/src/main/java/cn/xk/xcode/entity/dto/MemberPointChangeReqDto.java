@@ -1,6 +1,5 @@
 package cn.xk.xcode.entity.dto;
 
-import cn.xk.xcode.enums.MemberExperienceChangeBizTypeEnum;
 import cn.xk.xcode.enums.MemberPointChangeBizTypeEnum;
 import cn.xk.xcode.validation.InIntEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Schema(description = "用户会员积分变化dto")
 public class MemberPointChangeReqDto extends MemberBaseReqDto
 {

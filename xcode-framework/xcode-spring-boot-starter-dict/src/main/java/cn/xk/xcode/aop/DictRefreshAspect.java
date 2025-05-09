@@ -31,7 +31,7 @@ public class DictRefreshAspect implements Ordered {
     private final DictCacheStrategy dictCacheStrategy;
 
     @Around("@annotation(refreshDict)")
-    public Object around(ProceedingJoinPoint joinPoint, RefreshDict refreshDict) {
+    public Object around(ProceedingJoinPoint joinPoint, RefreshDict refreshDict) throws Throwable {
         String dictType = refreshDict.dictType();
         String dictCode = refreshDict.dictCode();
         String dictName = refreshDict.dictName();
@@ -71,7 +71,7 @@ public class DictRefreshAspect implements Ordered {
             if (refreshDict.isExceptionRefresh()){
                 dictCacheStrategy.saveOrUpdateDictData(dictDataEntity);
             }
-            throw new RuntimeException(e);
+            throw e;
         }
         return proceed;
     }

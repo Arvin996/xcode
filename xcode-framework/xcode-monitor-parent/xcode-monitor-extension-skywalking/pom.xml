@@ -13,6 +13,7 @@
     <artifactId>xcode-monitor-extension-skywalking</artifactId>
     <description>集成skywalking</description>
     <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

@@ -38,7 +38,6 @@ public abstract class AbstractLoginHandler {
         Map<String, Object> extraData = new HashMap<>();
         extraData.put("clientId", clientId);
         extraData.put("loginId", username);
-        extraData.put("sys_key", "xk-sys-learn");
         extraData.put("loginType", loginType);
         return extraData;
     }

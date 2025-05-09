@@ -50,7 +50,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RolePo> implements 
         // 新增
         for (Integer roleId : roleIds) {
             UserRolePo userRolePo = new UserRolePo();
-            userRolePo.setUserId(updateUserRoleDto.getUserId());
+            userRolePo.setUserId(Long.valueOf(updateUserRoleDto.getUserId()));
             userRolePo.setRoleId(roleId);
             userRoleService.save(userRolePo);
         }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-mall</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>xcode-mall-product</artifactId>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-common</artifactId>
-            <version>1.0.0</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

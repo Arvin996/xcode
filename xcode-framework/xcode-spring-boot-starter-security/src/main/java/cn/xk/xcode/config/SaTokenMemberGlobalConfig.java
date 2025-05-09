@@ -31,7 +31,7 @@ public class SaTokenMemberGlobalConfig implements WebMvcConfigurer {
             // 指定一条 match 规则
             SaRouter
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
-                    .notMatch("/auth/doLogin", "/webjars/**", "/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**")
+                    .notMatch("/webjars/**", "/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**")
                     .notMatch(whitelistProperties.getWhitelist())
                     .check(r -> {
                         if (!StpMemberUtil.isLogin() && !StpSystemUtil.isLogin()) {

@@ -1,13 +1,11 @@
 package cn.xk.xcode.entity.po;
 
-import cn.xk.xcode.entity.DataLongObjectBaseEntity;
 import cn.xk.xcode.entity.DataStringObjectBaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
 import lombok.*;

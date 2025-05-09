@@ -6,9 +6,10 @@
     <parent>
         <groupId>cn.xk.xcode</groupId>
         <artifactId>xcode-framework</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
     </parent>
 
+    <version>${revision}</version>
     <artifactId>xcode-spring-boot-starter-thread-pool</artifactId>
 
     <properties>

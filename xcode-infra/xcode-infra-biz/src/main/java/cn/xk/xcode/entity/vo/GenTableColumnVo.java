@@ -16,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Schema(description = "表属性返回")
 public class GenTableColumnVo extends GenTableColumnPo {
 

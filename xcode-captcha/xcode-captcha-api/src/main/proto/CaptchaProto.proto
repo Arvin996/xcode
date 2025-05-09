@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_multiple_files = false;
+option java_package = "cn.xk.xcode.rpc";
+option java_outer_classname = "CaptchaProto";
+
+message CaptchaVerifyRequest {
+  string code = 1;
+  string type = 2;
+  string email = 3;
+  string phone = 4;
+}
+
+message CaptchaVerifyResponse {
+  bool data = 1;
+  int32 code = 2;
+  string msg = 3;
+}
+
+service CaptchaService {
+    rpc verifyCode(CaptchaVerifyRequest) returns (CaptchaVerifyResponse) {}
+}

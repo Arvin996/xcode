@@ -81,7 +81,7 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         if (!wsState.isState()) {
             log.warn("Service is shutting down. Skipping cleanup for closed connection.");
             return;
@@ -97,7 +97,7 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
                 WebSocketManagerCache.onlineSessionMap.remove(sid);
                 session.close();
             } catch (IOException e) {
-                log.error("【websocket消息】连接断开异常，error: {}", e.getMessage());
+                log.error("【websocket消息】断开异常，error: {}", e.getMessage());
                 throw new RuntimeException(e);
             }
         }
@@ -113,7 +113,6 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
         String sid = session.getId();
         String loginId = (String) session.getAttributes().get("loginId");
         WsSession wsSession = new WsSession(sid, loginId, session);
-
         WebSocketManagerCache.onlineSessionMap.put(sid, wsSession);
         WebSocketManagerCache.addOnlineSid(loginId, sid);
         wsRedisStatisticsAndManage.addUserToOnlineChat(sid, loginId);
@@ -191,7 +190,6 @@ public class WebSocketMessageHandler extends TextWebSocketHandler {
                 }
             }
         }
-
     }
 
 }

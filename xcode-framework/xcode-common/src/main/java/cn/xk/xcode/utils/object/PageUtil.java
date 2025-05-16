@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
  * @Version 1.0
  * @Description PageUtil
  */
+@Deprecated
 public class PageUtil {
 
     private static final Object[] ORDER_TYPES = new String[]{SortedField.ORDER_ASC, SortedField.ORDER_DESC};

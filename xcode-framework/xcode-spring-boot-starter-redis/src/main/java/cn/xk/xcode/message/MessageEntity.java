@@ -26,7 +26,4 @@ public class MessageEntity {
     private Object data;
 
     private String fromUser;
-
-    // 是否推送给所有用户
-    private boolean toPushAll;
 }

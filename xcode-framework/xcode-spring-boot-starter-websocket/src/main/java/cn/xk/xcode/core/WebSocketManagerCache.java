@@ -10,34 +10,30 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  * @Description WebSocketManagerCache
  */
-public class WebSocketManagerCache
-{
+public class WebSocketManagerCache {
     /**
      * sid <==> session 关系
      */
-    public static ConcurrentHashMap<String, WsSession> onlineSessionMap = new ConcurrentHashMap<String, WsSession>();
+    public static ConcurrentHashMap<String, WsSession> onlineSessionMap = new ConcurrentHashMap<>();
 
     /**
      * loginId <==> sid 关系; 1对多,一个用户有可能在多个浏览器上登录
      */
-    public static ConcurrentHashMap<String, List<String>> onlineUserSessionIdMap = new ConcurrentHashMap<String, List<String>>();
+    public static ConcurrentHashMap<String, List<String>> onlineUserSessionIdMap = new ConcurrentHashMap<>();
 
     public static void addOnlineSid(String loginId, String sid) {
+        List<String> sidArray;
         if (onlineUserSessionIdMap.containsKey(loginId)) {
-            List<String> sidArray = onlineUserSessionIdMap.get(loginId);
-            sidArray.add(sid);
-            onlineUserSessionIdMap.put(loginId, sidArray);
+            sidArray = onlineUserSessionIdMap.get(loginId);
         } else {
-            List<String> sidArray = new ArrayList<>();
-            sidArray.add(sid);
-            onlineUserSessionIdMap.put(loginId, sidArray);
+            sidArray = new ArrayList<>();
         }
+        sidArray.add(sid);
+        onlineUserSessionIdMap.put(loginId, sidArray);
     }
 
     /**
      * 清除断线的sid
-     *
-     * @param sid
      */
     public static void removeUserSession(String sid) {
         WsSession wsSession = onlineSessionMap.get(sid);

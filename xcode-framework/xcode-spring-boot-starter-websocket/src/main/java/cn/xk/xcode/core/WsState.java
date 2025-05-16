@@ -1,8 +1,6 @@
 package cn.xk.xcode.core;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,10 +9,8 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  * @Description WsState
  */
-@Getter
+@Data
 @Component
-@Setter
-public class WsState
-{
+public class WsState {
     private boolean state = false;
 }

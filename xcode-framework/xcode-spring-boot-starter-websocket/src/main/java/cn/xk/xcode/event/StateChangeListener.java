@@ -26,7 +26,7 @@ public class StateChangeListener implements ApplicationListener<StateChangeEvent
     public void onApplicationEvent(StateChangeEvent event) {
         boolean state = wsState.isState();
         wsState.setState(!state);
-        if (Boolean.FALSE.equals(state)){
+        if (!state) {
             webSocketMessageHandler.disconnectAll();
         }
     }

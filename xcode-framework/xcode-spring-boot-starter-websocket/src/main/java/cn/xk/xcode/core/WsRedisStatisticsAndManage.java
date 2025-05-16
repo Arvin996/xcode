@@ -16,8 +16,10 @@ import java.util.stream.Collectors;
  * @Description WsRedisStatisticsAndManage
  */
 @Component
-public class WsRedisStatisticsAndManage
-{
+@SuppressWarnings("all")
+public class WsRedisStatisticsAndManage {
+
+    // 一个用户对应一个loginId 一个loginId对应多个sessionId(sid)
     public final static String WEBSOCKET_ONLINE_SID = "socket:online:sid";
     public final static String WEBSOCKET_ONLINE_USER = "socket:online:user";
 
@@ -26,8 +28,6 @@ public class WsRedisStatisticsAndManage
 
     /**
      * 用户上线
-     *
-     * @param loginId
      */
     public void addUserToOnlineChat(String sessionId, String loginId) {
         String onlineUserKey = WEBSOCKET_ONLINE_USER;
@@ -43,18 +43,15 @@ public class WsRedisStatisticsAndManage
             sids.add(sessionId);
             redisTemplate.opsForHash().put(onlineUserKey, loginId, sids);
         }
-
         // 更新sid映射
         redisTemplate.opsForHash().put(WEBSOCKET_ONLINE_SID, sessionId, loginId);
     }
 
     /**
      * 用户下线
-     *
      */
     public void removeUser(String sessionId, String loginId) {
         String onlineUserKey = WEBSOCKET_ONLINE_USER;
-
         // 检查用户名是否存在于在线用户哈希表中
         if (redisTemplate.opsForHash().hasKey(onlineUserKey, loginId)) {
             // 如果存在，获取sid列表并移除当前sessionId
@@ -68,14 +65,12 @@ public class WsRedisStatisticsAndManage
                 redisTemplate.opsForHash().put(onlineUserKey, loginId, sids);
             }
         }
-
         // 删除sessionId映射
         redisTemplate.opsForHash().delete(WEBSOCKET_ONLINE_SID, sessionId);
     }
 
     /**
      * 用户下线 - 根据sessionId
-     *
      * @param sessionId
      */
     public void removeUserBySessionId(String sessionId) {
@@ -85,7 +80,6 @@ public class WsRedisStatisticsAndManage
             // 从在线用户列表中删除sessionId
             if (redisTemplate.opsForHash().hasKey(WEBSOCKET_ONLINE_USER, loginId)) {
                 List<String> sids = (List<String>) redisTemplate.opsForHash().get(WEBSOCKET_ONLINE_USER, loginId);
-                System.out.println("sids =="+ sids);
                 sids.remove(sessionId);
                 // 如果用户不再有任何会话，则从在线用户列表中删除该用户
                 if (sids.isEmpty()) {
@@ -101,13 +95,11 @@ public class WsRedisStatisticsAndManage
     }
 
     /**
-     * 用户下线 - 根据sessionId
-     *
+     * 用户下线 - 根据loginId 删除所有的sid
      * @param loginId
      */
     public void removeUserByUsername(String loginId) {
         String onlineUserKey = WEBSOCKET_ONLINE_USER;
-
         // 检查用户名是否存在于在线用户哈希表中
         if (redisTemplate.opsForHash().hasKey(onlineUserKey, loginId)) {
             // 获取该用户的所有连接sessionId
@@ -115,7 +107,6 @@ public class WsRedisStatisticsAndManage
 
             // 从在线用户列表中删除该用户
             redisTemplate.opsForHash().delete(onlineUserKey, loginId);
-
             // 删除与该用户相关的所有sessionId映射
             for (String sid : sids) {
                 redisTemplate.opsForHash().delete(WEBSOCKET_ONLINE_SID, sid);
@@ -152,9 +143,7 @@ public class WsRedisStatisticsAndManage
      * @return
      */
     public long getConnectionCount() {
-
         // 获取在线连接数，即sessionId映射的数量
-
         return redisTemplate.opsForHash().size(WEBSOCKET_ONLINE_SID);
     }
 
@@ -164,7 +153,6 @@ public class WsRedisStatisticsAndManage
      */
     public long getUserConnectionCount(String loginId) {
         String onlineUserKey = WEBSOCKET_ONLINE_USER;
-
         // 检查用户名是否存在于在线用户哈希表中
         if (redisTemplate.opsForHash().hasKey(onlineUserKey, loginId)) {
             // 如果存在，获取该用户的连接数
@@ -178,7 +166,6 @@ public class WsRedisStatisticsAndManage
 
     /**
      * 获取所有在线用户名列表
-     *
      * @return
      */
     public List<String> getAllOnlineUsernames() {
@@ -194,7 +181,6 @@ public class WsRedisStatisticsAndManage
      */
     public List<String> getUserSessionIds(String loginId) {
         String onlineUserKey = WEBSOCKET_ONLINE_USER;
-
         if (redisTemplate.opsForHash().hasKey(onlineUserKey, loginId)) {
             List<String> sids = (List<String>) redisTemplate.opsForHash().get(onlineUserKey, loginId);
             return new ArrayList<>(sids);

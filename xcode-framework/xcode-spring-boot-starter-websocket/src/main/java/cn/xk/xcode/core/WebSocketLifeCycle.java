@@ -14,8 +14,8 @@ import javax.annotation.Resource;
  * @Description WebSocketLifeCycle
  */
 @Component
-public class WebSocketLifeCycle implements SmartLifecycle
-{
+public class WebSocketLifeCycle implements SmartLifecycle {
+
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
 

@@ -4,4 +4,57 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.MessageChannelAccessClientMapper">
 
+    <resultMap id="clientMap" type="cn.xk.xcode.entity.vo.client.MessageChannelClientVo">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="accessToken" column="access_token" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="accessCount" column="access_count" jdbcType="INTEGER"/>
+        <result property="usedCount" column="used_count" jdbcType="INTEGER"/>
+        <result property="restAccount" column="rest_account" jdbcType="INTEGER"/>
+        <result property="tokenRefreshTime" column="token_refresh_time" jdbcType="DATE"/>
+        <result property="createTime" column="create_time" jdbcType="DATE"/>
+        <result property="updateTime" column="update_time" jdbcType="DATE"/>
+        <collection property="clientChannelVoList" javaType="List"
+                    ofType="cn.xk.xcode.entity.vo.client.MessageChannelClientVo$ClientChannelVo"
+                    column="id=id"
+                    select="getAccessChannelById">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="code" column="code" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryAllMessageChannelAccessClients"
+            parameterType="cn.xk.xcode.entity.dto.client.QueryChannelClientDto"
+            resultType="cn.xk.xcode.entity.vo.client.MessageChannelClientVo">
+        select id, name, email, mobile, access_token, status, access_count, used_count, rest_account,
+        token_refresh_time, create_time, update_time
+        from message_channel_access_client a
+        where a.is_deleted = '0'
+        <if test="queryChannelClientDto.name != null">
+            and a.name like concat(#{queryChannelClientDto.name}, '%')
+        </if>
+        <if test="queryChannelClientDto.email != null">
+            and a.email like concat(#{queryChannelClientDto.name}, '%')
+        </if>
+        <if test="queryChannelClientDto.mobile != null">
+            and a.mobile like concat(#{queryChannelClientDto.name}, '%')
+        </if>
+        <if test="queryChannelClientDto.status != null">
+            and a.status = #{status}
+        </if>
+    </select>
+
+    <select id="getAccessChannelById" resultType="cn.xk.xcode.entity.vo.client.MessageChannelClientVo$ClientChannelVo">
+        select b.id,
+               code,
+               name
+        from message_client_channel a
+                 left join message_channel b
+                           on a.channel_id = b.id
+        where a.client_id = #{id}
+    </select>
 </mapper>

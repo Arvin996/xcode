@@ -26,20 +26,28 @@ public class MessageChannelUrlConstant {
     public static final String DING_DING_PULL_URL = "https://oapi.dingtalk.com/topapi/message/corpconversation/getsendresult";
     public static final String DING_DING_UPLOAD_URL = "https://oapi.dingtalk.com/media/upload";
     public static final String DING_DING_TOKEN_URL = "https://oapi.dingtalk.com/gettoken";
+    // =======================以上直接作废 以下开始
 
     /**
-     * 微信小程序相关的url
+     * 钉钉 webhook相关url
      */
-    public static final String WE_CHAT_MINI_PROGRAM_OPENID_SYNC = "https://api.weixin.qq.com/sns/jscode2session?appid=<APPID>&secret=<SECRET>&js_code=<CODE>&grant_type=authorization_code";
+    public static final String DING_DING_ROBOT_WEBHOOK_URL = "https://oapi.dingtalk.com/robot/send?access_token=%s";
 
     /**
-     * 企业微信机器人相关的url
+     * feishu webhook相关url
      */
-    public static final String ENTERPRISE_WE_CHAT_ROBOT_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=<KEY>&type=<TYPE>";
+    public static final String FEI_SHU_ROBOT_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/%s";
 
     /**
-     * 支付宝小程序相关的url
+     * 微信小程序相关url
      */
-    public static final String ALI_MINI_PROGRAM_GATEWAY_URL = "https://openapi.alipay.com/gateway.do";
+    public static final String WX_MINI_PROGRAM_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=%s";
+    public static final String WX_MINI_PROGRAM_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+
+    /**
+     * 微信公众号相关url
+     */
+    public static final String WX_OFFICIAL_ACCOUNT_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
+    public static final String WX_OFFICIAL_ACCOUNT_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
 }

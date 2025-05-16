@@ -3,7 +3,7 @@ package cn.xk.xcode.service.consume;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.ThreadPoolExecutorHolder;
 import cn.xk.xcode.entity.po.MessageTaskDetailPo;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.service.MessageTaskDetailService;
 import cn.xk.xcode.service.MessageTaskService;

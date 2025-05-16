@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @Author xuk
@@ -13,25 +14,40 @@ import javax.validation.constraints.NotNull;
  * @Description AddMessageTemplateDto
  **/
 @Data
-@Schema(description = "add message template dto")
+@Schema(name = "AddMessageTemplateDto", description = "AddMessageTemplateDto 新增消息模板")
 public class AddMessageTemplateDto {
 
     /**
-     * 模板所属用户id
+     * 模板名称
      */
-    @Schema(description = "client id")
-    @NotNull(message = "client id cannot be null")
-    private Integer clientId;
-
-    @Schema(description = "name")
-    @NotBlank(message = "name not be blank")
+    @Schema(description = "模板名称")
+    @NotBlank(message = "模板名称不能为空")
     private String name;
+
+    /**
+     * 0自定义模板 1 三方平台的模板
+     */
+    @Schema(description = "0自定义模板 1 三方平台的模板")
+    @NotBlank(message = "模板类型不能为空")
+    private String type;
+
+    /**
+     * 模板id 指的是在三方平台中定义模板后的id值 或者自定义的
+     */
+    @Schema(description = "模板id 指的是在三方平台中定义模板后的id值 或者自定义的")
+    @NotBlank(message = "模板id不能为空")
+    private String templateId;
 
     /**
      * 模板内容信息 使用{}占位符
      */
-    @Schema(description = "content")
-    @NotBlank(message = "content cannot be null")
+    @Schema(description = "模板内容信息 使用{}占位符")
+    @NotBlank(message = "模板内容不能为空")
     private String content;
 
+    /**
+     * 模板描述
+     */
+    @Schema(description = "模板描述")
+    private String desc;
 }

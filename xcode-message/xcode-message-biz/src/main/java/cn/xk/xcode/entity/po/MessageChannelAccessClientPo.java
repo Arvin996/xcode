@@ -7,16 +7,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  *  实体类。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 @Data
 @Builder
@@ -39,28 +36,61 @@ public class MessageChannelAccessClientPo implements Serializable {
     private String name;
 
     /**
+     * 接入商邮箱
+     */
+    private String email;
+
+    /**
+     * 接入商手机号
+     */
+    private String mobile;
+
+    /**
      * 接入密钥，用于校验合法性
      */
     private String accessToken;
 
     /**
-     * 令牌发送时间
-     */
-    private LocalDateTime accessTime;
-
-    /**
      * 0启用 1禁用
      */
-    private String state;
+    private String status;
+
+    /**
+     * 接入商消息配额 默认100
+     */
+    private Integer accessCount;
+
+    /**
+     * 已用配额
+     */
+    private Integer usedCount;
+
+    /**
+     * 剩余配额
+     */
+    private Integer restCount;
+
+    /**
+     * 是否删除 0未删除 1已删除
+     */
+    @com.mybatisflex.annotation.Column(isLogicDelete = true)
+    private String isDelete;
+
+    /**
+     * token 刷新时间
+     */
+    @com.mybatisflex.annotation.Column(onInsertValue = "now()")
+    private LocalDateTime tokenRefreshTime;
 
     /**
      * 创建时间
      */
+    @com.mybatisflex.annotation.Column(onInsertValue = "now()")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @com.mybatisflex.annotation.Column(onUpdateValue = "now()")
     private LocalDateTime updateTime;
-
 }

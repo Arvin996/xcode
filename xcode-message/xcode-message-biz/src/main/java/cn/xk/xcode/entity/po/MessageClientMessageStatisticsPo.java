@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 /**
  *  实体类。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 @Data
 @Builder
@@ -27,8 +27,11 @@ public class MessageClientMessageStatisticsPo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 自增id
+     */
     @Id(keyType = KeyType.Auto)
-    private Integer id;
+    private Long id;
 
     /**
      * 渠道用户
@@ -36,14 +39,29 @@ public class MessageClientMessageStatisticsPo implements Serializable {
     private Integer clientId;
 
     /**
-     * 渠道code
+     * 渠道id
      */
-    private String channelCode;
+    private Integer channelId;
+
+    /**
+     * 渠道发送账户
+     */
+    private Integer channelAccount;
 
     /**
      * 发送信息条数
      */
     private Integer count;
+
+    /**
+     * 成功条数
+     */
+    private Integer successCount;
+
+    /**
+     * 失败条数
+     */
+    private Integer failCount;
 
     /**
      * 统计时间

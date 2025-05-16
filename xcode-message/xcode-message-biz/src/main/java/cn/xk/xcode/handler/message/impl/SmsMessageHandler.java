@@ -2,7 +2,7 @@ package cn.xk.xcode.handler.message.impl;
 
 import cn.xk.xcode.core.annotation.Handler;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.ChannelTypeEnum;
 import cn.xk.xcode.handler.message.AbstractHandler;
 import cn.xk.xcode.handler.message.HandlerResult;

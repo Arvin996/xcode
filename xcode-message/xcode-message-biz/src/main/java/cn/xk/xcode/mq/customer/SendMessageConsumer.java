@@ -1,11 +1,9 @@
 package cn.xk.xcode.mq.customer;
 
 import cn.xk.xcode.config.RabbitMqConfiguration;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.service.consume.ConsumeMessageService;
 import com.alibaba.fastjson2.JSON;
-import com.xxl.mq.client.consumer.IMqConsumer;
-import com.xxl.mq.client.consumer.MqResult;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 

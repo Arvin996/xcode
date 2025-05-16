@@ -5,10 +5,10 @@ import com.mybatisflex.core.table.TableDef;
 
 
 /**
- * 表定义层。
+ *  表定义层。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 public class MessageChannelAccountTableDef extends TableDef {
 
@@ -17,7 +17,7 @@ public class MessageChannelAccountTableDef extends TableDef {
     /**
      *
      */
-    public static final MessageChannelAccountTableDef MESSAGE_CHANNEL_ACCOUNT_PO = new MessageChannelAccountTableDef();
+    public static final MessageChannelAccountTableDef MESSAGE_CHANNEL_ACCOUNT = new MessageChannelAccountTableDef();
 
     /**
      * 自增id
@@ -25,14 +25,19 @@ public class MessageChannelAccountTableDef extends TableDef {
     public final QueryColumn ID = new QueryColumn(this, "id");
 
     /**
-     * 权重
+     * 0 启用 1弃用
+     */
+    public final QueryColumn STATUS = new QueryColumn(this, "status");
+
+    /**
+     * 账号权重
      */
     public final QueryColumn WEIGHT = new QueryColumn(this, "weight");
 
     /**
-     * 0 启用 1弃用
+     * 0 未删除 1已删除
      */
-    public final QueryColumn STATUS = new QueryColumn(this, "status");
+    public final QueryColumn IS_DELETED = new QueryColumn(this, "is_deleted");
 
     /**
      * 创建时间
@@ -60,14 +65,9 @@ public class MessageChannelAccountTableDef extends TableDef {
     public final QueryColumn ACCOUNT_NAME = new QueryColumn(this, "account_name");
 
     /**
-     * 渠道code
+     * 渠道code 
      */
-    public final QueryColumn CHANNEL_CODE = new QueryColumn(this, "channel_code");
-
-    /**
-     * 渠道配置 jsonz字符串 主要配置appid等一些必须的参数
-     */
-    public final QueryColumn CHANNEL_CONFIG = new QueryColumn(this, "channel_config");
+    public final QueryColumn CHANNEL_ID = new QueryColumn(this, "channel_id");
 
     /**
      * 所有字段。
@@ -77,7 +77,7 @@ public class MessageChannelAccountTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, WEIGHT, ACCOUNT_NAME, CHANNEL_CODE, CHANNEL_CONFIG, STATUS, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ACCOUNT_NAME, CHANNEL_ID, WEIGHT, STATUS, IS_DELETED, CREATE_TIME, UPDATE_TIME, CREATE_USER, UPDATE_USER};
 
     public MessageChannelAccountTableDef() {
         super("", "message_channel_account");

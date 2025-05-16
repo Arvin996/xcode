@@ -18,14 +18,20 @@ import javax.validation.constraints.NotBlank;
 public class AddMessageChannelDto {
 
     @Schema(description = "渠道码", example = "sms")
-    @NotBlank(message = "channel code cannot be blank")
+    @NotBlank(message = "渠道码不能为空")
     private String code;
 
     /**
      * 渠道名称
      */
     @Schema(description = "渠道名称")
-    @NotBlank(message = "channel name cannot be blank")
+    @NotBlank(message = "渠道名称不能为空")
     private String name;
+
+    /**
+     * 是否支持负载均衡 0支持 1不支持
+     */
+    @Schema(description = "是否支持负载均衡 0支持 1不支持")
+    private String supportLoadBalance = "1";
 
 }

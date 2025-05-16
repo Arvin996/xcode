@@ -7,8 +7,8 @@ import com.mybatisflex.core.table.TableDef;
 /**
  *  表定义层。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 public class MessageTaskDetailTableDef extends TableDef {
 
@@ -17,7 +17,7 @@ public class MessageTaskDetailTableDef extends TableDef {
     /**
      * 
      */
-    public static final MessageTaskDetailTableDef MESSAGE_TASK_DETAIL_PO = new MessageTaskDetailTableDef();
+    public static final MessageTaskDetailTableDef MESSAGE_TASK_DETAIL = new MessageTaskDetailTableDef();
 
     /**
      * 自增id
@@ -67,7 +67,7 @@ public class MessageTaskDetailTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, TASK_ID, RECEIVER, EXEC_TIME, STATUS, RETRY_TIMES, FAIL_MSG, SUCCESS_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, TASK_ID, RECEIVER, STATUS, RETRY_TIMES, FAIL_MSG, EXEC_TIME, SUCCESS_TIME};
 
     public MessageTaskDetailTableDef() {
         super("", "message_task_detail");

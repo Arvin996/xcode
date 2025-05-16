@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author xuk
@@ -12,27 +15,29 @@ import javax.validation.constraints.NotBlank;
  * @Description AddMessageAccountDto
  **/
 @Data
-@Schema(description = "add message account dto")
+@Schema(name = "AddMessageChannelAccountDto", description = "新增消息渠道账户")
 public class AddMessageChannelAccountDto {
 
     /**
      * 渠道账户名称
      */
-    @Schema(description = "account name")
-    @NotBlank(message = "account name cannot be blank")
+    @Schema(description = "渠道账户名称")
+    @NotBlank(message = "渠道账户名称不能为空")
     private String accountName;
 
     /**
      * 渠道code
      */
-    @Schema(description = "channel code")
-    @NotBlank(message = "channel code cannot be blank")
-    private String channelCode;
+    @Schema(description = "渠道id")
+    @NotNull(message = "渠道id 不能为空")
+    private Integer channelId;
 
     /**
-     * 渠道配置 jsonz字符串 主要配置appid等一些必须的参数
+     * 账号权重
      */
-    @Schema(description = "channel config")
-    @NotBlank(message = "channel config cannot be blank")
-    private String channelConfig;
+    @Schema(description = "账号权重")
+    private Double weight;
+
+    @Schema(description = "渠道参数配置详情")
+    private Map<Integer, String> channelParamValueMap = new HashMap<>();
 }

@@ -5,7 +5,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.balance.core.ILoadBalancer;
 import cn.xk.xcode.entity.po.*;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.*;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.limit.RateLimiterHolder;

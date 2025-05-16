@@ -1,6 +1,6 @@
 package cn.xk.xcode.handler.message;
 
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 
 import java.util.List;
 

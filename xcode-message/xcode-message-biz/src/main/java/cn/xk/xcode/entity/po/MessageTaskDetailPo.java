@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 /**
  *  实体类。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 @Data
 @Builder
@@ -36,7 +36,7 @@ public class MessageTaskDetailPo implements Serializable {
     /**
      * 任务id
      */
-    private Integer taskId;
+    private Long taskId;
 
     /**
      * 接收人
@@ -44,12 +44,7 @@ public class MessageTaskDetailPo implements Serializable {
     private String receiver;
 
     /**
-     * 执行时间
-     */
-    private LocalDateTime execTime;
-
-    /**
-     * 执行状态 0发送成功 1发送失败 2已撤销
+     * 执行状态 0成功 1失败
      */
     private String status;
 
@@ -62,6 +57,11 @@ public class MessageTaskDetailPo implements Serializable {
      * 失败原因
      */
     private String failMsg;
+
+    /**
+     * 执行时间
+     */
+    private LocalDateTime execTime;
 
     /**
      * 成功时间

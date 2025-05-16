@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @Author xuk
@@ -16,10 +17,10 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@Schema(description = "update message channel dto")
+@Schema(name = "UpdateMessageChannelDto", description = "UpdateMessageChannelDto 更新渠道")
 public class UpdateMessageChannelDto extends AddMessageChannelDto{
 
-    @NotBlank(message = "channel id cannot be blank")
+    @NotNull(message = "渠道id 不能为空")
     @Schema(description = "channel id")
     private Integer id;
 }

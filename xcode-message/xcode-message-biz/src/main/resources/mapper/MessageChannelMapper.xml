@@ -4,4 +4,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.MessageChannelMapper">
 
+    <resultMap id="channelMap" type="cn.xk.xcode.entity.vo.channel.MessageChannelVo">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="support_load_balance" property="supportLoadBalance" jdbcType="CHAR"/>
+        <result column="status" property="status" jdbcType="CHAR"/>
+        <collection property="channelParamVoList" ofType="cn.xk.xcode.entity.vo.param.MessageChannelParamVo" javaType="List"
+                    column="id=id" select="getChannelParamsById">
+            <result property="id" column="channelParamId" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="required" column="required" jdbcType="CHAR"/>
+            <result property="desc" column="desc" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getMessageChannel" resultMap="channelMap">
+        select id, code, name, support_load_balance, status
+        from message_channel a
+        where 1=1
+        <if test="queryMessageChannelDto.code != null">
+            and a.code like concat(#{queryMessageChannelDto.code}, '%')
+        </if>
+        <if test="queryMessageChannelDto.name != null">
+            and a.name like concat(#{queryMessageChannelDto.code}, '%')
+        </if>
+    </select>
+
+    <select id="getChannelParamsById" resultType="cn.xk.xcode.entity.vo.param.MessageChannelParamVo">
+        select id channelParamId,
+               name,
+               required,
+               `desc`
+        from message_channel_param
+        where channel_id = #{id}
+          and is_deleted = '0'
+    </select>
 </mapper>

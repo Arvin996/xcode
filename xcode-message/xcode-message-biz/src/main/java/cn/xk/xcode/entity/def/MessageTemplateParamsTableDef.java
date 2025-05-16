@@ -7,8 +7,8 @@ import com.mybatisflex.core.table.TableDef;
 /**
  *  表定义层。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 public class MessageTemplateParamsTableDef extends TableDef {
 
@@ -17,7 +17,7 @@ public class MessageTemplateParamsTableDef extends TableDef {
     /**
      * 
      */
-    public static final MessageTemplateParamsTableDef MESSAGE_TEMPLATE_PARAMS_PO = new MessageTemplateParamsTableDef();
+    public static final MessageTemplateParamsTableDef MESSAGE_TEMPLATE_PARAMS = new MessageTemplateParamsTableDef();
 
     
     public final QueryColumn ID = new QueryColumn(this, "id");
@@ -27,8 +27,16 @@ public class MessageTemplateParamsTableDef extends TableDef {
      */
     public final QueryColumn NAME = new QueryColumn(this, "name");
 
+    /**
+     * 参数名称
+     */
+    public final QueryColumn DESC = new QueryColumn(this, "desc");
+
     
     public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
+
+
+    public final QueryColumn CREATE_USER = new QueryColumn(this, "create_user");
 
     /**
      * 模板id
@@ -38,6 +46,9 @@ public class MessageTemplateParamsTableDef extends TableDef {
     
     public final QueryColumn UPDATE_TIME = new QueryColumn(this, "update_time");
 
+
+    public final QueryColumn UPDATE_USER = new QueryColumn(this, "update_user");
+
     /**
      * 所有字段。
      */
@@ -46,7 +57,7 @@ public class MessageTemplateParamsTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, TEMPLATE_ID, NAME, CREATE_TIME, UPDATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, TEMPLATE_ID, NAME, DESC, CREATE_USER, UPDATE_USER, CREATE_TIME, UPDATE_TIME};
 
     public MessageTemplateParamsTableDef() {
         super("", "message_template_params");

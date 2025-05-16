@@ -4,7 +4,7 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.xk.xcode.core.CommonStatusEnum;
-import cn.xk.xcode.entity.account.sms.YunPianSmsChannelAccount;
+import cn.xk.xcode.entity.discard.account.sms.YunPianSmsChannelAccount;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import cn.xk.xcode.entity.po.MessageTaskDetailPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;

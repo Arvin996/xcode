@@ -1,13 +1,12 @@
 package cn.xk.xcode.utils;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
-import cn.xk.xcode.entity.account.other.DingDingWorkNoticeAccount;
-import cn.xk.xcode.entity.account.other.GeTuiAccount;
+import cn.xk.xcode.entity.discard.account.other.DingDingWorkNoticeAccount;
+import cn.xk.xcode.entity.discard.account.other.GeTuiAccount;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

@@ -1,4 +1,8 @@
+server:
+  port: 4003
 spring:
+  application:
+    name: xcode-message
   rabbitmq:
     publisher-confirm-type: correlated # 开启publisher confirm机制，并设置confirm类型
     publisher-returns: true # 开启publisher return机制

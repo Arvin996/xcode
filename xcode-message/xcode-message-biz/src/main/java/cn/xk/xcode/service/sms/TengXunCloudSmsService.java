@@ -2,7 +2,7 @@ package cn.xk.xcode.service.sms;
 
 import cn.hutool.core.util.IdUtil;
 import cn.xk.xcode.core.CommonStatusEnum;
-import cn.xk.xcode.entity.account.sms.TencentSmsChannelAccount;
+import cn.xk.xcode.entity.discard.account.sms.TencentSmsChannelAccount;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import cn.xk.xcode.entity.po.MessageTaskDetailPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static cn.xk.xcode.config.GlobalMessageConstants.MESSAGE_ACCOUNT_IS_DISABLED;

@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.po;
 
-import cn.xk.xcode.entity.DataLongObjectBaseEntity;
+import cn.xk.xcode.core.entity.TransPo;
+import cn.xk.xcode.entity.DataStringObjectBaseEntity;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -13,8 +14,8 @@ import lombok.*;
 /**
  *  实体类。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -22,7 +23,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("message_channel_account")
-public class MessageChannelAccountPo extends DataLongObjectBaseEntity implements Serializable {
+public class MessageChannelAccountPo extends DataStringObjectBaseEntity implements Serializable, TransPo {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,23 +39,24 @@ public class MessageChannelAccountPo extends DataLongObjectBaseEntity implements
     private String accountName;
 
     /**
-     * 渠道code 
+     * 渠道id
      */
-    private String channelCode;
+    private Integer channelId;
 
     /**
-     * 权重
+     * 账号权重
      */
     private Double weight;
-
-    /**
-     * 渠道配置 jsonz字符串 主要配置appid等一些必须的参数
-     */
-    private String channelConfig;
 
     /**
      * 0 启用 1弃用
      */
     private String status;
+
+    /**
+     * 0 未删除 1已删除
+     */
+    @com.mybatisflex.annotation.Column(isLogicDelete = true)
+    private String isDeleted;
 
 }

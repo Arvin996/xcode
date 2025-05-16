@@ -6,15 +6,15 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.xk.xcode.constants.MessageChannelUrlConstant;
 import cn.xk.xcode.core.annotation.Handler;
-import cn.xk.xcode.entity.account.other.GeTuiAccount;
-import cn.xk.xcode.entity.content.GeTuiContentModel;
+import cn.xk.xcode.entity.discard.account.other.GeTuiAccount;
+import cn.xk.xcode.entity.discard.content.GeTuiContentModel;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import cn.xk.xcode.entity.po.MessageTaskDetailPo;
-import cn.xk.xcode.entity.request.getui.GeTuiBatchSendParam;
-import cn.xk.xcode.entity.request.getui.GeTuiBatchSendResult;
-import cn.xk.xcode.entity.request.getui.GeTuiSendResult;
-import cn.xk.xcode.entity.request.getui.GeTuiSingleSendParam;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.getui.GeTuiBatchSendParam;
+import cn.xk.xcode.entity.discard.getui.GeTuiBatchSendResult;
+import cn.xk.xcode.entity.discard.getui.GeTuiSendResult;
+import cn.xk.xcode.entity.discard.getui.GeTuiSingleSendParam;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.ChannelTypeEnum;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.handler.message.AbstractHandler;
@@ -156,7 +156,7 @@ public class GeTuiMessageHandler extends AbstractHandler {
 
 
     private String singleSend(MessageTask messageTask, String accessToken, GeTuiAccount geTuiAccount, GeTuiContentModel geTuiContentModel) {
-        String url = MessageChannelUrlConstant.DING_DING_PULL_URL + geTuiAccount.getAppId() + GE_TUI_SINGLE_PUSH_PATH;
+        String url = MessageChannelUrlConstant.GE_TUI_BASE_URL + geTuiAccount.getAppId() + GE_TUI_SINGLE_PUSH_PATH;
         GeTuiSingleSendParam param = GeTuiSingleSendParam
                 .builder()
                 .requestId(IdUtil.getSnowflakeNextIdStr())

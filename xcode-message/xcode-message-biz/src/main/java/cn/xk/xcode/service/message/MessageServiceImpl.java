@@ -1,7 +1,7 @@
 package cn.xk.xcode.service.message;
 
 import cn.xk.xcode.config.RabbitMqConfiguration;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.mq.XxlMqTemplate;
 import cn.xk.xcode.service.MessageTaskService;

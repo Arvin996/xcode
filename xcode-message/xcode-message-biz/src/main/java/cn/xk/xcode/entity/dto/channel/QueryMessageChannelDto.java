@@ -1,7 +1,9 @@
 package cn.xk.xcode.entity.dto.channel;
 
+import cn.xk.xcode.pojo.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @Author xuk
@@ -9,16 +11,14 @@ import lombok.Data;
  * @Version 1.0.0
  * @Description QueryMessageChannelDto
  **/
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Schema(description = "query message channel dto")
-public class QueryMessageChannelDto {
+@Schema(name = "QueryMessageChannelDto", description = "渠道查询dto")
+public class QueryMessageChannelDto extends PageParam {
 
-    @Schema(description = "channel id")
-    private Integer id;
-
-    @Schema(description = "channel code")
+    @Schema(description = "渠道码")
     private String code;
 
-    @Schema(description = "channel name")
+    @Schema(description = "渠道名")
     private String name;
 }

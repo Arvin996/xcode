@@ -4,4 +4,62 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.MessageChannelAccountMapper">
 
+
+    <resultMap id="accountMap" type="cn.xk.xcode.entity.vo.account.MessageChannelAccountVo">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="accountName" column="accountName" jdbcType="VARCHAR"/>
+        <result property="channelCode" column="channelCode" jdbcType="VARCHAR"/>
+        <result property="channelName" column="channelName" jdbcType="VARCHAR"/>
+        <result property="channelId" column="channelId" jdbcType="INTEGER"/>
+        <result property="weight" column="weight" jdbcType="DOUBLE"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <collection property="accountChannelParams" javaType="List"
+                    ofType="cn.xk.xcode.entity.vo.account.MessageChannelAccountVo$AccountChannelParams"
+                    column="id=id" select="selectAccountChannelParamsById">
+            <result property="channelId" column="channelId" jdbcType="INTEGER"/>
+            <result property="channelParamId" column="channelParamId" jdbcType="INTEGER"/>
+            <result property="channelParamValueId" column="channelParamValueId" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="required" column="required" jdbcType="CHAR"/>
+            <result property="desc" column="desc" jdbcType="VARCHAR"/>
+            <result property="paramValue" column="paramValue" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryAllMessageChannelAccounts" resultMap="accountMap">
+        select a.id,
+        a.account_name accountName,
+        a.channel_id channelId,
+        b.channel_code channelCode,
+        a.weight,
+        a.status
+        from message_channel_account a
+        left join message_channel b
+        on a.channel_id = b.id
+        where a.is_deleted = '0'
+        <if test="queryMessageChannelAccountDto.channelCode != null">
+            and a.channel_code = #{queryMessageChannelAccountDto.channelCode}
+        </if>
+        <if test="queryMessageChannelAccountDto.accountName != null">
+            and a.account_name like concat(#{queryMessageChannelAccountDto.accountName}, '%')
+        </if>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectAccountChannelParamsById"
+            resultType="cn.xk.xcode.entity.vo.account.MessageChannelAccountVo$AccountChannelParams">
+        select b.name        channelName,
+               b.id          channelId,
+               c.id          channelParamId,
+               c.name,
+               c.required,
+               c.`desc`,
+               d.id          channelParamValueId,
+               d.param_value paramValue
+        from message_channel b
+                 left join message_channel_param c
+                           on b.id = c.channel_id and c.is_deleted = '0'
+                 left join message_channel_account_param_value d
+                           on c.id = d.channel_param_id and d.is_deleted = '0' and d.account_id = #{id}
+    </select>
 </mapper>

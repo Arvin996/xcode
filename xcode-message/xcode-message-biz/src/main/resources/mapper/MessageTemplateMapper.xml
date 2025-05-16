@@ -4,4 +4,42 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.MessageTemplateMapper">
 
+    <resultMap id="templateMap" type="cn.xk.xcode.entity.vo.template.MessageTemplateVo">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="CHAR"/>
+        <result column="template_id" property="templateId" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="CHAR"/>
+        <result column="desc" property="desc" jdbcType="VARCHAR"/>
+        <collection property="params" javaType="List" ofType="cn.xk.xcode.entity.vo.template.MessageTemplateVo$MessageTemplateParamVo"
+                    column="id=id" select="getTemplateParamsById">
+            <result column="id" property="id" jdbcType="INTEGER"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="desc" property="desc" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getMessageTemplateList" resultType="cn.xk.xcode.entity.vo.template.MessageTemplateVo">
+        select id, name, type, template_id, content, status, `desc`
+        from message_template
+        where is_deleted = '0'
+        <if test="queryMessageTemplateDto.name != null">
+            and name like concat(#{queryMessageTemplateDto.name}, '%')
+        </if>
+        <if test="queryMessageTemplateDto.type != null">
+            and type = #{queryMessageTemplateDto.type}
+        </if>
+        <if test="queryMessageTemplateDto.templateId != null">
+            and template_id like concat('%', #{queryMessageTemplateDto.templateId}, '%')
+        </if>
+    </select>
+
+    <select id="getTemplateParamsById" resultType="cn.xk.xcode.entity.vo.template.MessageTemplateVo$MessageTemplateParamVo">
+        select id,
+               name,
+               `desc`
+        from message_template_params
+        where template_id = #{id}
+    </select>
 </mapper>

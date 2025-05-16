@@ -1,6 +1,6 @@
 package cn.xk.xcode.service.task;
 
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.handler.MessageHandlerHolder;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;

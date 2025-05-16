@@ -5,19 +5,19 @@ import com.mybatisflex.core.table.TableDef;
 
 
 /**
- *  表定义层。
+ * 表定义层。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 public class MessageChannelAccessClientTableDef extends TableDef {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
-    public static final MessageChannelAccessClientTableDef MESSAGE_CHANNEL_ACCESS_CLIENT_PO = new MessageChannelAccessClientTableDef();
+    public static final MessageChannelAccessClientTableDef MESSAGE_CHANNEL_ACCESS_CLIENT = new MessageChannelAccessClientTableDef();
 
     /**
      * 自增id
@@ -30,14 +30,24 @@ public class MessageChannelAccessClientTableDef extends TableDef {
     public final QueryColumn NAME = new QueryColumn(this, "name");
 
     /**
-     * 0启用 1禁用
+     * 接入商邮箱
      */
-    public final QueryColumn STATE = new QueryColumn(this, "state");
+    public final QueryColumn EMAIL = new QueryColumn(this, "email");
 
     /**
-     * 令牌发送时间
+     * 接入商手机号
      */
-    public final QueryColumn ACCESS_TIME = new QueryColumn(this, "access_time");
+    public final QueryColumn MOBILE = new QueryColumn(this, "mobile");
+
+    /**
+     * 0启用 1禁用
+     */
+    public final QueryColumn STATUS = new QueryColumn(this, "status");
+
+    /**
+     * 是否删除 0未删除 1已删除
+     */
+    public final QueryColumn IS_DELETED = new QueryColumn(this, "is_deleted");
 
     /**
      * 创建时间
@@ -50,9 +60,29 @@ public class MessageChannelAccessClientTableDef extends TableDef {
     public final QueryColumn UPDATE_TIME = new QueryColumn(this, "update_time");
 
     /**
+     * token刷新时间
+     */
+    public final QueryColumn TOKEN_REFRESH_TIME = new QueryColumn(this, "token_refresh_time");
+
+    /**
+     * 接入商消息配额 默认100
+     */
+    public final QueryColumn ACCESS_COUNT = new QueryColumn(this, "access_count");
+
+    /**
      * 接入密钥，用于校验合法性
      */
     public final QueryColumn ACCESS_TOKEN = new QueryColumn(this, "access_token");
+
+    /**
+     * 剩余配额
+     */
+    public final QueryColumn REST_COUNT = new QueryColumn(this, "rest_count");
+
+    /**
+     * 已用配额
+     */
+    public final QueryColumn USED_COUNT = new QueryColumn(this, "used_count");
 
     /**
      * 所有字段。
@@ -62,7 +92,7 @@ public class MessageChannelAccessClientTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, ACCESS_TOKEN, ACCESS_TIME, STATE, CREATE_TIME, UPDATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, EMAIL, MOBILE, ACCESS_TOKEN, TOKEN_REFRESH_TIME, IS_DELETED, STATUS, ACCESS_COUNT, REST_COUNT, USED_COUNT, CREATE_TIME, UPDATE_TIME};
 
     public MessageChannelAccessClientTableDef() {
         super("", "message_channel_access_client");

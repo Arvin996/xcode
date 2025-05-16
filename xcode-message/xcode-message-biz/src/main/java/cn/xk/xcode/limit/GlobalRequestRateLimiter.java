@@ -1,7 +1,7 @@
 package cn.xk.xcode.limit;
 
 import cn.xk.xcode.config.XcodeMessageProperties;
-import cn.xk.xcode.entity.task.MessageTask;
+import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.RateLimiterEnum;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RRateLimiter;

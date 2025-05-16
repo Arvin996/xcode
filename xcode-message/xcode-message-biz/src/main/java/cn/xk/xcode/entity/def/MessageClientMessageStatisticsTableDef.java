@@ -7,8 +7,8 @@ import com.mybatisflex.core.table.TableDef;
 /**
  *  表定义层。
  *
- * @author xuk
- * @since 2025-03-10
+ * @author Administrator
+ * @since 2025-05-15
  */
 public class MessageClientMessageStatisticsTableDef extends TableDef {
 
@@ -17,9 +17,11 @@ public class MessageClientMessageStatisticsTableDef extends TableDef {
     /**
      * 
      */
-    public static final MessageClientMessageStatisticsTableDef MESSAGE_CLIENT_MESSAGE_STATISTICS_PO = new MessageClientMessageStatisticsTableDef();
+    public static final MessageClientMessageStatisticsTableDef MESSAGE_CLIENT_MESSAGE_STATISTICS = new MessageClientMessageStatisticsTableDef();
 
-    
+    /**
+     * 自增id
+     */
     public final QueryColumn ID = new QueryColumn(this, "id");
 
     /**
@@ -33,6 +35,11 @@ public class MessageClientMessageStatisticsTableDef extends TableDef {
     public final QueryColumn CLIENT_ID = new QueryColumn(this, "client_id");
 
     /**
+     * 失败条数
+     */
+    public final QueryColumn FAIL_COUNT = new QueryColumn(this, "fail_count");
+
+    /**
      * 统计时间
      */
     public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
@@ -40,7 +47,17 @@ public class MessageClientMessageStatisticsTableDef extends TableDef {
     /**
      * 渠道code
      */
-    public final QueryColumn CHANNEL_CODE = new QueryColumn(this, "channel_code");
+    public final QueryColumn CHANNEL_ID = new QueryColumn(this, "channel_id");
+
+    /**
+     * 成功条数
+     */
+    public final QueryColumn SUCCESS_COUNT = new QueryColumn(this, "success_count");
+
+    /**
+     * 渠道发送账户
+     */
+    public final QueryColumn CHANNEL_ACCOUNT = new QueryColumn(this, "channel_account");
 
     /**
      * 所有字段。
@@ -50,7 +67,7 @@ public class MessageClientMessageStatisticsTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, CLIENT_ID, CHANNEL_CODE, COUNT, CREATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, CLIENT_ID, CHANNEL_ID, CHANNEL_ACCOUNT, COUNT, SUCCESS_COUNT, FAIL_COUNT, CREATE_TIME};
 
     public MessageClientMessageStatisticsTableDef() {
         super("", "message_client_message_statistics");

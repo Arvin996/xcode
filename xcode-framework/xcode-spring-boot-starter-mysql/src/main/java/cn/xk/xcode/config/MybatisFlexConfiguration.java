@@ -5,13 +5,17 @@ import cn.xk.xcode.entity.DataStringObjectBaseEntity;
 import cn.xk.xcode.listener.BaseLongEntityChangeListener;
 import cn.xk.xcode.listener.BaseStringEntityChangeListener;
 import cn.xk.xcode.permission.dialect.CustomPermissionDialect;
+import com.github.pagehelper.PageInterceptor;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.audit.AuditManager;
 import com.mybatisflex.core.dialect.DbType;
 import com.mybatisflex.core.dialect.DialectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Properties;
 
 /**
  * @Author xuk
@@ -48,5 +52,16 @@ public class MybatisFlexConfiguration
         config.registerUpdateListener(baseLongEntityChangeListener, DataLongObjectBaseEntity.class);
         config.registerSetListener(baseLongEntityChangeListener, DataLongObjectBaseEntity.class);
         DialectFactory.registerDialect(DbType.MYSQL, new CustomPermissionDialect());
+    }
+
+    @Bean
+    public PageInterceptor pageInterceptor() {
+        PageInterceptor pageInterceptor = new PageInterceptor();
+        Properties properties = new Properties();
+        properties.setProperty("helperDialect", "mysql");
+        properties.setProperty("offsetAsPageNum", "true");
+        properties.setProperty("rowBoundsWithCount", "true");
+        pageInterceptor.setProperties(properties);
+        return pageInterceptor;
     }
 }

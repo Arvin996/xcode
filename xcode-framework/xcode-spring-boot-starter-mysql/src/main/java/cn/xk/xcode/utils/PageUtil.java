@@ -3,6 +3,10 @@ package cn.xk.xcode.utils;
 import cn.hutool.core.util.ObjectUtil;
 import cn.xk.xcode.pojo.PageParam;
 import cn.xk.xcode.pojo.PageResult;
+import cn.xk.xcode.utils.collections.CollectionUtil;
+import cn.xk.xcode.utils.object.BeanUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mybatisflex.core.paginate.Page;
 
 import java.util.ArrayList;
@@ -35,8 +39,22 @@ public class PageUtil {
         return pageResult;
     }
 
-    public static <T> PageResult<T> toPageResult(Page<T> page){
-        return new PageResult<T>(page.getPageNumber(), page.getPageSize(), page.getTotalPage(), page.getRecords());
+    public static <T, K> PageResult<K> toPageResult(Page<T> page, Class<K> classType) {
+        List<T> records = page.getRecords();
+        if (CollectionUtil.isEmpty(records)) {
+            return createEmptyPageResult(page.getPageNumber(), page.getPageSize());
+        } else {
+            return new PageResult<>(page.getPageNumber(), page.getPageSize(), page.getTotalPage(), BeanUtil.toBean(records, classType));
+        }
+    }
+
+    public static <T> PageResult<T> toPageResult(PageInfo<T> pageInfo) {
+        List<T> records = pageInfo.getList();
+        if (CollectionUtil.isEmpty(records)) {
+            return createEmptyPageResult(pageInfo.getPageNum(), pageInfo.getPageSize());
+        } else {
+            return new PageResult<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), records);
+        }
     }
 
     public static <T> PageResult<T> startPage(long pageNo, long pageSize, List<T> result){
@@ -52,6 +70,14 @@ public class PageUtil {
 
     public static <T> PageResult<T> createEmptyPageResult(PageParam pageParam){
         return PageResult.empty(pageParam);
+    }
+
+    public static <T> Page<T> toFlexPage(PageParam pageParam) {
+        return new Page<>(pageParam.getPageNo(), pageParam.getPageSize());
+    }
+
+    public static void statePage(PageParam pageParam){
+        PageHelper.startPage(Math.toIntExact(pageParam.getPageNo()), Math.toIntExact(pageParam.getPageSize()));
     }
 
 }

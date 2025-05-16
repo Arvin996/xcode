@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.po;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -34,7 +35,7 @@ public class SystemStationNoticePo implements Serializable {
     private Long id;
 
     /**
-     * 消息titile
+     * 消息title
      */
     private String title;
 
@@ -61,6 +62,7 @@ public class SystemStationNoticePo implements Serializable {
     /**
      * 发送时间
      */
+    @Column(onInsertValue = "now()")
     private LocalDateTime createTime;
 
 }

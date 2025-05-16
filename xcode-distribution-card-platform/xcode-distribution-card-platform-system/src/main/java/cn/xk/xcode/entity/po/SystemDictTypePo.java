@@ -46,7 +46,7 @@ public class SystemDictTypePo extends DataStringObjectBaseEntity implements Seri
     /**
      * 状态（0正常 1停用）
      */
-    private Integer status;
+    private String status;
 
     /**
      * 备注

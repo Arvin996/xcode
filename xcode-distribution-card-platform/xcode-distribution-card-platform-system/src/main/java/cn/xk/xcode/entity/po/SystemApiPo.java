@@ -32,6 +32,9 @@ public class SystemApiPo implements Serializable {
     @Id(keyType = KeyType.Auto)
     private Integer id;
 
+    /**
+     * 服务所属服务名
+     */
     private String productName;
 
     /**

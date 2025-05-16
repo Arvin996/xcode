@@ -50,13 +50,36 @@
         </dependency>
 
         <dependency>
-            <groupId>me.zhyd.oauth</groupId>
-            <artifactId>JustAuth</artifactId>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-trans-flex</artifactId>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-captcha-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-websocket</artifactId>
             <version>${revision}</version>
         </dependency>
 

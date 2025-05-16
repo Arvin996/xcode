@@ -1,6 +1,8 @@
 package cn.xk.xcode.service;
 
+import cn.xk.xcode.entity.dto.user.LoginUserDto;
 import cn.xk.xcode.entity.dto.user.RegisterUserDto;
+import cn.xk.xcode.pojo.LoginVO;
 
 /**
  * @Author xuk
@@ -10,4 +12,9 @@ import cn.xk.xcode.entity.dto.user.RegisterUserDto;
  **/
 public interface AuthService {
     Boolean register(RegisterUserDto registerUserDto);
+
+    LoginVO Login(LoginUserDto loginUserDto);
+
+    Boolean logout();
+
 }

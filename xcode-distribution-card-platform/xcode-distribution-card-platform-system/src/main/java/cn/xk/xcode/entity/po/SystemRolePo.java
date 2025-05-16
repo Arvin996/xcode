@@ -1,12 +1,12 @@
 package cn.xk.xcode.entity.po;
 
+import cn.xk.xcode.core.entity.TransPo;
 import cn.xk.xcode.entity.DataStringObjectBaseEntity;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
 import lombok.*;
@@ -23,7 +23,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("system_role")
-public class SystemRolePo extends DataStringObjectBaseEntity implements Serializable {
+public class SystemRolePo extends DataStringObjectBaseEntity implements Serializable, TransPo {
 
     private static final long serialVersionUID = 1L;
 

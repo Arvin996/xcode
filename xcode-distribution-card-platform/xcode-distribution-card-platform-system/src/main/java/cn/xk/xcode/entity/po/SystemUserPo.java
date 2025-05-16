@@ -69,6 +69,36 @@ public class SystemUserPo extends DataStringObjectBaseEntity implements Serializ
     private String mobile;
 
     /**
+     * 邮件
+     */
+    private String email;
+
+    /**
+     * dingTalkWebhookToken
+     */
+    @Column("ding_talk_webhook_token")
+    private String dingTalkWebhookToken;
+
+    /**
+     * dingTalkWebhookSign 签名
+     */
+    @Column("ding_talk_webhook_sign")
+    private String dingTalkWebhookSign;
+
+
+    /**
+     * feiShuWebhookToken
+     */
+    @Column("feishu_webhook_token")
+    private String feiShuWebhookToken;
+
+    /**
+     * feiShuWebhookSign 签名
+     */
+    @Column("feishu_webhook_sign")
+    private String feiShuWebhookSign;
+
+    /**
      * 头像
      */
     private String avatar;

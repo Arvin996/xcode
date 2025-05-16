@@ -3,6 +3,7 @@ package cn.xk.xcode.core;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.xk.xcode.annotation.EnableServerSecurity;
 import cn.xk.xcode.config.SaTokenMemberGlobalConfig;
+import cn.xk.xcode.config.SaTokenMixedGlobalConfig;
 import cn.xk.xcode.config.SaTokenSystemGlobalConfig;
 import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
@@ -31,11 +32,15 @@ public class XcodeSecurityBeanImport implements ImportBeanDefinitionRegistrar {
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             beanDefinition.setBeanClass(SaTokenSystemGlobalConfig.class);
             registry.registerBeanDefinition("saTokenSystemGlobalConfig", beanDefinition);
-        }else {
+        } else if (Objects.equals(stpType, StpType.MEMBER)) {
             SaTokenLoginUtils.setStpLogic(StpMemberUtil.getStpLogic());
             GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             beanDefinition.setBeanClass(SaTokenMemberGlobalConfig.class);
             registry.registerBeanDefinition("saTokenMemberGlobalConfig", beanDefinition);
+        } else {
+            GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+            beanDefinition.setBeanClass(SaTokenMixedGlobalConfig.class);
+            registry.registerBeanDefinition("saTokenMixedGlobalConfig", beanDefinition);
         }
     }
 }

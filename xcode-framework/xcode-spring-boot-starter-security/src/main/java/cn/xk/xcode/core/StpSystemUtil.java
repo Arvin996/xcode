@@ -27,7 +27,13 @@ public class StpSystemUtil {
 	/**
 	 * 底层使用的 StpLogic 对象
 	 */
-	public static StpLogic stpLogic = new StpLogic(TYPE);
+    public static StpLogic stpLogic = new StpLogic(TYPE) {
+
+//		@Override
+//		public String splicingKeyTokenName() {
+//			return super.splicingKeyTokenName() + "-" + StpType.SYSTEM.getType();
+//		}
+    };
 
 	/**
 	 * 获取当前 StpLogic 的账号类型

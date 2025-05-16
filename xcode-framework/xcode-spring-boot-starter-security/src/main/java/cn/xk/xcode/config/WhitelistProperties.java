@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Data
-@ConfigurationProperties(prefix = "xcode.security.whitelist")
+@ConfigurationProperties(prefix = "xcode.security")
 @Component
 public class WhitelistProperties {
 

@@ -16,6 +16,7 @@ import java.util.List;
 
 
 @Component
+@SuppressWarnings("all")
 public class StpMemberUtil {
 
     private StpMemberUtil() {}
@@ -28,7 +29,12 @@ public class StpMemberUtil {
     /**
      * 底层使用的 StpLogic 对象
      */
-    public static StpLogic stpLogic = new StpLogic(TYPE);
+    public static StpLogic stpLogic = new StpLogic(TYPE) {
+//        @Override
+//        public String splicingKeyTokenName() {
+//            return super.splicingKeyTokenName() + "-" + StpType.MEMBER.getType();
+//        }
+    };
 
     /**
      * 获取当前 StpLogic 的账号类型

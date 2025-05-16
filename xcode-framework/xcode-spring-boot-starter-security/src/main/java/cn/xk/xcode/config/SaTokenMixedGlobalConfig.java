@@ -2,6 +2,7 @@ package cn.xk.xcode.config;
 
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
+import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.core.StpSystemUtil;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,30 +11,22 @@ import javax.annotation.Resource;
 
 /**
  * @Author xuk
- * @Date 2024/6/24 09:49
- * @Version 1.0
- * @Description SaTokenGlobalConfig
- */
+ * @Date 2025/5/14 8:35
+ * @Version 1.0.0
+ * @Description SaTokenMixedGlobalConfig
+ **/
 @SuppressWarnings("all")
-public class SaTokenSystemGlobalConfig implements WebMvcConfigurer {
+public class SaTokenMixedGlobalConfig implements WebMvcConfigurer {
 
     @Resource
     private WhitelistProperties whitelistProperties;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册 Sa-Token 拦截器，定义详细认证规则
-//        registry.addInterceptor(new SaInterceptor(handle -> StpSystemUtil.checkLogin()))
-//                .addPathPatterns("/**")
-//
-//                .excludePathPatterns("/webjars/**", "/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**", "/error")
-//                .excludePathPatterns(whitelistProperties.getWhitelist());
         registry.addInterceptor(new SaInterceptor(handler -> {
             // 打印白名单 System.out.println(whitelistProperties.getWhitelist());
             // 指定一条 match 规则
-            SaRouter
-                    .match("/**")    // 拦截的 path 列表，可以写多个 */
-                    .notMatch("/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**")
+            SaRouter.notMatch("/doc.html", "/v3/**", "/warm-flow-ui/**", "/warm-flow/**")
                     .notMatch("/*.html")
                     .notMatch("/swagger-resources")
                     .notMatch("/webjars/**")
@@ -43,11 +36,8 @@ public class SaTokenSystemGlobalConfig implements WebMvcConfigurer {
                     .notMatch("/**/favicon.ico")
                     .notMatch("/resources/**")
                     .notMatch(whitelistProperties.getWhitelist())
-                    .check(r -> StpSystemUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
-
+                    .match("/manage/**").check(r -> StpSystemUtil.checkLogin())
+                    .match("/api/**").check(r -> StpMemberUtil.checkLogin());
         })).addPathPatterns("/**");
-
     }
-
-
 }

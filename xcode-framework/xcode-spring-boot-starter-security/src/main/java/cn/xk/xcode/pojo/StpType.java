@@ -14,7 +14,8 @@ import lombok.Getter;
 public enum StpType {
 
     SYSTEM("system"),
-    MEMBER("member");
+    MEMBER("member"),
+    MIXED("mixed");
     private final String type;
 
     public static StpType getType(String type) {

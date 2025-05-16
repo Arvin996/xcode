@@ -14,8 +14,8 @@ import java.util.Date;
  * @Version 1.0
  * @Description MinioFileUtils
  */
-public class MinioFileUtils
-{
+public class MinioFileUtils {
+
     // 生成规则：yyyy/MM/dd/fileId/filename
     public static String getObjectName(String fileName, String fileId) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

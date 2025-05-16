@@ -34,10 +34,10 @@ public @interface FlexFieldTrans {
     String refConditionField();
 
     /**
-     * Wrapper查询出来实体类后，要取哪个属性进行返回翻译
+     * Wrapper查询出来实体类后，要取哪个属性进行返回翻译 为空则为原始的实体类
      * @return 属性名
      */
-    String refSourceFiled();
+    String refSourceFiled() default "";
 
     /**
      * 是否是远程调用

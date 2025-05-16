@@ -13,6 +13,7 @@ import cn.xk.xcode.core.handler.TransFlexHandler;
 import cn.xk.xcode.core.service.FlexTransService;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.pojo.PageResult;
 import cn.xk.xcode.support.enums.GlobalEnumsContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,10 +70,20 @@ public class TransFlexAnnotationInterceptor implements MethodInterceptor {
                             data = list.stream().map(pojo -> handleSingleObject((TransVo) pojo)).collect(Collectors.toList());
                         }
                     }
-                } else {
-                    if (data instanceof TransVo) {
-                        handleSingleObject((TransVo) data);
+                } else if (data instanceof TransVo) {
+                    handleSingleObject((TransVo) data);
+                } else if (data instanceof PageResult) {
+                    PageResult<?> pageResult = (PageResult<?>) data;
+                    List<?> resultData = pageResult.getData();
+                    if (resultData != null && !resultData.isEmpty()) {
+                        Object o = resultData.get(0);
+                        if (o instanceof TransVo) {
+                            resultData = resultData.stream().map(pojo -> handleSingleObject((TransVo) pojo)).collect(Collectors.toList());
+                            data = new PageResult<>(pageResult.getPageParam(), pageResult.getTotal(), resultData);
+                        }
                     }
+                } else {
+                    log.warn("返回值为未知类型，暂时不支持翻译， 返回值：{}", data);
                 }
                 objectCommonResult.setData(data);
                 return objectCommonResult;

@@ -1,6 +1,7 @@
 package cn.xk.xcode.core.handler;
 
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.annotation.FlexFieldTrans;
 import cn.xk.xcode.core.client.TransFlexClient;
 import cn.xk.xcode.core.entity.FlexTransDto;
@@ -8,6 +9,8 @@ import cn.xk.xcode.core.entity.TransPo;
 import cn.xk.xcode.core.entity.TransVo;
 import cn.xk.xcode.core.service.FlexTransService;
 import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.utils.collections.CollectionUtil;
+import cn.xk.xcode.utils.object.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClientBuilder;
 import org.springframework.util.StringUtils;
@@ -28,6 +31,7 @@ import static cn.xk.xcode.constants.TransFlexGlobalConstants.TRANS_FAILED;
  * @description
  */
 @Slf4j
+@SuppressWarnings("all")
 public class TransFlexHandler {
     private TransFlexHandler() {
     }
@@ -48,14 +52,22 @@ public class TransFlexHandler {
             }
             if (List.class.isAssignableFrom(tagetField.getType())) {
                 try {
-                    tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, BeanUtil.toBean(list, tagetField.getType()));
+                    } else {
+                        tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
                 }
             } else {
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(list.get(0), refSourceFiled));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, BeanUtil.toBean(list.get(0), tagetField.getType()));
+                    } else {
+                        tagetField.set(proceed, ReflectUtil.getFieldValue(list.get(0), refSourceFiled));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -69,7 +81,11 @@ public class TransFlexHandler {
                     return;
                 }
                 try {
-                    tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, BeanUtil.toBean(list, tagetField.getType()));
+                    } else {
+                        tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -82,7 +98,11 @@ public class TransFlexHandler {
                     return;
                 }
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, BeanUtil.toBean(transPo, tagetField.getType()));
+                    } else {
+                        tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -115,14 +135,22 @@ public class TransFlexHandler {
             }
             if (List.class.isAssignableFrom(tagetField.getType())) {
                 try {
-                    tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, list);
+                    } else {
+                        tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
                 }
             } else {
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(list.get(0), refSourceFiled));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, list.get(0));
+                    } else {
+                        tagetField.set(proceed, ReflectUtil.getFieldValue(list.get(0), refSourceFiled));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -139,7 +167,11 @@ public class TransFlexHandler {
                     return;
                 }
                 try {
-                    tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, list);
+                    } else {
+                        tagetField.set(proceed, list.stream().map(transVo -> ReflectUtil.getFieldValue(transVo, refSourceFiled)).collect(Collectors.toList()));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);
@@ -154,7 +186,11 @@ public class TransFlexHandler {
                     return;
                 }
                 try {
-                    tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
+                    if (StrUtil.isBlank(refSourceFiled)) {
+                        tagetField.set(proceed, BeanUtil.toBean(transPo, tagetField.getType()));
+                    } else {
+                        tagetField.set(proceed, ReflectUtil.getFieldValue(transPo, refSourceFiled));
+                    }
                 } catch (IllegalAccessException e) {
                     log.error(e.getMessage());
                     throw new ServerException(TRANS_FAILED);

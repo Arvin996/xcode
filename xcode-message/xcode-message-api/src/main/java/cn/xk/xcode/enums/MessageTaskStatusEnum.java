@@ -17,7 +17,8 @@ public enum MessageTaskStatusEnum {
     PART_SUCCESS("10"),
     FAIL("20"),
     ALL_SUCCESS("30"),
-    CANCEL("40");
+    CANCEL("40"),
+    PAUSE("50");
 
     private final String status;
 }

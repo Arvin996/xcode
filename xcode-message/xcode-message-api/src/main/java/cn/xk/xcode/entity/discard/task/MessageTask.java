@@ -20,7 +20,7 @@ import java.util.Set;
 @Schema(description = "MessageTask")
 public class MessageTask {
 
-    private Integer id;
+    private Long id;
 
     /**
      * 接入商id
@@ -92,6 +92,12 @@ public class MessageTask {
     private Integer templateId;
 
     /**
+     * 三方模板id
+     */
+    private String thirdTemplateId;
+
+
+    /**
      * 消息内容
      */
     private String messageContent;
@@ -116,4 +122,9 @@ public class MessageTask {
     private Set<String> receiverSet;
 
     private Integer successCount;
+
+    /**
+     * 点击模板卡片后的跳转页面。支持带参数 微信小程序字段为page 公众号为pagepath
+     */
+    private String page;
 }

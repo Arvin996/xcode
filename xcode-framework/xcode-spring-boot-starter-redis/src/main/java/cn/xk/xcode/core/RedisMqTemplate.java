@@ -41,7 +41,6 @@ public class RedisMqTemplate {
         messageEntity.setData(messageContent);
         messageEntity.setFromUser(fromUser);
         messageEntity.setToUsers(toUsers);
-        messageEntity.setToPushAll(pushAll);
         sendMessage(messageEntity);
     }
 

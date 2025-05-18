@@ -1,26 +1,22 @@
 package cn.xk.xcode.handler.message.impl;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.mail.MailAccount;
-import cn.hutool.extra.mail.MailUtil;
 import cn.xk.xcode.core.annotation.Handler;
-import cn.xk.xcode.entity.discard.account.other.EmailAccount;
-import cn.xk.xcode.entity.discard.content.EmailContentModel;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
-import cn.xk.xcode.entity.po.MessageTaskDetailPo;
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.ChannelTypeEnum;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.handler.message.AbstractHandler;
-import cn.xk.xcode.handler.message.HandlerResult;
+import cn.xk.xcode.handler.message.SingeSendMessageResult;
 import com.alibaba.fastjson2.JSON;
-import com.github.xiaoymin.knife4j.core.util.CollectionUtils;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static cn.xk.xcode.config.GlobalMessageConstants.CHANNEL_EMAIL_PROPERTY_NOT_CONFIG;
 
 /**
  * @Author xuk
@@ -32,55 +28,57 @@ import java.util.Set;
 @Handler
 public class EmailMessageHandler extends AbstractHandler {
 
+    private JavaMailSenderImpl javaMailSender;
+
     @Override
-    public HandlerResult doSendMessage(MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) {
-        EmailAccount emailAccount = JSON.parseObject(messageChannelAccountPo.getChannelConfig(), EmailAccount.class);
-        EmailContentModel emailContentModel = JSON.parseObject(messageTask.getMessageContent(), EmailContentModel.class);
-        MailAccount mailAccount = new MailAccount();
-        mailAccount.setHost(emailAccount.getHost());
-        mailAccount.setPort(emailAccount.getPort());
-        mailAccount.setUser(emailAccount.getUsername());
-        mailAccount.setPass(emailAccount.getPassword());
-        mailAccount.setFrom(emailAccount.getUsername());
-        List<MessageTaskDetailPo> list = new ArrayList<>();
-        Integer successCount = 0;
-        if (CollectionUtils.isNotEmpty(messageTask.getReceiverSet())) {
-            Set<String> receiverSet = messageTask.getReceiverSet();
-            for (String receiver : receiverSet) {
-                try {
-                    File file;
-                    if (!StrUtil.isEmpty(emailContentModel.getUrl())) {
-                        file = new File(emailContentModel.getUrl());
-                        MailUtil.send(mailAccount, receiver, emailContentModel.getTitle(), emailContentModel.getContent(), true, file);
-                    } else {
-                        MailUtil.send(mailAccount, receiver, emailContentModel.getTitle(), emailContentModel.getContent(), true);
-                    }
-                    MessageTaskDetailPo messageTaskDetailPo = new MessageTaskDetailPo();
-                    messageTaskDetailPo.setTaskId(messageTask.getId());
-                    messageTaskDetailPo.setReceiver(receiver);
-                    messageTaskDetailPo.setExecTime(LocalDateTime.now());
-                    messageTaskDetailPo.setStatus("0");
-                    messageTaskDetailPo.setRetryTimes(0);
-                    messageTaskDetailPo.setFailMsg(null);
-                    messageTaskDetailPo.setSuccessTime(LocalDateTime.now());
-                    list.add(messageTaskDetailPo);
-                    successCount++;
-                } catch (Exception e) {
-                    log.error("EmailMessageHandler#doSendMessage fail!{}", e);
-                    MessageTaskDetailPo messageTaskDetailPo = new MessageTaskDetailPo();
-                    messageTaskDetailPo.setTaskId(messageTask.getId());
-                    messageTaskDetailPo.setReceiver(receiver);
-                    messageTaskDetailPo.setExecTime(LocalDateTime.now());
-                    messageTaskDetailPo.setStatus("1");
-                    messageTaskDetailPo.setRetryTimes(0);
-                    messageTaskDetailPo.setFailMsg(e.getMessage());
-                    messageTaskDetailPo.setSuccessTime(null);
-                    list.add(messageTaskDetailPo);
-                }
-            }
+    public void validateChannelAccountParamValue(Map<String, Object> channelAccountParamsValueMap) {
+        if (!channelAccountParamsValueMap.containsKey("username")) {
+            ExceptionUtil.castServiceException(CHANNEL_EMAIL_PROPERTY_NOT_CONFIG, "username");
         }
-        return HandlerResult.builder().successCount(successCount).list(list).build();
+        if (!channelAccountParamsValueMap.containsKey("host")) {
+            ExceptionUtil.castServiceException(CHANNEL_EMAIL_PROPERTY_NOT_CONFIG, "host");
+        }
+        if (!channelAccountParamsValueMap.containsKey("password")) {
+            ExceptionUtil.castServiceException(CHANNEL_EMAIL_PROPERTY_NOT_CONFIG, "password");
+        }
+        if (!channelAccountParamsValueMap.containsKey("port")) {
+            ExceptionUtil.castServiceException(CHANNEL_EMAIL_PROPERTY_NOT_CONFIG, "port");
+        }
     }
+
+    @Override
+    protected void initChannelSendClient() {
+        javaMailSender = getJavaMailSender();
+    }
+
+    @Override
+    protected SingeSendMessageResult doSendMessage(String receiver, MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) {
+        SingeSendMessageResult singeSendMessageResult = new SingeSendMessageResult();
+        singeSendMessageResult.setReceiver(receiver);
+        singeSendMessageResult.setExecTime(LocalDateTime.now());
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(javaMailSender.getUsername());
+        message.setTo(receiver);
+        String realMessageCount = getRealMessageCount();
+        if (!JSON.isValid(realMessageCount)){
+            singeSendMessageResult.setSuccess(false);
+            singeSendMessageResult.setFailMsg("消息模板格式不正确，非json格式:" + realMessageCount);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(realMessageCount);
+        message.setSubject(jsonObject.getString("subject"));
+        message.setText(jsonObject.getString("content"));
+        try {
+            javaMailSender.send(message);
+            singeSendMessageResult.setSuccess(true);
+            singeSendMessageResult.setSuccessTime(LocalDateTime.now());
+        } catch (Exception e) {
+            log.error("发送邮件失败:{}", e.getMessage());
+            singeSendMessageResult.setSuccess(false);
+            singeSendMessageResult.setFailMsg(e.getMessage());
+        }
+        return singeSendMessageResult;
+    }
+
 
     @Override
     public String channelCode() {
@@ -90,5 +88,20 @@ public class EmailMessageHandler extends AbstractHandler {
     @Override
     public boolean needRateLimit() {
         return true;
+    }
+
+
+    private JavaMailSenderImpl getJavaMailSender() {
+        Map<String, Object> channelAccountParamsValue = getChannelAccountParamsValue();
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setUsername(channelAccountParamsValue.get("username").toString());
+        mailSender.setHost(channelAccountParamsValue.get("host").toString());
+        mailSender.setPort((int) channelAccountParamsValue.get("port"));
+        mailSender.setPassword(channelAccountParamsValue.get("password").toString());
+        Properties properties = mailSender.getJavaMailProperties();
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", true);
+        properties.put("mail.smtp.starttls.enable", true);
+        return mailSender;
     }
 }

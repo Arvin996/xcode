@@ -40,10 +40,4 @@ public class ConsumeMessageService {
         threadPoolExecutorHolder.routeThreadPool(messageTask.getSendType())
                 .execute(sendMessageTask);
     }
-
-    public void consumeWithDrawMessage(Integer taskDetailId) {
-        MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
-        String code = messageTaskService.getById(messageTaskDetailPo.getTaskId()).getSendType();
-        messageHandlerHolder.routeHandler(code).withDrawMessage(Collections.singletonList(taskDetailId));
-    }
 }

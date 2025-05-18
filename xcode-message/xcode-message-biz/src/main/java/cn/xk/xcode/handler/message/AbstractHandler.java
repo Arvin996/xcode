@@ -4,18 +4,20 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.balance.core.ILoadBalancer;
+import cn.xk.xcode.core.ThreadPoolExecutorHolder;
 import cn.xk.xcode.entity.po.*;
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.*;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.limit.RateLimiterHolder;
-import cn.xk.xcode.mq.XxlMqTemplate;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.CsvCountUtil;
 import cn.xk.xcode.utils.collections.CollectionUtil;
+import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.MessageDeliveryMode;
@@ -29,14 +31,17 @@ import javax.annotation.Resource;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static cn.xk.xcode.config.GlobalMessageConstants.*;
 import static cn.xk.xcode.config.RabbitMqConfiguration.*;
-import static cn.xk.xcode.entity.def.MessageChannelAccountTableDef.MESSAGE_CHANNEL_ACCOUNT_PO;
-import static cn.xk.xcode.entity.def.MessageChannelTableDef.MESSAGE_CHANNEL_PO;
-import static cn.xk.xcode.entity.def.MessageTemplateParamsTableDef.MESSAGE_TEMPLATE_PARAMS_PO;
+import static cn.xk.xcode.entity.def.MessageChannelAccountTableDef.MESSAGE_CHANNEL_ACCOUNT;
+import static cn.xk.xcode.entity.def.MessageChannelTableDef.MESSAGE_CHANNEL;
+import static cn.xk.xcode.entity.def.MessageTemplateParamsTableDef.MESSAGE_TEMPLATE_PARAMS;
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.TOO_MANY_REQUESTS;
 
 /**
@@ -47,6 +52,8 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.TOO_MANY_REQUESTS;
  **/
 @Slf4j
 public abstract class AbstractHandler implements IHandler {
+
+    private final static int WAIT_TIME = 3;
 
     @Resource
     private SensitiveWordBs sensitiveWordBs;
@@ -64,7 +71,7 @@ public abstract class AbstractHandler implements IHandler {
     private MessageTemplateParamsService messageTemplateParamsService;
 
     @Resource
-    private XxlMqTemplate xxlMqTemplate;
+    private MessageChannelParamService messageChannelParamService;
 
     @Resource
     private RabbitTemplate rabbitTemplate;
@@ -84,6 +91,17 @@ public abstract class AbstractHandler implements IHandler {
     @Resource
     private MessageTaskService messageTaskService;
 
+    @Resource
+    private ThreadPoolExecutorHolder threadPoolExecutorHolder;
+
+    private Map<String, Object> channelAccountParamsValueMap;
+
+    @Resource
+    protected StringRedisTemplate stringRedisTemplate;
+
+    @Getter
+    private String realMessageCount;
+
     @Override
     public void sendMessage(MessageTask messageTask) {
         // 1. 敏感词过滤
@@ -91,6 +109,8 @@ public abstract class AbstractHandler implements IHandler {
         if (sensitiveWordBs.contains(content)) {
             ExceptionUtil.castServerException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
         }
+        realMessageCount = content;
+        convertReceivers(messageTask);
         // 2. 屏蔽
         handleShield(messageTask);
         // 3. 负载均衡
@@ -98,20 +118,26 @@ public abstract class AbstractHandler implements IHandler {
         if (Objects.isNull(messageChannelAccountPo)) {
             ExceptionUtil.castServerException(MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, messageTask.getSendType());
         }
-        convertReceivers(messageTask);
         // 4. 限流
         if (needRateLimit()) {
             if (!rateLimiterHolder.getRateLimiter().rateLimit(messageTask)) {
                 ExceptionUtil.castServerException(TOO_MANY_REQUESTS);
             }
         }
+        // 5. 验证参数
+        validateChannelAccountParamValue(getChannelAccountParamsValue(messageChannelAccountPo));
         MessageTaskPo messageTaskPo = new MessageTaskPo();
         BeanUtil.copyProperties(messageTask, messageTaskPo);
-        messageTaskPo.setClientId(messageChannelAccountPo.getId());
+        messageTaskPo.setAccountId(messageChannelAccountPo.getId());
         messageTaskService.save(messageTaskPo);
         messageTask.setId(messageTaskPo.getId());
         // 5. 发消息
-        HandlerResult result = doSendMessage(messageTask, messageChannelAccountPo);
+        HandlerResult result = null;
+        try {
+            result = doSendMessage(messageTask, messageChannelAccountPo);
+        } catch (InterruptedException e) {
+            log.error("发送消息超时,{}", e.getMessage());
+        }
         if (Objects.isNull(result)) {
             return;
         }
@@ -135,11 +161,14 @@ public abstract class AbstractHandler implements IHandler {
         messageTaskDetailService.saveBatch(list);
     }
 
+    public abstract void validateChannelAccountParamValue(Map<String, Object> channelAccountParamsValueMap);
+
 
     private void convertReceivers(MessageTask messageTask) {
         String receiverType = messageTask.getReceiverType();
         if (ReceiverTypeEnum.isCsv(receiverType)) {
             Set<String> set = new HashSet<>();
+            // todo 对接minio 上传csv文件
             CsvCountUtil.handleCsv(messageTask.getReceivers(), row -> {
                 set.add(row.get(0));
             });
@@ -150,21 +179,71 @@ public abstract class AbstractHandler implements IHandler {
         }
     }
 
-    public abstract HandlerResult doSendMessage(MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo);
+    public HandlerResult doSendMessage(MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) throws InterruptedException {
+        HandlerResult handlerResult = new HandlerResult();
+        initChannelSendClient();
+        ExecutorService executorService = threadPoolExecutorHolder.routeThreadPool(channelCode());
+        Set<String> receiverSet = messageTask.getReceiverSet();
+        CountDownLatch countDownLatch = new CountDownLatch(receiverSet.size());
+        CopyOnWriteArrayList<SingeSendMessageResult> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
+        receiverSet.forEach(receiver -> {
+            try {
+                executorService.execute(() -> {
+                    //  这里执行真正发消息的逻辑
+                    SingeSendMessageResult singeSendMessageResult = doSendMessage(receiver, messageTask, messageChannelAccountPo);
+                    copyOnWriteArrayList.add(singeSendMessageResult);
+                });
+            } catch (Exception e) {
+                log.error("发送消息失败,{}", e.getMessage());
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+        countDownLatch.await(WAIT_TIME, TimeUnit.MINUTES);
+        int successCount = 0;
+        List<MessageTaskDetailPo> list = new ArrayList<>();
+        for (SingeSendMessageResult singeSendMessageResult : copyOnWriteArrayList) {
+            MessageTaskDetailPo messageTaskDetailPo = new MessageTaskDetailPo();
+            messageTaskDetailPo.setTaskId(messageTask.getId());
+            messageTaskDetailPo.setReceiver(singeSendMessageResult.getReceiver());
+            messageTaskDetailPo.setExecTime(singeSendMessageResult.getExecTime());
+            messageTaskDetailPo.setRetryTimes(0);
+            if (singeSendMessageResult.isSuccess()) {
+                successCount++;
+                messageTaskDetailPo.setStatus("0");
+                messageTaskDetailPo.setFailMsg(singeSendMessageResult.getFailMsg());
+            } else {
+                messageTaskDetailPo.setStatus("1");
+                messageTaskDetailPo.setSuccessTime(singeSendMessageResult.getSuccessTime());
+            }
+            list.add(messageTaskDetailPo);
+
+        }
+        handlerResult.setSuccessCount(successCount);
+        handlerResult.setList(list);
+        return handlerResult;
+    }
+
+    protected abstract void initChannelSendClient();
+
+    protected abstract SingeSendMessageResult doSendMessage(String receiver, MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo);
 
     public MessageChannelAccountPo handleLoadBalance(MessageTask messageTask) {
-        MessageChannelPo messageChannelPo = messageChannelService.getOne(MESSAGE_CHANNEL_PO.CODE.eq(messageTask.getSendType()));
+        MessageChannelPo messageChannelPo = messageChannelService.getOne(MESSAGE_CHANNEL.CODE.eq(messageTask.getSendType()));
         if (Objects.isNull(messageChannelPo)) {
-            ExceptionUtil.castServerException(MESSAGE_CHANNEL_NOT_EXISTS, messageTask.getSendType());
+            ExceptionUtil.castServerException(CHANNEL_NOT_EXISTS);
         }
         String supportLoadBalance = messageChannelPo.getSupportLoadBalance();
         if ("1".equals(supportLoadBalance)) {
             // 不支持负载 必然有对应的id
-            Integer clientId = messageTask.getClientId();
-            return messageChannelAccountService.getById(clientId);
+            Integer accountId = messageTask.getAccountId();
+            if (ObjectUtil.isNull(accountId)) {
+                ExceptionUtil.castServiceException(MESSAGE_TASK_ACCOUNT_NOT_DEFINED);
+            }
+            return messageChannelAccountService.getById(accountId);
         } else {
             // 支持负载均衡
-            List<MessageChannelAccountPo> messageChannelAccountPoList = messageChannelAccountService.list(MESSAGE_CHANNEL_ACCOUNT_PO.CHANNEL_CODE.eq(messageTask.getSendType()));
+            List<MessageChannelAccountPo> messageChannelAccountPoList = messageChannelAccountService.list(MESSAGE_CHANNEL_ACCOUNT.CHANNEL_ID.eq(messageChannelPo.getCode()));
             MessageChannelAccountPo channelAccountPo = loadBalancer.choose(messageChannelAccountPoList);
             if (Objects.nonNull(channelAccountPo)) {
                 messageTask.setClientId(channelAccountPo.getId());
@@ -262,11 +341,12 @@ public abstract class AbstractHandler implements IHandler {
             if (Objects.isNull(messageTemplatePo)) {
                 ExceptionUtil.castServerException(MESSAGE_TEMPLATE_NOT_EXISTS, messageTask.getTemplateId());
             }
+            messageTask.setThirdTemplateId(messageTemplatePo.getTemplateId());
             String content = messageTemplatePo.getContent();
             if (!StringUtils.hasLength(content)) {
                 ExceptionUtil.castServerException(MESSAGE_TEMPLATE_CONTENT_NOT_DEFINED, messageTask.getTemplateId());
             }
-            List<MessageTemplateParamsPo> templateParamsPoList = messageTemplateParamsService.list(MESSAGE_TEMPLATE_PARAMS_PO.TEMPLATE_ID.eq(messageTask.getTemplateId()));
+            List<MessageTemplateParamsPo> templateParamsPoList = messageTemplateParamsService.list(MESSAGE_TEMPLATE_PARAMS.TEMPLATE_ID.eq(messageTask.getTemplateId()));
             String contentValueParams = messageTask.getContentValueParams();
             if (CollectionUtil.isEmpty(templateParamsPoList)) {
                 return content;
@@ -346,6 +426,15 @@ public abstract class AbstractHandler implements IHandler {
     @Override
     public List<WithdrawResult> doWithDrawMessage(List<Integer> messageTaskDetailIds) {
         throw new UnsupportedOperationException("渠道" + channelCode() + "不支持撤回");
+    }
+
+    private Map<String, Object> getChannelAccountParamsValue(MessageChannelAccountPo messageChannelAccountPo) {
+        channelAccountParamsValueMap = messageChannelParamService.getChannelParamsAndValueForAccount(messageChannelAccountPo.getId());
+        return channelAccountParamsValueMap;
+    }
+
+    protected Map<String, Object> getChannelAccountParamsValue() {
+        return channelAccountParamsValueMap;
     }
 
 }

@@ -27,6 +27,7 @@ public class MessageChannelUrlConstant {
     public static final String DING_DING_UPLOAD_URL = "https://oapi.dingtalk.com/media/upload";
     public static final String DING_DING_TOKEN_URL = "https://oapi.dingtalk.com/gettoken";
     // =======================以上直接作废 以下开始
+    public static final String WX_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
     /**
      * 钉钉 webhook相关url
@@ -42,12 +43,9 @@ public class MessageChannelUrlConstant {
      * 微信小程序相关url
      */
     public static final String WX_MINI_PROGRAM_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=%s";
-    public static final String WX_MINI_PROGRAM_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
-
     /**
      * 微信公众号相关url
      */
     public static final String WX_OFFICIAL_ACCOUNT_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
-    public static final String WX_OFFICIAL_ACCOUNT_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
 }

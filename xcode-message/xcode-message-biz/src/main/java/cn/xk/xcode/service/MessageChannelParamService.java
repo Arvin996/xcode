@@ -5,6 +5,8 @@ import cn.xk.xcode.entity.dto.param.UpdateMessageChannelParamDto;
 import cn.xk.xcode.entity.po.MessageChannelParamPo;
 import com.mybatisflex.core.service.IService;
 
+import java.util.Map;
+
 /**
  * 服务层。
  *
@@ -18,4 +20,6 @@ public interface MessageChannelParamService extends IService<MessageChannelParam
     Boolean delMessageChannelParam(Integer id);
 
     Boolean updateMessageChannelParam(UpdateMessageChannelParamDto updateMessageChannelParamDto);
+
+    Map<String, Object> getChannelParamsAndValueForAccount(Integer accountId);
 }

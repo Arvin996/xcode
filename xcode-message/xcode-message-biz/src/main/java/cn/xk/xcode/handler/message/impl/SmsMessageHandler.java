@@ -3,15 +3,25 @@ package cn.xk.xcode.handler.message.impl;
 import cn.xk.xcode.core.annotation.Handler;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import cn.xk.xcode.entity.discard.task.MessageTask;
-import cn.xk.xcode.enums.ChannelTypeEnum;
+import cn.xk.xcode.enums.MessageChannelEnum;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.handler.message.AbstractHandler;
-import cn.xk.xcode.handler.message.HandlerResult;
-import cn.xk.xcode.service.sms.ISmsService;
-import cn.xk.xcode.service.sms.SmsPlatEnum;
-import cn.xk.xcode.service.sms.SmsReqDto;
-import cn.xk.xcode.service.sms.SmsServiceHolder;
+import cn.xk.xcode.handler.message.SingeSendMessageResult;
+import com.alibaba.fastjson2.JSON;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static cn.xk.xcode.config.GlobalMessageConstants.CHANNEL_ALIYUN_SMS_PROPERTY_NOT_CONFIG;
 
 /**
  * @Author xuk
@@ -20,30 +30,75 @@ import javax.annotation.Resource;
  * @Description SmsMessageHandler
  **/
 @Handler
+@Slf4j
 public class SmsMessageHandler extends AbstractHandler {
 
-    @Resource
-    private SmsServiceHolder smsServiceHolder;
-
-    @Override
-    public HandlerResult doSendMessage(MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) {
-        ISmsService smsService = smsServiceHolder.getSmsService(SmsPlatEnum.getByName(messageChannelAccountPo.getAccountName()));
-        return smsService.sendMessage(SmsReqDto
-                .builder()
-                .accountId(messageChannelAccountPo.getId())
-                .phones(messageTask.getReceiverSet())
-                .content(messageTask.getMessageContent())
-                .taskId(messageTask.getId())
-                .build());
-    }
+    private DefaultProfile defaultProfile;
 
     @Override
     public String channelCode() {
-        return ChannelTypeEnum.SMS.getCode();
+        return MessageChannelEnum.ALIYUN_SMS.getCode();
     }
 
     @Override
     public boolean needRateLimit() {
         return true;
+    }
+
+    @Override
+    public void validateChannelAccountParamValue(Map<String, Object> channelAccountParamsValueMap) {
+        if (!channelAccountParamsValueMap.containsKey("signName")) {
+            ExceptionUtil.castServiceException(CHANNEL_ALIYUN_SMS_PROPERTY_NOT_CONFIG, "signName");
+        }
+        if (!channelAccountParamsValueMap.containsKey("accessKeyId")) {
+            ExceptionUtil.castServiceException(CHANNEL_ALIYUN_SMS_PROPERTY_NOT_CONFIG, "accessKeyId");
+        }
+        if (!channelAccountParamsValueMap.containsKey("secret")) {
+            ExceptionUtil.castServiceException(CHANNEL_ALIYUN_SMS_PROPERTY_NOT_CONFIG, "secret");
+        }
+        if (!channelAccountParamsValueMap.containsKey("regionId")) {
+            ExceptionUtil.castServiceException(CHANNEL_ALIYUN_SMS_PROPERTY_NOT_CONFIG, "regionId");
+        }
+    }
+
+    @Override
+    protected void initChannelSendClient() {
+        Map<String, Object> channelAccountParamsValue = getChannelAccountParamsValue();
+        defaultProfile = DefaultProfile.getProfile(channelAccountParamsValue.get("regionId").toString(), channelAccountParamsValue.get("accessKeyId").toString(), channelAccountParamsValue.get("secret").toString());
+    }
+
+    @Override
+    protected SingeSendMessageResult doSendMessage(String receiver, MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) {
+        SingeSendMessageResult singeSendMessageResult = new SingeSendMessageResult();
+        singeSendMessageResult.setExecTime(LocalDateTime.now());
+        IAcsClient client = new DefaultAcsClient(defaultProfile);
+        SendSmsRequest request = new SendSmsRequest();
+        request.setSysRegionId(defaultProfile.getRegionId());
+        request.setPhoneNumbers(receiver);
+        request.setSignName(getChannelAccountParamsValue().get("signName").toString());
+        request.setSysMethod(MethodType.POST);
+        request.setTemplateCode(messageTask.getThirdTemplateId());
+        request.setTemplateParam(messageTask.getContentValueParams());
+        try {
+            singeSendMessageResult.setReceiver(receiver);
+            SendSmsResponse sendSmsResponse = client.getAcsResponse(request);
+            if ((sendSmsResponse.getCode() != null) && (sendSmsResponse.getCode().equals("OK"))) {
+                singeSendMessageResult.setSuccess(true);
+                singeSendMessageResult.setSuccessTime(LocalDateTime.now());
+            } else {
+                singeSendMessageResult.setSuccess(false);
+                Map<String, Object> map = new HashMap<>();
+                map.put("code", sendSmsResponse.getCode());
+                map.put("message", sendSmsResponse.getMessage());
+                map.put("requestId", sendSmsResponse.getRequestId());
+                map.put("bizId", sendSmsResponse.getBizId());
+                singeSendMessageResult.setFailMsg(JSON.toJSONString(map));
+            }
+        } catch (ClientException e) {
+            singeSendMessageResult.setFailMsg(e.getMessage());
+            singeSendMessageResult.setSuccess(false);
+            log.error("发送短信失败:{}", e.getMessage());
+        }
+        return singeSendMessageResult;
     }
 }

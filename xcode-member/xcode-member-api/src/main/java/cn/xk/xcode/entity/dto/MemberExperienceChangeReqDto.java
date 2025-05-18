@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Schema(description = "用户会员经验变化dto")
 public class MemberExperienceChangeReqDto extends MemberBaseReqDto{
 

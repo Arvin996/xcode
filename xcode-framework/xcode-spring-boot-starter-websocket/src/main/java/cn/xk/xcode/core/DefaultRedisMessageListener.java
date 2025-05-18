@@ -26,10 +26,6 @@ public class DefaultRedisMessageListener extends AbstractRedisMessageListener {
 
     @Override
     public void onMessage(MessageEntity messageEntity) {
-        if (messageEntity.isToPushAll()){
-            webSocketMessageHandler.sendMessageToAllUser(messageEntity);
-        }else {
-            webSocketMessageHandler.sendMessage(messageEntity);
-        }
+        webSocketMessageHandler.sendMessage(messageEntity);
     }
 }

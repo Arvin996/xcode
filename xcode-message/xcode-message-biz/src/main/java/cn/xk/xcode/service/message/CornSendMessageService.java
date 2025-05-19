@@ -28,7 +28,6 @@ import static cn.xk.xcode.config.GlobalMessageConstants.*;
 public class CornSendMessageService extends AbstractSendMessageService {
 
     private final RegisterCsvCornTaskService registerCsvCornTaskService;
-    private final MessageTaskService messageTaskService;
 
     public CornSendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService,
                                   MessageTemplateParamsService messageTemplateParamsService,
@@ -37,9 +36,8 @@ public class CornSendMessageService extends AbstractSendMessageService {
                                   MessageTaskService messageTaskService,
                                   MessageChannelAccessClientService messageChannelAccessClientService,
                                   MessageChannelAccountService messageChannelAccountService) {
-        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService);
+        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
         this.registerCsvCornTaskService = registerCsvCornTaskService;
-        this.messageTaskService = messageTaskService;
     }
 
     @Override
@@ -57,8 +55,7 @@ public class CornSendMessageService extends AbstractSendMessageService {
         if (!CronExpression.isValidExpression(corn)) {
             return CommonResult.error(CORN_MESSAGE_TASK_EXPRESSION_INVALID, corn);
         }
-        MessageTaskPo messageTaskPo = BeanUtil.toBean(messageTask, MessageTaskPo.class);
-        messageTaskService.save(messageTaskPo);
+        MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
         try {
             return registerCsvCornTaskService.registerReceiversCronTask(messageTaskPo);
         } catch (NoSuchMethodException e) {

@@ -29,10 +29,10 @@ public class SendMessageController {
     @Operation(summary = "发送消息")
     @PostMapping("/sendMessage")
     public CommonResult<?> sendMessage(@Validated @RequestBody MessageTask messageTask) {
-        return sendMessageServiceHolder.routeSendMessageService(messageTask.getSendType()).sendMessage(messageTask);
+        return sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgChannel()).sendMessage(messageTask);
     }
 
-    @Operation(summary = "取消消息发送 仅针对延时消息")
+    @Operation(summary = "取消消息发送 仅针对延时消息 或者是屏蔽的消息")
     @GetMapping("/cancelMessage/{taskId}")
     public CommonResult<Boolean> cancelMessage(@PathVariable("taskId") Integer taskId) {
         return CommonResult.success(messageTaskService.cancelMessage(taskId));

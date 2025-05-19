@@ -55,7 +55,7 @@ public interface GlobalMessageConstants {
     ErrorCode CORN_MESSAGE_TASK_EXPRESSION_INVALID = new IntErrorCode(4003_1_530, "定时消息任务corn表达式{}不合法");
     ErrorCode CORN_TASK_SUBMIT_FAILED = new IntErrorCode(4003_1_531, "定时消息任务提交失败,失败信息：{}");
     ErrorCode MESSAGE_TASK_NOT_EXISTS = new IntErrorCode(4003_1_532, "消息任务不存在");
-    ErrorCode ONLY_DELAY_TASK_SUPPORTS_CANCEL = new IntErrorCode(4003_1_533, "仅延时消息任务支持取消");
+    ErrorCode THIS_MESSAGE_TASK_NOT_SUPPORTS_CANCEL = new IntErrorCode(4003_1_533, "此任务不支持取消");
     ErrorCode DELAY_TASK_NOT_WAITING = new IntErrorCode(4003_1_534, "延时消息任务已执行，取消任务失败");
     ErrorCode ONLY_CORN_TASK_SUPPORTS_PAUSE = new IntErrorCode(4003_1_535, "仅定时消息任务支持暂停");
     ErrorCode MESSAGE_TASK_DETAIL_NOT_EXISTS = new IntErrorCode(4003_1_536, "消息任务详情不存在");
@@ -68,6 +68,7 @@ public interface GlobalMessageConstants {
     ErrorCode CLIENT_ACCESS_COUNT_IS_NOT_ENOUGH =  new IntErrorCode(4003_1_543, "接入商配额不足");
     ErrorCode CLIENT_NOT_HAS_THIS_CHANNEL_PERMISSION =  new IntErrorCode(4003_1_544, "接入商没有此渠道的权限");
     ErrorCode PLAIN_TEXT_MESSAGE_MUST_NOT_EMPTY =  new IntErrorCode(4003_1_545, "纯文本消息的消息内容不能为空");
+    ErrorCode SHIELD_TASK_NOT_WAITING =  new IntErrorCode(4003_1_546, "屏蔽消息任务已执行，取消任务失败");
 
     String XXL_THREAD_POOL_NAME = "execute-xxl-thread-pool";
     int MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME = 24 * 60 * 40 * 30; // 一个月

@@ -11,6 +11,7 @@ import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.CsvCountUtil;
 import cn.xk.xcode.utils.collections.CollectionUtil;
+import cn.xk.xcode.utils.object.BeanUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -67,6 +68,8 @@ public abstract class AbstractSendMessageService {
 
     private final MessageChannelAccountService messageChannelAccountService;
 
+    protected final MessageTaskService messageTaskService;
+
 
     public CommonResult<?> sendMessage(MessageTask messageTask) {
         // 铭感词过滤
@@ -88,6 +91,9 @@ public abstract class AbstractSendMessageService {
         MessageChannelAccessClientPo messageChannelAccessClientPo = messageChannelAccessClientService.getOne(MESSAGE_CHANNEL_ACCESS_CLIENT.ACCESS_TOKEN.eq(messageTask.getClientAccessToken()));
         messageChannelAccessClientService.validateClient(messageChannelAccessClientPo, messageTask.getReceiverSet().size());
         messageTask.setClientId(messageChannelAccessClientPo.getId());
+        MessageTaskPo messageTaskPo = BeanUtil.toBean(messageTask, MessageTaskPo.class);
+        messageTaskService.save(messageTaskPo);
+        messageTask.setId(messageTaskPo.getId());
         // 2. 屏蔽
         boolean b = handleShield(messageTask);
         if (b) {

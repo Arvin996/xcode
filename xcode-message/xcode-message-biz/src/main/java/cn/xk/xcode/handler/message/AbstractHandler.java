@@ -97,11 +97,9 @@ public abstract class AbstractHandler implements IHandler {
         }
         // 3. 验证参数
         validateChannelAccountParamValue(getChannelAccountParamsValue(messageChannelAccountPo));
-        MessageTaskPo messageTaskPo = new MessageTaskPo();
-        BeanUtil.copyProperties(messageTask, messageTaskPo);
+        MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
         messageTaskPo.setAccountId(messageChannelAccountPo.getId());
-        messageTaskService.save(messageTaskPo);
-        messageTask.setId(messageTaskPo.getId());
+        messageTaskService.updateById(messageTaskPo);
         // 5. 发消息
         HandlerResult result = null;
         try {

@@ -30,7 +30,6 @@ import static cn.xk.xcode.config.RabbitMqConfiguration.*;
 @Service
 public class DelaySendMessageService extends AbstractSendMessageService {
 
-    private final MessageTaskService messageTaskService;
 
     public DelaySendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService,
                                    MessageTemplateParamsService messageTemplateParamsService,
@@ -38,8 +37,7 @@ public class DelaySendMessageService extends AbstractSendMessageService {
                                    MessageTaskService messageTaskService,
                                    MessageChannelAccessClientService messageChannelAccessClientService,
                                    MessageChannelAccountService messageChannelAccountService) {
-        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService);
-        this.messageTaskService = messageTaskService;
+        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
     }
 
     @Override
@@ -56,9 +54,6 @@ public class DelaySendMessageService extends AbstractSendMessageService {
         if (scheduleTime.isBefore(LocalDateTime.now())) {
             return CommonResult.error(DEALY_MESSAGE_TASK_SCHEDULE_TIME_MUST_NOT_BEFORE_NOW);
         }
-        MessageTaskPo messageTaskPo = BeanUtil.toBean(messageTask, MessageTaskPo.class);
-        messageTaskService.save(messageTaskPo);
-        messageTask.setId(messageTaskPo.getId());
         rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, DELAY_MESSAGE_BINDING_KEY, JSON.toJSONString(messageTask), message -> {
             // 单位毫秒 计算出现在到明天早上9点的毫秒数
             message.getMessageProperties().setDelay((int) LocalDateTimeUtil.between(LocalDateTime.now(), scheduleTime).toMillis());

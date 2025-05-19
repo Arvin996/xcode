@@ -24,7 +24,7 @@ public class SendMessageServiceHolder {
         sendMessageServices.forEach(sendMessageService -> sendMessageServiceMap.put(sendMessageService.sendType(), sendMessageService));
     }
 
-    public AbstractSendMessageService routeSendMessageService(String sendType) {
-        return sendMessageServiceMap.get(sendType);
+    public AbstractSendMessageService routeSendMessageService(String msgChannel) {
+        return sendMessageServiceMap.get(msgChannel);
     }
 }

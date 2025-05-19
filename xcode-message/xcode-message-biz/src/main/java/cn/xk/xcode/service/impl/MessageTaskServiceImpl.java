@@ -11,6 +11,7 @@ import cn.xk.xcode.entity.vo.task.MessageTaskDetailVo;
 import cn.xk.xcode.entity.vo.task.MessageTaskVo;
 import cn.xk.xcode.enums.MessageSendType;
 import cn.xk.xcode.enums.MessageTaskStatusEnum;
+import cn.xk.xcode.enums.ShieldType;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.mapper.MessageTaskMapper;
 import cn.xk.xcode.pojo.CommonResult;
@@ -100,10 +101,19 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
             ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
         }
         MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
-        if (!MessageSendType.DELAY.getCode().equals(messageChannelPo.getCode())) {
-            ExceptionUtil.castServiceException(ONLY_DELAY_TASK_SUPPORTS_CANCEL);
+        if (MessageSendType.CORN.getCode().equals(messageChannelPo.getCode())) {
+            ExceptionUtil.castServiceException(THIS_MESSAGE_TASK_NOT_SUPPORTS_CANCEL);
         }
-        String status = messageChannelPo.getStatus();
+        String status = messageTaskPo.getStatus();
+        if (MessageSendType.NOW.getCode().equals(messageChannelPo.getCode())) {
+            if (ShieldType.NIGHT_NO_SHIELD.getCode().equals(messageTaskPo.getShieldType())){
+                ExceptionUtil.castServiceException(THIS_MESSAGE_TASK_NOT_SUPPORTS_CANCEL);
+            }else {
+                if (!MessageTaskStatusEnum.WAITING.getStatus().equals(status)) {
+                    ExceptionUtil.castServiceException(SHIELD_TASK_NOT_WAITING);
+                }
+            }
+        }
         if (!MessageTaskStatusEnum.WAITING.getStatus().equals(status)) {
             ExceptionUtil.castServiceException(DELAY_TASK_NOT_WAITING);
         }
@@ -118,7 +128,7 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
             ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
         }
         MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
-        if (MessageSendType.CORN.getCode().equals(messageChannelPo.getCode())) {
+        if (!MessageSendType.CORN.getCode().equals(messageChannelPo.getCode())) {
             ExceptionUtil.castServiceException(ONLY_CORN_TASK_SUPPORTS_PAUSE);
         }
         // 暂停任务 调用xxl-job暂停任务接口

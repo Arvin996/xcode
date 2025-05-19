@@ -1,4 +1,4 @@
-package cn.xk.xcode.mq.customer;
+package cn.xk.xcode.consumer;
 
 import cn.xk.xcode.config.RabbitMqConfiguration;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -67,12 +67,12 @@ public class SystemUserTableDef extends TableDef {
     /**
      * ding_talk_webhook_sign
      */
-    public final QueryColumn DING_TALK_WEBHOOK_SIGN = new QueryColumn(this, "ding_talk_webhook_sign");
+    public final QueryColumn DING_TALK_WEBHOOK_SECRET = new QueryColumn(this, "ding_talk_webhook_secret");
 
     /**
      * feishu_webhook_sign
      */
-    public final QueryColumn FEISHU_WEBHOOK_SIGN = new QueryColumn(this, "feishu_webhook_sign");
+    public final QueryColumn FEISHU_WEBHOOK_SECRET = new QueryColumn(this, "feishu_webhook_secret");
 
     /**
      * 账号状态 0正常 1停用
@@ -137,7 +137,7 @@ public class SystemUserTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ROLE_ID, USERNAME, PASSWORD, NICKNAME, SEX, AGE, MOBILE, EMAIL, DING_TALK_WEBHOOK_SIGN, FEISHU_WEBHOOK_SIGN, DING_TALK_WEBHOOK_TOKEN, FEISHU_WEBHOOK_TOKEN, AVATAR, STATUS, LAST_LOGIN_IP, LAST_LOGIN_TIME, IS_DELETED, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ROLE_ID, USERNAME, PASSWORD, NICKNAME, SEX, AGE, MOBILE, EMAIL, DING_TALK_WEBHOOK_SECRET, FEISHU_WEBHOOK_SECRET, DING_TALK_WEBHOOK_TOKEN, FEISHU_WEBHOOK_TOKEN, AVATAR, STATUS, LAST_LOGIN_IP, LAST_LOGIN_TIME, IS_DELETED, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER};
 
     public SystemUserTableDef() {
         super("", "system_user");

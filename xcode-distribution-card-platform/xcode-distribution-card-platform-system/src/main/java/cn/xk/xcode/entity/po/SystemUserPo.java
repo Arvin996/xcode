@@ -82,8 +82,8 @@ public class SystemUserPo extends DataStringObjectBaseEntity implements Serializ
     /**
      * dingTalkWebhookSign 签名
      */
-    @Column("ding_talk_webhook_sign")
-    private String dingTalkWebhookSign;
+    @Column("ding_talk_webhook_secret")
+    private String dingTalkWebhookSecret;
 
 
     /**
@@ -95,8 +95,8 @@ public class SystemUserPo extends DataStringObjectBaseEntity implements Serializ
     /**
      * feiShuWebhookSign 签名
      */
-    @Column("feishu_webhook_sign")
-    private String feiShuWebhookSign;
+    @Column("feishu_webhook_secret")
+    private String feiShuWebhookSecret;
 
     /**
      * 头像

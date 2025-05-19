@@ -70,14 +70,14 @@ public class UpdateUserDto {
     private String feiShuWebhookToken;
 
     /**
-     * dingTalkWebhookSign
+     * dingTalkWebhookSecret
      */
-    @Schema(description = "dingTalkWebhookSign")
-    private String dingTalkWebhookSign;
+    @Schema(description = "dingTalkWebhookSign 钉钉机器人配置的签名密钥")
+    private String dingTalkWebhookSecret;
 
     /**
-     * feiShuWebhookSign
+     * feiShuWebhookSecret
      */
-    @Schema(description = "feiShuWebhookSign")
-    private String feiShuWebhookSign;
+    @Schema(description = "feiShuWebhookSecret 飞书机器人配置的签名密钥")
+    private String feiShuWebhookSecret;
 }

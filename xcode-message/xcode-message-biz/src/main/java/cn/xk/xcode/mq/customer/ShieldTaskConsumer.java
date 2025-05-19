@@ -1,11 +1,16 @@
 package cn.xk.xcode.mq.customer;
 
 import cn.xk.xcode.config.RabbitMqConfiguration;
+import cn.xk.xcode.handler.MessageHandlerHolder;
+import com.rabbitmq.client.Channel;
 import com.xxl.mq.client.consumer.IMqConsumer;
 import com.xxl.mq.client.consumer.MqResult;
 import com.xxl.mq.client.consumer.annotation.MqConsumer;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @Author xuk
@@ -16,8 +21,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShieldTaskConsumer{
 
+    @Resource
+    private MessageHandlerHolder messageHandlerHolder;
+
     @RabbitListener(queues = RabbitMqConfiguration.SHIELD_MESSAGE_QUEUE_NAME)
-    public void consumeShieldMessage(String message) {
-        System.out.println("receive message:" + message);
+    public void consumeShieldMessage(Message message, Channel channel) {
+
     }
 }

@@ -59,7 +59,7 @@ public class EmailMessageHandler extends AbstractHandler {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(javaMailSender.getUsername());
         message.setTo(receiver);
-        String realMessageCount = getRealMessageCount();
+        String realMessageCount = messageTask.getMessageContent();
         if (!JSON.isValid(realMessageCount)){
             singeSendMessageResult.setSuccess(false);
             singeSendMessageResult.setFailMsg("消息模板格式不正确，非json格式:" + realMessageCount);

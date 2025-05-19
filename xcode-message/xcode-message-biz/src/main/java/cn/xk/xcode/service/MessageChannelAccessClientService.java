@@ -31,4 +31,6 @@ public interface MessageChannelAccessClientService extends IService<MessageChann
     Boolean lockClient(Integer id);
 
     Boolean bindClientChannel(BindClientChannelDto bindClientChannelDto);
+
+    void validateClient(MessageChannelAccessClientPo messageChannelAccessClientPo, int count);
 }

@@ -6,7 +6,6 @@ import cn.xk.xcode.core.lazy.AbstractLazyTaskProcessor;
 import cn.xk.xcode.core.lazy.LazyTaskProcessorParamsBuilder;
 import cn.xk.xcode.entity.discard.message.BatchSendMessageRequest;
 import cn.xk.xcode.handler.csv.CsvReceiverEntity;
-import cn.xk.xcode.service.message.MessageService;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -29,9 +28,6 @@ import java.util.stream.Collectors;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CrowBatchHandleMessageProcessor extends AbstractLazyTaskProcessor<CsvReceiverEntity> {
-
-    @Resource(name = "messageServiceImpl")
-    private MessageService messageService;
 
     private static final Integer CROW_BATCH_QUEUE_SIZE = 100;
     private static final Integer CROW_BATCH_NUM_THRESHOLD = 100;
@@ -58,7 +54,5 @@ public class CrowBatchHandleMessageProcessor extends AbstractLazyTaskProcessor<C
         BatchSendMessageRequest request = new BatchSendMessageRequest();
         request.setMessageTaskId(taskRef.get(0).getTaskId());
         request.setReceivers(taskRef.stream().map(CsvReceiverEntity::getReceiver).collect(Collectors.toList()));
-    //    messageService.sendMessage()
-    //    messageService.batchSendMessage(request);
     }
 }

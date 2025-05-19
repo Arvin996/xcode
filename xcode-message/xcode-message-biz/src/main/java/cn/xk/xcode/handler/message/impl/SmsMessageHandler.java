@@ -77,7 +77,7 @@ public class SmsMessageHandler extends AbstractHandler {
         request.setPhoneNumbers(receiver);
         request.setSignName(getChannelAccountParamsValue().get("signName").toString());
         request.setSysMethod(MethodType.POST);
-        request.setTemplateCode(messageTask.getThirdTemplateId());
+        request.setTemplateCode(messageTask.getTemplateId());
         request.setTemplateParam(messageTask.getContentValueParams());
         try {
             singeSendMessageResult.setReceiver(receiver);

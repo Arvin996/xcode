@@ -20,4 +20,10 @@ public interface MessageTaskService extends IService<MessageTaskPo> {
     PageResult<MessageTaskVo> queryMessageTasks(QueryMessageTaskDto queryMessageTaskDto);
 
     PageResult<MessageTaskDetailVo> queryMessageTaskDetail(QueryMessageTaskDetailDto queryMessageTaskDetailDto);
+
+    Boolean cancelMessage(Integer taskId);
+
+    Boolean pauseMessage(Integer taskId);
+
+    Boolean resumeMessage(Integer taskId);
 }

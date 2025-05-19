@@ -14,6 +14,7 @@ import cn.xk.xcode.service.MessageTemplateParamsService;
 import cn.xk.xcode.service.MessageTemplateService;
 import cn.xk.xcode.utils.PageUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
+import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.github.pagehelper.PageInfo;
 import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
@@ -43,6 +44,9 @@ public class MessageTemplateServiceImpl extends ServiceImpl<MessageTemplateMappe
     @Resource
     private MessageTemplateMapper messageTemplateMapper;
 
+    @Resource
+    private SensitiveWordBs sensitiveWordBs;
+
     @Override
     public Boolean addMessageTemplate(AddMessageTemplateDto addMessageTemplateDto) {
         if (LogicDeleteManager.execWithoutLogicDelete(() -> exists(MESSAGE_TEMPLATE.TEMPLATE_ID.eq(addMessageTemplateDto.getTemplateId())))) {
@@ -50,6 +54,9 @@ public class MessageTemplateServiceImpl extends ServiceImpl<MessageTemplateMappe
         }
         if (LogicDeleteManager.execWithoutLogicDelete(() -> exists(MESSAGE_TEMPLATE.NAME.eq(addMessageTemplateDto.getName())))) {
             ExceptionUtil.castServiceException(MASSAGE_TEMPLATE_NAME_ALREADY_EXISTS, addMessageTemplateDto.getName());
+        }
+        if (sensitiveWordBs.contains(addMessageTemplateDto.getContent())){
+            ExceptionUtil.castServiceException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
         }
         return save(BeanUtil.toBean(addMessageTemplateDto, MessageTemplatePo.class));
     }
@@ -70,6 +77,9 @@ public class MessageTemplateServiceImpl extends ServiceImpl<MessageTemplateMappe
         if (LogicDeleteManager.execWithoutLogicDelete(() -> exists(MESSAGE_TEMPLATE.NAME.eq(updateMessageTemplateDto.getName())
                 .and(MESSAGE_TEMPLATE.ID.ne(updateMessageTemplateDto.getId()))))) {
             ExceptionUtil.castServiceException(MASSAGE_TEMPLATE_NAME_ALREADY_EXISTS, updateMessageTemplateDto.getName());
+        }
+        if (sensitiveWordBs.contains(updateMessageTemplateDto.getContent())){
+            ExceptionUtil.castServiceException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
         }
         return updateById(BeanUtil.toBean(updateMessageTemplateDto, MessageTemplatePo.class));
     }

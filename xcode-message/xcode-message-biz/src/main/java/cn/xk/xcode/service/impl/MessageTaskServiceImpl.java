@@ -1,15 +1,21 @@
 package cn.xk.xcode.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.xk.xcode.core.EnhanceXxlJobService;
 import cn.xk.xcode.entity.dto.task.QueryMessageTaskDetailDto;
 import cn.xk.xcode.entity.dto.task.QueryMessageTaskDto;
+import cn.xk.xcode.entity.po.MessageChannelPo;
 import cn.xk.xcode.entity.po.MessageTaskDetailPo;
 import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.entity.vo.task.MessageTaskDetailVo;
 import cn.xk.xcode.entity.vo.task.MessageTaskVo;
+import cn.xk.xcode.enums.MessageSendType;
+import cn.xk.xcode.enums.MessageTaskStatusEnum;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.mapper.MessageTaskMapper;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.PageResult;
+import cn.xk.xcode.service.MessageChannelService;
 import cn.xk.xcode.service.MessageTaskDetailService;
 import cn.xk.xcode.service.MessageTaskService;
 import cn.xk.xcode.utils.PageUtil;
@@ -21,6 +27,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.time.LocalDateTime;
+
+import static cn.xk.xcode.config.GlobalMessageConstants.*;
 import static cn.xk.xcode.entity.def.MessageChannelAccessClientTableDef.MESSAGE_CHANNEL_ACCESS_CLIENT;
 import static cn.xk.xcode.entity.def.MessageChannelAccountTableDef.MESSAGE_CHANNEL_ACCOUNT;
 import static cn.xk.xcode.entity.def.MessageChannelTableDef.MESSAGE_CHANNEL;
@@ -28,7 +37,7 @@ import static cn.xk.xcode.entity.def.MessageTaskDetailTableDef.MESSAGE_TASK_DETA
 import static cn.xk.xcode.entity.def.MessageTaskTableDef.MESSAGE_TASK;
 
 /**
- *  服务层实现。
+ * 服务层实现。
  *
  * @author Administrator
  * @since 2025-05-15
@@ -38,6 +47,12 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
 
     @Resource
     private MessageTaskDetailService messageTaskDetailService;
+
+    @Resource
+    private MessageChannelService messageChannelService;
+
+    @Resource
+    private EnhanceXxlJobService enhanceXxlJobService;
 
     @Override
     public PageResult<MessageTaskVo> queryMessageTasks(QueryMessageTaskDto queryMessageTaskDto) {
@@ -76,5 +91,66 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
         Page<MessageTaskDetailPo> flexPage = PageUtil.toFlexPage(queryMessageTaskDetailDto);
         Page<MessageTaskDetailPo> page = messageTaskDetailService.page(flexPage, queryWrapper);
         return PageUtil.toPageResult(page, MessageTaskDetailVo.class);
+    }
+
+    @Override
+    public Boolean cancelMessage(Integer taskId) {
+        MessageTaskPo messageTaskPo = this.getById(taskId);
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
+        if (!MessageSendType.DELAY.getCode().equals(messageChannelPo.getCode())) {
+            ExceptionUtil.castServiceException(ONLY_DELAY_TASK_SUPPORTS_CANCEL);
+        }
+        String status = messageChannelPo.getStatus();
+        if (!MessageTaskStatusEnum.WAITING.getStatus().equals(status)) {
+            ExceptionUtil.castServiceException(DELAY_TASK_NOT_WAITING);
+        }
+        messageTaskPo.setStatus(MessageTaskStatusEnum.CANCEL.getStatus());
+        return this.updateById(messageTaskPo);
+    }
+
+    @Override
+    public Boolean pauseMessage(Integer taskId) {
+        MessageTaskPo messageTaskPo = this.getById(taskId);
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
+        if (MessageSendType.CORN.getCode().equals(messageChannelPo.getCode())) {
+            ExceptionUtil.castServiceException(ONLY_CORN_TASK_SUPPORTS_PAUSE);
+        }
+        // 暂停任务 调用xxl-job暂停任务接口
+        Long taskCornId = messageTaskPo.getTaskCornId();
+        enhanceXxlJobService.stopXxlJob(Math.toIntExact(taskCornId));
+        messageTaskPo.setStatus(MessageTaskStatusEnum.PAUSE.getStatus());
+        return this.updateById(messageTaskPo);
+    }
+
+    @Override
+    public Boolean resumeMessage(Integer taskId) {
+        MessageTaskPo messageTaskPo = this.getById(taskId);
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
+        if (!MessageSendType.NOW.getCode().equals(messageChannelPo.getCode())) {
+            ExceptionUtil.castServiceException(NOW_TASK_NOT_SUPPORTS_RESUME);
+        }
+        if (MessageSendType.CORN.getCode().equals(messageChannelPo.getCode())) {
+            // 定时
+            messageTaskPo.setStatus(MessageTaskStatusEnum.WAITING.getStatus());
+            enhanceXxlJobService.startXxlJob(Math.toIntExact(messageTaskPo.getTaskCornId()));
+        } else {
+            // 延时
+            LocalDateTime scheduleTime = messageTaskPo.getScheduleTime();
+            if (LocalDateTime.now().isAfter(scheduleTime)) {
+                ExceptionUtil.castServiceException(DEALY_MESSAGE_TASK_SCHEDULE_TIME_ALREADY_PASS);
+            } else {
+                messageTaskPo.setStatus(MessageTaskStatusEnum.WAITING.getStatus());
+            }
+        }
+        return updateById(messageTaskPo);
     }
 }

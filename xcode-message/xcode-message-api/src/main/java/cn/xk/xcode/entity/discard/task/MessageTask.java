@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,8 +26,19 @@ public class MessageTask {
     /**
      * 接入商id
      */
-    @NotNull
     private Integer clientId;
+
+    /**
+     * 接入商token
+     */
+    @NotBlank
+    private String clientAccessToken;
+
+    /**
+     * 账号名称
+     */
+    @NotBlank
+    private String accountName;
 
     /**
      * 渠道账号id
@@ -58,16 +70,22 @@ public class MessageTask {
     private String msgType;
 
     /**
-     * 发送类型 如短信 微信公众号等
+     * 发送渠道 如短信 微信公众号等
      */
     @NotBlank
-    @InStrEnum(ChannelTypeEnum.class)
-    private String sendType;
+    @InStrEnum(MessageChannelEnum.class)
+    private String msgChannel;
+
+
+    /**
+     * 渠道id
+     */
+    private Integer channelId;
 
     /**
      * 定时任务corn
      */
-    private String msgCorn;
+    private String taskCorn;
 
     /**
      * xxl中的任务id
@@ -87,14 +105,9 @@ public class MessageTask {
     private String msgContentType;
 
     /**
-     * 模板id
-     */
-    private Integer templateId;
-
-    /**
      * 三方模板id
      */
-    private String thirdTemplateId;
+    private String templateId;
 
 
     /**
@@ -121,10 +134,13 @@ public class MessageTask {
 
     private Set<String> receiverSet;
 
-    private Integer successCount;
-
     /**
      * 点击模板卡片后的跳转页面。支持带参数 微信小程序字段为page 公众号为pagepath
      */
     private String page;
+
+    /**
+     * 附加参数 如webhook token 以及签名
+     */
+    private Map<String, Object> extraParams;
 }

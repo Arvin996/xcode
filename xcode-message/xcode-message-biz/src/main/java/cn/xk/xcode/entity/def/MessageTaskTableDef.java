@@ -90,6 +90,11 @@ public class MessageTaskTableDef extends TableDef {
     public final QueryColumn RECEIVER_TYPE = new QueryColumn(this, "receiver_type");
 
     /**
+     * 接收人
+     */
+    public final QueryColumn RECEIVERS = new QueryColumn(this, "receivers");
+
+    /**
      * 执行时间 针对延时发送而言
      */
     public final QueryColumn SCHEDULE_TIME = new QueryColumn(this, "schedule_time");

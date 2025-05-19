@@ -1,13 +1,8 @@
 package cn.xk.xcode.mq.customer;
 
 import cn.xk.xcode.config.RabbitMqConfiguration;
-import com.xxl.mq.client.consumer.IMqConsumer;
-import com.xxl.mq.client.consumer.MqResult;
-import com.xxl.mq.client.consumer.annotation.MqConsumer;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @Author xuk

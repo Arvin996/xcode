@@ -61,7 +61,7 @@ public class WxMiniProgramMessageHandler extends AbstractHandler {
             singeSendMessageResult.setFailMsg("获取token失败");
         } else {
             SendWxMiniProgramMessageParams sendWxMiniProgramMessageParams = new SendWxMiniProgramMessageParams();
-            sendWxMiniProgramMessageParams.setTemplate_id(messageTask.getThirdTemplateId());
+            sendWxMiniProgramMessageParams.setTemplate_id(messageTask.getTemplateId());
             sendWxMiniProgramMessageParams.setPage(messageTask.getPage());
             sendWxMiniProgramMessageParams.setTouser(receiver);
             String contentValueParams = messageTask.getContentValueParams();

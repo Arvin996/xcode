@@ -1,7 +1,12 @@
 package cn.xk.xcode.enums;
 
+import cn.xk.xcode.core.annotation.StringEnumValueToArray;
+import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author xukai
@@ -11,7 +16,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum MessageChannelEnum {
+public enum MessageChannelEnum implements StringEnumValueToArray {
     WX_MINI_PROGRAM("wx_miniProgram", "微信小程序"),
     WX_OFFICE("wx_office", "微信公众号"),
     DING_DING_ROBOT("dingDingRobot", "钉钉机器人"),
@@ -21,4 +26,8 @@ public enum MessageChannelEnum {
     private final String code;
     private final String name;
 
+    @Override
+    public String[] toArrayString() {
+        return ArrayUtil.toArray(Arrays.stream(values()).map(MessageChannelEnum::getCode).collect(Collectors.toList()));
+    }
 }

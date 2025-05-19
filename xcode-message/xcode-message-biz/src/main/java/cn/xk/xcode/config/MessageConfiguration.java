@@ -67,17 +67,17 @@ public class MessageConfiguration {
         return new FirstLoadBalancer();
     }
 
-    @Bean
-    public XxlMqSpringClientFactory getXxlMqConsumer() {
-        XxlMqSpringClientFactory xxlMqSpringClientFactory = new XxlMqSpringClientFactory();
-        xxlMqSpringClientFactory.setAdminAddress(xxlMqProperties.getAdminAddress());
-        return xxlMqSpringClientFactory;
-    }
+//    @Bean
+//    public XxlMqSpringClientFactory getXxlMqConsumer() {
+//        XxlMqSpringClientFactory xxlMqSpringClientFactory = new XxlMqSpringClientFactory();
+//        xxlMqSpringClientFactory.setAdminAddress(xxlMqProperties.getAdminAddress());
+//        return xxlMqSpringClientFactory;
+//    }
 
-    @Bean
-    public XxlMqTemplate xxlMqTemplate() {
-        return new XxlMqTemplate();
-    }
+//    @Bean
+//    public XxlMqTemplate xxlMqTemplate() {
+//        return new XxlMqTemplate();
+//    }
 
     @Bean
     public SensitiveWordBs sensitiveWordBs() {

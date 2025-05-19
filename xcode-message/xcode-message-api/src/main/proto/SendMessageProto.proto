@@ -1,0 +1,34 @@
+syntax = "proto3";
+option java_multiple_files = false;
+option java_package = "cn.xk.xcode.rpc";
+option java_outer_classname = "SendMessageProto";
+
+message SendMessageTaskRequest {
+  string clientAccessToken = 1;
+  optional string accountName = 2;
+  string shieldType = 3;
+  optional string shieldStartTime = 4;
+  optional string shieldEndTime = 5;
+  string msgType = 6;
+  string msgChannel = 7;
+  optional string taskCorn = 8;
+  optional string scheduleTime = 9;
+  string msgContentType = 10;
+  optional string templateId = 11;
+  optional string messageContent = 12;
+  optional string contentValueParams = 13;
+  string receiverType = 14;
+  string receivers = 15;
+  optional string page = 16;
+  optional string extraParams = 17;
+}
+
+message SendMessageTaskResponse {
+  string data = 1;
+  int32 code = 2;
+  string msg = 3;
+}
+
+service SendMessageTaskService {
+  rpc sendMessageTask(SendMessageTaskRequest) returns (SendMessageTaskResponse) {}
+}

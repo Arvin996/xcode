@@ -61,7 +61,7 @@ public class WxOfficeMessageHandler extends AbstractHandler {
             singeSendMessageResult.setFailMsg("获取token失败");
         } else {
             SendWxOfficeProgramMessageParams sendWxOfficeProgramMessageParams = new SendWxOfficeProgramMessageParams();
-            sendWxOfficeProgramMessageParams.setTemplate_id(messageTask.getThirdTemplateId());
+            sendWxOfficeProgramMessageParams.setTemplate_id(messageTask.getTemplateId());
             if (StrUtil.isNotEmpty(messageTask.getPage())){
                 Map<String, Object> map = new HashMap<>();
                 map.put("appid", getChannelAccountParamsValue().get("appId"));

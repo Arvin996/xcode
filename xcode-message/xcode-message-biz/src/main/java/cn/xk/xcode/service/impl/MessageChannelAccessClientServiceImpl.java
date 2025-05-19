@@ -173,4 +173,21 @@ public class MessageChannelAccessClientServiceImpl extends ServiceImpl<MessageCh
             return messageClientChannelService.saveBatch(list);
         }
     }
+
+    @Override
+    public void validateClient(MessageChannelAccessClientPo messageChannelAccessClientPo, int count) {
+        if (ObjectUtil.isNull(messageChannelAccessClientPo)) {
+            ExceptionUtil.castServiceException(CLIENT_ACCESS_TOKEN_IS_INVALID);
+        }
+        LocalDateTime tokenRefreshTime = messageChannelAccessClientPo.getTokenRefreshTime();
+        if (tokenRefreshTime.plusSeconds(MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME).isBefore(LocalDateTime.now())) {
+            ExceptionUtil.castServiceException(CLIENT_ACCESS_TOKEN_IS_EXPIRED);
+        }
+        if (messageChannelAccessClientPo.getRestCount() <= count) {
+            ExceptionUtil.castServiceException(CLIENT_ACCESS_COUNT_IS_NOT_ENOUGH);
+        }
+        if (!messageClientChannelService.exists(MESSAGE_CLIENT_CHANNEL.CLIENT_ID.eq(messageChannelAccessClientPo.getId()))) {
+            ExceptionUtil.castServiceException(CLIENT_NOT_HAS_THIS_CHANNEL_PERMISSION);
+        }
+    }
 }

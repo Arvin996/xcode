@@ -1,6 +1,7 @@
 package cn.xk.xcode.handler.message;
 
 import cn.xk.xcode.entity.discard.task.MessageTask;
+import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 
 import java.util.List;
 
@@ -18,7 +19,13 @@ public interface IHandler {
 
     List<WithdrawResult> doWithDrawMessage(List<Integer> messageTaskDetailIds);
 
+    HandlerResult doSendMessage(MessageTask messageTask, MessageChannelAccountPo messageChannelAccountPo) throws InterruptedException;
+
     String channelCode();
 
     boolean needRateLimit();
+
+    void reSendTaskMessage(Long taskId);
+
+    void reSendSingleTask(Long taskDetailId);
 }

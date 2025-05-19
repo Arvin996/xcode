@@ -6,6 +6,7 @@ import com.mybatisflex.annotation.Table;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 import lombok.AllArgsConstructor;
@@ -108,6 +109,11 @@ public class MessageTaskPo implements Serializable {
      * 接收人类型 00透传直接发送 10 csv文件
      */
     private String receiverType;
+
+    /**
+     * 接收人list
+     */
+    private String receivers;
 
     /**
      * 00 待发送

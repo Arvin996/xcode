@@ -1,22 +1,33 @@
 package cn.xk.xcode.handler.core;
 
 import cn.hutool.captcha.generator.RandomGenerator;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.config.CaptchaProperties;
 import cn.xk.xcode.entity.GenerateCodeResEntity;
 import cn.xk.xcode.entity.dto.CaptchaGenReqDto;
 import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
-import cn.xk.xcode.enums.CaptchaGenerateType;
+import cn.xk.xcode.enums.*;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.handler.CaptchaHandlerStrategy;
 import cn.xk.xcode.handler.SaveCaptchaCacheStrategy;
+import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.rpc.SendMessageProto;
+import cn.xk.xcode.rpc.SendMessageTaskServiceGrpc;
+import cn.xk.xcode.utils.object.ObjectUtil;
+import com.alibaba.fastjson2.JSON;
+import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import static cn.xk.xcode.enums.CaptchaGlobalErrorCodeConstants.CAPTCHA_REPEAT_SEND;
+import static cn.xk.xcode.enums.CaptchaGlobalErrorCodeConstants.SEND_CAPTCHA_ERROR;
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.*;
 
 
@@ -26,21 +37,20 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.*;
  * @Version 1.0
  * @Description EmailCaptchaHandler
  */
+@Slf4j
 public class EmailCaptchaHandler extends CaptchaHandlerStrategy {
 
-    private final JavaMailSenderImpl javaMailSender;
-    private final Integer expiredTime;
+    @GrpcClient("xcode-message")
+    private SendMessageTaskServiceGrpc.SendMessageTaskServiceBlockingStub sendMessageTaskServiceBlockingStub;
 
-    public EmailCaptchaHandler(SaveCaptchaCacheStrategy saveCaptchaStrategy, CaptchaProperties captchaProperties, JavaMailSenderImpl javaMailSender, Integer expiredTime) {
+    public EmailCaptchaHandler(SaveCaptchaCacheStrategy saveCaptchaStrategy, CaptchaProperties captchaProperties) {
         super(saveCaptchaStrategy, captchaProperties);
-        this.codeGenerator = new RandomGenerator(RandomUtil.BASE_CHAR_NUMBER, captchaProperties.getEmail().getLength());
-        this.javaMailSender = javaMailSender;
-        this.expiredTime = expiredTime;
+        this.codeGenerator = new RandomGenerator(RandomUtil.BASE_CHAR_NUMBER, captchaProperties.getCodeLength());
     }
 
     @Override
     public GenerateCodeResEntity generate(CaptchaGenReqDto captchaGenReqDto) {
-        if (StrUtil.isNotEmpty(this.saveCaptchaStrategy.get(captchaGenReqDto.getEmail()))){
+        if (StrUtil.isNotEmpty(this.saveCaptchaStrategy.get(captchaGenReqDto.getEmail()))) {
             throw new ServiceException(CAPTCHA_REPEAT_SEND);
         }
         String code = sendMessage(captchaGenReqDto);
@@ -61,22 +71,35 @@ public class EmailCaptchaHandler extends CaptchaHandlerStrategy {
     public String sendMessage(CaptchaGenReqDto captchaGenReqDto) {
         String code = this.codeGenerator.generate();
         String email = captchaGenReqDto.getEmail();
-        SimpleMailMessage message = new SimpleMailMessage();
-        // 发送邮箱
-        message.setFrom(Objects.requireNonNull(javaMailSender.getUsername()));
-        // 接受邮箱
-        message.setTo(email);
-        // 标题
-        message.setSubject("测试服务平台-邮箱验证");
-        // 内容
-        message.setText("<h1>尊敬的用户您好：</h1><br>" +
-                "<h5> 您正在进行邮箱验证，本次验证码为：<span style='color:#ec0808;font-size: 20px;'>" + code + "</span>，请在" + expiredTime + "分钟内进行使用。</h5>" +
-                "<h5>如非本人操作，请忽略此邮件，由此给您带来的不便请谅解！</h5> <h5 style='text-align: right;'>--测试服务平台</h5>");
+        // 发送邮件
+        SendMessageProto.SendMessageTaskRequest.Builder builder = SendMessageProto.SendMessageTaskRequest.newBuilder();
+        builder.setClientAccessToken("aa");
+        builder.setAccountName("ss");
+        builder.setShieldType(ShieldType.NIGHT_NO_SHIELD.getCode());
+        builder.setMsgType(MessageSendType.NOW.getCode());
+        builder.setMsgChannel(MessageChannelEnum.EMAIL.getCode());
+        builder.setMsgContentType(MessageContentType.TEMPLATE.getCode());
+        builder.setTemplateId("ccc");
+        HashMap<String, String> map = MapUtil.of("code", code);
+        builder.setContentValueParams(JSON.toJSONString(map));
+        builder.setReceiverType(ReceiverTypeEnum.PLAIN.getCode());
+        builder.setReceivers(email);
         try {
-            // 发送邮件
-            javaMailSender.send(message);
+            SendMessageProto.SendMessageTaskResponse response = sendMessageTaskServiceBlockingStub.sendMessageTask(builder.build());
+            if (!CommonResult.isSuccess(response.getCode())) {
+                String msg = response.getMsg();
+                ExceptionUtil.castServerException0(response.getCode(), msg);
+            } else {
+                SendMessageProto.SendMessageResponse sendMessageResponse = response.getSendMessageResponse();
+                int failCount = sendMessageResponse.getFailCount();
+                if (failCount > 0) {
+                    log.error("发送邮件失败:{}", sendMessageResponse.getFailMessageDetailList(0));
+                    ExceptionUtil.castServiceException(SEND_CAPTCHA_ERROR);
+                }
+            }
         } catch (Exception e) {
-            throw new ServiceException(CHECK_CODE_SEND_ERROR);
+            log.error("发送邮件失败:{}", e.getMessage());
+            ExceptionUtil.castServiceException(SEND_CAPTCHA_ERROR);
         }
         return code;
     }

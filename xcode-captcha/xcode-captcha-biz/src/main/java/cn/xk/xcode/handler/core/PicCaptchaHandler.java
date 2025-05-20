@@ -37,7 +37,7 @@ public class PicCaptchaHandler extends CaptchaHandlerStrategy {
         PicCaptchaType picCaptchaType = captchaPropertiesPic.getType();
         this.abstractCaptcha = abstractCaptcha;
         if (picCaptchaType.equals(PicCaptchaType.CHAR)) {
-            codeGenerator = new RandomGenerator(RandomUtil.BASE_CHAR_NUMBER, captchaProperties.getPic().getCharLength());
+            codeGenerator = new RandomGenerator(RandomUtil.BASE_CHAR_NUMBER, captchaProperties.getCodeLength());
         } else {
             codeGenerator = new MathGenerator(captchaProperties.getPic().getMathLength());
         }
@@ -54,17 +54,17 @@ public class PicCaptchaHandler extends CaptchaHandlerStrategy {
             code = exp.getValue(String.class);
         }
         String uuid = IdUtil.simpleUUID();
-        return GenerateCodeResEntity.builder().uuid(uuid).code(code).picCode(abstractCaptcha.getImageBase64()).build();
+        return GenerateCodeResEntity.builder().uuid(uuid).code(uuid + code).picCode(abstractCaptcha.getImageBase64()).build();
     }
 
     @Override
     public void doCodeSave(CaptchaGenReqDto captchaGenReqDto, GenerateCodeResEntity generateCodeResEntity) {
-        saveCaptchaStrategy.save(generateCodeResEntity.getUuid() + generateCodeResEntity.getCode(),  generateCodeResEntity.getUuid() + generateCodeResEntity.getCode());
+        saveCaptchaStrategy.save(generateCodeResEntity.getUuid(),  generateCodeResEntity.getCode());
     }
 
     @Override
     public String getLocalCodeKey(CaptchaVerifyReqDto captchaVerifyReqDto) {
-        return captchaVerifyReqDto.getCode();
+        return captchaVerifyReqDto.getUuid();
     }
 
     @Override

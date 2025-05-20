@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private AbstractLoginHandler loginHandler;
 
-    @GrpcClient("captcha-server")
+    @GrpcClient("xcode-captcha")
     private CaptchaServiceGrpc.CaptchaServiceBlockingStub captchaServiceBlockingStub;
 
     private static final String DEFAULT_AVATAR = "XXX";

@@ -23,7 +23,7 @@ import static cn.xk.xcode.config.GlobalMessageConstants.CORN_TASK_SUBMIT_FAILED;
 @Service
 @Slf4j
 @SuppressWarnings("all")
-public class RegisterCsvCornTaskService {
+public class RegisterCornTaskService {
 
     @Resource
     private CornReceiversTask cornReceiversTask;

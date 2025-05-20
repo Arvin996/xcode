@@ -26,13 +26,6 @@
     </properties>
 
     <dependencies>
-        <!-- RPC 远程调用相关 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <optional>true</optional>
-        </dependency>
-
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-spring-boot-starter-dict</artifactId>

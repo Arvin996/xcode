@@ -98,9 +98,9 @@ knife4j:
 
 grpc:
   client:
-    captcha-server:
+    xcode-captcha:
       #    address: "static://127.0.0.1:9999"
-      address: 'discovery:///rpc-server'
+      address: 'discovery:///xcode-captcha'
       negotiation-type: plaintext
       #  TCP相关设置
       enable-keep-alive: true

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ######### 常见参数 #########
+    %c{参数} 或 %logger{参数}    ##输出日志名称，如果logger名称为Log.Console,则%c{1}输出Console
+    %C{参数} 或 %class{参数}     ##输出类名，%C会输出类的类全路径，%C{1}，则只会输出类名（该参数会影响性能）
+    %d{参数}{时区}               ##输出时间，例如：%d{HH:mm:ss}{GMT+0}
+    %F或%file                   ##输出文件名（该参数会影响性能）
+    %highlight{pattern}{style}  ##高亮显示
+    %l                          ##输出错误的完整位置（该参数会影响性能）
+    %L                          ##输出错误行号（该参数会影响性能）
+    %m 或 %msg 或 %message      ##输出错误信息
+    %M 或 %method               ##输出方法名（该参数会影响性能）
+    %n                          ##输出换行符
+    %p 或 %level                ##输出日志的级别，例如：%-5level，-5表示左对齐并且固定输出5个字符，如果不足在右边补空格
+    %t 或 %thread               ##创建logging事件的线程名
+    %sn                         ##SequenceNumber 日志计数器(全局)
+    %u                          ##uuid UUID(全局)
+    # 下面的还没搞明白用法
+    %X{ip} “X”, “mdc”, “MDC” MDC方式获取ip(等同于 %MDC{ip} 和 %mdc{ip} )
+    %x     “x”, “NDC” NDC方式
+    %xEx "xEx", "xThrowable", “xException” ExtendedThrowablePatternConverter
+         "ex", "throwable", “exception” ThrowablePatternConverter
+         "rEx", "rThrowable", “rException” RootThrowablePatternConverter
+
+    ######### 系统变量 ############
+    ${sys:user.home}
+    ${sys:user.dir}
+    ######### 日期变量 ############
+    ${date:yyyy-MM}
+    ######### 环境变量 ############
+    ${env:JAVA_HOME}
+
+    ######### 特殊符号 ############
+    #有些特殊符号不能直接打印，需要使用实体名称或者编号
+    & —— &amp; 或者 &#38;
+    < —— &lt;  或者 &#60;
+    > —— &gt;  或者 &#62;
+    “ —— &quot; 或者 &#34;
+    ‘ —— &apos; 或者 &#39;
+
+    ######## pattern对齐修饰 ##########
+    // 对齐修饰，可以指定信息的输出格式，如是否左对齐，是否留空格等。
+    ## 编写格式为在任何pattern和%之间加入一个小数，可以是正数，也可以是负数。
+    ## 整数表示右对齐，负数表示左对齐；
+    ## 整数位表示输出信息的最小n个字符，如果输出信息不够n个字符，将用空格补齐；
+    ## 小数位表示输出信息的最大字符数，如果超过n个字符，则只保留最后n个字符的信息
+    ##（注意：保留的是后20个字符，而不是前20个字符）
+
+    #示例如下
+    %20 —— 右对齐，不足20个字符则在信息前面用空格补足，超过20个字符则保留原信息
+    %-20 —— 左对齐，不足20个字符则在信息后面用空格补足，超过20个字符则保留原信息
+    %.30 —— 如果信息超过30个字符，则只保留最后30个字符
+    %20.30 —— 右对齐，不足20个字符则在信息前面用空格补足，超过30个字符则只保留最后30个字符
+    %-20.30 —— 左对齐，不足20个字符则在信息后面用空格补足，超过30个字符则只保留最后30个字符
+
+    ######## 关于异步日志 ##########
+    log4j2中的异步日志实现方式有AsyncAppender和AsyncLogger两种。
+    AsyncAppender采用了ArrayBlockingQueue来保存需要异步输出的日志事件，log4j2自带。
+    AsyncLogger则使用了Disruptor框架来实现高吞吐，需要额外引入Disruptor依赖。
+
+    ######## 关于颜色 #########
+    有Black，Red，Green，Yellow，Blue，Magenta，Cyan，White
+-->
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--status="WARN":用于设置log4j2自身内部日志的信息输出级别，默认是OFF-->
+<!--monitorInterval="30":间隔秒数,自动检测配置文件的变更和重新配置本身-->
+<configuration status="off" monitorInterval="1800">
+    <!-- 自定义常量 -->
+    <!-- 使用${变量名}引用 -->
+    <Properties>
+        <!-- 编码定义 -->
+        <Property name="encoding">utf-8</Property>
+        <!-- 应用名 -->
+        <Property name="project">xcode-message</Property>
+
+        <!-- 文件名和路径定义 -->
+        <Property name="logFileBasePath">logs</Property>  <!-- 日志保存的根文件夹 -->
+        <Property name="logApi">xcode-message</Property>        <!-- 本系统应用的日志文件名 -->
+        <Property name="logSql">logSql</Property>        <!-- 本系统应用的数据库日志文件名 -->
+        <Property name="logSystem">status</Property>        <!-- 本系统应用的其他日志文件名 -->
+        <Property name="logFileSuffix">.log</Property>    <!-- 日志文件后缀名 -->
+
+        <!-- 输出格式定义 -->
+        <Property name="Pattern_Console">${project} [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%highlight{%-5level}]
+            [%style{%logger{3}}{normal,Magenta}] > [%style{%t}{bright,blue}] - %msg%xEx%n
+        </Property>
+        <Property name="Pattern_Api">${project} [%logger] [%d{yyyy-MM-dd HH:mm:ss.SSS}] > [%p] [%C] [%t] - %msg%xEx%n
+        </Property>
+        <Property name="Pattern_Basic">${project} [%d{yyyy-MM-dd HH:mm:ss.SSS}] > [%p] [%C] [%t] - %msg%xEx%n</Property>
+    </Properties>
+
+    <!-- appenders:定义输出内容，输出格式，输出方式，日志保存策略等，常用其下三种标签[console,File,RollingFile] -->
+    <!--
+        参考：https://blog.csdn.net/fanpeng1100/article/details/53519192
+        FileAppender 　　   普通地输出到本地文件
+        FlumeAppender　　   将几个不同源的日志汇集、集中到一处
+        KafkaAppender       输出到Kafka
+        RewriteAppender 　　对日志事件进行掩码或注入信息
+        RollingFileAppender 对日志文件进行封存
+        RoutingAppender　　 在输出地之间进行筛选路由
+        SMTPAppender　　    将LogEvent发送到指定邮件列表
+        SocketAppender　　  将LogEvent以普通格式发送到远程主机
+        SyslogAppender　　  将LogEvent以RFC 5424格式发送到远程主机
+        AsynchAppender 　　 将一个LogEvent异步地写入多个不同输出地
+        ConsoleAppender　　 将LogEvent输出到控制台
+        FailoverAppender　　维护一个队列，系统将尝试向队列中的Appender依次输出LogEvent，直到有一个成功为止
+    -->
+    <appenders>
+        <!--Console:控制台输出的配置 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- ThresholdFilter:日志输出过滤 -->
+            <!-- level="info":日志级别，onMatch="ACCEPT":级别在info之上则接受，onMismatch="DENY":级别在info之下则拒绝 -->
+            <!-- 控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout disableAnsi="false" noConsoleNoAnsi="false" charset="${encoding}"
+                           pattern="${Pattern_Console}"/>
+        </Console>
+
+
+        <!-- 项目日志 -->
+        <RollingFile name="logApi" fileName="${logFileBasePath}/${logApi}${logFileSuffix}"
+                     filePattern="${logFileBasePath}/$${date:yyyy-MM}/${logApi}_%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- 二次过滤级别(loggers部分会过滤一次) -->
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout charset="${encoding}" pattern="${Pattern_Api}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>  <!-- 每日备份 -->
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了15，
+                 max参数是与filePattern中的计数器%i配合起作用的，其具体作用方式与filePattern的配置密切相关 -->
+            <!-- 参考：https://www.cnblogs.com/yeyang/p/7944899.html -->
+            <DefaultRolloverStrategy max="15">
+                <!-- maxDepth指定了目录扫描深度，为2表示扫描baseDir文件夹及其子文件夹
+				     IfFileName指定了文件名需满足的条件，IfLastModified指定了文件修改时间需要满足的条件 -->
+                <Delete basePath="logs/" maxDepth="2">
+                    <IfFileName glob="*/${logApi}_*.log"/>
+                    <!-- Note: 这里的age必须和filePattern协调, 后者是精确到HH, 这里就要写成xH, xd就不起作用 另外, 数字最好>2,
+                        否则可能造成删除的时候, 最近的文件还处于被占用状态,导致删除不成功! -->
+                    <!--30天 -->
+                    <IfLastModified age="60d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- 数据库日志 -->
+        <RollingFile name="logSql" fileName="${logFileBasePath}/${logSql}${logFileSuffix}"
+                     filePattern="${logFileBasePath}/$${date:yyyy-MM}/${logSql}_%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- 二次过滤级别(loggers部分会过滤一次) -->
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout charset="${encoding}" pattern="${Pattern_Basic}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>  <!-- 每日备份 -->
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了15，
+                 max参数是与filePattern中的计数器%i配合起作用的，其具体作用方式与filePattern的配置密切相关 -->
+            <!-- 参考：https://www.cnblogs.com/yeyang/p/7944899.html -->
+            <DefaultRolloverStrategy max="15">
+                <!-- maxDepth指定了目录扫描深度，为2表示扫描baseDir文件夹及其子文件夹
+				     IfFileName指定了文件名需满足的条件，IfLastModified指定了文件修改时间需要满足的条件 -->
+                <Delete basePath="logs/" maxDepth="2">
+                    <IfFileName glob="*/${logSql}_*.log"/>
+                    <!-- Note: 这里的age必须和filePattern协调, 后者是精确到HH, 这里就要写成xH, xd就不起作用 另外, 数字最好>2,
+                        否则可能造成删除的时候, 最近的文件还处于被占用状态,导致删除不成功! -->
+                    <!--30天 -->
+                    <IfLastModified age="60d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <!-- 其他日志 -->
+        <RollingFile name="logSystem" fileName="${logFileBasePath}/${logSystem}${logFileSuffix}"
+                     filePattern="${logFileBasePath}/$${date:yyyy-MM}/${logSystem}_%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- 二次过滤级别(loggers部分会过滤一次) -->
+            <!--<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout charset="${encoding}" pattern="${Pattern_Basic}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>  <!-- 每日备份 -->
+                <SizeBasedTriggeringPolicy size="128MB"/>
+            </Policies>
+
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了15，
+                 max参数是与filePattern中的计数器%i配合起作用的，其具体作用方式与filePattern的配置密切相关 -->
+            <!-- 参考：https://www.cnblogs.com/yeyang/p/7944899.html -->
+            <DefaultRolloverStrategy max="15">
+                <!-- maxDepth指定了目录扫描深度，为2表示扫描baseDir文件夹及其子文件夹
+				     IfFileName指定了文件名需满足的条件，IfLastModified指定了文件修改时间需要满足的条件 -->
+                <Delete basePath="logs/" maxDepth="2">
+                    <IfFileName glob="*/${logSystem}_*.log"/>
+                    <!-- Note: 这里的age必须和filePattern协调, 后者是精确到HH, 这里就要写成xH, xd就不起作用 另外, 数字最好>2,
+                        否则可能造成删除的时候, 最近的文件还处于被占用状态,导致删除不成功! -->
+                    <!--30天 -->
+                    <IfLastModified age="60d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+    </appenders>
+
+    <!-- 定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <!-- 如把additivity='true'中的true，改成false，root logger就不会再起作用，即只会记录在文件里，控制台无输出 -->
+    <!-- includeLocation 打印行号，如果设为false，就算pattern中使用了%L也不会打印行号 -->
+    <loggers>
+        <!-- 过滤掉spring和mybatis的一些无用的DEBUG信息 -->
+        <!-- Logger节点用来单独指定日志的形式，name为包路径，比如要为org.springframework包下所有日志指定为INFO级别等 -->
+        <!-- 不加additivity="false"的话，会沿用root的日志设置，并且测试发现，level定义的级别会覆盖root定义 -->
+        <!--<logger name="org.springframework" level="info"></logger>-->
+        <!--<logger name="org.mybatis" level="info"></logger>-->
+
+        <!-- 打印mybatis日志（结合Mybatis的logPrefix配置） -->
+        <logger name="MyBatisLog" level="DEBUG" additivity="false">
+            <appender-ref ref="Console" level="debug"/>
+        </logger>
+
+
+        <!-- 异步日志，LOG4J有三种日志模式：全异步日志、混合模式、同步日志，性能从高到底，线程越多效率越高，也可以避免日志卡死线程情况发生 -->
+        <!-- 采用了高性能并发框架Disruptor，创建一个线程用于处理日志输出，需要额外引入Disruptor依赖 -->
+        <!--<AsyncLogger name="Log.AsyncLogger" level="trace" includeLocation="false" additivity="false">-->
+        <!--<appender-ref ref="Console"/>-->
+        <!--<appender-ref ref="DailyLog_App"/>-->
+        <!--</AsyncLogger>-->
+
+        <!-- 记录jar提供的数据库接口操作日志 -->
+        <logger name="com.gg.core.service" level="debug" additivity="false">
+            <appender-ref ref="logSql"/>
+        </logger>
+
+        <!-- 记录通用controller日志，即直接访问xml的接口出入参 -->
+        <logger name="com.gg.core.aspect" level="info" additivity="false">
+            <appender-ref ref="logApi"/>
+        </logger>
+
+        <!-- 本项目记录的日志 -->
+        <logger name="Log.Api" level="info" additivity="false">
+            <appender-ref ref="logApi"/>
+        </logger>
+
+
+        <!--根日志-->
+        <!--root节点用来指定项目的根日志，如果没有单独指定Logger，那么就会默认使用该root日志输出-->
+        <!--建立一个默认的root的logger,其它的logger最终都相当于继承自root logger-->
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="logSystem"/>
+        </root>
+
+
+    </loggers>
+
+</configuration>

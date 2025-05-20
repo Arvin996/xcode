@@ -4,9 +4,9 @@ import cn.xk.xcode.core.factory.AbstractThreadPoolFactory;
 import cn.xk.xcode.core.factory.ThreadPoolProduceDecider;
 import cn.xk.xcode.core.factory.ThreadPoolTypeEnums;
 import cn.xk.xcode.utils.collections.CollectionUtil;
-import com.dtp.core.DtpRegistry;
-import com.dtp.core.thread.DtpExecutor;
 import lombok.RequiredArgsConstructor;
+import org.dromara.dynamictp.core.DtpRegistry;
+import org.dromara.dynamictp.core.executor.DtpExecutor;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -39,6 +39,6 @@ public class ThreadPoolExecutorHolder {
     }
 
     public ExecutorService routeThreadPool(String threadUniqueCode) {
-        return DtpRegistry.getExecutor(AbstractThreadPoolFactory.PRE_FIX + threadUniqueCode);
+        return DtpRegistry.getDtpExecutor(AbstractThreadPoolFactory.PRE_FIX + threadUniqueCode);
     }
 }

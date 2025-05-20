@@ -2,15 +2,12 @@ package cn.xk.xcode.service.message;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.entity.discard.task.MessageTask;
-import cn.xk.xcode.entity.po.MessageChannelPo;
 import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.enums.MessageSendType;
 import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
-import cn.xk.xcode.service.task.RegisterCsvCornTaskService;
-import cn.xk.xcode.utils.object.BeanUtil;
-import cn.xk.xcode.utils.object.ObjectUtil;
+import cn.xk.xcode.service.task.RegisterCornTaskService;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.support.CronExpression;
@@ -27,17 +24,17 @@ import static cn.xk.xcode.config.GlobalMessageConstants.*;
 @Service
 public class CornSendMessageService extends AbstractSendMessageService {
 
-    private final RegisterCsvCornTaskService registerCsvCornTaskService;
+    private final RegisterCornTaskService registerCornTaskService;
 
     public CornSendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService,
                                   MessageTemplateParamsService messageTemplateParamsService,
                                   MessageChannelService messageChannelService,
-                                  RegisterCsvCornTaskService registerCsvCornTaskService,
+                                  RegisterCornTaskService registerCornTaskService,
                                   MessageTaskService messageTaskService,
                                   MessageChannelAccessClientService messageChannelAccessClientService,
                                   MessageChannelAccountService messageChannelAccountService) {
         super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
-        this.registerCsvCornTaskService = registerCsvCornTaskService;
+        this.registerCornTaskService = registerCornTaskService;
     }
 
     @Override
@@ -57,7 +54,7 @@ public class CornSendMessageService extends AbstractSendMessageService {
         }
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
         try {
-            return registerCsvCornTaskService.registerReceiversCronTask(messageTaskPo);
+            return registerCornTaskService.registerReceiversCronTask(messageTaskPo);
         } catch (NoSuchMethodException e) {
             return CommonResult.error(CORN_TASK_SUBMIT_FAILED, e.getMessage());
         }

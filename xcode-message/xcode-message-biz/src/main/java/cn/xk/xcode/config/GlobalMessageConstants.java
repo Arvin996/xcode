@@ -69,6 +69,7 @@ public interface GlobalMessageConstants {
     ErrorCode CLIENT_NOT_HAS_THIS_CHANNEL_PERMISSION =  new IntErrorCode(4003_1_544, "接入商没有此渠道的权限");
     ErrorCode PLAIN_TEXT_MESSAGE_MUST_NOT_EMPTY =  new IntErrorCode(4003_1_545, "纯文本消息的消息内容不能为空");
     ErrorCode SHIELD_TASK_NOT_WAITING =  new IntErrorCode(4003_1_546, "屏蔽消息任务已执行，取消任务失败");
+    ErrorCode EXEC_MESSAGE_TASK_ERROR = new IntErrorCode(4003_1_547, "执行消息任务失败, 异常信息：{}");
 
     String XXL_THREAD_POOL_NAME = "execute-xxl-thread-pool";
     int MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME = 24 * 60 * 40 * 30; // 一个月

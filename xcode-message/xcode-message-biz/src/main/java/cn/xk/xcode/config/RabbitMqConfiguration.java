@@ -3,14 +3,9 @@ package cn.xk.xcode.config;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.retry.MessageRecoverer;
-import org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,20 +26,16 @@ public class RabbitMqConfiguration {
     // 声明bindingKey
     public static final String DELAY_MESSAGE_BINDING_KEY = "delayMessageBindingKey";
     public static final String SHIELD_MESSAGE_BINDING_KEY = "shieldMessageBindingKey";
-    public static final String SEND_MESSAGE_BINDING_KEY = "sendMessageBindingKey";
-    public static final String WITHDRAW_MESSAGE_BINDING_KEY = "withdrawMessageBindingKey";
-    public static final String MESSAGE_HANDLE_FAIL_BINDING_KEY = "messageHandleFailBindingKey";
+    public static final String RETRY_MESSAGE_BINDING_KEY = "retryMessageBindingKey";
 
     // 声明队列名称
     public static final String DELAY_MESSAGE_QUEUE_NAME = "delayMessageQueue";
     public static final String SHIELD_MESSAGE_QUEUE_NAME = "shieldMessageQueue";
-    public static final String SEND_MESSAGE_QUEUE_NAME = "sendMessageQueue";
-    public static final String WITHDRAW_MESSAGE_QUEUE_NAME = "withdrawMessageQueue";
-    public static final String MESSAGE_HANDLE_FAIL_QUEUE_NAME = "messageHandleFailQueue";
+    public static final String RETRY_MESSAGE_QUEUE_NAME = "retryMessageQueue";
+
     // 声明交换机名称
     public static final String DELAY_EXCHANGE_NAME = "delayExchange";
-    public static final String MESSAGE_HANDLER_EXCHANGE_NAME = "messageHandlerExchange";
-    public static final String MESSAGE_HANDLE_FAIL_EXCHANGE_NAME = "messageHandleFailExchange";
+    public static final String RETRY_EXCHANGE_NAME = "retryExchange";
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -60,8 +51,6 @@ public class RabbitMqConfiguration {
             log.debug("replyCode: {}", returned.getReplyCode());
             log.debug("replyText: {}", returned.getReplyText());
         });
-//        rabbitTemplate.setConfirmCallback((correlationData, b, s) -> {
-//        });
         rabbitTemplate.setMessageConverter(messageConverter());
     }
 
@@ -84,20 +73,12 @@ public class RabbitMqConfiguration {
                 .build();
     }
 
-    // 2. 发送消息以及撤销消息的direct交换机
-    @Bean(MESSAGE_HANDLER_EXCHANGE_NAME)
-    public DirectExchange messageHandlerExchange() {
+    // 2. 重试交换机
+    @Bean(RETRY_EXCHANGE_NAME)
+    public DirectExchange retryExchange() {
         return ExchangeBuilder
-                .directExchange(MESSAGE_HANDLER_EXCHANGE_NAME)
-                .durable(true)  // 设置持久化
-                .build();
-    }
-
-    // 3. 消息者消息消息失败 并且达到最大重试次数后 消息放到此交换机
-    @Bean(MESSAGE_HANDLE_FAIL_EXCHANGE_NAME)
-    public DirectExchange messageHandleFailExchange() {
-        return ExchangeBuilder
-                .directExchange(MESSAGE_HANDLE_FAIL_EXCHANGE_NAME)
+                .directExchange(RETRY_EXCHANGE_NAME)
+                .delayed()  // 设置延时交换机
                 .durable(true)  // 设置持久化
                 .build();
     }
@@ -115,56 +96,28 @@ public class RabbitMqConfiguration {
         return QueueBuilder.durable(SHIELD_MESSAGE_QUEUE_NAME).lazy().build();
     }
 
-    // 2.1 发送消息的队列
-    @Bean(SEND_MESSAGE_QUEUE_NAME)
-    public Queue sendMessageQueue() {
-        return QueueBuilder.durable(SEND_MESSAGE_QUEUE_NAME).lazy().build();
-    }
-
-    // 2.2 撤销消息的队列
-    @Bean(WITHDRAW_MESSAGE_QUEUE_NAME)
-    public Queue withdrawMessageQueue() {
-        return QueueBuilder.durable(WITHDRAW_MESSAGE_QUEUE_NAME).lazy().build();
-    }
-
-    // 3.1 消息处理失败的队列
-    @Bean(MESSAGE_HANDLE_FAIL_QUEUE_NAME)
-    public Queue messageHandleFailQueue() {
-        return QueueBuilder.durable(MESSAGE_HANDLE_FAIL_QUEUE_NAME).lazy().build();
+    // 2.2 重试队列
+    @Bean(RETRY_MESSAGE_QUEUE_NAME)
+    public Queue rertyMessageQueue() {
+        return QueueBuilder.durable(RETRY_MESSAGE_QUEUE_NAME).lazy().build();
     }
 
     // 这里用于绑定==================================
     // 绑定1 1.1 1.2
     @Bean
-    public Binding delayMessageQueueBinding(@Qualifier("delayExchange") DirectExchange delayExchange, @Qualifier("delayMessageQueue") Queue delayMessageQueue) {
+    public Binding delayMessageQueueBinding(@Qualifier(DELAY_EXCHANGE_NAME) DirectExchange delayExchange, @Qualifier(DELAY_MESSAGE_QUEUE_NAME) Queue delayMessageQueue) {
         return BindingBuilder.bind(delayMessageQueue).to(delayExchange).with(DELAY_MESSAGE_BINDING_KEY);
     }
 
     @Bean
-    public Binding shieldMessageQueueBinding(@Qualifier("delayExchange") DirectExchange delayExchange, @Qualifier("shieldMessageQueue") Queue shieldMessageQueue) {
+    public Binding shieldMessageQueueBinding(@Qualifier(DELAY_EXCHANGE_NAME) DirectExchange delayExchange, @Qualifier(SHIELD_MESSAGE_QUEUE_NAME) Queue shieldMessageQueue) {
         return BindingBuilder.bind(shieldMessageQueue).to(delayExchange).with(SHIELD_MESSAGE_BINDING_KEY);
-    }
-
-    // 绑定2 2.3 2.4
-    @Bean
-    public Binding sendMessageQueueBinding(@Qualifier("messageHandlerExchange") DirectExchange messageHandlerExchange, @Qualifier("sendMessageQueue") Queue sendMessageQueue) {
-        return BindingBuilder.bind(sendMessageQueue).to(messageHandlerExchange).with(SEND_MESSAGE_BINDING_KEY);
-    }
-
-    @Bean
-    public Binding withdrawMessageQueueBinding(@Qualifier("messageHandlerExchange") DirectExchange messageHandlerExchange, @Qualifier("withdrawMessageQueue") Queue withdrawMessageQueue) {
-        return BindingBuilder.bind(withdrawMessageQueue).to(messageHandlerExchange).with(WITHDRAW_MESSAGE_BINDING_KEY);
     }
 
     // 绑定3 3.1
     @Bean
-    public Binding messageHandleFailQueueBinding(@Qualifier("messageHandleFailExchange") DirectExchange messageHandleFailExchange, @Qualifier("messageHandleFailQueue") Queue messageHandleFailQueue) {
-        return BindingBuilder.bind(messageHandleFailQueue).to(messageHandleFailExchange).with(MESSAGE_HANDLE_FAIL_BINDING_KEY);
-    }
-
-    @Bean
-    public MessageRecoverer republishMessageRecoverer(RabbitTemplate rabbitTemplate){
-        return new RepublishMessageRecoverer(rabbitTemplate, MESSAGE_HANDLE_FAIL_EXCHANGE_NAME,  MESSAGE_HANDLE_FAIL_BINDING_KEY);
+    public Binding rertyMessageQueueBinding(@Qualifier(RETRY_EXCHANGE_NAME) DirectExchange retryExchange, @Qualifier(RETRY_MESSAGE_QUEUE_NAME) Queue rertyMessageQueue) {
+        return BindingBuilder.bind(rertyMessageQueue).to(retryExchange).with(RETRY_MESSAGE_BINDING_KEY);
     }
 
 }

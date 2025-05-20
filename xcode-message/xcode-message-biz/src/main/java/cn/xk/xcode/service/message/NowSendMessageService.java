@@ -33,7 +33,6 @@ public class NowSendMessageService extends AbstractSendMessageService {
 
     @Override
     public CommonResult<?> dealMessage(MessageTask messageTask) {
-        messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
-        return CommonResult.success("消息提交成功");
+        return messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
     }
 }

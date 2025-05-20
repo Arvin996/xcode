@@ -1,8 +1,6 @@
 package cn.xk.xcode.permission.dialect;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReferenceUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.StpSystemUtil;
@@ -39,7 +37,7 @@ public class CustomPermissionDialect extends CommonsDialectImpl {
     @Override
     public void prepareAuth(QueryWrapper queryWrapper, OperateType operateType) {
         DatePermissionHolder.DataScopeEntity dataScopeEntity = DatePermissionHolder.get();
-        if (!StpSystemUtil.isLogin() || ObjectUtil.isNull(dataScopeEntity)) {
+        if (ObjectUtil.isNull(dataScopeEntity) || !StpSystemUtil.isLogin()) {
             super.prepareAuth(queryWrapper, operateType);
             return;
         }

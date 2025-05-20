@@ -24,34 +24,11 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-mysql</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-biz-message</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-thread-pool</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-redis</artifactId>
-            <version>1.0.0</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

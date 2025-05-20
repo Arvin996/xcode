@@ -1,8 +1,10 @@
 package cn.xk.xcode.core;
 
-import com.dtp.core.DtpRegistry;
-import com.dtp.core.thread.DtpExecutor;
+
 import lombok.RequiredArgsConstructor;
+import org.dromara.dynamictp.core.DtpRegistry;
+import org.dromara.dynamictp.core.executor.DtpExecutor;
+import org.dromara.dynamictp.core.support.ExecutorWrapper;
 
 /**
  * @Author xuk
@@ -18,6 +20,6 @@ public class ThreadPoolRegister {
 
     public void register(DtpExecutor executor) {
         threadPoolExecutorAllShutDownProcessor.registerThreadPool(executor);
-        DtpRegistry.register(executor, SOURCE_NAME);
+        DtpRegistry.registerExecutor(new ExecutorWrapper(executor), SOURCE_NAME);
     }
 }

@@ -17,8 +17,6 @@ import cn.xk.xcode.utils.object.BeanUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.github.pagehelper.PageInfo;
 import com.mybatisflex.core.logicdelete.LogicDeleteManager;
-import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

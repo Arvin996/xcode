@@ -33,14 +33,6 @@ public interface GlobalErrorCodeConstants
     ErrorCode CACHE_TYPE_INVALID = new IntErrorCode(430, "无效缓存类型");
     // ========== 服务端错误段 ==========
     ErrorCode INTERNAL_SERVER_ERROR = new IntErrorCode(500, "系统异常");
-    ErrorCode NOT_IMPLEMENTED = new IntErrorCode(501, "功能未实现/未开启");
-    ErrorCode ERROR_CONFIGURATION = new IntErrorCode(502, "错误的配置项");
-    ErrorCode CHECK_CODE_IS_EXPIRED = new IntErrorCode(503, "验证码已过期");
-    ErrorCode CHECK_CODE_IS_ERROR = new IntErrorCode(504, "验证码不正确");
-    ErrorCode CHECK_CODE_GEN_ERROR = new IntErrorCode(505, "验证码生成失败");
-    ErrorCode CHECK_CODE_SEND_ERROR = new IntErrorCode(506, "验证码发送失败");
-    ErrorCode CHECK_CODE_EMAIL_NOT_CONFIG = new IntErrorCode(507, "验证码邮箱未配置");
-    ErrorCode CHECK_CODE_MOBILE_NOT_CONFIG = new IntErrorCode(508, "验证码手机短信未配置");
     ErrorCode CHECK_CODE_HANDLER_NOT_EXISTS = new IntErrorCode(509, "对应的验证码处理器不存在");
     ErrorCode MQ_MESSAGE_SEND_FAIL = new IntErrorCode(510, "消息发送失败");
     ErrorCode SERVICE_FALL_BACK = new IntErrorCode(511, "服务熔断");
@@ -54,4 +46,5 @@ public interface GlobalErrorCodeConstants
     ErrorCode TASK_CONTEXT_IS_NULL =  new IntErrorCode(997, "任务上下文为空");
     ErrorCode TASK_CONTEXT_BIZ_CODE_IS_NULL =  new IntErrorCode(996, "任务上下文业务编码为空");
     ErrorCode TASK_HANDLER_LIST_IS_NULL =  new IntErrorCode(995, "任务编码{}对应的任务执行器列表为空");
+
 }

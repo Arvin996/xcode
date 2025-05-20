@@ -4,7 +4,6 @@ import cn.xk.xcode.enums.*;
 import cn.xk.xcode.validation.InStrEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;

@@ -3,21 +3,25 @@ package cn.xk.xcode.handler.message;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.balance.core.ILoadBalancer;
+import cn.xk.xcode.config.XcodeMessageProperties;
+import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.core.ThreadPoolExecutorHolder;
 import cn.xk.xcode.entity.po.*;
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.enums.*;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.exception.core.ServiceException;
+import cn.xk.xcode.handler.message.response.SendMessageResponse;
 import cn.xk.xcode.limit.RateLimiterHolder;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
-import cn.xk.xcode.utils.CsvCountUtil;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
-import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
+import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -28,8 +32,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static cn.xk.xcode.config.GlobalMessageConstants.*;
+import static cn.xk.xcode.config.RabbitMqConfiguration.*;
 import static cn.xk.xcode.entity.def.MessageChannelAccountTableDef.MESSAGE_CHANNEL_ACCOUNT;
 import static cn.xk.xcode.entity.def.MessageChannelTableDef.MESSAGE_CHANNEL;
 import static cn.xk.xcode.entity.def.MessageTaskDetailTableDef.MESSAGE_TASK_DETAIL;
@@ -60,9 +66,6 @@ public abstract class AbstractHandler implements IHandler {
     private ILoadBalancer loadBalancer;
 
     @Resource
-    private StringRedisTemplate redisTemplate;
-
-    @Resource
     private RateLimiterHolder rateLimiterHolder;
 
     @Resource
@@ -82,21 +85,39 @@ public abstract class AbstractHandler implements IHandler {
     @Resource
     protected MessageChannelAccessClientService messageChannelAccessClientService;
 
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private XcodeMessageProperties xcodeMessageProperties;
+
     @Override
-    public void sendMessage(MessageTask messageTask) {
+    public CommonResult<SendMessageResponse> sendMessage(MessageTask messageTask) {
         // 1. 负载均衡
         MessageChannelAccountPo messageChannelAccountPo = handleLoadBalance(messageTask);
         if (Objects.isNull(messageChannelAccountPo)) {
-            ExceptionUtil.castServerException(MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, messageTask.getMsgChannel());
+            return CommonResult.error(MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, messageTask.getMsgChannel());
         }
         // 2. 限流
         if (needRateLimit()) {
             if (!rateLimiterHolder.getRateLimiter().rateLimit(messageTask)) {
-                ExceptionUtil.castServerException(TOO_MANY_REQUESTS);
+                return CommonResult.error(TOO_MANY_REQUESTS);
             }
         }
         // 3. 验证参数
-        validateChannelAccountParamValue(getChannelAccountParamsValue(messageChannelAccountPo));
+        try {
+            validateChannelAccountParamValue(getChannelAccountParamsValue(messageChannelAccountPo));
+        } catch (Exception e) {
+            if (e instanceof ServiceException) {
+                ServiceException s = (ServiceException) e;
+                return CommonResult.error(s.getCode(), s.getMsg());
+            } else if (e instanceof ServerException) {
+                ServerException s = (ServerException) e;
+                return CommonResult.error(s.getCode(), s.getMsg());
+            } else {
+                return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, e.getMessage());
+            }
+        }
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
         messageTaskPo.setAccountId(messageChannelAccountPo.getId());
         messageTaskService.updateById(messageTaskPo);
@@ -106,10 +127,10 @@ public abstract class AbstractHandler implements IHandler {
             result = doSendMessage(messageTask, messageChannelAccountPo);
         } catch (InterruptedException e) {
             log.error("发送消息超时,{}", e.getMessage());
-            ExceptionUtil.castServiceException(SEND_MESSAGE_TASK_TIMEOUT);
+            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
         }
         if (Objects.isNull(result)) {
-            return;
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
         }
         List<MessageTaskDetailPo> list = result.getList();
         Integer successCount = result.getSuccessCount();
@@ -126,34 +147,45 @@ public abstract class AbstractHandler implements IHandler {
         // 失败重试
         if (CollectionUtil.isNotEmpty(list)) {
             saveBatchTaskMessageDetails(list);
+            // 获取重试消息
+            List<MessageTaskDetailPo> retryMessageList = messageTaskDetailService.list(MESSAGE_TASK_DETAIL.TASK_ID.eq(messageTask.getId()).and(MESSAGE_TASK_DETAIL.STATUS.eq("1")));
+            if (CollectionUtil.isNotEmpty(retryMessageList)) {
+                rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, JSON.toJSONString(retryMessageList));
+            }
         }
+        return buildResponse(result);
     }
 
     @Override
-    public void reSendTaskMessage(Long taskId) {
+    public CommonResult<SendMessageResponse> reSendTaskMessage(Long taskId) {
         initChannelSendClient();
         MessageTaskPo messageTaskPo = messageTaskService.getById(taskId);
         if (ObjectUtil.isNull(messageTaskPo)) {
-            ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
         }
         MessageChannelAccessClientPo channelAccessClientPo = messageChannelAccessClientService.getById(messageTaskPo.getClientId());
         MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
-            ExceptionUtil.castServiceException(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+            return CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
         }
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
-        messageTask.setReceiverSet(new HashSet<>(StrUtil.split(messageTaskPo.getReceivers(), ",")));
-        messageChannelAccessClientService.validateClient(channelAccessClientPo, messageTask.getReceiverSet().size());
+        List<String> reSendReceivers = StrUtil.splitTrim(messageTaskPo.getReceivers(), ",");
+        messageTask.setReceiverSet(CollectionUtil.convertSet(reSendReceivers, Function.identity()));
+        try {
+            messageChannelAccessClientService.validateClient(channelAccessClientPo, messageTask.getReceiverSet().size());
+        } catch (ServiceException e) {
+            return CommonResult.error(e.getCode(), e.getMsg());
+        }
         HandlerResult result = null;
         try {
             result = doSendMessage(messageTask, messageChannelAccountPo);
         } catch (InterruptedException e) {
             log.error("发送消息超时,{}", e.getMessage());
-            ExceptionUtil.castServiceException(SEND_MESSAGE_TASK_TIMEOUT);
+            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
         }
         if (Objects.isNull(result)) {
             log.warn("执行结果为空");
-            return;
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
         }
         List<MessageTaskDetailPo> list = result.getList();
         Integer successCount = result.getSuccessCount();
@@ -171,26 +203,106 @@ public abstract class AbstractHandler implements IHandler {
         }
         List<MessageTaskDetailPo> list1 = messageTaskDetailService.list(MESSAGE_TASK_DETAIL.TASK_ID.eq(taskId));
         Map<String, MessageTaskDetailPo> map = new HashMap<>();
-        list1.forEach(messageTaskDetailPo -> {
-          map.put(messageTaskDetailPo.getReceiver(), messageTaskDetailPo);
-        });
+        list.forEach(messageTaskDetailPo -> map.put(messageTaskDetailPo.getReceiver(), messageTaskDetailPo));
         List<MessageTaskDetailPo> list2 = new ArrayList<>();
-        for (MessageTaskDetailPo messageTaskDetailPo : list) {
+        for (MessageTaskDetailPo messageTaskDetailPo : list1) {
             MessageTaskDetailPo messageTaskDetailPo1 = map.get(messageTaskDetailPo.getReceiver());
-            if (ObjectUtil.isNotNull(messageTaskDetailPo1)){
-                messageTaskDetailPo1.setStatus(messageTaskDetailPo.getStatus());
-                messageTaskDetailPo1.setFailMsg(messageTaskDetailPo.getFailMsg());
-                messageTaskDetailPo1.setSuccessTime(messageTaskDetailPo.getSuccessTime());
-                messageTaskDetailPo1.setExecTime(messageTaskDetailPo.getExecTime());
-                list2.add(messageTaskDetailPo1);
+            if (ObjectUtil.isNotNull(messageTaskDetailPo1)) {
+                messageTaskDetailPo.setStatus(messageTaskDetailPo1.getStatus());
+                messageTaskDetailPo.setFailMsg(messageTaskDetailPo1.getFailMsg());
+                messageTaskDetailPo.setSuccessTime(messageTaskDetailPo1.getSuccessTime());
+                messageTaskDetailPo.setExecTime(messageTaskDetailPo1.getExecTime());
+                list2.add(messageTaskDetailPo);
             }
         }
         if (CollectionUtil.isNotEmpty(list2)) {
             messageTaskDetailService.updateBatch(list2);
         }
+        return buildResponse(result);
     }
 
-    private void updateClientAccessCount(MessageChannelAccessClientPo channelAccessClientPo, int successCount){
+    private CommonResult<SendMessageResponse> buildResponse(HandlerResult result) {
+        List<MessageTaskDetailPo> list = result.getList();
+        Integer successCount = result.getSuccessCount();
+        SendMessageResponse response = new SendMessageResponse();
+        response.setSuccessCount(successCount);
+        response.setFailCount(list.size() - successCount);
+        List<SendMessageResponse.FailMessageDetail> failMessageDetailList = list.stream().filter(m -> CommonStatusEnum.isDisable(m.getStatus()))
+                .map(m -> {
+                    SendMessageResponse.FailMessageDetail failMessageDetail = new SendMessageResponse.FailMessageDetail();
+                    failMessageDetail.setReceiver(m.getReceiver());
+                    failMessageDetail.setFailMsg(m.getFailMsg());
+                    return failMessageDetail;
+                }).collect(Collectors.toList());
+        response.setFailMessageDetailList(failMessageDetailList);
+        return CommonResult.success(response);
+    }
+
+    @Override
+    public CommonResult<SendMessageResponse> retrySendMessage(List<MessageTaskDetailPo> messageTaskDetailPoList) {
+        MessageTaskPo messageTaskPo = messageTaskService.getById(messageTaskDetailPoList.get(0).getTaskId());
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
+        if (ObjectUtil.isNull(messageChannelAccountPo)) {
+            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+        }
+        MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
+        messageTask.setReceiverSet(CollectionUtil.convertSet(messageTaskDetailPoList, MessageTaskDetailPo::getReceiver));
+        HandlerResult result = null;
+        try {
+            result = doSendMessage(messageTask, messageChannelAccountPo);
+        } catch (InterruptedException e) {
+            log.error("发送消息超时,{}", e.getMessage());
+            CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
+        }
+        if (ObjectUtil.isNull(result)) {
+            log.warn("执行结果为空");
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
+        }
+        List<MessageTaskDetailPo> list = result.getList();
+        Integer successCount = result.getSuccessCount();
+        if (successCount == messageTask.getReceiverSet().size()) {
+            messageTaskPo.setStatus(MessageTaskStatusEnum.ALL_SUCCESS.getStatus());
+            messageTaskService.updateById(messageTaskPo);
+        } else {
+            if (successCount > 0) {
+                // 成功了一部分
+                messageTaskPo.setStatus(MessageTaskStatusEnum.PART_SUCCESS.getStatus());
+                messageTaskService.updateById(messageTaskPo);
+            }
+        }
+        // 更新
+        Map<String, MessageTaskDetailPo> map = new HashMap<>();
+        list.forEach(messageTaskDetailPo -> map.put(messageTaskDetailPo.getReceiver(), messageTaskDetailPo));
+        List<MessageTaskDetailPo> list2 = new ArrayList<>();
+        List<MessageTaskDetailPo> retryList = new ArrayList<>();
+        for (MessageTaskDetailPo messageTaskDetailPo : messageTaskDetailPoList) {
+            MessageTaskDetailPo messageTaskDetailPo1 = map.get(messageTaskDetailPo.getReceiver());
+            if (ObjectUtil.isNotNull(messageTaskDetailPo1)) {
+                messageTaskDetailPo.setStatus(messageTaskDetailPo1.getStatus());
+                messageTaskDetailPo.setRetryTimes(messageTaskDetailPo.getRetryTimes() + 1);
+                messageTaskDetailPo.setFailMsg(messageTaskDetailPo1.getFailMsg());
+                messageTaskDetailPo.setSuccessTime(messageTaskDetailPo1.getSuccessTime());
+                messageTaskDetailPo.setExecTime(messageTaskDetailPo1.getExecTime());
+                if (CommonStatusEnum.isDisable(messageTaskDetailPo.getStatus()) && messageTaskDetailPo.getRetryTimes() < xcodeMessageProperties.getFailRetryTimes()) {
+                    retryList.add(messageTaskDetailPo);
+                }
+                list2.add(messageTaskDetailPo);
+            }
+        }
+        if (CollectionUtil.isNotEmpty(list2)) {
+            messageTaskDetailService.updateBatch(list2);
+        }
+        // 重试补偿
+        if (CollectionUtil.isNotEmpty(retryList)) {
+            rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, JSON.toJSONString(retryList));
+        }
+        return buildResponse(result);
+    }
+
+    private void updateClientAccessCount(MessageChannelAccessClientPo channelAccessClientPo, int successCount) {
         channelAccessClientPo.setRestCount(channelAccessClientPo.getRestCount() - successCount);
         channelAccessClientPo.setUsedCount(channelAccessClientPo.getUsedCount() + successCount);
         messageChannelAccessClientService.updateById(channelAccessClientPo);
@@ -198,32 +310,37 @@ public abstract class AbstractHandler implements IHandler {
 
 
     @Override
-    public void reSendSingleTask(Long taskDetailId) {
+    public CommonResult<SendMessageResponse> reSendSingleTask(Long taskDetailId) {
         initChannelSendClient();
         MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
         if (ObjectUtil.isNull(messageTaskDetailPo)) {
-            ExceptionUtil.castServiceException(MESSAGE_TASK_DETAIL_NOT_EXISTS);
+            CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS);
         }
         messageTaskDetailPo.setExecTime(LocalDateTime.now());
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTaskDetailPo.getTaskId());
         if (ObjectUtil.isNull(messageTaskPo)) {
-            ExceptionUtil.castServiceException(MESSAGE_TASK_NOT_EXISTS);
+            CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
         }
         MessageChannelAccessClientPo channelAccessClientPo = messageChannelAccessClientService.getById(messageTaskPo.getClientId());
         MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
-            ExceptionUtil.castServiceException(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
         }
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         SingeSendMessageResult singeSendMessageResult = doSendMessage(messageTaskDetailPo.getReceiver(), messageTask, messageChannelAccountPo);
         // 1. 更新消息任务详情
+        HandlerResult handlerResult = new HandlerResult();
         if (singeSendMessageResult.isSuccess()) {
             messageTaskDetailPo.setStatus("0");
+            handlerResult.setSuccessCount(1);
             messageTaskDetailPo.setSuccessTime(LocalDateTime.now());
+            handlerResult.setList(Collections.singletonList(messageTaskDetailPo));
             updateClientAccessCount(channelAccessClientPo, 1);
         } else {
             messageTaskDetailPo.setStatus("1");
             messageTaskDetailPo.setFailMsg(singeSendMessageResult.getFailMsg());
+            handlerResult.setList(Collections.singletonList(messageTaskDetailPo));
+            handlerResult.setSuccessCount(0);
         }
         messageTaskDetailService.updateById(messageTaskDetailPo);
         // 2. 更新消息任务
@@ -242,6 +359,7 @@ public abstract class AbstractHandler implements IHandler {
                 messageTaskService.updateById(messageTaskPo);
             }
         }
+        return buildResponse(handlerResult);
     }
 
     private void saveBatchTaskMessageDetails(List<MessageTaskDetailPo> list) {
@@ -325,11 +443,11 @@ public abstract class AbstractHandler implements IHandler {
     }
 
     protected void saveWithDrawInfo(Integer taskDetailId, String taskId) {
-        redisTemplate.opsForValue().set(channelCode() + "_" + taskDetailId, taskId, 1, TimeUnit.DAYS);
+        stringRedisTemplate.opsForValue().set(channelCode() + "_" + taskDetailId, taskId, 1, TimeUnit.DAYS);
     }
 
     protected String getWithDrawInfo(Integer taskDetailId) {
-        return redisTemplate.opsForValue().get(channelCode() + "_" + taskDetailId);
+        return stringRedisTemplate.opsForValue().get(channelCode() + "_" + taskDetailId);
     }
 
     @Override

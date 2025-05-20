@@ -27,9 +27,8 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "验证码校验dto")
 public class CaptchaVerifyReqDto {
 
-    @NotBlank(message = "验证码不能为空")
-    @Schema(description = "验证码")
-    private String code;
+    @Schema(description = "uuid")
+    private String uuid;
 
     @NotNull(message = "验证码生成类型不能为空")
     @Schema(description = "生成类型", example = "email")
@@ -44,7 +43,7 @@ public class CaptchaVerifyReqDto {
     @Schema(description = "手机号", example = "13027102413")
     private String mobile;
 
-    public boolean isValid() {
+    public boolean isInvalid() {
         return StrUtil.isBlank(email) && StrUtil.isBlank(mobile);
     }
 }

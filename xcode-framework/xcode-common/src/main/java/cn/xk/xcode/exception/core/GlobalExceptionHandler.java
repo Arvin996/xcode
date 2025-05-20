@@ -18,7 +18,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.PARAMETER_VALIDATIO
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public CommonResult<?> handlerException(Exception e) {
-        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
+        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage());
     }
 
     @ExceptionHandler(ServerException.class)

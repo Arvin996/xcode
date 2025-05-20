@@ -17,7 +17,9 @@ import java.io.File;
 public class CsvCountUtil {
 
     public static long countCsvRow(String path, CsvRowCountHandler csvRowCountHandler) {
-        try (CsvReader reader = new CsvReader(new File(path), null)) {
+        CsvReader reader;
+        try {
+            reader = new CsvReader(new File(path), null);
             reader.read(csvRowCountHandler);
         } catch (Exception e) {
             log.error("CsvCountUtil#countCsvRow fail!{}", e.getMessage());
@@ -25,10 +27,12 @@ public class CsvCountUtil {
         return csvRowCountHandler.getRowSize();
     }
 
-    public static void handleCsv(String path, CsvRowHandler rowHandler){
-        try (CsvReader reader = new CsvReader(new File(path), null)) {
+    public static void handleCsv(String path, CsvRowHandler rowHandler) {
+        CsvReader reader;
+        try {
+            reader = new CsvReader(new File(path), null);
             reader.read(rowHandler);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("CsvCountUtil#handleCsv fail!{}", e.getMessage());
         }
     }

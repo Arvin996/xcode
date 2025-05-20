@@ -1,5 +1,6 @@
 package cn.xk.xcode.handler.core.cache;
 
+import cn.xk.xcode.config.CaptchaProperties;
 import cn.xk.xcode.handler.SaveCaptchaCacheStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,13 +15,14 @@ import java.util.concurrent.TimeUnit;
  */
 @RequiredArgsConstructor
 public class RedisSaveCaptchaCache implements SaveCaptchaCacheStrategy {
+
     private final StringRedisTemplate stringRedisTemplate;
 
-    private final long expireTime;
+    private final CaptchaProperties captchaProperties;
 
     @Override
     public void save(String k, String v) {
-        stringRedisTemplate.opsForValue().set(k, v, expireTime, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(k, v, captchaProperties.getExpiredTime(), TimeUnit.SECONDS);
     }
 
     @Override

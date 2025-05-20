@@ -2,8 +2,8 @@ package cn.xk.xcode.service.task;
 
 import cn.xk.xcode.core.ThreadPoolExecutorHolder;
 import cn.xk.xcode.handler.corn.CornReceiversTaskHandler;
-import com.dtp.core.thread.DtpExecutor;
 import com.xxl.job.core.context.XxlJobHelper;
+import org.dromara.dynamictp.core.executor.DtpExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,13 +20,15 @@ import static cn.xk.xcode.config.GlobalMessageConstants.XXL_THREAD_POOL_NAME;
 @Component
 public class CornReceiversTask {
 
-    @Resource
-    private CornReceiversTaskHandler cornReceiversTaskHandler;
 
-    @Resource
-    private ThreadPoolExecutorHolder threadPoolExecutorHolder;
+    private final CornReceiversTaskHandler cornReceiversTaskHandler;
 
-    private final DtpExecutor dtpExecutor = (DtpExecutor) threadPoolExecutorHolder.routeThreadPool(XXL_THREAD_POOL_NAME);
+    private final DtpExecutor dtpExecutor;
+
+    public CornReceiversTask(CornReceiversTaskHandler cornReceiversTaskHandler, ThreadPoolExecutorHolder threadPoolExecutorHolder) {
+        this.cornReceiversTaskHandler = cornReceiversTaskHandler;
+        dtpExecutor = (DtpExecutor) threadPoolExecutorHolder.routeThreadPool(XXL_THREAD_POOL_NAME);
+    }
 
     public void executeCsvReceiversCronTask() {
         Integer taskId = Integer.valueOf(Objects.requireNonNull(XxlJobHelper.getJobParam()));

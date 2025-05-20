@@ -1,14 +1,17 @@
 package cn.xk.xcode.controller;
 
-import cn.xk.xcode.client.CaptchaClientApi;
 import cn.xk.xcode.entity.dto.CaptchaGenReqDto;
 import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
 import cn.xk.xcode.entity.vo.CaptchaGenResultVo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.CaptchaService;
-import org.springframework.stereotype.Controller;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -18,22 +21,23 @@ import javax.annotation.Resource;
  * @Version 1.0
  * @Description CaptchaController
  */
-@Controller
+@RestController
 @RequestMapping("/Captcha")
-public class CaptchaController implements CaptchaClientApi {
+@Tag(name = "CaptchaController", description = "验证码相关接口")
+public class CaptchaController {
 
     @Resource
     private CaptchaService CaptchaService;
 
-    @Override
     @PostMapping("/genCode")
-    public CommonResult<CaptchaGenResultVo> genCaptcha(CaptchaGenReqDto CaptchaGenReqDto) {
+    @Operation(summary = "生成验证码")
+    public CommonResult<CaptchaGenResultVo> genCaptcha(@Validated @RequestBody CaptchaGenReqDto CaptchaGenReqDto) {
         return CaptchaService.genCaptcha(CaptchaGenReqDto);
     }
 
-    @Override
     @PostMapping("/verifyCode")
-    public CommonResult<Boolean> verifyCode(CaptchaVerifyReqDto CaptchaVerifyReqDto) {
+    @Operation(summary = "验证验证码")
+    public CommonResult<Boolean> verifyCode(@Validated @RequestBody CaptchaVerifyReqDto CaptchaVerifyReqDto) {
         return CaptchaService.verifyCode(CaptchaVerifyReqDto);
     }
 }

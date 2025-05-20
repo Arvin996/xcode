@@ -24,4 +24,7 @@ public class CaptchaGenResultVo {
 
     @Schema(description = "图片base64验证码")
     private String picCode;
+
+    @Schema(description = "uuid")
+    private String uuid;
 }

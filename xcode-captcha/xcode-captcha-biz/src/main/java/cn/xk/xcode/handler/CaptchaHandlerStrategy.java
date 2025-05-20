@@ -11,8 +11,7 @@ import cn.xk.xcode.enums.CaptchaGenerateType;
 import cn.xk.xcode.pojo.CommonResult;
 import org.springframework.util.StringUtils;
 
-import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CHECK_CODE_IS_ERROR;
-import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CHECK_CODE_IS_EXPIRED;
+import static cn.xk.xcode.enums.CaptchaGlobalErrorCodeConstants.*;
 
 /**
  * @Author xuk
@@ -38,12 +37,22 @@ public abstract class CaptchaHandlerStrategy {
     public CaptchaGenResultVo doGenerateCode(CaptchaGenReqDto captchaGenReqDto) {
         GenerateCodeResEntity generateCodeResEntity = generate(captchaGenReqDto);
         doCodeSave(captchaGenReqDto, generateCodeResEntity);
-        return CaptchaGenResultVo.builder().success(true).picCode(generateCodeResEntity.getPicCode()).build();
+        return CaptchaGenResultVo.builder().success(true).picCode(generateCodeResEntity.getPicCode()).uuid(generateCodeResEntity.getUuid()).build();
     }
 
     public abstract void doCodeSave(CaptchaGenReqDto captchaGenReqDto, GenerateCodeResEntity generateCodeResEntity);
 
     public CommonResult<Boolean> verifyCode(CaptchaVerifyReqDto captchaVerifyReqDto) {
+        String type = captchaVerifyReqDto.getType();
+        if (CaptchaGenerateType.EMAIL.getCode().equals(type)){
+            if (StrUtil.isBlank(captchaVerifyReqDto.getEmail())){
+                return CommonResult.error(EMAIL_MUST_NOT_NULL);
+            }
+        }else if (CaptchaGenerateType.MOBILE.getCode().equals(type)){
+            if (StrUtil.isBlank(captchaVerifyReqDto.getMobile())){
+                return CommonResult.error(MOBILE_MUST_NOT_NULL);
+            }
+        }
         String code = captchaVerifyReqDto.getCode();
         String key = getLocalCodeKey(captchaVerifyReqDto);
         String localCode = saveCaptchaStrategy.get(key);

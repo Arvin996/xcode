@@ -7,20 +7,19 @@ import cn.xk.xcode.handler.message.IHandler;
 import cn.xk.xcode.limit.BaseRateLimiter;
 import cn.xk.xcode.limit.GlobalRequestRateLimiter;
 import cn.xk.xcode.limit.RateLimiterHolder;
-import cn.xk.xcode.mq.XxlMqTemplate;
 import com.github.houbb.sensitive.word.api.IWordAllow;
 import com.github.houbb.sensitive.word.api.IWordDeny;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.github.houbb.sensitive.word.support.allow.WordAllows;
 import com.github.houbb.sensitive.word.support.deny.WordDenys;
-import com.xxl.mq.client.factory.impl.XxlMqSpringClientFactory;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ import java.util.List;
  * @Description MessageThreadPoolConfiguration
  **/
 @Configuration
-@EnableConfigurationProperties({XxlMqProperties.class, XcodeMessageProperties.class})
+@EnableConfigurationProperties({XcodeMessageProperties.class})
 public class MessageConfiguration {
 
     // 配置默认敏感词 + 自定义敏感词
@@ -38,8 +37,6 @@ public class MessageConfiguration {
     // 配置默认非敏感词 + 自定义非敏感词
     IWordAllow wordAllow = WordAllows.chains(WordAllows.defaults(), new CustomWordAllow());
 
-    @Resource
-    private XxlMqProperties xxlMqProperties;
 
     @Bean
     public MessageHandlerHolder messageHandlerHolder(List<IHandler> handlers) {
@@ -66,18 +63,6 @@ public class MessageConfiguration {
     public ILoadBalancer iLoadBalancer() {
         return new FirstLoadBalancer();
     }
-
-//    @Bean
-//    public XxlMqSpringClientFactory getXxlMqConsumer() {
-//        XxlMqSpringClientFactory xxlMqSpringClientFactory = new XxlMqSpringClientFactory();
-//        xxlMqSpringClientFactory.setAdminAddress(xxlMqProperties.getAdminAddress());
-//        return xxlMqSpringClientFactory;
-//    }
-
-//    @Bean
-//    public XxlMqTemplate xxlMqTemplate() {
-//        return new XxlMqTemplate();
-//    }
 
     @Bean
     public SensitiveWordBs sensitiveWordBs() {
@@ -107,6 +92,16 @@ public class MessageConfiguration {
                 // 配置非自定义敏感词
                 .wordAllow(wordAllow)
                 .init();
+    }
+
+    @Bean(name = "stringRedisTemplate")
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
+        // 设置序列化器（默认就是字符串序列化器，此处可省略）
+        // template.setKeySerializer(RedisSerializer.string());
+        // template.setValueSerializer(RedisSerializer.string());
+        // template.setHashKeySerializer(RedisSerializer.string());
+        // template.setHashValueSerializer(RedisSerializer.string());
+        return new StringRedisTemplate(factory);
     }
 
 

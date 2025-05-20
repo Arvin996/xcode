@@ -5,7 +5,20 @@ spring:
     # 微服务名
     # 添加服务名称，用于在注册中心显示，必要字段
     # 此处服务名称，与 plat_service 表中 route 字段一致（重要）
-    name: xcode-captcha-server
+    name: xcode-captcha
+  cloud:
+    loadbalancer:
+      nacos:
+        enabled: true
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: Geit@86970000
+      discovery:
+        enabled: true
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
   redis:
     # Redis数据库索引（默认为0）
     database: 1
@@ -27,31 +40,34 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
-
-grpc:
-  server:
-    port: 9999
 xcode:
   captcha:
     cache-type: redis
     expired-time: 60
-    email:
-      host: s
-      username: a
-      password: a
-      port: 22
-      length: 6
-    mobile:
-      access-key-id: 1
-      length: 6
-      region-id: a
-      secret: a
-      sign-name: aaa
     pic:
       category: LINE
       type: char
-      char-length: 6
       math-length: 1
+    code-length: 6
+grpc:
+  server:
+    port: 3000
+  client:
+    xcode-message:
+      address: 'discovery:///xcode-message'
+      negotiation-type: plaintext
+      #  TCP相关设置
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+knife4j:
+  enable: true
+  production: false
+  setting:
+    language: zh_cn
+  basic:
+    enable: false
+    username: root
+    password: 123456
 
 
 

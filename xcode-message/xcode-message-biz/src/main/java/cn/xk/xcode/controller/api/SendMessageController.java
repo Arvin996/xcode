@@ -50,4 +50,17 @@ public class SendMessageController {
         return CommonResult.success(messageTaskService.resumeMessage(taskId));
     }
 
+    @Operation(summary = "重新发送单条任务详情信息")
+    @GetMapping("/reSendSingleTask/{taskDetailId}")
+    public CommonResult<?> reSendSingleTask(@PathVariable("taskDetailId") Long taskDetailId) {
+        return messageTaskService.reSendSingleTask(taskDetailId);
+    }
+
+    @Operation(summary = "重新发送消息任务")
+    @GetMapping("/reSendTaskMessage/{taskId}")
+    public CommonResult<?> reSendTaskMessage(@PathVariable("taskId") Long taskId) {
+        return messageTaskService.reSendTaskMessage(taskId);
+    }
+
+
 }

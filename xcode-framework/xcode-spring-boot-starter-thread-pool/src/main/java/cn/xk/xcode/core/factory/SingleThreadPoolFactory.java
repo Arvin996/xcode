@@ -2,14 +2,15 @@ package cn.xk.xcode.core.factory;
 
 import cn.xk.xcode.config.ThreadPoolConstants;
 import cn.xk.xcode.core.ThreadPoolRegister;
-import com.dtp.common.em.QueueTypeEnum;
-import com.dtp.common.em.RejectedTypeEnum;
-import com.dtp.core.thread.DtpExecutor;
-import com.dtp.core.thread.ThreadPoolBuilder;
+;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.dromara.dynamictp.common.em.QueueTypeEnum;
+import org.dromara.dynamictp.common.em.RejectedTypeEnum;
+import org.dromara.dynamictp.core.executor.DtpExecutor;
+import org.dromara.dynamictp.core.support.ThreadPoolBuilder;
 /**
  * @Author xuk
  * @Date 2025/3/7 11:29

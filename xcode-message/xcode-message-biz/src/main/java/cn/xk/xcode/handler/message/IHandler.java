@@ -2,6 +2,9 @@ package cn.xk.xcode.handler.message;
 
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
+import cn.xk.xcode.entity.po.MessageTaskDetailPo;
+import cn.xk.xcode.handler.message.response.SendMessageResponse;
+import cn.xk.xcode.pojo.CommonResult;
 
 import java.util.List;
 
@@ -13,7 +16,7 @@ import java.util.List;
  **/
 public interface IHandler {
 
-    void sendMessage(MessageTask messageTask);
+    CommonResult<SendMessageResponse> sendMessage(MessageTask messageTask);
 
     void withDrawMessage(List<Integer> messageTaskDetailIds);
 
@@ -25,7 +28,9 @@ public interface IHandler {
 
     boolean needRateLimit();
 
-    void reSendTaskMessage(Long taskId);
+    CommonResult<SendMessageResponse> reSendTaskMessage(Long taskId);
 
-    void reSendSingleTask(Long taskDetailId);
+    CommonResult<SendMessageResponse> reSendSingleTask(Long taskDetailId);
+
+    CommonResult<SendMessageResponse> retrySendMessage(List<MessageTaskDetailPo> messageTaskDetailPoList);
 }

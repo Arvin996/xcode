@@ -58,7 +58,7 @@
         <bcprov-jdk15to18.version>1.75</bcprov-jdk15to18.version>
         <s3.version>2.25.15</s3.version>
         <aws-crt.version>0.31.3</aws-crt.version>
-        <dynamic-tp.version>1.0.2</dynamic-tp.version>
+        <dynamic-tp.version>1.2.1</dynamic-tp.version>
         <guava.version>31.0.1-jre</guava.version>
         <dingding.version>2.0.0</dingding.version>
         <sensitive-word.version>0.21.0</sensitive-word.version>
@@ -70,6 +70,14 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Sa-Token 整合 grpc -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-grpc</artifactId>
+                <version>${satoken.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -114,10 +122,11 @@
             </dependency>
 
             <dependency>
-                <groupId>io.github.lyh200</groupId>
-                <artifactId>dynamic-tp-spring-boot-starter-apollo</artifactId>
+                <groupId>org.dromara.dynamictp</groupId>
+                <artifactId>dynamic-tp-spring-boot-starter-nacos</artifactId>
                 <version>${dynamic-tp.version}</version>
             </dependency>
+
 
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>

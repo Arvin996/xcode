@@ -13,6 +13,7 @@ import cn.xk.xcode.enums.MessageSendType;
 import cn.xk.xcode.enums.MessageTaskStatusEnum;
 import cn.xk.xcode.enums.ShieldType;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.mapper.MessageTaskMapper;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.PageResult;
@@ -54,6 +55,9 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
 
     @Resource
     private EnhanceXxlJobService enhanceXxlJobService;
+
+    @Resource
+    private MessageHandlerHolder messageHandlerHolder;
 
     @Override
     public PageResult<MessageTaskVo> queryMessageTasks(QueryMessageTaskDto queryMessageTaskDto) {
@@ -162,5 +166,35 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
             }
         }
         return updateById(messageTaskPo);
+    }
+
+    @Override
+    public CommonResult<?> reSendSingleTask(Long taskDetailId) {
+        MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
+        if (ObjectUtil.isNull(messageTaskDetailPo)) {
+            return CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS);
+        }
+        MessageTaskPo messageTaskPo = getById(messageTaskDetailPo.getTaskId());
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
+        if (ObjectUtil.isNull(messageChannelPo)) {
+            return CommonResult.error(CHANNEL_NOT_EXISTS);
+        }
+        return messageHandlerHolder.routeHandler(messageChannelPo.getCode()).reSendSingleTask(taskDetailId);
+    }
+
+    @Override
+    public CommonResult<?> reSendTaskMessage(Long taskId) {
+        MessageTaskPo messageTaskPo = this.getById(taskId);
+        if (ObjectUtil.isNull(messageTaskPo)) {
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+        }
+        MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
+        if (ObjectUtil.isNull(messageChannelPo)) {
+            return CommonResult.error(CHANNEL_NOT_EXISTS);
+        }
+        return messageHandlerHolder.routeHandler(messageChannelPo.getCode()).reSendTaskMessage(taskId);
     }
 }

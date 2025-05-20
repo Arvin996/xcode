@@ -26,4 +26,8 @@ public interface MessageTaskService extends IService<MessageTaskPo> {
     Boolean pauseMessage(Integer taskId);
 
     Boolean resumeMessage(Integer taskId);
+
+    CommonResult<?> reSendSingleTask(Long taskDetailId);
+
+    CommonResult<?> reSendTaskMessage(Long taskId);
 }

@@ -5,6 +5,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.lock.DistributedLock;
 import cn.xk.xcode.entity.po.MessageChannelAccountPo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.service.MessageChannelService;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -27,13 +28,14 @@ public class RoundLoadBalancer implements ILoadBalancer {
     private final static long WAIT_LOCK_TIME_OUT = 2L;
     private final static long LOCK_TIME_OUT = 4L;
     private final StringRedisTemplate redisTemplate = SpringUtil.getBean(StringRedisTemplate.class);
+    private final MessageChannelService messageChannelService = SpringUtil.getBean(MessageChannelService.class);
 
     @Override
     public MessageChannelAccountPo choose(List<MessageChannelAccountPo> accountPoList) {
         if (CollectionUtil.isEmpty(accountPoList)) {
             return null;
         }
-        String channelCode = accountPoList.get(0).getChannelCode();
+        String channelCode = messageChannelService.getById(accountPoList.get(0).getChannelId()).getCode();
         String lockKey = LOCK_KEY_PREFIX + channelCode;
         boolean locked = distributedLock.tryLock(lockKey, WAIT_LOCK_TIME_OUT, LOCK_TIME_OUT, TimeUnit.SECONDS);
         if (!locked) {

@@ -27,8 +27,19 @@ message SendMessageTaskResponse {
   string data = 1;
   int32 code = 2;
   string msg = 3;
+  optional SendMessageResponse sendMessageResponse = 4;
 }
 
+message SendMessageResponse {
+  int32 successCount = 1;
+  int32 failCount = 2;
+  repeated FailMessageDetail failMessageDetailList = 3;
+}
+
+message FailMessageDetail {
+  string receiver = 1;
+  string failMsg = 2;
+}
 service SendMessageTaskService {
   rpc sendMessageTask(SendMessageTaskRequest) returns (SendMessageTaskResponse) {}
 }

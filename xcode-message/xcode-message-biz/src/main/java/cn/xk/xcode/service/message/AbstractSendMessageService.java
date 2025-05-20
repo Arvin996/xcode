@@ -103,9 +103,9 @@ public abstract class AbstractSendMessageService {
         return dealMessage(messageTask);
     }
 
-    public abstract String sendType();
+    protected abstract String sendType();
 
-    public abstract CommonResult<?> dealMessage(MessageTask messageTask);
+    protected abstract CommonResult<?> dealMessage(MessageTask messageTask);
 
     private void convertReceivers(MessageTask messageTask) {
         String msgChannel = messageTask.getMsgChannel();

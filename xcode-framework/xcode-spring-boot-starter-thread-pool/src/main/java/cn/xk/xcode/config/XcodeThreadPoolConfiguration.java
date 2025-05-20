@@ -1,7 +1,6 @@
 package cn.xk.xcode.config;
 
 import cn.xk.xcode.core.*;
-import cn.xk.xcode.core.controller.ThreadPoolInfoController;
 import cn.xk.xcode.core.factory.AbstractThreadPoolFactory;
 import cn.xk.xcode.core.factory.CommonThreadPoolFactory;
 import cn.xk.xcode.core.factory.SingleThreadPoolFactory;
@@ -55,10 +54,5 @@ public class XcodeThreadPoolConfiguration {
     @Bean
     public ThreadPoolExecutorHolder threadPoolExecutorHolder(ThreadPoolRegister register, ThreadPoolExecutorsUniqueCodeLoader loader, ThreadPoolProduceDecider decider) {
         return new ThreadPoolExecutorHolder(register, loader, decider);
-    }
-
-    @Bean
-    public ThreadPoolInfoController threadPoolInfoController() {
-        return new ThreadPoolInfoController();
     }
 }

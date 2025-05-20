@@ -5,6 +5,8 @@ import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.enums.MessageTaskStatusEnum;
 import cn.xk.xcode.handler.MessageHandlerHolder;
+import cn.xk.xcode.handler.message.response.SendMessageResponse;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.MessageTaskService;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
@@ -37,8 +39,8 @@ public class DelayTaskConsumer {
 
     @RabbitListener(queues = RabbitMqConfiguration.DELAY_MESSAGE_QUEUE_NAME)
     public void consumeDelayMessage(Message message, Channel channel) throws IOException {
-        log.info("receive delay message:{}", message);
         String body = new String(message.getBody(), StandardCharsets.UTF_8);
+        log.info("receive delay message:{}", body);
         MessageTask messageTask = JSON.parseObject(body, MessageTask.class);
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
         if (ObjectUtil.isNull(messageTaskPo)){
@@ -51,13 +53,8 @@ public class DelayTaskConsumer {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             return;
         }
-        try {
-            messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        } catch (Exception e) {
-            // 消息补偿 todo
-            log.error("延时消息消费失败，任务id: {}", messageTask.getId());
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
-        }
+        CommonResult<SendMessageResponse> commonResult = messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
+        log.info("延时消息返回结果: {}", commonResult);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
 }

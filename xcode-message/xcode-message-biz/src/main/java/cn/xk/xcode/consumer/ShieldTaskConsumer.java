@@ -5,6 +5,8 @@ import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.enums.MessageTaskStatusEnum;
 import cn.xk.xcode.handler.MessageHandlerHolder;
+import cn.xk.xcode.handler.message.response.SendMessageResponse;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.MessageTaskService;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
@@ -51,12 +53,8 @@ public class ShieldTaskConsumer{
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             return;
         }
-        try {
-            messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        } catch (Exception e) {
-            log.error("屏蔽消息消费失败，任务id: {}", messageTask.getId());
-            channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
-        }
+        CommonResult<SendMessageResponse> commonResult = messageHandlerHolder.routeHandler(messageTask.getMsgChannel()).sendMessage(messageTask);
+        log.info("屏蔽消息返回结果: {}", commonResult);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
     }
 }

@@ -24,7 +24,7 @@ import javax.validation.constraints.NotBlank;
 public class CaptchaGenReqDto
 {
     @NotBlank(message = "验证码生成类型不能为空")
-    @Schema(description = "生成类型", example = "email")
+    @Schema(description = "生成类型 email pic mobile", example = "pic")
     @InStrEnum(CaptchaGenerateType.class)
     private String type;
 

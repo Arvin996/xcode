@@ -4,10 +4,13 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.core.StpSystemUtil;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.UNAUTHORIZED;
 
 /**
  * @Author xuk
@@ -36,6 +39,11 @@ public class SaTokenMixedGlobalConfig implements WebMvcConfigurer {
                     .notMatch("/**/favicon.ico")
                     .notMatch("/resources/**")
                     .notMatch(whitelistProperties.getWhitelist())
+                    .match("/**").check(r -> {
+                        if (!StpSystemUtil.isLogin() && !StpMemberUtil.isLogin()) {
+                            ExceptionUtil.castServerException(UNAUTHORIZED);
+                        }
+                    })
                     .match("/manage/**").check(r -> StpSystemUtil.checkLogin())
                     .match("/api/**").check(r -> StpMemberUtil.checkLogin());
         })).addPathPatterns("/**");

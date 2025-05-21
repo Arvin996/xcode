@@ -1,6 +1,7 @@
 package cn.xk.xcode.utils.collections;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.util.CollectionUtils;
 
@@ -220,27 +221,27 @@ public class CollectionUtil {
 
 
     public static <T> List<T> createEmptyList() {
-        return Collections.emptyList();
+        return CollUtil.list(false);
     }
 
     public static <T> Set<T> createEmptySet() {
-        return Collections.emptySet();
+        return CollUtil.newHashSet();
     }
 
     public static <K, V> Map<K, V> createEmptyMap() {
-        return Collections.emptyMap();
+        return new HashMap<>();
     }
 
     public static <T> List<T> createSingleList(T obj) {
-        return Collections.singletonList(obj);
+        return CollUtil.list(false, obj);
     }
 
     public static <T> Set<T> createSingleSet(T obj) {
-        return Collections.singleton(obj);
+        return CollUtil.set(false, obj);
     }
 
     public static <K, V> Map<K, V> createSingleMap(K key, V value) {
-        return Collections.singletonMap(key, value);
+        return MapUtil.of(key, value);
     }
 
     public static <T> boolean isEmpty(Collection<T> collection) {

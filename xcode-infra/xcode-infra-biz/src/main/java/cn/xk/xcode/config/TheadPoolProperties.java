@@ -11,8 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "xcode.infra.thread")
-public class TheadPoolProperties
-{
+public class TheadPoolProperties {
+
     private int corePoolSize;
 
     private int maxPoolSize;
@@ -20,6 +20,5 @@ public class TheadPoolProperties
     private int keepAliveTime;
 
     private int queueCapacity;
-
 
 }

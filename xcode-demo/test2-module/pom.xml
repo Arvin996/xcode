@@ -36,15 +36,21 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-monitor-extension-trace</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.xk.xcode</groupId>-->
+<!--            <artifactId>xcode-monitor-extension-trace</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>cn.xk.xcode</groupId>-->
+<!--            <artifactId>xcode-spring-boot-starter-xxl-job</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-xxl-job</artifactId>
+            <artifactId>xcode-spring-boot-starter-oss</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

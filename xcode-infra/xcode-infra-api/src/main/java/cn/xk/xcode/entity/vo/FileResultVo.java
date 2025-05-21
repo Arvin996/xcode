@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Schema(description = "文件上传返回视图")
-public class FileResultVo
-{
+public class FileResultVo {
+
     @Schema(description = "文件id")
     private String fileId;
 

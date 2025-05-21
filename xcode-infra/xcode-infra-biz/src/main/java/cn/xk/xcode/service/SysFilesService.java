@@ -19,9 +19,9 @@ public interface SysFilesService extends IService<SysFilesPo> {
 
     FileResultVo uploadFile(UploadFileDto uploadFileDto);
 
-    String delFile(String fileId);
-
-    String updateFile(UpdateFileDto updateFileDto);
+    Boolean updateFile(UpdateFileDto updateFileDto);
 
     void downloadFile(String fileId, HttpServletResponse response) throws IOException;
+
+    Boolean delFile(String fileId);
 }

@@ -66,11 +66,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <exclusions>
@@ -87,11 +82,11 @@
             <version>4.11.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-xxl-job</artifactId>
-            <version>${revision}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>cn.xk.xcode</groupId>-->
+<!--            <artifactId>xcode-spring-boot-starter-xxl-job</artifactId>-->
+<!--            <version>${revision}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

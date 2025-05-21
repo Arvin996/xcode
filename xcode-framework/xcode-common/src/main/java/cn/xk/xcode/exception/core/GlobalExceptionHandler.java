@@ -1,6 +1,7 @@
 package cn.xk.xcode.exception.core;
 
 import cn.xk.xcode.pojo.CommonResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,9 +16,11 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.PARAMETER_VALIDATIO
  * @Description GlobalExceptionHandler
  */
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public CommonResult<?> handlerException(Exception e) {
+        log.error("发生异常:{}", e.getMessage());
         return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage());
     }
 

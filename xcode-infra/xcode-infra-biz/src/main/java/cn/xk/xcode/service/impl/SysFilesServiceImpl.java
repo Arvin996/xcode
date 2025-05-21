@@ -7,29 +7,30 @@ import cn.xk.xcode.entity.dto.UpdateFileDto;
 import cn.xk.xcode.entity.dto.UploadFileDto;
 import cn.xk.xcode.entity.po.SysFilesProcessPo;
 import cn.xk.xcode.entity.vo.FileResultVo;
-import cn.xk.xcode.enums.MinioBucketType;
+import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.service.MinioService;
 import cn.xk.xcode.service.SysFilesProcessService;
 import cn.xk.xcode.utils.MinioFileUtils;
+import cn.xk.xcode.utils.ip.IpUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import cn.xk.xcode.entity.po.SysFilesPo;
 import cn.xk.xcode.mapper.SysFilesMapper;
 import cn.xk.xcode.service.SysFilesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.nio.file.Files;
 
+import static cn.xk.xcode.config.InfraGlobalErrorCodeConstants.*;
 import static cn.xk.xcode.entity.def.SysFilesProcessTableDef.SYS_FILES_PROCESS_PO;
 
 /**
@@ -39,6 +40,7 @@ import static cn.xk.xcode.entity.def.SysFilesProcessTableDef.SYS_FILES_PROCESS_P
  * @since 2024-06-26
  */
 @Service
+@Slf4j
 public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo> implements SysFilesService {
 
     @Resource
@@ -50,19 +52,26 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
     @Override
     public FileResultVo uploadFile(UploadFileDto uploadFileDto) {
         MultipartFile file = uploadFileDto.getFile();
+        if (ObjectUtil.isNull(file)) {
+            ExceptionUtil.castServerException(UPLOAD_FILE_IS_EMPTY);
+        }
         String filename = file.getOriginalFilename();
-        File tempFile;
+        if (ObjectUtil.isNull(filename)) {
+            ExceptionUtil.castServerException(UPLOAD_FILE_NAME_IS_EMPTY);
+        }
+        File tempFile = null;
         try {
             tempFile = File.createTempFile(filename, ".temp");
             file.transferTo(tempFile);
         } catch (Exception e) {
-            throw new ServiceException(500, "创建文件失败");
+            log.error("创建临时文件失败:{}", e.getMessage());
+            ExceptionUtil.castServerException(UPLOAD_FILE_ERROR);
         }
         String fileMd5Id = MinioFileUtils.getFileMd5Id(tempFile);
         String objectName = MinioFileUtils.getObjectName(filename, fileMd5Id);
         Boolean b = minioService.uploadFile(tempFile, objectName, uploadFileDto.getBucketType().getType(), file.getContentType());
         if (!b) {
-            throw new ServiceException(500, "上传文件失败");
+            ExceptionUtil.castServerException(UPLOAD_FILE_ERROR);
         }
         // 插入数据库
         SysFilesPo filesPo = new SysFilesPo();
@@ -71,7 +80,7 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
         filesPo.setFileSize(file.getSize());
         filesPo.setFileType(file.getContentType());
         filesPo.setId(fileMd5Id);
-        filesPo.setCreateUser(StpUtil.getLoginIdAsString());
+       // filesPo.setCreateUser(StpUtil.getLoginIdAsString());
         filesPo.setBucket(uploadFileDto.getBucketType().getType());
         this.save(filesPo);
         if (uploadFileDto.isNeedConvertToMp4()) {
@@ -85,59 +94,63 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
                 sysFilesProcessPo.setStatus("0");
                 sysFilesProcessPo.setBucket(uploadFileDto.getBucketType().getType());
                 sysFilesProcessService.save(sysFilesProcessPo);
+                // 这里可以考虑使用消息队列异步处理也行 或者使用线程池异步 不需要使用定时任务
+                // 定时任务更适合做一些补偿
             }
         }
-        // 这里的filename 一定要是本服务器的ip地址 todo拼接ip地址给filePath
-        InetAddress inetAddress = null;
-        try {
-            inetAddress = InetAddress.getLocalHost();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String hostAddress = inetAddress.getHostAddress();
-        return FileResultVo.builder().fileId(fileMd5Id).filePath("http://" + hostAddress + ":9000" + "/" + objectName).build();
+        // 这里的filename 一定要是本服务器的ip地址
+        String hostIp = IpUtil.getHostIp();
+        return FileResultVo.builder().fileId(fileMd5Id).filePath("http://" + hostIp + ":9000" + "/" + objectName).build();
     }
 
     @Override
-    public String delFile(String fileId) {
+    public Boolean delFile(String fileId) {
         SysFilesPo filesPo = getById(fileId);
         if (ObjectUtil.isNull(filesPo)) {
-            throw new ServiceException(500, "文件不存在");
+            throw new ServiceException(FILE_NOT_EXISTS);
         }
         boolean b = minioService.delFile(filesPo.getBucket(), filesPo.getFilePath());
         if (!b) {
-            throw new ServiceException(500, "删除文件失败");
+            throw new ServerException(DEL_FILE_ERROR);
         }
-        removeById(fileId);
-        return "删除成功";
+        return removeById(fileId);
     }
+
+
 
     @Transactional
     @Override
-    public String updateFile(UpdateFileDto updateFileDto) {
+    public Boolean updateFile(UpdateFileDto updateFileDto) {
+        MultipartFile file = updateFileDto.getFile();
+        if (ObjectUtil.isNull(file)) {
+            ExceptionUtil.castServerException(UPLOAD_FILE_IS_EMPTY);
+        }
+        String filename = file.getOriginalFilename();
+        if (ObjectUtil.isNull(filename)) {
+            ExceptionUtil.castServerException(UPLOAD_FILE_NAME_IS_EMPTY);
+        }
         // 1. 获取原来的数据文件
         SysFilesPo filesPo = getById(updateFileDto.getFileId());
         if (ObjectUtil.isNull(filesPo)) {
-            throw new ServiceException(500, "文件不存在");
+            ExceptionUtil.castServerException(FILE_NOT_EXISTS);
         }
         boolean b = minioService.delFile(filesPo.getBucket(), filesPo.getFilePath());
         if (!b) {
-            throw new ServiceException(500, "操作失败");
+            ExceptionUtil.castServerException(UPDATE_FILE_ERROR);
         }
-        MultipartFile file = updateFileDto.getFile();
-        String filename = file.getOriginalFilename();
-        File tempFile;
+        File tempFile = null;
         try {
             tempFile = File.createTempFile(filename, ".temp");
             file.transferTo(tempFile);
         } catch (Exception e) {
-            throw new ServiceException(500, "创建文件失败");
+            log.error("创建临时文件失败:{}", e.getMessage());
+            ExceptionUtil.castServerException(UPDATE_FILE_ERROR);
         }
         String fileMd5Id = MinioFileUtils.getFileMd5Id(tempFile);
         String objectName = MinioFileUtils.getObjectName(filename, fileMd5Id);
         b = minioService.uploadFile(tempFile, objectName, filesPo.getBucket(), file.getContentType());
         if (!b) {
-            throw new ServiceException(500, "上传文件失败");
+            ExceptionUtil.castServerException(UPDATE_FILE_ERROR);
         }
         removeById(filesPo);
         QueryWrapper wrapper = QueryWrapper.create().where(SYS_FILES_PROCESS_PO.FILE_ID.eq(filesPo.getId()).and(SYS_FILES_PROCESS_PO.STATUS.eq("0")));
@@ -162,21 +175,21 @@ public class SysFilesServiceImpl extends ServiceImpl<SysFilesMapper, SysFilesPo>
         newfilesPo.setCreateUser(StpUtil.getLoginIdAsString());
         newfilesPo.setBucket(filesPo.getBucket());
         save(newfilesPo);
-        return "更新成功";
+        return true;
     }
 
     @Override
     public void downloadFile(String fileId, HttpServletResponse response) throws IOException {
         SysFilesPo filesPo = getById(fileId);
         if (ObjectUtil.isNull(filesPo)) {
-            throw new ServiceException(500, "文件不存在");
+            ExceptionUtil.castServerException(FILE_NOT_EXISTS);
         }
         byte[] bytes;
         InputStream inputStream = null;
         try {
             inputStream = minioService.downloadFile(filesPo.getBucket(), filesPo.getFilePath());
             if (ObjectUtil.isNull(inputStream)){
-                throw new ServiceException(500, "文件下载失败");
+                ExceptionUtil.castServerException(DOWNLOAD_FILE_ERROR);
             }
             bytes = IoUtil.readBytes(inputStream);
             response.setContentType(filesPo.getFileType());

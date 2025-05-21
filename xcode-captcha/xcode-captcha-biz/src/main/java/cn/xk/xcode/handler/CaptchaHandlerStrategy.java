@@ -37,7 +37,7 @@ public abstract class CaptchaHandlerStrategy {
     public CaptchaGenResultVo doGenerateCode(CaptchaGenReqDto captchaGenReqDto) {
         GenerateCodeResEntity generateCodeResEntity = generate(captchaGenReqDto);
         doCodeSave(captchaGenReqDto, generateCodeResEntity);
-        return CaptchaGenResultVo.builder().success(true).picCode(generateCodeResEntity.getPicCode()).uuid(generateCodeResEntity.getUuid()).build();
+        return CaptchaGenResultVo.builder().picCode(generateCodeResEntity.getPicCode()).uuid(generateCodeResEntity.getUuid()).build();
     }
 
     public abstract void doCodeSave(CaptchaGenReqDto captchaGenReqDto, GenerateCodeResEntity generateCodeResEntity);

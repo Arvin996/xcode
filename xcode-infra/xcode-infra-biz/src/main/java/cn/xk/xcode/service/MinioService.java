@@ -1,21 +1,14 @@
 package cn.xk.xcode.service;
 
-import cn.xk.xcode.entity.dto.UploadFileDto;
-import cn.xk.xcode.enums.MinioBucketType;
 import cn.xk.xcode.exception.core.ServiceException;
-import cn.xk.xcode.utils.MinioFileUtils;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import static cn.xk.xcode.config.InfraGlobalErrorCodeConstants.DOWNLOAD_FILE_ERROR;
 
 /**
  * @Author xuk
@@ -23,12 +16,17 @@ import java.util.Date;
  * @Version 1.0
  * @Description MinioUtils
  */
-@Component
+@Service
+@Slf4j
 public class MinioService {
+
     @Resource
     private MinioClient minioClient;
 
+    private  static final int MINIO_FILE_URL_EXPIRED_TIME = 60;
+
     public Boolean uploadFile(File file, String objectName, String bucketType, String type) {
+        boolean b = false;
         try {
             file.deleteOnExit();
             minioClient.uploadObject(
@@ -39,10 +37,12 @@ public class MinioService {
                             .contentType(type)
                             .build()
             );
+            b = true;
+            return b;
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            log.error("上传文件失败:{}", e.getMessage());
+            return b;
         }
-        return true;
     }
 
     public InputStream downloadFile(String bucket, String objectName) {
@@ -53,21 +53,40 @@ public class MinioService {
                     .object(objectName)
                     .build());
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            log.error("下载文件失败:{}", e.getMessage());
+            return null;
         }
         return inputStream;
     }
 
     public boolean delFile(String bucket, String objectName) {
+        boolean b = false;
         try {
             minioClient.removeObject(RemoveObjectArgs.builder()
                     .bucket(bucket)
                     .object(objectName)
                     .build());
+            b = true;
+            return b;
         } catch (Exception e) {
-            throw new ServiceException(e.getMessage());
+            log.error("删除文件失败:{}", e.getMessage());
+            return b;
         }
-        return true;
+    }
+
+    public String getFileUrl(String bucket, String objectName) {
+        String url;
+        try {
+            url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucket)
+                    .object(objectName)
+                    .expiry(MINIO_FILE_URL_EXPIRED_TIME)
+                    .build());
+        } catch (Exception e) {
+            log.error("获取文件url失败:{}", e.getMessage());
+            return null;
+        }
+        return url;
     }
 
 }

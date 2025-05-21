@@ -1,5 +1,6 @@
 package cn.xk.xcode.config;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.OssClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -28,21 +29,36 @@ public class XcodeOssConfiguration {
     @Resource
     private XcodeOssProperties xcodeOssProperties;
 
+    private final static Double TARGET_THROUGH_PUT_IN_GBPS = 20.0D;
+    private final static Long MINIMUM_PART_SIZE_IN_BYTES = 10 * 1025 * 1024L;
+
     @Bean
     public S3AsyncClient s3AsyncClient() {
         StaticCredentialsProvider credentialsProvider = credentialsProvider();
-        return S3AsyncClient.crtBuilder().region(getRegion()).forcePathStyle(isPathStyle()).credentialsProvider(credentialsProvider).endpointOverride(getUri())
-                .targetThroughputInGbps(20.0).checksumValidationEnabled(false).build();
+        return S3AsyncClient.crtBuilder()
+                .region(getRegion())
+                .forcePathStyle(isPathStyle())
+                .credentialsProvider(credentialsProvider)
+                .endpointOverride(getUri())
+                .targetThroughputInGbps(TARGET_THROUGH_PUT_IN_GBPS)
+                .minimumPartSizeInBytes(MINIMUM_PART_SIZE_IN_BYTES)
+                .checksumValidationEnabled(false)
+                .build();
     }
 
     @Bean
     public S3Client s3Client() {
         StaticCredentialsProvider credentialsProvider = credentialsProvider();
-        return S3Client.builder().region(getRegion()).forcePathStyle(isPathStyle()).credentialsProvider(credentialsProvider).endpointOverride(getUri()).build();
+        return S3Client.builder()
+                .region(getRegion())
+                .forcePathStyle(isPathStyle())
+                .credentialsProvider(credentialsProvider)
+                .endpointOverride(getUri())
+                .build();
     }
 
     private boolean isPathStyle() {
-        return xcodeOssProperties.isMinIoCClient();
+        return xcodeOssProperties.getOssProvider() == XcodeOssProperties.OssProvider.MINIO;
     }
 
     @Bean
@@ -52,9 +68,16 @@ public class XcodeOssConfiguration {
 
     @Bean
     public S3Presigner s3Presigner() {
-        software.amazon.awssdk.services.s3.S3Configuration config = software.amazon.awssdk.services.s3.S3Configuration.builder()
-                .pathStyleAccessEnabled(isPathStyle()).chunkedEncodingEnabled(false).build();
-        return S3Presigner.builder().region(getRegion()).credentialsProvider(credentialsProvider()).endpointOverride(getUri()).serviceConfiguration(config)
+        software.amazon.awssdk.services.s3.S3Configuration config = software.amazon.awssdk.services.s3.S3Configuration
+                .builder()
+                .pathStyleAccessEnabled(isPathStyle())
+                .chunkedEncodingEnabled(false)
+                .build();
+        return S3Presigner.builder()
+                .region(getRegion())
+                .credentialsProvider(credentialsProvider())
+                .endpointOverride(getUri())
+                .serviceConfiguration(config)
                 .build();
     }
 
@@ -64,7 +87,7 @@ public class XcodeOssConfiguration {
     }
 
     private Region getRegion() {
-        return Region.US_EAST_1;
+        return StrUtil.isBlank(xcodeOssProperties.getRegion()) ? Region.US_EAST_1 : Region.of(xcodeOssProperties.getRegion());
     }
 
     private StaticCredentialsProvider credentialsProvider() {
@@ -74,8 +97,9 @@ public class XcodeOssConfiguration {
     private URI getUri() {
         if (xcodeOssProperties.getEndpoint().startsWith("https://") || xcodeOssProperties.getEndpoint().startsWith("http://")) {
             return URI.create(xcodeOssProperties.getEndpoint());
+        }else {
+            XcodeOssProperties.RequestProto proto = xcodeOssProperties.getProto();
+            return URI.create(proto.getProto() + "://" + xcodeOssProperties.getEndpoint());
         }
-        String scheme = xcodeOssProperties.isHttps() ? "https" : "http";
-        return URI.create(scheme + "://" + xcodeOssProperties.getEndpoint());
     }
 }

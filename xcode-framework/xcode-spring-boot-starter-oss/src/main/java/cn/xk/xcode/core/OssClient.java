@@ -6,6 +6,7 @@ import cn.xk.xcode.config.XcodeOssProperties;
 import cn.xk.xcode.entity.*;
 import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.IntErrorCode;
+import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,7 @@ public class OssClient implements InitializingBean {
     private static final ErrorCode UPLOAD_CHUNK_FILE_ERROR = new IntErrorCode(1600_0_504, "上传分片失败, 错误信息:{}");
     private static final ErrorCode CHECK_CHUNK_FILE_EXISTS_ERROR = new IntErrorCode(1600_0_505, "检查分片文件是否存在失败, 错误信息:{}");
     private static final ErrorCode MERGE_CHUNK_FILE_ERROR = new IntErrorCode(1600_0_506, "合并分片文件失败, 错误信息:{}");
+    private static final ErrorCode CREATE_BUCKET_ERROE = new IntErrorCode(1600_0_507, "创建存储桶失败, 错误信息:{}");
 
     public CommonResult<InitUploadChunkFileRespDto> initUploadChunkFile(InitUploadChunkFileReqDto initUploadChunkFileReqDto) {
         try {
@@ -218,8 +220,15 @@ public class OssClient implements InitializingBean {
             CompletedUpload uploadResult = upload.completionFuture().join();
             String eTag = normalizeETag(uploadResult.response().eTag());
             String url = getUrl(bucketName) + "/" + objectName;
-            return UploadResult.builder().url(url).objectName(objectName).dirTag(getDirTag(objectName)).filename(getFileName(objectName))
-                    .contextType(contextType).size(size).eTag(eTag).build();
+            return UploadResult.builder()
+                    .url(url)
+                    .objectName(objectName)
+                    .dirTag(getDirTag(objectName))
+                    .filename(getFileName(objectName))
+                    .contextType(contextType)
+                    .size(size)
+                    .eTag(eTag)
+                    .build();
         } catch (Exception e) {
             throw new ServerException(UPLOAD_FILE_ERROR, e.getMessage());
         }
@@ -365,13 +374,13 @@ public class OssClient implements InitializingBean {
     private String getUrl(String bucketName) {
         String domain = properties.getDomain();
         String endpoint = properties.getEndpoint();
-        String scheme = properties.isHttps() ? "https" : "http";
+        String scheme = properties.getProto().getProto() + "://";
         // 非 MinIO 处理
-        if (!properties.isMinIoCClient()) {
+        if (!(properties.getOssProvider() == XcodeOssProperties.OssProvider.MINIO)) {
             if (StrUtil.isNotEmpty(domain)) {
                 return (domain.startsWith("https://") || domain.startsWith("http://")) ? domain : scheme + domain;
             } else {
-                return scheme + bucketName + "." + endpoint; // eg: https://your_bucket_name.oss-cn-beijing.aliyuncs.com
+                return scheme + bucketName + "." + endpoint;
             }
         }
         if (StrUtil.isNotEmpty(domain)) {
@@ -385,7 +394,6 @@ public class OssClient implements InitializingBean {
 
     /**
      * 生成文件名 eg: /20231212/4150e7c6-b92f-419d-b804-0e8be80f5e71.png
-     *
      * @param originalFilename 原始文件名
      * @return 文件名
      */
@@ -448,12 +456,107 @@ public class OssClient implements InitializingBean {
         return s3Client.listBuckets().buckets().stream().anyMatch(bucket -> bucket.name().equals(bucketName));
     }
 
-    private void createBucket(String bucketName) {
-        CreateBucketRequest createBucketRequest = CreateBucketRequest
-                .builder()
-                .bucket(bucketName)
-                .build();
-        s3Client.createBucket(createBucketRequest);
+    public void createBucket(String bucketName) {
+        try {
+            // 尝试获取存储桶的信息
+            s3Client.headBucket(
+
+                            x -> x.bucket(bucketName)
+                                    .build());
+        } catch (Exception ex) {
+            if (ex instanceof NoSuchBucketException) {
+                try {
+                    // 存储桶不存在，尝试创建存储桶
+                    s3Client.createBucket(
+                                    x -> x.bucket(bucketName));
+
+                    // 设置存储桶的访问策略（Bucket Policy）
+                    s3Client.putBucketPolicy(
+                                    x -> x.bucket(bucketName)
+                                            .policy(getAccessPolicy(bucketName, properties.getS3Policy())));
+                } catch (S3Exception e) {
+                    // 存储桶创建或策略设置失败
+                    log.error("创建Bucket失败, 请核对配置信息:[" + e.getMessage() + "]");
+                    ExceptionUtil.castServerException(CREATE_BUCKET_ERROE, e.getMessage());
+                }
+            } else {
+                ExceptionUtil.castServerException(CREATE_BUCKET_ERROE, ex.getMessage());
+            }
+        }
+    }
+
+    private String getAccessPolicy(String bucketName, XcodeOssProperties.S3Policy policyType) {
+        String policy = "";
+        switch (policyType) {
+            case READ:
+                policy = "{\n" +
+                        "    \"Version\": \"2012-10-17\",\n" +
+                        "    \"Statement\": [\n" +
+                        "        {\n" +
+                        "            \"Effect\": \"Allow\",\n" +
+                        "            \"Principal\": \"*\",\n" +
+                        "            \"Action\": [\n" +
+                        "                \"s3:GetBucketLocation\"\n" +
+                        "            ],\n" +
+                        "            \"Resource\": \"arn:aws:s3:::bucketName\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "            \"Effect\": \"Deny\",\n" +
+                        "            \"Principal\": \"*\",\n" +
+                        "            \"Action\": [\n" +
+                        "                \"s3:ListBucket\"\n" +
+                        "            ],\n" +
+                        "            \"Resource\": \"arn:aws:s3:::bucketName\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "            \"Effect\": \"Allow\",\n" +
+                        "            \"Principal\": \"*\",\n" +
+                        "            \"Action\": \"s3:GetObject\",\n" +
+                        "            \"Resource\": \"arn:aws:s3:::bucketName/*\"\n" +
+                        "        }\n" +
+                        "    ]\n" +
+                        "}";
+                break;
+            case WRITE:
+                policy = "{\n" +
+                        "    \"Version\": \"2012-10-17\",\n" +
+                        "    \"Statement\": [\n" +
+                        "        \n" +
+                        "    ]\n" +
+                        "}";
+                break;
+            case READ_WRITE:
+                policy = "{\n" +
+                        "    \"Version\": \"2012-10-17\",\n" +
+                        "    \"Statement\": [\n" +
+                        "        {\n" +
+                        "            \"Effect\": \"Allow\",\n" +
+                        "            \"Principal\": \"*\",\n" +
+                        "            \"Action\": [\n" +
+                        "                \"s3:GetBucketLocation\",\n" +
+                        "                \"s3:ListBucket\",\n" +
+                        "                \"s3:ListBucketMultipartUploads\"\n" +
+                        "            ],\n" +
+                        "            \"Resource\": \"arn:aws:s3:::bucketName\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "            \"Effect\": \"Allow\",\n" +
+                        "            \"Principal\": \"*\",\n" +
+                        "            \"Action\": [\n" +
+                        "                \"s3:AbortMultipartUpload\",\n" +
+                        "                \"s3:DeleteObject\",\n" +
+                        "                \"s3:GetObject\",\n" +
+                        "                \"s3:ListMultipartUploadParts\",\n" +
+                        "                \"s3:PutObject\"\n" +
+                        "            ],\n" +
+                        "            \"Resource\": \"arn:aws:s3:::bucketName/*\"\n" +
+                        "        }\n" +
+                        "    ]\n" +
+                        "}";
+                break;
+        }
+        return policy.replaceAll("bucketName", bucketName);
+
     }
 
     private String generateChunkFileObjectName(String fileName, int currentChunk) {

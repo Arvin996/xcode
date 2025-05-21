@@ -33,7 +33,4 @@ public class UploadResult {
 
     // 文件大小
     private Long size;
-
-    // 文件id
-    private Long fileId;
 }

@@ -21,11 +21,6 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-mysql</artifactId>
-            <version>${revision}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -36,16 +31,17 @@
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-common</artifactId>
             <version>${revision}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-webmvc</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
 

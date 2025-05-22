@@ -5,12 +5,17 @@ import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.pojo.LoginUser;
 import cn.xk.xcode.pojo.StpType;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * @Author xuk
@@ -53,5 +58,27 @@ public class SaTokenLoginUtils {
             session = StpMemberUtil.getTokenSessionByToken(token);
         }
         return ObjectUtil.isNull(session) ? null : (LoginUser) session.get(USER_KEY);
+    }
+
+    public static void updateLoginUserPermission(Set<String> permissions, Object loginId){
+        String token = StpUtil.getTokenValueByLoginId(loginId);
+        if (StrUtil.isNotEmpty(token)){
+            SaSession session = StpUtil.getTokenSessionByToken(token);
+            LoginUser loginUser = (LoginUser) session.get(USER_KEY);
+            loginUser.setPermissions(permissions);
+            session.set(USER_KEY, loginUser);
+            session.update();
+        }
+    }
+
+    public static void updateLoginUserRole(Set<String> roles, Object loginId){
+        String token = StpUtil.getTokenValueByLoginId(loginId);
+        if (StrUtil.isNotEmpty(token)){
+            SaSession session = StpUtil.getTokenSessionByToken(token);
+            LoginUser loginUser = (LoginUser) session.get(USER_KEY);
+            loginUser.setRoles(roles);
+            session.set(USER_KEY, loginUser);
+            session.update();
+        }
     }
 }

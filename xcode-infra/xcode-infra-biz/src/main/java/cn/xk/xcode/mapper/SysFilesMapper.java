@@ -1,14 +1,14 @@
 package cn.xk.xcode.mapper;
 
-import com.mybatisflex.core.BaseMapper;
 import cn.xk.xcode.entity.po.SysFilesPo;
 import org.apache.ibatis.annotations.Mapper;
+import com.mybatisflex.core.BaseMapper;
 
 /**
  *  映射层。
  *
- * @author lenovo
- * @since 2024-06-26
+ * @author Administrator
+ * @since 2025-05-22
  */
 @Mapper
 public interface SysFilesMapper extends BaseMapper<SysFilesPo> {

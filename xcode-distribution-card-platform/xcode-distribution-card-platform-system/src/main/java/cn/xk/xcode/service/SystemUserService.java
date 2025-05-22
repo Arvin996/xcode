@@ -16,4 +16,6 @@ public interface SystemUserService extends IService<SystemUserPo> {
     Boolean updateUserInfo(UpdateUserDto updateUserDto);
 
     Boolean updateUserPassword(UpdatePasswordDto updatePasswordDto);
+
+    SystemUserPo getUserInfo();
 }

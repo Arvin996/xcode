@@ -3,6 +3,7 @@ package cn.xk.xcode.service.impl.auth;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.hutool.core.util.ObjectUtil;
+import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.po.ClientPo;
 import cn.xk.xcode.entity.po.UserPo;
 import cn.xk.xcode.exception.core.ServiceException;
@@ -66,6 +67,15 @@ public class PasswordAuthImpl extends AbstractLoginHandler {
             throw new ServiceException(INVALID_CLIENT);
         }
         return clientPo;
+    }
+
+    @Override
+    public LoginVO createLoginVO(Object userInfo) {
+        LoginVO loginVo = new LoginVO();
+        loginVo.setAccessToken(StpSystemUtil.getTokenValue());
+        loginVo.setExpireIn(StpSystemUtil.getTokenTimeout());
+        loginVo.setUserInfo(userInfo);
+        return loginVo;
     }
 
 }

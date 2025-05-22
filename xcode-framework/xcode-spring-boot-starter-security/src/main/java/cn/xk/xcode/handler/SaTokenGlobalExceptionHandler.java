@@ -40,7 +40,7 @@ public class SaTokenGlobalExceptionHandler
         } else {
             message = "当前会话未登录";
         }
-        return CommonResult.error(GlobalErrorCodeConstants.INVALID_TOKEN.getCode(), message);
+        return CommonResult.error(GlobalErrorCodeConstants.INVALID_TOKEN.getCode(), message, null);
     }
 
     @ExceptionHandler(NotPermissionException.class)

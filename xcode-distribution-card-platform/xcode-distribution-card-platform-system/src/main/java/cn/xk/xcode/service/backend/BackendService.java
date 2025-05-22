@@ -2,6 +2,7 @@ package cn.xk.xcode.service.backend;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.dto.user.QueryUserDto;
@@ -13,6 +14,8 @@ import cn.xk.xcode.handler.WebSocketMessageHandler;
 import cn.xk.xcode.message.Header;
 import cn.xk.xcode.message.MessageEntity;
 import cn.xk.xcode.pojo.PageResult;
+import cn.xk.xcode.pojo.RefreshUserRoleEvent;
+import cn.xk.xcode.service.SystemRoleService;
 import cn.xk.xcode.service.SystemUserService;
 import cn.xk.xcode.utils.PageUtil;
 import cn.xk.xcode.utils.collections.CollectionUtil;
@@ -20,6 +23,7 @@ import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +45,9 @@ public class BackendService {
 
     @Resource
     private WebSocketMessageHandler webSocketMessageHandler;
+
+    @Resource
+    private SystemRoleService systemRoleService;
 
     public Boolean lockUser(String username) {
         SystemUserPo systemUserPo = systemUserService.getOne(SYSTEM_USER_PO.USERNAME.eq(username));
@@ -106,6 +113,7 @@ public class BackendService {
         if (ObjectUtil.isNull(systemUserPo)) {
             ExceptionUtil.castServiceException(USER_NOT_EXISTS);
         }
+        SpringUtil.publishEvent(new RefreshUserRoleEvent(systemUserPo.getUsername(), CollectionUtil.createSingleSet(systemRoleService.getById(updateUserRoleDto.getNewRoleId()).getCode())));
         systemUserPo.setRoleId(updateUserRoleDto.getNewRoleId());
         return systemUserService.updateById(systemUserPo);
     }

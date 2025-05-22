@@ -92,10 +92,13 @@ knife4j:
   setting:
     language: zh_cn
   basic:
-    enable: true
+    enable: false
     username: root
     password: 123456
-
+springdoc:
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
 grpc:
   client:
     xcode-captcha:
@@ -113,7 +116,7 @@ xcode:
     cache-type: redis
   security:
     whitelist:
-      - /auth/login
-      - /auth/register
+      - /manage/auth/login
+      - /manage/auth/register
       - /ws/**
 

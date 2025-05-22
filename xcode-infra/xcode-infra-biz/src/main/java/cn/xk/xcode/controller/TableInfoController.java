@@ -31,7 +31,7 @@ import static cn.xk.xcode.entity.def.TableInfoTableDef.TABLE_INFO_PO;
  */
 @RestController
 @Tag(name = "数据库表信息接口")
-@RequestMapping("/local/tbinfo")
+@RequestMapping("/manage/tbinfo")
 public class TableInfoController {
     @Resource
     private TableInfoService tableInfoService;

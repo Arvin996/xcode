@@ -1,27 +1,30 @@
 package cn.xk.xcode.service;
 
-import cn.xk.xcode.entity.dto.UpdateFileDto;
-import cn.xk.xcode.entity.dto.UploadFileDto;
-import cn.xk.xcode.entity.vo.FileResultVo;
-import com.mybatisflex.core.service.IService;
+import cn.xk.xcode.entity.dto.QuerySysFilesDto;
 import cn.xk.xcode.entity.po.SysFilesPo;
+import cn.xk.xcode.entity.vo.FileResultVo;
+import cn.xk.xcode.entity.vo.SysFilesVo;
+import cn.xk.xcode.pojo.PageResult;
+import com.mybatisflex.core.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  *  服务层。
  *
- * @author lenovo
- * @since 2024-06-26
+ * @author Administrator
+ * @since 2025-05-22
  */
 public interface SysFilesService extends IService<SysFilesPo> {
 
-    FileResultVo uploadFile(UploadFileDto uploadFileDto);
-
-    Boolean updateFile(UpdateFileDto updateFileDto);
-
-    void downloadFile(String fileId, HttpServletResponse response) throws IOException;
+    FileResultVo uploadFile(MultipartFile file, String bucket, String username, Boolean isNeedConvertToMp4);
 
     Boolean delFile(String fileId);
+
+    Boolean updateFile(MultipartFile file, String fileId);
+
+    void downloadFile(String fileId, HttpServletResponse response);
+
+    PageResult<SysFilesVo> querySysFiles(QuerySysFilesDto querySysFilesDto);
 }

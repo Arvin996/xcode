@@ -2,6 +2,7 @@ package cn.xk.xcode.controller;
 
 import cn.xk.xcode.entity.dto.user.UpdatePasswordDto;
 import cn.xk.xcode.entity.dto.user.UpdateUserDto;
+import cn.xk.xcode.entity.po.SystemUserPo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.SystemUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,5 +46,11 @@ public class UserController {
     public CommonResult<Boolean> updateUserAvatar(@RequestPart("file") MultipartFile file,
                                                   @RequestParam("username") String username) {
         return CommonResult.success(true);
+    }
+
+    @Operation(summary = "获取用户信息")
+    @GetMapping("/getUserInfo")
+    public CommonResult<SystemUserPo> getUserInfo(){
+        return CommonResult.success(systemUserService.getUserInfo());
     }
 }

@@ -2,6 +2,7 @@ package cn.xk.xcode.handler;
 
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.pojo.LoginInfoDto;
 import cn.xk.xcode.pojo.LoginVO;
 
@@ -29,7 +30,9 @@ public abstract class AbstractLoginHandler {
 
     public SaLoginModel bulidSaLoginModel(String clientId, LoginInfoDto loginInfoDto){
         SaLoginModel saLoginModel = SaLoginModel.create();
-        saLoginModel.setDevice(loginInfoDto.getLoginDevType());
+        if (StrUtil.isNotBlank(loginInfoDto.getLoginDevType())){
+            saLoginModel.setDevice(loginInfoDto.getLoginDevType());
+        }
         saLoginModel.setExtraData(createExtraData(clientId, loginInfoDto.getUsername(), loginInfoDto.getGrantType()));
         return saLoginModel;
     }
@@ -42,11 +45,5 @@ public abstract class AbstractLoginHandler {
         return extraData;
     }
 
-    public LoginVO createLoginVO(Object userInfo) {
-        LoginVO loginVo = new LoginVO();
-        loginVo.setAccessToken(StpUtil.getTokenValue());
-        loginVo.setExpireIn(StpUtil.getTokenTimeout());
-        loginVo.setUserInfo(userInfo);
-        return loginVo;
-    }
+    public abstract LoginVO createLoginVO(Object userInfo);
 }

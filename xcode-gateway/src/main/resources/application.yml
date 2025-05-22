@@ -1,13 +1,104 @@
-common-variables:
-  application-name: xk-learn-gateway
-  nacos-addr: 127.0.0.1:8848
-
+server:
+  port: 4000
 spring:
-  profiles:
-    active: test
   application:
-    # 微服务名
-    # 添加服务名称，用于在注册中心显示，必要字段
-    # 此处服务名称，与 plat_service 表中 route 字段一致（重要）
-    name: ${common-variables.application-name}
-
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes: # 网关配置
+        #        - id: user-manage # 路由id 唯一即可
+        #          uri: lb://user-manage #请求路由 如果用nacos则可以写服务名 否则写死ip+port
+        #          predicates: # 按照什么路由规则去转发
+        #            - Path=/user/**
+        #        - id: order-manage
+        #          uri: lb://order-manage
+        #          predicates:
+        #            - Path=/order/**
+        - id: xcode-dc-system
+          uri: lb://xcode-dc-system
+          predicates:
+            - Path=/xcode-dc-system/**
+          filters:
+            - StripPrefix=1
+        - id: xcode-captcha
+          uri: lb://xcode-captcha
+          predicates:
+            - Path=/xcode-captcha/**
+          filters:
+            - StripPrefix=1
+#          predicates:
+#            - Path=/pay-manage/**
+#          filters:
+#            - StripPrefix=1
+    loadbalancer:
+      nacos:
+        enabled: true
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: Geit@86970000
+      discovery:
+        enabled: true
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 1
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    # password:
+    # 连接超时时间
+    timeout: 10
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
+sa-token:
+  jwt-secret-key: asdasdasifhueuiwyurfewbfjsdafjk
+  # token 名称（同时也是 cookie 名称）
+  token-name: token
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 2592000
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: -1
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: true
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: true
+  # 配置 Sa-Token 单独使用的 Redis 连接
+  alone-redis:
+    # Redis数据库索引（默认为0）
+    database: 2
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    # 连接超时时间
+    timeout: 10s
+knife4j:
+  gateway:
+    enabled: true
+    # 指定服务发现的模式聚合微服务文档，并且是默认`default`分组
+    strategy: discover
+    discover:
+      enabled: true
+      # 指定版本号(Swagger2|OpenAPI3)
+      version : openapi3
+      # 需要排除的微服务(eg:网关服务)
+      excluded-services:
+        - gateway-service

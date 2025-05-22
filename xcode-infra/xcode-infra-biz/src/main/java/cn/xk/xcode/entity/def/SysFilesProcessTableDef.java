@@ -7,8 +7,8 @@ import com.mybatisflex.core.table.TableDef;
 /**
  *  表定义层。
  *
- * @author lenovo
- * @since 2024-06-26
+ * @author Administrator
+ * @since 2025-05-22
  */
 public class SysFilesProcessTableDef extends TableDef {
 
@@ -20,7 +20,7 @@ public class SysFilesProcessTableDef extends TableDef {
     public static final SysFilesProcessTableDef SYS_FILES_PROCESS_PO = new SysFilesProcessTableDef();
 
     /**
-     * 文件主键id
+     * 任务id
      */
     public final QueryColumn ID = new QueryColumn(this, "id");
 
@@ -55,14 +55,14 @@ public class SysFilesProcessTableDef extends TableDef {
     public final QueryColumn FAIL_COUNT = new QueryColumn(this, "fail_count");
 
     /**
-     * 文件在minio中的访问路劲
-     */
-    public final QueryColumn FILE_PATH = new QueryColumn(this, "file_path");
-
-    /**
      * 完成时间
      */
     public final QueryColumn FINISH_TIME = new QueryColumn(this, "finish_time");
+
+    /**
+     * 文件在minio中的访问路劲
+     */
+    public final QueryColumn OBJECT_NAME = new QueryColumn(this, "object_name");
 
     /**
      * 上传时间
@@ -77,7 +77,7 @@ public class SysFilesProcessTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, FILE_ID, FILE_NAME, BUCKET, FILE_PATH, STATUS, UPLOAD_TIME, FINISH_TIME, ERR_MSG, FAIL_COUNT};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, FILE_ID, FILE_NAME, BUCKET, OBJECT_NAME, STATUS, FAIL_COUNT, UPLOAD_TIME, FINISH_TIME, ERR_MSG};
 
     public SysFilesProcessTableDef() {
         super("", "infra_sys_files_process");

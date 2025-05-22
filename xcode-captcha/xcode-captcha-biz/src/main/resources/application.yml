@@ -68,6 +68,10 @@ knife4j:
     enable: false
     username: root
     password: 123456
+springdoc:
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
 
 
 

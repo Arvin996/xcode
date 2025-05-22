@@ -1,9 +1,11 @@
 package cn.xk.xcode.pojo;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.GlobalErrorCodeConstants;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
+import cn.xk.xcode.utils.object.ObjectUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,16 +29,30 @@ public class CommonResult<T> implements Serializable {
 
     private Object code;
 
-    public static <T> CommonResult<T> error(Object code, String msg) {
+    public static <T> CommonResult<T> error(Object code, String msg){
         CommonResult<T> result = new CommonResult<>();
         result.setCode(code);
         result.setMsg(msg);
         return result;
     }
-
-    public static <T> CommonResult<T> error(ErrorCode errorCode) {
-        return error(errorCode.getCode(), errorCode.getMessage());
+    public static <T> CommonResult<T> error(Object code, String msg, T data, Object... args) {
+        CommonResult<T> result = new CommonResult<>();
+        if (ObjectUtil.isNotNull(data)) {
+            result.setData(data);
+        }
+        result.setCode(code);
+        result.setMsg(StrUtil.format(msg, args));
+        return result;
     }
+
+    public static <T> CommonResult<T> error(ErrorCode errorCode, Object... args) {
+        return error(errorCode, null, args);
+    }
+
+    public static <T> CommonResult<T> error(ErrorCode errorCode, T data, Object... args) {
+        return error(errorCode.getCode(), errorCode.getMessage(), data, args);
+    }
+
 
     public static <T> CommonResult<T> success(T data) {
         CommonResult<T> result = new CommonResult<>();
@@ -56,11 +72,11 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> error(ServiceException serviceException) {
-        return error(serviceException.getCode(), serviceException.getMessage());
+        return error(serviceException.getCode(), serviceException.getMessage(), null);
     }
 
     public static <T> CommonResult<T> error(ServerException serverException) {
-        return error(serverException.getCode(), serverException.getMessage());
+        return error(serverException.getCode(), serverException.getMessage(), null);
     }
 
     public static boolean isSuccess(CommonResult<?> result) {

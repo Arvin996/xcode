@@ -3,6 +3,7 @@ package cn.xk.xcode.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.CommonStatusEnum;
+import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.dto.user.UpdatePasswordDto;
 import cn.xk.xcode.entity.dto.user.UpdateUserDto;
 import cn.xk.xcode.exception.core.ExceptionUtil;
@@ -66,6 +67,12 @@ public class SystemUserServiceImpl extends ServiceImpl<SystemUserMapper, SystemU
         }
         systemUserPo.setPassword(updatePasswordDto.getNewPassword());
         return this.updateById(systemUserPo);
+    }
+
+    @Override
+    public SystemUserPo getUserInfo() {
+        String username = StpSystemUtil.getLoginIdAsString();
+        return this.getOne(SYSTEM_USER_PO.USERNAME.eq(username));
     }
 
 

@@ -66,20 +66,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.squareup.okhttp3</groupId>
-                    <artifactId>okhttp</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.11.0</version>
+            <groupId>cn.xk.xcode</groupId>
+            <artifactId>xcode-spring-boot-starter-oss</artifactId>
+            <version>${revision}</version>
         </dependency>
 
 <!--        <dependency>-->

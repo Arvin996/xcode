@@ -21,22 +21,22 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public CommonResult<?> handlerException(Exception e) {
         log.error("发生异常:{}", e.getMessage());
-        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage());
+        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage(), null);
     }
 
     @ExceptionHandler(ServerException.class)
     public CommonResult<?> handlerServerException(ServerException e) {
-        return CommonResult.error(e.getCode(), e.getMessage());
+        return CommonResult.error(e);
     }
 
     @ExceptionHandler(ServiceException.class)
     public CommonResult<?> handlerServiceException(ServiceException e) {
-        return CommonResult.error(e.getCode(), e.getMessage());
+        return CommonResult.error(e);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public CommonResult<?> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return CommonResult.error(PARAMETER_VALIDATION_FAIL.getCode(),
-                PARAMETER_VALIDATION_FAIL.getMessage() + ":" + e.getMessage());
+                PARAMETER_VALIDATION_FAIL.getMessage() + ":" + e.getMessage(), null);
     }
 }

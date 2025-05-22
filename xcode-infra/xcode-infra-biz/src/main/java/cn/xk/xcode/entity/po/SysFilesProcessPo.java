@@ -1,6 +1,5 @@
 package cn.xk.xcode.entity.po;
 
-import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -16,8 +15,8 @@ import lombok.NoArgsConstructor;
 /**
  *  实体类。
  *
- * @author lenovo
- * @since 2024-06-26
+ * @author Administrator
+ * @since 2025-05-22
  */
 @Data
 @Builder
@@ -29,10 +28,10 @@ public class SysFilesProcessPo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 文件主键id
+     * 任务id
      */
     @Id(keyType = KeyType.Auto)
-    private int id;
+    private Integer id;
 
     /**
      * 对应于file表中的id 表示要进行转码
@@ -52,7 +51,7 @@ public class SysFilesProcessPo implements Serializable {
     /**
      * 文件在minio中的访问路劲
      */
-    private String filePath;
+    private String objectName;
 
     /**
      * 状态 0待处理 1处理中 2处理成功 3处理失败
@@ -60,14 +59,13 @@ public class SysFilesProcessPo implements Serializable {
     private String status;
 
     /**
-     * 失败次数 最大为3
+     * 失败次数
      */
-    private String failCount;
+    private Integer failCount;
 
     /**
      * 上传时间
      */
-    @Column(onInsertValue = "now()")
     private LocalDateTime uploadTime;
 
     /**

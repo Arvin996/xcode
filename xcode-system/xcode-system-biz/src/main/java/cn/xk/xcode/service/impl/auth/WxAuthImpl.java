@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.constant.SystemConstant;
+import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.po.ClientPo;
 import cn.xk.xcode.entity.po.ThirdUserPo;
 import cn.xk.xcode.entity.po.UserPo;
@@ -114,5 +115,14 @@ public class WxAuthImpl extends AbstractLoginHandler {
         String body = HttpRequest.get(url).execute().body();
         log.info("调用微信接口申请用户信息: 返回值:{}", body);
         return JSONUtil.parseObj(body);
+    }
+
+    @Override
+    public LoginVO createLoginVO(Object userInfo) {
+        LoginVO loginVo = new LoginVO();
+        loginVo.setAccessToken(StpSystemUtil.getTokenValue());
+        loginVo.setExpireIn(StpSystemUtil.getTokenTimeout());
+        loginVo.setUserInfo(userInfo);
+        return loginVo;
     }
 }

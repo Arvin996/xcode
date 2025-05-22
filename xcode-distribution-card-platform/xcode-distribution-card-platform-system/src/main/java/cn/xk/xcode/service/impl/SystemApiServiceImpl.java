@@ -1,14 +1,18 @@
 package cn.xk.xcode.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.entity.dto.api.AddSystemApiDto;
 import cn.xk.xcode.entity.dto.api.BindRoleApiDto;
 import cn.xk.xcode.entity.dto.api.QuerySystemApiDto;
 import cn.xk.xcode.entity.dto.api.UpdateSystemApiDto;
 import cn.xk.xcode.entity.po.SystemRoleApiPo;
+import cn.xk.xcode.entity.po.SystemUserPo;
 import cn.xk.xcode.entity.vo.api.SystemApiVo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.pojo.RefreshUserPermissionEvent;
 import cn.xk.xcode.service.SystemRoleApiService;
+import cn.xk.xcode.service.SystemUserService;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -23,11 +27,13 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static cn.xk.xcode.config.DistributionCardSystemErrorCode.*;
 import static cn.xk.xcode.entity.def.SystemApiTableDef.SYSTEM_API_PO;
 import static cn.xk.xcode.entity.def.SystemRoleApiTableDef.SYSTEM_ROLE_API_PO;
+import static cn.xk.xcode.entity.def.SystemUserTableDef.SYSTEM_USER_PO;
 
 /**
  * 服务层实现。
@@ -40,6 +46,9 @@ public class SystemApiServiceImpl extends ServiceImpl<SystemApiMapper, SystemApi
 
     @Resource
     private SystemRoleApiService systemRoleApiService;
+
+    @Resource
+    private SystemUserService systemUserService;
 
     @Override
     public Map<String, List<SystemApiVo>> selectAllApi(QuerySystemApiDto querySystemApiDto) {
@@ -101,6 +110,10 @@ public class SystemApiServiceImpl extends ServiceImpl<SystemApiMapper, SystemApi
             systemRoleApiPo.setApiId(o);
             return systemRoleApiPo;
         }).collect(Collectors.toList());
+        List<SystemUserPo> systemUserPoList = systemUserService.list(SYSTEM_USER_PO.ROLE_ID.eq(bindRoleApiDto.getRoleId()));
+        List<String> users = CollectionUtil.convertList(systemUserPoList, SystemUserPo::getUsername);
+        Set<String> permissions = CollectionUtil.convertSet(this.listByIds(bindRoleApiDto.getApiIdList()), SystemApiPo::getApiCode);
+        users.forEach(user -> SpringUtil.publishEvent(new RefreshUserPermissionEvent(user, permissions)));
         return systemRoleApiService.saveBatch(collect);
     }
 }

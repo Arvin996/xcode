@@ -1,7 +1,9 @@
 package cn.xk.xcode.service.auth;
 
 import cn.dev33.satoken.stp.SaLoginModel;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.xk.xcode.core.CommonStatusEnum;
+import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.dto.menu.QueryMenuDto;
 import cn.xk.xcode.entity.po.SystemRolePo;
 import cn.xk.xcode.entity.po.SystemUserPo;
@@ -69,6 +71,15 @@ public class PasswordAuthImpl extends AbstractLoginHandler {
     @Override
     public Object validateClient(LoginInfoDto loginInfoDto) {
         return null;
+    }
+
+    @Override
+    public LoginVO createLoginVO(Object userInfo) {
+        LoginVO loginVo = new LoginVO();
+        loginVo.setAccessToken(StpSystemUtil.getTokenValue());
+        loginVo.setExpireIn(StpSystemUtil.getTokenTimeout());
+        loginVo.setUserInfo(userInfo);
+        return loginVo;
     }
 
     private LoginUser buildLoginUser(SystemUserPo systemUserPo) {

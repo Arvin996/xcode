@@ -225,18 +225,8 @@
         <!--<appender-ref ref="DailyLog_App"/>-->
         <!--</AsyncLogger>-->
 
-        <!-- 记录jar提供的数据库接口操作日志 -->
-        <logger name="com.gg.core.service" level="debug" additivity="false">
-            <appender-ref ref="logSql"/>
-        </logger>
-
         <!-- 记录通用controller日志，即直接访问xml的接口出入参 -->
-        <logger name="com.gg.core.aspect" level="info" additivity="false">
-            <appender-ref ref="logApi"/>
-        </logger>
-
-        <!-- 本项目记录的日志 -->
-        <logger name="Log.Api" level="info" additivity="false">
+        <logger name="cn.xk.xcode" level="info" additivity="false">
             <appender-ref ref="logApi"/>
         </logger>
 

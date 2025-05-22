@@ -92,7 +92,7 @@ knife4j:
   setting:
     language: zh_cn
   basic:
-    enable: true
+    enable: false
     username: root
     password: 123456
 logging:
@@ -101,11 +101,11 @@ xcode:
   dict:
     enable: true
     cache-type: redis
-  infra:
-    minio:
-      access-key: minioadmin
-      secret-key: minioadmin
-      endpoint: 127.0.0.1:9002
+  oss:
+    access-key: minioadmin
+    endpoint: 127.0.0.1:9000
+    secret-key: minioadmin
+    default-bucket: video
 #  security:
 #    whitelist:
 #      - /auth/login

@@ -1,6 +1,7 @@
 package cn.xk.xcode.entity.dto.user;
 
 import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
+import cn.xk.xcode.validation.Email;
 import cn.xk.xcode.validation.Mobile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -72,9 +73,7 @@ public class RegisterUserDto extends CaptchaVerifyReqDto {
     @Schema(description = "mobile 手机号", example = "18888888888")
     private String mobile;
 
-    /**
-     * 头像
-     */
-    @Schema(description = "用户头像", example = "http://www.baidu.com")
-    private String avatar;
+    @Email
+    @Schema(description = "email 邮箱", example = "1247459620@qq.com")
+    private String email;
 }

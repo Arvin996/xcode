@@ -58,9 +58,6 @@ public class AuthServiceImpl implements AuthService {
             // 随机生成一个昵称
             registerUserDto.setNickname(IdUtil.fastSimpleUUID().replace("-", ""));
         }
-        if (StrUtil.isBlank(registerUserDto.getAvatar())) {
-            registerUserDto.setAvatar(DEFAULT_AVATAR);
-        }
         // 验证验证码
         CaptchaProto.CaptchaVerifyRequest.Builder builder = CaptchaProto.CaptchaVerifyRequest.newBuilder();
         builder.setCode(registerUserDto.getCode());
@@ -76,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
         CaptchaProto.CaptchaVerifyRequest.Builder builder = CaptchaProto.CaptchaVerifyRequest.newBuilder();
         builder.setCode(loginUserDto.getCode());
         builder.setType(CaptchaGenerateType.PIC.getCode());
-        checkCaptcha(builder);
+       // checkCaptcha(builder);
         return loginHandler.Login(LoginInfoDto.builder()
                 .code(loginUserDto.getCode())
                 .username(loginUserDto.getUsername())

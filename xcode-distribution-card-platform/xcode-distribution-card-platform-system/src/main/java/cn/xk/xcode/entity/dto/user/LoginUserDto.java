@@ -23,7 +23,7 @@ public class LoginUserDto {
     @Schema(description = "password 密码", example = "123456")
     private String password;
 
-    @NotBlank(message = "验证码不能为空")
+  //  @NotBlank(message = "验证码不能为空")
     @Schema(description = "code 验证码", example = "123456")
     private String code;
 

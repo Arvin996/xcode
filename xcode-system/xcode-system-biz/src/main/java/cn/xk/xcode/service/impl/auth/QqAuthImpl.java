@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import cn.xk.xcode.constant.SystemConstant;
+import cn.xk.xcode.core.StpSystemUtil;
 import cn.xk.xcode.entity.po.ClientPo;
 import cn.xk.xcode.entity.po.ThirdUserPo;
 import cn.xk.xcode.entity.po.UserPo;
@@ -98,6 +99,15 @@ public class QqAuthImpl extends AbstractLoginHandler
         return clientPo;
     }
 
+    @Override
+    public LoginVO createLoginVO(Object userInfo) {
+        LoginVO loginVo = new LoginVO();
+        loginVo.setAccessToken(StpSystemUtil.getTokenValue());
+        loginVo.setExpireIn(StpSystemUtil.getTokenTimeout());
+        loginVo.setUserInfo(userInfo);
+        return loginVo;
+    }
+
     private Map<String, Object> getQqOauth2AccessToken(String code, ClientPo clientPo){
         String url = String.format(SystemConstant.QQ_USER_TOKEN_URL, clientPo.getClientKey(), clientPo.getClientSecret(), code, "www.baidu.com");
         log.info("开始请求qq认证服务器，得到token");
@@ -124,4 +134,6 @@ public class QqAuthImpl extends AbstractLoginHandler
         log.info("qq认证服务器返回信息{}", body);
         return map;
     }
+
+
 }

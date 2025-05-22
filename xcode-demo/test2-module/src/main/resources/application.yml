@@ -1,6 +1,15 @@
 server:
   port: 1001
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+      enabled: true
   application:
     name: test2-module
   cloud:

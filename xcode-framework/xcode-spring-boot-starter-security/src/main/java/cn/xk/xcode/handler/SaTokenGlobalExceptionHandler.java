@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.FORBIDDEN;
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_TOKEN;
+
 /**
  * @Author xuk
  * @Date 2024/6/24 10:04
@@ -40,13 +43,13 @@ public class SaTokenGlobalExceptionHandler
         } else {
             message = "当前会话未登录";
         }
-        return CommonResult.error(GlobalErrorCodeConstants.INVALID_TOKEN.getCode(), message, null);
+        return CommonResult.error(INVALID_TOKEN, message);
     }
 
     @ExceptionHandler(NotPermissionException.class)
     public CommonResult<String> handlerNotPermissionException(NotPermissionException e) {
         log.error(e.getMessage());
-        return CommonResult.error(GlobalErrorCodeConstants.FORBIDDEN);
+        return CommonResult.error(FORBIDDEN, e.getMessage());
     }
 
 

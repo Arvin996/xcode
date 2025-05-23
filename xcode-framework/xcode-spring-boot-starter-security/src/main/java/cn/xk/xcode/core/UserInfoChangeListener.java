@@ -22,6 +22,6 @@ public class UserInfoChangeListener {
 
     @EventListener
     public void onUserRoleChange(RefreshUserRoleEvent event) {
-        SaTokenLoginUtils.updateLoginUserRole(event.getPermissions(), event.getLoginId());
+        SaTokenLoginUtils.updateLoginUserRole(event.getRoles(), event.getLoginId());
     }
 }

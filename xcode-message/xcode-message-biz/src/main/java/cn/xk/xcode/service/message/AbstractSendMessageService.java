@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -70,7 +71,7 @@ public abstract class AbstractSendMessageService {
 
     protected final MessageTaskService messageTaskService;
 
-
+    @Transactional
     public CommonResult<?> sendMessage(MessageTask messageTask) {
         // 铭感词过滤
         filterSensitiveMsgContent(messageTask);
@@ -145,11 +146,12 @@ public abstract class AbstractSendMessageService {
                 ExceptionUtil.castServerException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
             }
         } else {
-            MessageTemplatePo messageTemplatePo = messageTemplateService.getOne(MESSAGE_TEMPLATE.TEMPLATE_ID.eq(messageTask.getTemplateId()));
+            MessageTemplatePo messageTemplatePo = messageTemplateService.getOne(MESSAGE_TEMPLATE.TEMPLATE_ID.eq(messageTask.getTemplateCode()));
             if (Objects.isNull(messageTemplatePo)) {
-                ExceptionUtil.castServerException(MESSAGE_TEMPLATE_NOT_EXISTS, messageTask.getTemplateId());
+                ExceptionUtil.castServerException(MESSAGE_TEMPLATE_NOT_EXISTS, messageTask.getTemplateCode());
             }
             String templateType = messageTemplatePo.getType();
+            messageTask.setTemplateId(messageTemplatePo.getId());
             // 自定义模板
             if ("0".equals(templateType)) {
                 String content = messageTemplatePo.getContent();
@@ -168,6 +170,7 @@ public abstract class AbstractSendMessageService {
                 }
                 String realContent = formatContent(content, templateParamsPoList, jsonObject);
                 if (sensitiveWordBs.contains(realContent)) {
+                    log.warn("敏感词信息：{}", sensitiveWordBs.findAll(realContent));
                     ExceptionUtil.castServerException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
                 }
                 messageTask.setMessageContent(realContent);
@@ -232,7 +235,7 @@ public abstract class AbstractSendMessageService {
                 // 明日9点
                 // 1.创建CorrelationData
                 LocalDateTime tomorrow9 = now.plusDays(1).withHour(9).withMinute(0).withSecond(0);
-                rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, JSON.toJSONString(messageTask), message -> {
+                rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, messageTask, message -> {
                     // 单位毫秒 计算出现在到明天早上9点的毫秒数
                     message.getMessageProperties().setDelay((int) LocalDateTimeUtil.between(LocalDateTime.now(), tomorrow9).toMillis());
                     message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
@@ -249,7 +252,7 @@ public abstract class AbstractSendMessageService {
                 if (shieldEndTime.compareTo(shieldStartTime) < 0) {
                     // 跨天了
                     LocalDateTime tomorrow9 = now.plusDays(1).withHour(9).withMinute(Integer.parseInt(shieldEndTime.substring(0, 2))).withSecond(Integer.parseInt(shieldEndTime.substring(2, 4)));
-                    rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, JSON.toJSONString(messageTask), message -> {
+                    rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, messageTask, message -> {
                         // 单位毫秒 计算出现在到明天早上9点的毫秒数
                         message.getMessageProperties().setDelay((int) LocalDateTimeUtil.between(LocalDateTime.now(), tomorrow9).toMillis());
                         message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
@@ -260,7 +263,7 @@ public abstract class AbstractSendMessageService {
                 } else {
                     // 没有跨天
                     LocalDateTime tomorrow9 = now.withHour(Integer.parseInt(shieldEndTime.substring(0, 2))).withMinute(Integer.parseInt(shieldEndTime.substring(2, 4))).withSecond(0);
-                    rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, JSON.toJSONString(messageTask), message -> {
+                    rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, SHIELD_MESSAGE_BINDING_KEY, messageTask, message -> {
                         // 单位毫秒 计算出现在到明天早上9点的毫秒数
                         message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
                         message.getMessageProperties().setDelay((int) LocalDateTimeUtil.between(LocalDateTime.now(), tomorrow9).toMillis());

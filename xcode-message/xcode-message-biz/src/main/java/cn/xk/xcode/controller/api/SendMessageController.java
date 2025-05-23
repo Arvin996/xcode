@@ -5,6 +5,7 @@ import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.MessageTaskService;
 import cn.xk.xcode.service.message.SendMessageServiceHolder;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  **/
 @RestController
 @RequestMapping("/api/message")
+@Tag(name = "api-message 发送消息接口")
 public class SendMessageController {
 
     @Resource
@@ -29,7 +31,7 @@ public class SendMessageController {
     @Operation(summary = "发送消息")
     @PostMapping("/sendMessage")
     public CommonResult<?> sendMessage(@Validated @RequestBody MessageTask messageTask) {
-        return sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgChannel()).sendMessage(messageTask);
+        return sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgType()).sendMessage(messageTask);
     }
 
     @Operation(summary = "取消消息发送 仅针对延时消息 或者是屏蔽的消息")

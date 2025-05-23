@@ -13,15 +13,18 @@ import cn.xk.xcode.service.MessageChannelParamService;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
+import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,14 +85,24 @@ public class MessageChannelParamServiceImpl extends ServiceImpl<MessageChannelPa
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
             return CollectionUtil.createEmptyMap();
         }
-        if (CommonStatusEnum.isEnable(messageChannelAccountPo.getStatus())) {
-            return CollectionUtil.createEmptyMap();
-        }
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(MESSAGE_CHANNEL_PARAM.NAME, MESSAGE_CHANNEL_ACCOUNT_PARAM_VALUE.PARAM_VALUE)
+                .select(MESSAGE_CHANNEL_PARAM.NAME, MESSAGE_CHANNEL_ACCOUNT_PARAM_VALUE.PARAM_VALUE.as("paramValue"))
                 .from(MESSAGE_CHANNEL_PARAM)
                 .leftJoin(MESSAGE_CHANNEL_ACCOUNT_PARAM_VALUE)
                 .on(MESSAGE_CHANNEL_ACCOUNT_PARAM_VALUE.CHANNEL_PARAM_ID.eq(MESSAGE_CHANNEL_PARAM.ID).and(MESSAGE_CHANNEL_ACCOUNT_PARAM_VALUE.ACCOUNT_ID.eq(accountId)));
-        return (Map<String, Object>) this.listAs(queryWrapper, Map.class);
+        List<ChannelParamsAndValueEntity> list = this.listAs(queryWrapper, ChannelParamsAndValueEntity.class);
+        Map<String, Object> map = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(list)) {
+            for (ChannelParamsAndValueEntity entity : list) {
+                map.put(entity.getName(), entity.getParamValue());
+            }
+        }
+        return map;
+    }
+
+    @Data
+    private static class ChannelParamsAndValueEntity {
+        private String name;
+        private String paramValue;
     }
 }

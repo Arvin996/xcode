@@ -14,14 +14,19 @@ import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.handler.message.response.SendMessageResponse;
 import cn.xk.xcode.limit.RateLimiterHolder;
+import cn.xk.xcode.mapper.MessageTaskDetailMapper;
+import cn.xk.xcode.mapper.MessageTaskMapper;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
-import com.alibaba.fastjson2.JSON;
+import com.mybatisflex.core.BaseMapper;
+import com.mybatisflex.core.row.Db;
+import com.mybatisflex.core.update.UpdateChain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -91,17 +96,21 @@ public abstract class AbstractHandler implements IHandler {
     @Resource
     private XcodeMessageProperties xcodeMessageProperties;
 
+    @Resource
+    private MessageTaskMapper messageTaskMapper;
+
+    @Transactional
     @Override
     public CommonResult<SendMessageResponse> sendMessage(MessageTask messageTask) {
         // 1. 负载均衡
         MessageChannelAccountPo messageChannelAccountPo = handleLoadBalance(messageTask);
         if (Objects.isNull(messageChannelAccountPo)) {
-            return CommonResult.error(MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, messageTask.getMsgChannel());
+            return CommonResult.error(MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null, messageTask.getMsgChannel());
         }
         // 2. 限流
         if (needRateLimit()) {
             if (!rateLimiterHolder.getRateLimiter().rateLimit(messageTask)) {
-                return CommonResult.error(TOO_MANY_REQUESTS);
+                return CommonResult.error(TOO_MANY_REQUESTS, null);
             }
         }
         // 3. 验证参数
@@ -110,12 +119,12 @@ public abstract class AbstractHandler implements IHandler {
         } catch (Exception e) {
             if (e instanceof ServiceException) {
                 ServiceException s = (ServiceException) e;
-                return CommonResult.error(s.getCode(), s.getMsg());
+                return CommonResult.error(s);
             } else if (e instanceof ServerException) {
                 ServerException s = (ServerException) e;
-                return CommonResult.error(s.getCode(), s.getMsg());
+                return CommonResult.error(s);
             } else {
-                return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, e.getMessage());
+                return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, null, e.getMessage());
             }
         }
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTask.getId());
@@ -127,10 +136,10 @@ public abstract class AbstractHandler implements IHandler {
             result = doSendMessage(messageTask, messageChannelAccountPo);
         } catch (InterruptedException e) {
             log.error("发送消息超时,{}", e.getMessage());
-            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
+            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT, null);
         }
         if (Objects.isNull(result)) {
-            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, null, "系统异常");
         }
         List<MessageTaskDetailPo> list = result.getList();
         Integer successCount = result.getSuccessCount();
@@ -150,7 +159,7 @@ public abstract class AbstractHandler implements IHandler {
             // 获取重试消息
             List<MessageTaskDetailPo> retryMessageList = messageTaskDetailService.list(MESSAGE_TASK_DETAIL.TASK_ID.eq(messageTask.getId()).and(MESSAGE_TASK_DETAIL.STATUS.eq("1")));
             if (CollectionUtil.isNotEmpty(retryMessageList)) {
-                rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, JSON.toJSONString(retryMessageList));
+                rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, retryMessageList);
             }
         }
         return buildResponse(result);
@@ -161,12 +170,12 @@ public abstract class AbstractHandler implements IHandler {
         initChannelSendClient();
         MessageTaskPo messageTaskPo = messageTaskService.getById(taskId);
         if (ObjectUtil.isNull(messageTaskPo)) {
-            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
         }
         MessageChannelAccessClientPo channelAccessClientPo = messageChannelAccessClientService.getById(messageTaskPo.getClientId());
         MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
-            return CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+            return CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         List<String> reSendReceivers = StrUtil.splitTrim(messageTaskPo.getReceivers(), ",");
@@ -174,18 +183,18 @@ public abstract class AbstractHandler implements IHandler {
         try {
             messageChannelAccessClientService.validateClient(channelAccessClientPo, messageTask.getReceiverSet().size());
         } catch (ServiceException e) {
-            return CommonResult.error(e.getCode(), e.getMsg());
+            return CommonResult.error(e);
         }
         HandlerResult result = null;
         try {
             result = doSendMessage(messageTask, messageChannelAccountPo);
         } catch (InterruptedException e) {
             log.error("发送消息超时,{}", e.getMessage());
-            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
+            return CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT, null);
         }
         if (Objects.isNull(result)) {
             log.warn("执行结果为空");
-            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, null, "系统异常");
         }
         List<MessageTaskDetailPo> list = result.getList();
         Integer successCount = result.getSuccessCount();
@@ -242,11 +251,11 @@ public abstract class AbstractHandler implements IHandler {
     public CommonResult<SendMessageResponse> retrySendMessage(List<MessageTaskDetailPo> messageTaskDetailPoList) {
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTaskDetailPoList.get(0).getTaskId());
         if (ObjectUtil.isNull(messageTaskPo)) {
-            CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+            CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
         }
         MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
-            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         messageTask.setReceiverSet(CollectionUtil.convertSet(messageTaskDetailPoList, MessageTaskDetailPo::getReceiver));
@@ -255,11 +264,11 @@ public abstract class AbstractHandler implements IHandler {
             result = doSendMessage(messageTask, messageChannelAccountPo);
         } catch (InterruptedException e) {
             log.error("发送消息超时,{}", e.getMessage());
-            CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT);
+            CommonResult.error(SEND_MESSAGE_TASK_TIMEOUT, null);
         }
         if (ObjectUtil.isNull(result)) {
             log.warn("执行结果为空");
-            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, "系统异常");
+            return CommonResult.error(EXEC_MESSAGE_TASK_ERROR, null, "系统异常");
         }
         List<MessageTaskDetailPo> list = result.getList();
         Integer successCount = result.getSuccessCount();
@@ -293,11 +302,14 @@ public abstract class AbstractHandler implements IHandler {
             }
         }
         if (CollectionUtil.isNotEmpty(list2)) {
-            messageTaskDetailService.updateBatch(list2);
+            for (MessageTaskDetailPo messageTaskDetailPo : list2) {
+                messageTaskDetailService.getById(messageTaskDetailPo);
+            }
+        //    messageTaskDetailService.updateBatch(list2);
         }
         // 重试补偿
         if (CollectionUtil.isNotEmpty(retryList)) {
-            rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, JSON.toJSONString(retryList));
+            rabbitTemplate.convertAndSend(RETRY_EXCHANGE_NAME, RETRY_MESSAGE_BINDING_KEY, retryList);
         }
         return buildResponse(result);
     }
@@ -314,17 +326,17 @@ public abstract class AbstractHandler implements IHandler {
         initChannelSendClient();
         MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
         if (ObjectUtil.isNull(messageTaskDetailPo)) {
-            CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS);
+            CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS, null);
         }
         messageTaskDetailPo.setExecTime(LocalDateTime.now());
         MessageTaskPo messageTaskPo = messageTaskService.getById(messageTaskDetailPo.getTaskId());
         if (ObjectUtil.isNull(messageTaskPo)) {
-            CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+            CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
         }
         MessageChannelAccessClientPo channelAccessClientPo = messageChannelAccessClientService.getById(messageTaskPo.getClientId());
         MessageChannelAccountPo messageChannelAccountPo = messageChannelAccountService.getById(messageTaskPo.getAccountId());
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
-            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS);
+            CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         SingeSendMessageResult singeSendMessageResult = doSendMessage(messageTaskDetailPo.getReceiver(), messageTask, messageChannelAccountPo);
@@ -377,17 +389,12 @@ public abstract class AbstractHandler implements IHandler {
         CountDownLatch countDownLatch = new CountDownLatch(receiverSet.size());
         CopyOnWriteArrayList<SingeSendMessageResult> copyOnWriteArrayList = new CopyOnWriteArrayList<>();
         receiverSet.forEach(receiver -> {
-            try {
-                executorService.execute(() -> {
-                    //  这里执行真正发消息的逻辑
-                    SingeSendMessageResult singeSendMessageResult = doSendMessage(receiver, messageTask, messageChannelAccountPo);
-                    copyOnWriteArrayList.add(singeSendMessageResult);
-                });
-            } catch (Exception e) {
-                log.error("发送消息失败,{}", e.getMessage());
-            } finally {
+            executorService.execute(() -> {
+                //  这里执行真正发消息的逻辑
+                SingeSendMessageResult singeSendMessageResult = doSendMessage(receiver, messageTask, messageChannelAccountPo);
+                copyOnWriteArrayList.add(singeSendMessageResult);
                 countDownLatch.countDown();
-            }
+            });
         });
         countDownLatch.await(WAIT_TIME, TimeUnit.MINUTES);
         int successCount = 0;
@@ -401,10 +408,11 @@ public abstract class AbstractHandler implements IHandler {
             if (singeSendMessageResult.isSuccess()) {
                 successCount++;
                 messageTaskDetailPo.setStatus("0");
-                messageTaskDetailPo.setFailMsg(singeSendMessageResult.getFailMsg());
+                messageTaskDetailPo.setSuccessTime(singeSendMessageResult.getSuccessTime());
+
             } else {
                 messageTaskDetailPo.setStatus("1");
-                messageTaskDetailPo.setSuccessTime(singeSendMessageResult.getSuccessTime());
+                messageTaskDetailPo.setFailMsg(singeSendMessageResult.getFailMsg());
             }
             list.add(messageTaskDetailPo);
 
@@ -433,7 +441,7 @@ public abstract class AbstractHandler implements IHandler {
             return messageChannelAccountService.getById(accountId);
         } else {
             // 支持负载均衡
-            List<MessageChannelAccountPo> messageChannelAccountPoList = messageChannelAccountService.list(MESSAGE_CHANNEL_ACCOUNT.CHANNEL_ID.eq(messageChannelPo.getCode()));
+            List<MessageChannelAccountPo> messageChannelAccountPoList = messageChannelAccountService.list(MESSAGE_CHANNEL_ACCOUNT.CHANNEL_ID.eq(messageChannelPo.getId()).and(MESSAGE_CHANNEL_ACCOUNT.STATUS.eq("0")));
             MessageChannelAccountPo channelAccountPo = loadBalancer.choose(messageChannelAccountPoList);
             if (Objects.nonNull(channelAccountPo)) {
                 messageTask.setClientId(channelAccountPo.getId());

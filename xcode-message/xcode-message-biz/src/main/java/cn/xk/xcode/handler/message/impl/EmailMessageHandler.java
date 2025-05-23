@@ -57,14 +57,25 @@ public class EmailMessageHandler extends AbstractHandler {
         singeSendMessageResult.setReceiver(receiver);
         singeSendMessageResult.setExecTime(LocalDateTime.now());
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(javaMailSender.getUsername());
+        message.setFrom("发卡平台系统管理员" + '<' + javaMailSender.getUsername() + '>');
         message.setTo(receiver);
         String realMessageCount = messageTask.getMessageContent();
-        if (!JSON.isValid(realMessageCount)){
+        if (!JSON.isValid(realMessageCount)) {
             singeSendMessageResult.setSuccess(false);
             singeSendMessageResult.setFailMsg("消息模板格式不正确，非json格式:" + realMessageCount);
+            return singeSendMessageResult;
         }
         JSONObject jsonObject = JSONObject.parseObject(realMessageCount);
+        if (!jsonObject.containsKey("subject")) {
+            singeSendMessageResult.setSuccess(false);
+            singeSendMessageResult.setFailMsg("消息模板格式不正确，缺少subject字段" );
+            return singeSendMessageResult;
+        }
+        if (!jsonObject.containsKey("content")) {
+            singeSendMessageResult.setSuccess(false);
+            singeSendMessageResult.setFailMsg("消息模板格式不正确，缺少content字段");
+            return singeSendMessageResult;
+        }
         message.setSubject(jsonObject.getString("subject"));
         message.setText(jsonObject.getString("content"));
         try {
@@ -87,7 +98,7 @@ public class EmailMessageHandler extends AbstractHandler {
 
     @Override
     public boolean needRateLimit() {
-        return true;
+        return false;
     }
 
 
@@ -96,12 +107,15 @@ public class EmailMessageHandler extends AbstractHandler {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setUsername(channelAccountParamsValue.get("username").toString());
         mailSender.setHost(channelAccountParamsValue.get("host").toString());
-        mailSender.setPort((int) channelAccountParamsValue.get("port"));
+        mailSender.setPort(Integer.parseInt(channelAccountParamsValue.get("port").toString()));
         mailSender.setPassword(channelAccountParamsValue.get("password").toString());
-        Properties properties = mailSender.getJavaMailProperties();
-        properties.put("mail.transport.protocol", "smtp");
-        properties.put("mail.smtp.auth", true);
-        properties.put("mail.smtp.starttls.enable", true);
+        mailSender.setProtocol("smtp");
+        mailSender.setDefaultEncoding("UTF-8");
+        Properties properties = new Properties();
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.ssl.enable", "true");
+        mailSender.setJavaMailProperties(properties);
         return mailSender;
     }
 }

@@ -172,15 +172,15 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
     public CommonResult<?> reSendSingleTask(Long taskDetailId) {
         MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
         if (ObjectUtil.isNull(messageTaskDetailPo)) {
-            return CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS);
+            return CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS, null);
         }
         MessageTaskPo messageTaskPo = getById(messageTaskDetailPo.getTaskId());
         if (ObjectUtil.isNull(messageTaskPo)) {
-            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
         }
         MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
         if (ObjectUtil.isNull(messageChannelPo)) {
-            return CommonResult.error(CHANNEL_NOT_EXISTS);
+            return CommonResult.error(CHANNEL_NOT_EXISTS, null);
         }
         return messageHandlerHolder.routeHandler(messageChannelPo.getCode()).reSendSingleTask(taskDetailId);
     }
@@ -189,11 +189,11 @@ public class MessageTaskServiceImpl extends ServiceImpl<MessageTaskMapper, Messa
     public CommonResult<?> reSendTaskMessage(Long taskId) {
         MessageTaskPo messageTaskPo = this.getById(taskId);
         if (ObjectUtil.isNull(messageTaskPo)) {
-            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS);
+            return CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
         }
         MessageChannelPo messageChannelPo = messageChannelService.getById(messageTaskPo.getChannelId());
         if (ObjectUtil.isNull(messageChannelPo)) {
-            return CommonResult.error(CHANNEL_NOT_EXISTS);
+            return CommonResult.error(CHANNEL_NOT_EXISTS, null);
         }
         return messageHandlerHolder.routeHandler(messageChannelPo.getCode()).reSendTaskMessage(taskId);
     }

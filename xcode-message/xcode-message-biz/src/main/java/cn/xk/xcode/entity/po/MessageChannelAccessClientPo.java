@@ -74,7 +74,7 @@ public class MessageChannelAccessClientPo implements Serializable {
      * 是否删除 0未删除 1已删除
      */
     @com.mybatisflex.annotation.Column(isLogicDelete = true)
-    private String isDelete;
+    private String isDeleted;
 
     /**
      * token 刷新时间

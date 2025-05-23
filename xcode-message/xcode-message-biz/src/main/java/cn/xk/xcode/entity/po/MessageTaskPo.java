@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.po;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -93,7 +94,7 @@ public class MessageTaskPo implements Serializable {
     /**
      * 模板id
      */
-    private Integer templateId;
+    private int templateId;
 
     /**
      * 消息内容
@@ -128,6 +129,7 @@ public class MessageTaskPo implements Serializable {
     /**
      * 任务创建时间
      */
+    @Column(onInsertValue = "now()")
     private LocalDateTime createTime;
 
     /**

@@ -46,7 +46,7 @@ public class CornSendMessageService extends AbstractSendMessageService {
     public CommonResult<?> dealMessage(MessageTask messageTask) {
         String corn = messageTask.getTaskCorn();
         if (StrUtil.isBlank(corn)) {
-            return CommonResult.error(CORN_MESSAGE_TASK_NOT_DEFINE_CORN);
+            return CommonResult.error(CORN_MESSAGE_TASK_NOT_DEFINE_CORN, null);
         }
         // 验证corn表达式的合法性
         if (!CronExpression.isValidExpression(corn)) {

@@ -29,29 +29,29 @@ public class CommonResult<T> implements Serializable {
 
     private Object code;
 
-    public static <T> CommonResult<T> error(Object code, String msg){
-        CommonResult<T> result = new CommonResult<>();
-        result.setCode(code);
-        result.setMsg(msg);
-        return result;
-    }
-    public static <T> CommonResult<T> error(Object code, String msg, T data, Object... args) {
+//    public static <T> CommonResult<T> error(Object code, String msg){
+//        CommonResult<T> result = new CommonResult<>();
+//        result.setCode(code);
+//        result.setMsg(msg);
+//        return result;
+//    }
+    public static <T> CommonResult<T> error(ErrorCode errorCode, T data, Object... args) {
         CommonResult<T> result = new CommonResult<>();
         if (ObjectUtil.isNotNull(data)) {
             result.setData(data);
         }
-        result.setCode(code);
-        result.setMsg(StrUtil.format(msg, args));
+        result.setCode(errorCode.getCode());
+        result.setMsg(StrUtil.format(errorCode.getMessage(), args));
         return result;
     }
 
-    public static <T> CommonResult<T> error(ErrorCode errorCode, Object... args) {
-        return error(errorCode, null, args);
-    }
+//    public static <T> CommonResult<T> error(ErrorCode errorCode, Object... args) {
+//        return error(errorCode, null, args);
+//    }
 
-    public static <T> CommonResult<T> error(ErrorCode errorCode, T data, Object... args) {
-        return error(errorCode.getCode(), errorCode.getMessage(), data, args);
-    }
+//    public static <T> CommonResult<T> error(ErrorCode errorCode, T data, Object... args) {
+//        return error(errorCode.getCode(), errorCode.getMessage(), data, args);
+//    }
 
 
     public static <T> CommonResult<T> success(T data) {
@@ -72,11 +72,31 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> error(ServiceException serviceException) {
-        return error(serviceException.getCode(), serviceException.getMessage(), null);
+        return error(new ErrorCode() {
+            @Override
+            public Object getCode() {
+                return serviceException.getCode();
+            }
+
+            @Override
+            public String getMessage() {
+                return serviceException.getMsg();
+            }
+        }, null);
     }
 
     public static <T> CommonResult<T> error(ServerException serverException) {
-        return error(serverException.getCode(), serverException.getMessage(), null);
+        return error(new ErrorCode() {
+            @Override
+            public Object getCode() {
+                return serverException.getCode();
+            }
+
+            @Override
+            public String getMessage() {
+                return serverException.getMsg();
+            }
+        }, null);
     }
 
     public static boolean isSuccess(CommonResult<?> result) {

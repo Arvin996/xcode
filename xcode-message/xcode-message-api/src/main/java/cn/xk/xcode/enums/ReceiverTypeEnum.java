@@ -1,9 +1,10 @@
 package cn.xk.xcode.enums;
 
 import cn.xk.xcode.core.annotation.StringEnumValueToArray;
-import cn.xk.xcode.utils.collections.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 /**
  * @Author xuk
@@ -23,7 +24,7 @@ public enum ReceiverTypeEnum implements StringEnumValueToArray {
 
     @Override
     public String[] toArrayString() {
-        return ArrayUtil.toArray(ReceiverTypeEnum.values(), ReceiverTypeEnum::getCode);
+        return Arrays.stream(values()).map(ReceiverTypeEnum::getCode).toArray(String[]::new);
     }
 
     public static boolean isCsv(String code){

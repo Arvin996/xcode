@@ -63,12 +63,12 @@ public class RetryTaskConsumer {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             return;
         }
-        list = list.stream().filter(m -> m.getRetryTimes() < xcodeMessageProperties.getFailRetryTimes()).collect(Collectors.toList());
-        if (CollectionUtil.isEmpty(list)) {
+        List<MessageTaskDetailPo> list1 = list.stream().filter(messageTaskDetailPo -> messageTaskDetailPo.getRetryTimes() < xcodeMessageProperties.getFailRetryTimes()).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(list1)) {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
             return;
         }
-        MessageTaskPo messageTaskPo = messageTaskService.getById(list.get(0).getTaskId());
+        MessageTaskPo messageTaskPo = messageTaskService.getById(list1.get(0).getTaskId());
         if (ObjectUtil.isNull(messageTaskPo)) {
             log.info("消息任务不存在，任务id: {}", list.get(0).getTaskId());
             for (MessageTaskDetailPo messageTaskDetailPo : list) {

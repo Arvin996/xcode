@@ -128,8 +128,7 @@ xcode:
     cache-type: redis
   security:
     whitelist:
-      - /auth/login
-      - /auth/register
+
       - /api/message/sendMessage
   xxl:
     job:

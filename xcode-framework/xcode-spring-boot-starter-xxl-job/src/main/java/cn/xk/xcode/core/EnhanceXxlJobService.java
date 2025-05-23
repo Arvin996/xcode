@@ -69,13 +69,13 @@ public class EnhanceXxlJobService {
         Map<String, Object> stringObjectMap = BeanUtil.beanToMap(xxlJobInfo);
         HttpResponse httpResponse = HttpRequest.post(updateUrl).form(stringObjectMap).cookie(getJobCookie()).execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
     }
 
@@ -85,13 +85,13 @@ public class EnhanceXxlJobService {
         params.put("id", jobId);
         HttpResponse httpResponse = HttpRequest.post(deleteUrl).form(params).cookie(getJobCookie()).execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
     }
 
@@ -101,13 +101,13 @@ public class EnhanceXxlJobService {
         params.put("id", jobId);
         HttpResponse httpResponse = HttpRequest.post(startUrl).form(params).cookie(getJobCookie()).execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
     }
 
@@ -117,13 +117,13 @@ public class EnhanceXxlJobService {
         params.put("id", jobId);
         HttpResponse httpResponse = HttpRequest.post(stopUrl).form(params).cookie(getJobCookie()).execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
     }
 
@@ -134,7 +134,7 @@ public class EnhanceXxlJobService {
                 .form("password", xxlJobProperties.getPassword())
                 .execute();
         if (!httpResponse.isOk()) {
-            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR);
+            ExceptionUtil.castServerException(XXL_JOB_ADMIN_ERROR, null);
         }
         HttpCookie cookie = httpResponse.getCookie(XXL_JOB_COOKIE_NAME);
         ObjectUtil.ifNullCastServerException(cookie, XXL_JOB_COOKIE_ERROR);
@@ -162,12 +162,12 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         String body = httpResponse.body();
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
         return CommonResult.success(jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobGroup.class)).collect(Collectors.toList()));
@@ -192,13 +192,13 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
     }
 
@@ -216,11 +216,11 @@ public class EnhanceXxlJobService {
                 .cookie(getJobCookie())
                 .execute();
         if (!httpResponse.isOk()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         String body = httpResponse.body();
         JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
@@ -246,11 +246,11 @@ public class EnhanceXxlJobService {
         // 检查HTTP响应是否成功
         if (!httpResponse.isOk()) {
             // 如果响应不成功，抛出服务器异常
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
         if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         // 返回任务ID
         return CommonResult.success(Integer.parseInt(returnT.getContent().toString()));

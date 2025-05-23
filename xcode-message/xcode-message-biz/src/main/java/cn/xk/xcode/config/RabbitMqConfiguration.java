@@ -1,5 +1,7 @@
 package cn.xk.xcode.config;
 
+import cn.hutool.extra.spring.SpringUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 /**
  * @Author xuk
@@ -51,12 +54,12 @@ public class RabbitMqConfiguration {
             log.debug("replyCode: {}", returned.getReplyCode());
             log.debug("replyText: {}", returned.getReplyText());
         });
-        rabbitTemplate.setMessageConverter(messageConverter());
+        rabbitTemplate.setMessageConverter(messageConverter(SpringUtil.getBean(ObjectMapper.class)));
     }
 
-    public MessageConverter messageConverter() {
+    public MessageConverter messageConverter(ObjectMapper objectMapper) {
         // 1.定义消息转换器
-        Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter();
+        Jackson2JsonMessageConverter jackson2JsonMessageConverter = new Jackson2JsonMessageConverter(objectMapper);
         // 2.配置自动创建消息id，用于识别不同消息，也可以在业务中基于ID判断是否是重复消息
         jackson2JsonMessageConverter.setCreateMessageIds(true);
         return jackson2JsonMessageConverter;

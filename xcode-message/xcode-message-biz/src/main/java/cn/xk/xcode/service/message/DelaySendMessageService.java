@@ -42,17 +42,17 @@ public class DelaySendMessageService extends AbstractSendMessageService {
 
     @Override
     public String sendType() {
-        return MessageSendType.NOW.getCode();
+        return MessageSendType.DELAY.getCode();
     }
 
     @Override
     public CommonResult<?> dealMessage(MessageTask messageTask) {
         LocalDateTime scheduleTime = messageTask.getScheduleTime();
         if (ObjectUtil.isNull(scheduleTime)) {
-            return CommonResult.error(DEALY_MESSAGE_TASK_NOT_DEFINE_SCHEDULE_TIME);
+            return CommonResult.error(DEALY_MESSAGE_TASK_NOT_DEFINE_SCHEDULE_TIME, null);
         }
         if (scheduleTime.isBefore(LocalDateTime.now())) {
-            return CommonResult.error(DEALY_MESSAGE_TASK_SCHEDULE_TIME_MUST_NOT_BEFORE_NOW);
+            return CommonResult.error(DEALY_MESSAGE_TASK_SCHEDULE_TIME_MUST_NOT_BEFORE_NOW, null);
         }
         rabbitTemplate.convertAndSend(DELAY_EXCHANGE_NAME, DELAY_MESSAGE_BINDING_KEY, JSON.toJSONString(messageTask), message -> {
             // 单位毫秒 计算出现在到明天早上9点的毫秒数

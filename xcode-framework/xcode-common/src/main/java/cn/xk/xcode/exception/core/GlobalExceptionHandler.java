@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public CommonResult<?> handlerException(Exception e) {
         log.error("发生异常:{}", e.getMessage());
-        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage(), null);
+        return CommonResult.error(INTERNAL_SERVER_ERROR, null);
     }
 
     @ExceptionHandler(ServerException.class)
@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public CommonResult<?> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return CommonResult.error(PARAMETER_VALIDATION_FAIL.getCode(),
-                PARAMETER_VALIDATION_FAIL.getMessage() + ":" + e.getMessage(), null);
+        return CommonResult.error(PARAMETER_VALIDATION_FAIL, e.getBindingResult().getFieldError().getDefaultMessage());
     }
 }

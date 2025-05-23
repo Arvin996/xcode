@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS `system_api` (
   UNIQUE KEY `uk_api_path` (`product_name`,`api_path`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统接口维护';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_api 的数据：~0 rows (大约)
+DELETE FROM `system_api`;
 
 -- 导出  表 xcode-distribution-card-system.system_dict_data 结构
 CREATE TABLE IF NOT EXISTS `system_dict_data` (
@@ -51,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `system_dict_data` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典数据表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_dict_data 的数据：~0 rows (大约)
+DELETE FROM `system_dict_data`;
 
 -- 导出  表 xcode-distribution-card-system.system_dict_type 结构
 CREATE TABLE IF NOT EXISTS `system_dict_type` (
@@ -69,7 +71,8 @@ CREATE TABLE IF NOT EXISTS `system_dict_type` (
   UNIQUE KEY `uk_type` (`type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典类型表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_dict_type 的数据：~0 rows (大约)
+DELETE FROM `system_dict_type`;
 
 -- 导出  表 xcode-distribution-card-system.system_menu 结构
 CREATE TABLE IF NOT EXISTS `system_menu` (
@@ -90,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `system_menu` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='菜单权限表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_menu 的数据：~0 rows (大约)
+DELETE FROM `system_menu`;
 
 -- 导出  表 xcode-distribution-card-system.system_operate_log 结构
 CREATE TABLE IF NOT EXISTS `system_operate_log` (
@@ -104,7 +108,8 @@ CREATE TABLE IF NOT EXISTS `system_operate_log` (
   KEY `key_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统操作日志表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_operate_log 的数据：~0 rows (大约)
+DELETE FROM `system_operate_log`;
 
 -- 导出  表 xcode-distribution-card-system.system_role 结构
 CREATE TABLE IF NOT EXISTS `system_role` (
@@ -120,7 +125,10 @@ CREATE TABLE IF NOT EXISTS `system_role` (
   UNIQUE KEY `uk_code` (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_role 的数据：~1 rows (大约)
+DELETE FROM `system_role`;
+INSERT INTO `system_role` (`id`, `code`, `name`, `is_deleted`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES
+	(1, 'root', '系统超级管理员', '0', '2025-05-20 16:23:05', NULL, '2025-05-20 16:23:07', NULL);
 
 -- 导出  表 xcode-distribution-card-system.system_role_api 结构
 CREATE TABLE IF NOT EXISTS `system_role_api` (
@@ -130,7 +138,8 @@ CREATE TABLE IF NOT EXISTS `system_role_api` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统角色-接口关联表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_role_api 的数据：~0 rows (大约)
+DELETE FROM `system_role_api`;
 
 -- 导出  表 xcode-distribution-card-system.system_role_menu 结构
 CREATE TABLE IF NOT EXISTS `system_role_menu` (
@@ -140,7 +149,8 @@ CREATE TABLE IF NOT EXISTS `system_role_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色-菜单绑定表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_role_menu 的数据：~0 rows (大约)
+DELETE FROM `system_role_menu`;
 
 -- 导出  表 xcode-distribution-card-system.system_station_notice 结构
 CREATE TABLE IF NOT EXISTS `system_station_notice` (
@@ -154,7 +164,8 @@ CREATE TABLE IF NOT EXISTS `system_station_notice` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统通知站内信';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_station_notice 的数据：~0 rows (大约)
+DELETE FROM `system_station_notice`;
 
 -- 导出  表 xcode-distribution-card-system.system_user 结构
 CREATE TABLE IF NOT EXISTS `system_user` (
@@ -168,9 +179,9 @@ CREATE TABLE IF NOT EXISTS `system_user` (
   `mobile` char(10) DEFAULT NULL COMMENT '手机号',
   `email` varchar(256) DEFAULT NULL COMMENT '邮箱',
   `ding_talk_webhook_token` text COMMENT '钉钉 webhook token',
-  `ding_talk_webhook_sign` text COMMENT '钉钉 webhook 签名密钥',
+  `ding_talk_webhook_secret` text COMMENT '钉钉 webhook 签名密钥',
   `feishu_webhook_token` text COMMENT '飞书 webhook token',
-  `feishu_webhook_sign` text COMMENT '飞书 webhook 签名密钥',
+  `feishu_webhook_secret` text COMMENT '飞书 webhook 签名密钥',
   `avatar` text COMMENT '头像',
   `status` char(1) NOT NULL DEFAULT '0' COMMENT '账号状态 0正常 1停用',
   `last_login_ip` varchar(128) DEFAULT NULL COMMENT '最后登录ip',
@@ -184,7 +195,10 @@ CREATE TABLE IF NOT EXISTS `system_user` (
   UNIQUE KEY `uk_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='后台系统用户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_user 的数据：~1 rows (大约)
+DELETE FROM `system_user`;
+INSERT INTO `system_user` (`id`, `role_id`, `username`, `password`, `nickname`, `sex`, `age`, `mobile`, `email`, `ding_talk_webhook_token`, `ding_talk_webhook_secret`, `feishu_webhook_token`, `feishu_webhook_secret`, `avatar`, `status`, `last_login_ip`, `last_login_time`, `is_deleted`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES
+	(1, 1, 'root', '123456', '系统超级用户', '2', 12, '', NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, '0', NULL, NULL, NULL, NULL);
 
 -- 导出  表 xcode-distribution-card-system.system_visit_log 结构
 CREATE TABLE IF NOT EXISTS `system_visit_log` (
@@ -199,7 +213,8 @@ CREATE TABLE IF NOT EXISTS `system_visit_log` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统访问记录';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-distribution-card-system.system_visit_log 的数据：~0 rows (大约)
+DELETE FROM `system_visit_log`;
 
 
 -- 导出 xcode-flow 的数据库结构
@@ -227,7 +242,8 @@ CREATE TABLE IF NOT EXISTS `flow_definition` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流程定义表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_definition 的数据：~0 rows (大约)
+DELETE FROM `flow_definition`;
 
 -- 导出  表 xcode-flow.flow_his_task 结构
 CREATE TABLE IF NOT EXISTS `flow_his_task` (
@@ -256,7 +272,8 @@ CREATE TABLE IF NOT EXISTS `flow_his_task` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='历史任务记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_his_task 的数据：~0 rows (大约)
+DELETE FROM `flow_his_task`;
 
 -- 导出  表 xcode-flow.flow_instance 结构
 CREATE TABLE IF NOT EXISTS `flow_instance` (
@@ -278,7 +295,8 @@ CREATE TABLE IF NOT EXISTS `flow_instance` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流程实例表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_instance 的数据：~0 rows (大约)
+DELETE FROM `flow_instance`;
 
 -- 导出  表 xcode-flow.flow_node 结构
 CREATE TABLE IF NOT EXISTS `flow_node` (
@@ -305,7 +323,8 @@ CREATE TABLE IF NOT EXISTS `flow_node` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流程结点表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_node 的数据：~0 rows (大约)
+DELETE FROM `flow_node`;
 
 -- 导出  表 xcode-flow.flow_oa_leave 结构
 CREATE TABLE IF NOT EXISTS `flow_oa_leave` (
@@ -328,7 +347,8 @@ CREATE TABLE IF NOT EXISTS `flow_oa_leave` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='OA 请假申请表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_oa_leave 的数据：~0 rows (大约)
+DELETE FROM `flow_oa_leave`;
 
 -- 导出  表 xcode-flow.flow_skip 结构
 CREATE TABLE IF NOT EXISTS `flow_skip` (
@@ -349,7 +369,8 @@ CREATE TABLE IF NOT EXISTS `flow_skip` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='结点跳转关联表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_skip 的数据：~0 rows (大约)
+DELETE FROM `flow_skip`;
 
 -- 导出  表 xcode-flow.flow_task 结构
 CREATE TABLE IF NOT EXISTS `flow_task` (
@@ -368,7 +389,8 @@ CREATE TABLE IF NOT EXISTS `flow_task` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='待办任务表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_task 的数据：~0 rows (大约)
+DELETE FROM `flow_task`;
 
 -- 导出  表 xcode-flow.flow_user 结构
 CREATE TABLE IF NOT EXISTS `flow_user` (
@@ -385,7 +407,8 @@ CREATE TABLE IF NOT EXISTS `flow_user` (
   KEY `user_processed_type` (`processed_by`,`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流程用户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-flow.flow_user 的数据：~0 rows (大约)
+DELETE FROM `flow_user`;
 
 
 -- 导出 xcode-infra 的数据库结构
@@ -405,7 +428,8 @@ CREATE TABLE IF NOT EXISTS `infra_database_conn_info` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_database_conn_info 的数据：~0 rows (大约)
+DELETE FROM `infra_database_conn_info`;
 
 -- 导出  表 xcode-infra.infra_gen_table 结构
 CREATE TABLE IF NOT EXISTS `infra_gen_table` (
@@ -433,7 +457,8 @@ CREATE TABLE IF NOT EXISTS `infra_gen_table` (
   PRIMARY KEY (`table_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='代码生成业务表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_gen_table 的数据：~0 rows (大约)
+DELETE FROM `infra_gen_table`;
 
 -- 导出  表 xcode-infra.infra_gen_table_column 结构
 CREATE TABLE IF NOT EXISTS `infra_gen_table_column` (
@@ -462,22 +487,26 @@ CREATE TABLE IF NOT EXISTS `infra_gen_table_column` (
   PRIMARY KEY (`column_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='代码生成业务表字段';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_gen_table_column 的数据：~0 rows (大约)
+DELETE FROM `infra_gen_table_column`;
 
 -- 导出  表 xcode-infra.infra_sys_files 结构
 CREATE TABLE IF NOT EXISTS `infra_sys_files` (
   `id` varchar(32) NOT NULL COMMENT '文件id  md5值',
-  `file_name` varchar(100) NOT NULL COMMENT '文件名',
-  `bucket` varchar(30) NOT NULL COMMENT '文件存在于minio中的桶',
-  `file_path` varchar(512) NOT NULL COMMENT '文件在minio中的访问路径',
-  `file_type` varchar(20) NOT NULL COMMENT '文件类型',
+  `file_name` varchar(512) NOT NULL COMMENT '文件名',
+  `bucket` varchar(128) NOT NULL COMMENT '文件桶',
+  `object_name` varchar(512) NOT NULL COMMENT '文件服务器中的key',
+  `file_url` text COMMENT '文件访问地址',
+  `content_type` varchar(128) NOT NULL COMMENT '文件类型',
   `file_size` bigint(20) NOT NULL COMMENT '文件大小',
+  `e_tag` varchar(128) DEFAULT NULL COMMENT '文件tag',
   `create_user` varchar(50) NOT NULL COMMENT '上传人',
   `create_time` datetime DEFAULT NULL COMMENT '上传时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_sys_files 的数据：~0 rows (大约)
+DELETE FROM `infra_sys_files`;
 
 -- 导出  表 xcode-infra.infra_sys_files_process 结构
 CREATE TABLE IF NOT EXISTS `infra_sys_files_process` (
@@ -485,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `infra_sys_files_process` (
   `file_id` varchar(32) NOT NULL COMMENT '对应于file表中的id 表示要进行转码',
   `file_name` varchar(128) NOT NULL COMMENT '文件名',
   `bucket` varchar(30) NOT NULL COMMENT 'minio桶',
-  `file_path` varchar(512) NOT NULL COMMENT '文件在minio中的访问路劲',
+  `object_name` varchar(512) NOT NULL COMMENT '文件在minio中的访问路劲',
   `status` char(1) NOT NULL DEFAULT '0' COMMENT '状态 0待处理 1处理中 2处理成功 3处理失败',
   `fail_count` int(2) DEFAULT '0' COMMENT '失败次数',
   `upload_time` datetime DEFAULT NULL COMMENT '上传时间',
@@ -494,7 +523,8 @@ CREATE TABLE IF NOT EXISTS `infra_sys_files_process` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_sys_files_process 的数据：~0 rows (大约)
+DELETE FROM `infra_sys_files_process`;
 
 -- 导出  表 xcode-infra.infra_table_info 结构
 CREATE TABLE IF NOT EXISTS `infra_table_info` (
@@ -508,7 +538,8 @@ CREATE TABLE IF NOT EXISTS `infra_table_info` (
   PRIMARY KEY (`database_id`,`table_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-infra.infra_table_info 的数据：~0 rows (大约)
+DELETE FROM `infra_table_info`;
 
 
 -- 导出 xcode-job 的数据库结构
@@ -526,7 +557,87 @@ CREATE TABLE IF NOT EXISTS `xxl_job_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_group 的数据：~78 rows (大约)
+DELETE FROM `xxl_job_group`;
+INSERT INTO `xxl_job_group` (`id`, `app_name`, `title`, `address_type`, `address_list`, `update_time`) VALUES
+	(1, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(2, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(3, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(4, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(5, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(6, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(7, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(8, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(9, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(10, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(11, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(12, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(13, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(14, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(15, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(16, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(17, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(18, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(19, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(20, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(21, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(22, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(23, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(24, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(25, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(26, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(27, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(28, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(29, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(30, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(31, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(32, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(33, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(34, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(35, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(36, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(37, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(38, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(39, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(40, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(41, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(42, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(43, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(44, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(45, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(46, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(47, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(48, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(49, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(50, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(51, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(52, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(53, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(54, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(55, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(56, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(57, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(58, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(59, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(60, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(61, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(62, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(63, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(64, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(65, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(66, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(67, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(68, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(69, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(70, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(71, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(72, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(73, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(74, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(75, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(76, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(77, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54'),
+	(78, 'xxl-test', '测试执行器', 0, NULL, '2025-05-23 17:30:54');
 
 -- 导出  表 xcode-job.xxl_job_info 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_info` (
@@ -557,7 +668,8 @@ CREATE TABLE IF NOT EXISTS `xxl_job_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_info 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_info`;
 
 -- 导出  表 xcode-job.xxl_job_lock 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_lock` (
@@ -565,7 +677,10 @@ CREATE TABLE IF NOT EXISTS `xxl_job_lock` (
   PRIMARY KEY (`lock_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_lock 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_lock`;
+INSERT INTO `xxl_job_lock` (`lock_name`) VALUES
+	('schedule_lock');
 
 -- 导出  表 xcode-job.xxl_job_log 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_log` (
@@ -591,7 +706,8 @@ CREATE TABLE IF NOT EXISTS `xxl_job_log` (
   KEY `I_job_id` (`job_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_log 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_log`;
 
 -- 导出  表 xcode-job.xxl_job_logglue 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_logglue` (
@@ -605,7 +721,8 @@ CREATE TABLE IF NOT EXISTS `xxl_job_logglue` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_logglue 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_logglue`;
 
 -- 导出  表 xcode-job.xxl_job_log_report 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_log_report` (
@@ -619,7 +736,12 @@ CREATE TABLE IF NOT EXISTS `xxl_job_log_report` (
   UNIQUE KEY `i_trigger_day` (`trigger_day`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_log_report 的数据：~3 rows (大约)
+DELETE FROM `xxl_job_log_report`;
+INSERT INTO `xxl_job_log_report` (`id`, `trigger_day`, `running_count`, `suc_count`, `fail_count`, `update_time`) VALUES
+	(1, '2025-05-23 00:00:00', 0, 0, 0, NULL),
+	(2, '2025-05-22 00:00:00', 0, 0, 0, NULL),
+	(3, '2025-05-21 00:00:00', 0, 0, 0, NULL);
 
 -- 导出  表 xcode-job.xxl_job_registry 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_registry` (
@@ -632,7 +754,8 @@ CREATE TABLE IF NOT EXISTS `xxl_job_registry` (
   UNIQUE KEY `i_g_k_v` (`registry_group`,`registry_key`,`registry_value`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_registry 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_registry`;
 
 -- 导出  表 xcode-job.xxl_job_user 结构
 CREATE TABLE IF NOT EXISTS `xxl_job_user` (
@@ -645,7 +768,10 @@ CREATE TABLE IF NOT EXISTS `xxl_job_user` (
   UNIQUE KEY `i_username` (`username`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-job.xxl_job_user 的数据：~0 rows (大约)
+DELETE FROM `xxl_job_user`;
+INSERT INTO `xxl_job_user` (`id`, `username`, `password`, `role`, `permission`) VALUES
+	(1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 1, NULL);
 
 
 -- 导出 xcode-mall 的数据库结构
@@ -666,7 +792,8 @@ CREATE TABLE IF NOT EXISTS `product_brand` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品品牌';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_brand 的数据：~0 rows (大约)
+DELETE FROM `product_brand`;
 
 -- 导出  表 xcode-mall.product_category 结构
 CREATE TABLE IF NOT EXISTS `product_category` (
@@ -682,7 +809,8 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_category 的数据：~0 rows (大约)
+DELETE FROM `product_category`;
 
 -- 导出  表 xcode-mall.product_comment 结构
 CREATE TABLE IF NOT EXISTS `product_comment` (
@@ -713,7 +841,8 @@ CREATE TABLE IF NOT EXISTS `product_comment` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品评价表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_comment 的数据：~0 rows (大约)
+DELETE FROM `product_comment`;
 
 -- 导出  表 xcode-mall.product_favorite 结构
 CREATE TABLE IF NOT EXISTS `product_favorite` (
@@ -722,7 +851,8 @@ CREATE TABLE IF NOT EXISTS `product_favorite` (
   PRIMARY KEY (`user_id`,`sku_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品收藏表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_favorite 的数据：~0 rows (大约)
+DELETE FROM `product_favorite`;
 
 -- 导出  表 xcode-mall.product_property 结构
 CREATE TABLE IF NOT EXISTS `product_property` (
@@ -736,7 +866,8 @@ CREATE TABLE IF NOT EXISTS `product_property` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品属性';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_property 的数据：~0 rows (大约)
+DELETE FROM `product_property`;
 
 -- 导出  表 xcode-mall.product_property_value 结构
 CREATE TABLE IF NOT EXISTS `product_property_value` (
@@ -751,7 +882,8 @@ CREATE TABLE IF NOT EXISTS `product_property_value` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品属性规则值表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_property_value 的数据：~0 rows (大约)
+DELETE FROM `product_property_value`;
 
 -- 导出  表 xcode-mall.product_sku 结构
 CREATE TABLE IF NOT EXISTS `product_sku` (
@@ -772,7 +904,8 @@ CREATE TABLE IF NOT EXISTS `product_sku` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品sku';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_sku 的数据：~0 rows (大约)
+DELETE FROM `product_sku`;
 
 -- 导出  表 xcode-mall.product_spu 结构
 CREATE TABLE IF NOT EXISTS `product_spu` (
@@ -806,7 +939,8 @@ CREATE TABLE IF NOT EXISTS `product_spu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品spu';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-mall.product_spu 的数据：~0 rows (大约)
+DELETE FROM `product_spu`;
 
 
 -- 导出 xcode-member 的数据库结构
@@ -825,7 +959,8 @@ CREATE TABLE IF NOT EXISTS `member_address` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员收货地址表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_address 的数据：~0 rows (大约)
+DELETE FROM `member_address`;
 
 -- 导出  表 xcode-member.member_config 结构
 CREATE TABLE IF NOT EXISTS `member_config` (
@@ -837,7 +972,8 @@ CREATE TABLE IF NOT EXISTS `member_config` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员配置表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_config 的数据：~0 rows (大约)
+DELETE FROM `member_config`;
 
 -- 导出  表 xcode-member.member_experience_record 结构
 CREATE TABLE IF NOT EXISTS `member_experience_record` (
@@ -853,7 +989,8 @@ CREATE TABLE IF NOT EXISTS `member_experience_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员经验记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_experience_record 的数据：~0 rows (大约)
+DELETE FROM `member_experience_record`;
 
 -- 导出  表 xcode-member.member_group 结构
 CREATE TABLE IF NOT EXISTS `member_group` (
@@ -863,7 +1000,8 @@ CREATE TABLE IF NOT EXISTS `member_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员所属组表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_group 的数据：~0 rows (大约)
+DELETE FROM `member_group`;
 
 -- 导出  表 xcode-member.member_level 结构
 CREATE TABLE IF NOT EXISTS `member_level` (
@@ -877,7 +1015,8 @@ CREATE TABLE IF NOT EXISTS `member_level` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员等级表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_level 的数据：~0 rows (大约)
+DELETE FROM `member_level`;
 
 -- 导出  表 xcode-member.member_level_change_record 结构
 CREATE TABLE IF NOT EXISTS `member_level_change_record` (
@@ -892,7 +1031,8 @@ CREATE TABLE IF NOT EXISTS `member_level_change_record` (
   `create_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员等级变更记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_level_change_record 的数据：~0 rows (大约)
+DELETE FROM `member_level_change_record`;
 
 -- 导出  表 xcode-member.member_login_record 结构
 CREATE TABLE IF NOT EXISTS `member_login_record` (
@@ -904,7 +1044,8 @@ CREATE TABLE IF NOT EXISTS `member_login_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员登录记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_login_record 的数据：~0 rows (大约)
+DELETE FROM `member_login_record`;
 
 -- 导出  表 xcode-member.member_point_record 结构
 CREATE TABLE IF NOT EXISTS `member_point_record` (
@@ -920,7 +1061,8 @@ CREATE TABLE IF NOT EXISTS `member_point_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户积分记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_point_record 的数据：~0 rows (大约)
+DELETE FROM `member_point_record`;
 
 -- 导出  表 xcode-member.member_sign 结构
 CREATE TABLE IF NOT EXISTS `member_sign` (
@@ -931,7 +1073,8 @@ CREATE TABLE IF NOT EXISTS `member_sign` (
   PRIMARY KEY (`day`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员签到表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_sign 的数据：~0 rows (大约)
+DELETE FROM `member_sign`;
 
 -- 导出  表 xcode-member.member_sign_record 结构
 CREATE TABLE IF NOT EXISTS `member_sign_record` (
@@ -944,7 +1087,8 @@ CREATE TABLE IF NOT EXISTS `member_sign_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员签到记录表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_sign_record 的数据：~0 rows (大约)
+DELETE FROM `member_sign_record`;
 
 -- 导出  表 xcode-member.member_tag 结构
 CREATE TABLE IF NOT EXISTS `member_tag` (
@@ -955,7 +1099,8 @@ CREATE TABLE IF NOT EXISTS `member_tag` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户标签表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_tag 的数据：~0 rows (大约)
+DELETE FROM `member_tag`;
 
 -- 导出  表 xcode-member.member_user 结构
 CREATE TABLE IF NOT EXISTS `member_user` (
@@ -979,7 +1124,8 @@ CREATE TABLE IF NOT EXISTS `member_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员用户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-member.member_user 的数据：~0 rows (大约)
+DELETE FROM `member_user`;
 
 
 -- 导出 xcode-message 的数据库结构
@@ -1000,7 +1146,10 @@ CREATE TABLE IF NOT EXISTS `message_channel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='消息渠道表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_channel 的数据：~1 rows (大约)
+DELETE FROM `message_channel`;
+INSERT INTO `message_channel` (`id`, `code`, `name`, `support_load_balance`, `status`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES
+	(1, 'email', '邮箱渠道', '0', '0', '2025-05-23 09:21:09', '2025-05-23 09:21:10', 'root', 'root');
 
 -- 导出  表 xcode-message.message_channel_access_client 结构
 CREATE TABLE IF NOT EXISTS `message_channel_access_client` (
@@ -1021,7 +1170,10 @@ CREATE TABLE IF NOT EXISTS `message_channel_access_client` (
   UNIQUE KEY `uni_name` (`name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='渠道接入商（入驻消息消息平台的用户）';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_channel_access_client 的数据：~1 rows (大约)
+DELETE FROM `message_channel_access_client`;
+INSERT INTO `message_channel_access_client` (`id`, `name`, `email`, `mobile`, `access_token`, `status`, `access_count`, `used_count`, `rest_count`, `is_deleted`, `token_refresh_time`, `create_time`, `update_time`) VALUES
+	(1, '系统接入商', '1347459620@qq.com', '13027102413', 'sksjnga212sa238hojm', '0', 999999, 3, 999996, '0', '2025-05-23 09:22:21', '2025-05-23 09:22:24', '2025-05-23 17:27:42');
 
 -- 导出  表 xcode-message.message_channel_account 结构
 CREATE TABLE IF NOT EXISTS `message_channel_account` (
@@ -1039,7 +1191,10 @@ CREATE TABLE IF NOT EXISTS `message_channel_account` (
   UNIQUE KEY `uk_account_id_name` (`channel_id`,`account_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='消息渠道账户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_channel_account 的数据：~1 rows (大约)
+DELETE FROM `message_channel_account`;
+INSERT INTO `message_channel_account` (`id`, `account_name`, `channel_id`, `weight`, `status`, `is_deleted`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES
+	(1, '系统用户邮箱', 1, 1, '0', '0', '2025-05-23 09:23:00', '2025-05-23 09:23:01', 'root', 'root');
 
 -- 导出  表 xcode-message.message_channel_account_param_value 结构
 CREATE TABLE IF NOT EXISTS `message_channel_account_param_value` (
@@ -1055,7 +1210,13 @@ CREATE TABLE IF NOT EXISTS `message_channel_account_param_value` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息渠道账户参数值表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_channel_account_param_value 的数据：~4 rows (大约)
+DELETE FROM `message_channel_account_param_value`;
+INSERT INTO `message_channel_account_param_value` (`id`, `account_id`, `channel_param_id`, `param_value`, `is_deleted`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES
+	(1, 1, 1, '1347459620@qq.com', '0', '2025-05-23 09:27:18', NULL, '2025-05-23 09:27:19', NULL),
+	(2, 1, 2, 'dummdezbcriuhahh', '0', '2025-05-23 09:28:13', NULL, '2025-05-23 09:28:14', NULL),
+	(3, 1, 3, 'smtp.qq.com', '0', '2025-05-23 09:28:13', NULL, '2025-05-23 09:28:15', NULL),
+	(4, 1, 4, '465', '0', '2025-05-23 09:28:12', NULL, '2025-05-23 09:28:15', NULL);
 
 -- 导出  表 xcode-message.message_channel_param 结构
 CREATE TABLE IF NOT EXISTS `message_channel_param` (
@@ -1072,7 +1233,13 @@ CREATE TABLE IF NOT EXISTS `message_channel_param` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息渠道参数';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_channel_param 的数据：~4 rows (大约)
+DELETE FROM `message_channel_param`;
+INSERT INTO `message_channel_param` (`id`, `channel_id`, `name`, `required`, `desc`, `is_deleted`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES
+	(1, 1, 'username', '1', '邮箱用户名', '0', '2025-05-23 09:24:45', NULL, '2025-05-23 09:24:59', NULL),
+	(2, 1, 'password', '1', '邮箱密码', '0', NULL, NULL, NULL, NULL),
+	(3, 1, 'host', '1', '邮箱主机名', '0', NULL, NULL, NULL, NULL),
+	(4, 1, 'port', '1', '邮箱服务器端口', '0', NULL, NULL, NULL, NULL);
 
 -- 导出  表 xcode-message.message_client_channel 结构
 CREATE TABLE IF NOT EXISTS `message_client_channel` (
@@ -1082,7 +1249,10 @@ CREATE TABLE IF NOT EXISTS `message_client_channel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息接入商与渠道的绑定关系';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_client_channel 的数据：~1 rows (大约)
+DELETE FROM `message_client_channel`;
+INSERT INTO `message_client_channel` (`id`, `client_id`, `channel_id`) VALUES
+	(1, 1, 1);
 
 -- 导出  表 xcode-message.message_client_message_statistics 结构
 CREATE TABLE IF NOT EXISTS `message_client_message_statistics` (
@@ -1097,7 +1267,8 @@ CREATE TABLE IF NOT EXISTS `message_client_message_statistics` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='渠道用户发送渠道消息条数统计';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_client_message_statistics 的数据：~0 rows (大约)
+DELETE FROM `message_client_message_statistics`;
 
 -- 导出  表 xcode-message.message_task 结构
 CREATE TABLE IF NOT EXISTS `message_task` (
@@ -1117,6 +1288,7 @@ CREATE TABLE IF NOT EXISTS `message_task` (
   `message_content` text CHARACTER SET utf8mb4 NOT NULL COMMENT '消息内容',
   `content_value_params` text CHARACTER SET utf8mb4 COMMENT '模板参数值 json格式',
   `receiver_type` char(2) CHARACTER SET utf8mb4 NOT NULL COMMENT '接收人类型 00透传直接发送 10 csv文件',
+  `receivers` longtext COMMENT '接收人',
   `status` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '00' COMMENT '00 待发送 \r\n10 部分发送成功 \r\n20 全部发送失败 \r\n30 全部发送成功 \r\n40 取消发送（延时任务）\r\n50 暂停发送（定时任务）',
   `create_time` datetime NOT NULL COMMENT '任务创建时间',
   `trigger_time` datetime DEFAULT NULL COMMENT '任务执行时间',
@@ -1124,7 +1296,10 @@ CREATE TABLE IF NOT EXISTS `message_task` (
   KEY `key_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=tis620 ROW_FORMAT=DYNAMIC COMMENT='消息任务表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_task 的数据：~0 rows (大约)
+DELETE FROM `message_task`;
+INSERT INTO `message_task` (`id`, `client_id`, `account_id`, `shield_type`, `shield_start_time`, `shield_end_time`, `msg_type`, `channel_id`, `task_corn`, `task_corn_id`, `schedule_time`, `msg_content_type`, `template_id`, `message_content`, `content_value_params`, `receiver_type`, `receivers`, `status`, `create_time`, `trigger_time`) VALUES
+	(1, 1, 1, '10', NULL, NULL, 'now', 1, NULL, NULL, NULL, 'template', 1, '{"subject1":"发卡平台邮箱短信验证码","content":"您好，您此次的验证码为【123456】, 请尽快完成验证！"}', '{"code": "123456"}', '00', '1347459620@qq.com', '20', '2025-05-23 17:27:41', NULL);
 
 -- 导出  表 xcode-message.message_task_detail 结构
 CREATE TABLE IF NOT EXISTS `message_task_detail` (
@@ -1140,7 +1315,10 @@ CREATE TABLE IF NOT EXISTS `message_task_detail` (
   KEY `key_exec_time` (`exec_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='消息任务详情表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_task_detail 的数据：~1 rows (大约)
+DELETE FROM `message_task_detail`;
+INSERT INTO `message_task_detail` (`id`, `task_id`, `receiver`, `status`, `retry_times`, `fail_msg`, `exec_time`, `success_time`) VALUES
+	(1, 1, '1347459620@qq.com', '1', 0, '消息模板格式不正确，缺少subject字段', '2025-05-23 17:27:42', NULL);
 
 -- 导出  表 xcode-message.message_template 结构
 CREATE TABLE IF NOT EXISTS `message_template` (
@@ -1159,7 +1337,10 @@ CREATE TABLE IF NOT EXISTS `message_template` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_template 的数据：~1 rows (大约)
+DELETE FROM `message_template`;
+INSERT INTO `message_template` (`id`, `name`, `type`, `template_id`, `content`, `status`, `desc`, `is_deleted`, `create_user`, `update_user`, `create_time`, `update_time`) VALUES
+	(1, '邮箱验证码模板', '0', 'sds4d5ad2ojfns2', '{"subject1":"发卡平台邮箱短信验证码","content":"您好，您此次的验证码为【{code}】, 请尽快完成验证！"}', '0', 's邮箱验证码模板', '0', NULL, NULL, NULL, NULL);
 
 -- 导出  表 xcode-message.message_template_params 结构
 CREATE TABLE IF NOT EXISTS `message_template_params` (
@@ -1174,7 +1355,10 @@ CREATE TABLE IF NOT EXISTS `message_template_params` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='消息模板参数表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-message.message_template_params 的数据：~1 rows (大约)
+DELETE FROM `message_template_params`;
+INSERT INTO `message_template_params` (`id`, `template_id`, `name`, `desc`, `create_user`, `update_user`, `create_time`, `update_time`) VALUES
+	(1, 1, 'code', '验证码', NULL, NULL, NULL, NULL);
 
 
 -- 导出 xcode-pay 的数据库结构
@@ -1195,7 +1379,8 @@ CREATE TABLE IF NOT EXISTS `pay_app` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付应用表（京东支付等 一个商户对用多个支付应用）';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_app 的数据：~0 rows (大约)
+DELETE FROM `pay_app`;
 
 -- 导出  表 xcode-pay.pay_app_channel 结构
 CREATE TABLE IF NOT EXISTS `pay_app_channel` (
@@ -1205,7 +1390,8 @@ CREATE TABLE IF NOT EXISTS `pay_app_channel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付应用渠道表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_app_channel 的数据：~0 rows (大约)
+DELETE FROM `pay_app_channel`;
 
 -- 导出  表 xcode-pay.pay_channel 结构
 CREATE TABLE IF NOT EXISTS `pay_channel` (
@@ -1217,7 +1403,8 @@ CREATE TABLE IF NOT EXISTS `pay_channel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付渠道表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_channel 的数据：~0 rows (大约)
+DELETE FROM `pay_channel`;
 
 -- 导出  表 xcode-pay.pay_merchant 结构
 CREATE TABLE IF NOT EXISTS `pay_merchant` (
@@ -1232,7 +1419,8 @@ CREATE TABLE IF NOT EXISTS `pay_merchant` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_merchant 的数据：~0 rows (大约)
+DELETE FROM `pay_merchant`;
 
 -- 导出  表 xcode-pay.pay_notify_log 结构
 CREATE TABLE IF NOT EXISTS `pay_notify_log` (
@@ -1245,7 +1433,8 @@ CREATE TABLE IF NOT EXISTS `pay_notify_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付任务的通知日志';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_notify_log 的数据：~0 rows (大约)
+DELETE FROM `pay_notify_log`;
 
 -- 导出  表 xcode-pay.pay_notify_task 结构
 CREATE TABLE IF NOT EXISTS `pay_notify_task` (
@@ -1262,7 +1451,8 @@ CREATE TABLE IF NOT EXISTS `pay_notify_task` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付回调通知任务表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_notify_task 的数据：~0 rows (大约)
+DELETE FROM `pay_notify_task`;
 
 -- 导出  表 xcode-pay.pay_order 结构
 CREATE TABLE IF NOT EXISTS `pay_order` (
@@ -1291,7 +1481,8 @@ CREATE TABLE IF NOT EXISTS `pay_order` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付订单表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_order 的数据：~0 rows (大约)
+DELETE FROM `pay_order`;
 
 -- 导出  表 xcode-pay.pay_refund 结构
 CREATE TABLE IF NOT EXISTS `pay_refund` (
@@ -1319,7 +1510,8 @@ CREATE TABLE IF NOT EXISTS `pay_refund` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付退款表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-pay.pay_refund 的数据：~0 rows (大约)
+DELETE FROM `pay_refund`;
 
 
 -- 导出 xcode-system 的数据库结构
@@ -1344,7 +1536,8 @@ CREATE TABLE IF NOT EXISTS `system_client` (
   PRIMARY KEY (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统客户端表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_client 的数据：~0 rows (大约)
+DELETE FROM `system_client`;
 
 -- 导出  表 xcode-system.system_dict 结构
 CREATE TABLE IF NOT EXISTS `system_dict` (
@@ -1356,7 +1549,8 @@ CREATE TABLE IF NOT EXISTS `system_dict` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统字典表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_dict 的数据：~0 rows (大约)
+DELETE FROM `system_dict`;
 
 -- 导出  表 xcode-system.system_resource 结构
 CREATE TABLE IF NOT EXISTS `system_resource` (
@@ -1370,7 +1564,8 @@ CREATE TABLE IF NOT EXISTS `system_resource` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统资源表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_resource 的数据：~0 rows (大约)
+DELETE FROM `system_resource`;
 
 -- 导出  表 xcode-system.system_role 结构
 CREATE TABLE IF NOT EXISTS `system_role` (
@@ -1382,7 +1577,8 @@ CREATE TABLE IF NOT EXISTS `system_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_role 的数据：~0 rows (大约)
+DELETE FROM `system_role`;
 
 -- 导出  表 xcode-system.system_role_resource 结构
 CREATE TABLE IF NOT EXISTS `system_role_resource` (
@@ -1392,7 +1588,8 @@ CREATE TABLE IF NOT EXISTS `system_role_resource` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色资源表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_role_resource 的数据：~0 rows (大约)
+DELETE FROM `system_role_resource`;
 
 -- 导出  表 xcode-system.system_route 结构
 CREATE TABLE IF NOT EXISTS `system_route` (
@@ -1406,7 +1603,8 @@ CREATE TABLE IF NOT EXISTS `system_route` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统路由表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_route 的数据：~0 rows (大约)
+DELETE FROM `system_route`;
 
 -- 导出  表 xcode-system.system_third_user 结构
 CREATE TABLE IF NOT EXISTS `system_third_user` (
@@ -1421,7 +1619,8 @@ CREATE TABLE IF NOT EXISTS `system_third_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统三方用户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_third_user 的数据：~0 rows (大约)
+DELETE FROM `system_third_user`;
 
 -- 导出  表 xcode-system.system_user 结构
 CREATE TABLE IF NOT EXISTS `system_user` (
@@ -1439,7 +1638,8 @@ CREATE TABLE IF NOT EXISTS `system_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统用户表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_user 的数据：~0 rows (大约)
+DELETE FROM `system_user`;
 
 -- 导出  表 xcode-system.system_user_role 结构
 CREATE TABLE IF NOT EXISTS `system_user_role` (
@@ -1449,7 +1649,8 @@ CREATE TABLE IF NOT EXISTS `system_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-system.system_user_role 的数据：~0 rows (大约)
+DELETE FROM `system_user_role`;
 
 
 -- 导出 xcode-takeout 的数据库结构
@@ -1480,7 +1681,8 @@ CREATE TABLE IF NOT EXISTS `takeout_address` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='地址管理';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_address 的数据：~0 rows (大约)
+DELETE FROM `takeout_address`;
 
 -- 导出  表 xcode-takeout.takeout_category 结构
 CREATE TABLE IF NOT EXISTS `takeout_category` (
@@ -1496,7 +1698,16 @@ CREATE TABLE IF NOT EXISTS `takeout_category` (
   UNIQUE KEY `idx_category_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜品及套餐分类';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_category 的数据：~7 rows (大约)
+DELETE FROM `takeout_category`;
+INSERT INTO `takeout_category` (`id`, `type`, `name`, `sort`, `create_time`, `update_time`, `create_user`, `update_user`) VALUES
+	(1397844263642378242, 1, '湘菜', 1, '2021-05-27 09:16:58', '2021-07-15 20:25:23', 1, 1),
+	(1397844303408574465, 1, '川菜', 2, '2021-05-27 09:17:07', '2021-06-02 14:27:22', 1, 1),
+	(1397844391040167938, 1, '粤菜', 3, '2021-05-27 09:17:28', '2021-07-09 14:37:13', 1, 1),
+	(1413341197421846529, 1, '饮品', 11, '2021-07-09 11:36:15', '2021-07-09 14:39:15', 1, 1),
+	(1413342269393674242, 2, '商务套餐', 5, '2021-07-09 11:40:30', '2021-07-09 14:43:45', 1, 1),
+	(1413384954989060097, 1, '主食', 12, '2021-07-09 14:30:07', '2021-07-09 14:39:19', 1, 1),
+	(1413386191767674881, 2, '儿童套餐', 6, '2021-07-09 14:35:02', '2021-07-09 14:39:05', 1, 1);
 
 -- 导出  表 xcode-takeout.takeout_dish 结构
 CREATE TABLE IF NOT EXISTS `takeout_dish` (
@@ -1518,7 +1729,32 @@ CREATE TABLE IF NOT EXISTS `takeout_dish` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜品管理';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_dish 的数据：~23 rows (大约)
+DELETE FROM `takeout_dish`;
+INSERT INTO `takeout_dish` (`id`, `name`, `category_id`, `price`, `code`, `image`, `stock`, `description`, `status`, `sort`, `create_time`, `update_time`, `create_user`, `update_user`, `is_deleted`) VALUES
+	(1397849739276890114, '辣子鸡', 1397844263642378242, 7800.00, '222222222', 'f966a38e-0780-40be-bb52-5699d13cb3d9.jpg', 9999, '来自鲜嫩美味的小鸡，值得一尝', 1, 0, '2021-05-27 09:38:43', '2021-05-27 09:38:43', 1, 1, 0),
+	(1397850140982161409, '毛氏红烧肉', 1397844263642378242, 6800.00, '123412341234', '0a3b3288-3446-4420-bbff-f263d0c02d8e.jpg', 9999, '毛氏红烧肉毛氏红烧肉，确定不来一份？', 1, 0, '2021-05-27 09:40:19', '2021-05-27 09:40:19', 1, 1, 0),
+	(1397850392090947585, '组庵鱼翅', 1397844263642378242, 4800.00, '123412341234', '740c79ce-af29-41b8-b78d-5f49c96e38c4.jpg', 9999, '组庵鱼翅，看图足以表明好吃程度', 1, 0, '2021-05-27 09:41:19', '2021-05-27 09:41:19', 1, 1, 0),
+	(1397850851245600769, '霸王别姬', 1397844263642378242, 12800.00, '123412341234', '057dd338-e487-4bbc-a74c-0384c44a9ca3.jpg', 9999, '还有什么比霸王别姬更美味的呢？', 1, 0, '2021-05-27 09:43:08', '2021-05-27 09:43:08', 1, 1, 0),
+	(1397851099502260226, '全家福', 1397844263642378242, 11800.00, '23412341234', 'a53a4e6a-3b83-4044-87f9-9d49b30a8fdc.jpg', 9999, '别光吃肉啦，来份全家福吧，让你长寿又美味', 1, 0, '2021-05-27 09:44:08', '2021-05-27 09:44:08', 1, 1, 0),
+	(1397851370462687234, '邵阳猪血丸子', 1397844263642378242, 13800.00, '1246812345678', '2a50628e-7758-4c51-9fbb-d37c61cdacad.jpg', 9999, '看，美味不？来嘛来嘛，这才是最爱吖', 1, 0, '2021-05-27 09:45:12', '2021-05-27 09:45:12', 1, 1, 0),
+	(1397851668262465537, '口味蛇', 1397844263642378242, 16800.00, '1234567812345678', '0f4bd884-dc9c-4cf9-b59e-7d5958fec3dd.jpg', 9999, '爬行界的扛把子，东兴-口味蛇，让你欲罢不能', 1, 0, '2021-05-27 09:46:23', '2021-05-27 09:46:23', 1, 1, 0),
+	(1397852391150759938, '辣子鸡丁', 1397844303408574465, 8800.00, '2346812468', 'ef2b73f2-75d1-4d3a-beea-22da0e1421bd.jpg', 9999, '辣子鸡丁，辣子鸡丁，永远的魂', 1, 0, '2021-05-27 09:49:16', '2021-05-27 09:49:16', 1, 1, 0),
+	(1397853183287013378, '麻辣兔头', 1397844303408574465, 19800.00, '123456787654321', '2a2e9d66-b41d-4645-87bd-95f2cfeed218.jpg', 9999, '麻辣兔头的详细制作，麻辣鲜香，色泽红润，回味悠长', 1, 0, '2021-05-27 09:52:24', '2021-05-27 09:52:24', 1, 1, 0),
+	(1397853709101740034, '蒜泥白肉', 1397844303408574465, 9800.00, '1234321234321', 'd2f61d70-ac85-4529-9b74-6d9a2255c6d7.jpg', 9999, '多么的有食欲啊', 1, 0, '2021-05-27 09:54:30', '2021-05-27 09:54:30', 1, 1, 0),
+	(1397853890262118402, '鱼香肉丝', 1397844303408574465, 3800.00, '1234212321234', '8dcfda14-5712-4d28-82f7-ae905b3c2308.jpg', 9999, '鱼香肉丝简直就是我们童年回忆的一道经典菜，上学的时候点个鱼香肉丝盖饭坐在宿舍床上看着肥皂剧，绝了！现在完美复刻一下上学的时候感觉', 1, 0, '2021-05-27 09:55:13', '2021-05-27 09:55:13', 1, 1, 0),
+	(1397854652581064706, '麻辣水煮鱼', 1397844303408574465, 14800.00, '2345312·345321', '1fdbfbf3-1d86-4b29-a3fc-46345852f2f8.jpg', 9999, '鱼片是买的切好的鱼片，放几个虾，增加味道', 1, 0, '2021-05-27 09:58:15', '2021-05-27 09:58:15', 1, 1, 0),
+	(1397854865672679425, '鱼香炒鸡蛋', 1397844303408574465, 2000.00, '23456431·23456', '0f252364-a561-4e8d-8065-9a6797a6b1d3.jpg', 9999, '鱼香菜也是川味的特色。里面没有鱼却鱼香味', 1, 0, '2021-05-27 09:59:06', '2021-05-27 09:59:06', 1, 1, 0),
+	(1397860242057375745, '脆皮烧鹅', 1397844391040167938, 12800.00, '123456786543213456', 'e476f679-5c15-436b-87fa-8c4e9644bf33.jpeg', 9999, '“广东烤鸭美而香，却胜烧鹅说古冈（今新会），燕瘦环肥各佳妙，君休偏重便宜坊”，可见烧鹅与烧鸭在粤菜之中已早负盛名。作为广州最普遍和最受欢迎的烧烤肉食，以它的“色泽金红，皮脆肉嫩，味香可口”的特色，在省城各大街小巷的烧卤店随处可见。', 1, 0, '2021-05-27 10:20:27', '2021-05-27 10:20:27', 1, 1, 0),
+	(1397860578738352129, '白切鸡', 1397844391040167938, 6600.00, '12345678654', '9ec6fc2d-50d2-422e-b954-de87dcd04198.jpeg', 9999, '白切鸡是一道色香味俱全的特色传统名肴，又叫白斩鸡，是粤菜系鸡肴中的一种，始于清代的民间。白切鸡通常选用细骨农家鸡与沙姜、蒜茸等食材，慢火煮浸白切鸡皮爽肉滑，清淡鲜美。著名的泮溪酒家白切鸡，曾获商业部优质产品金鼎奖。湛江白切鸡更是驰名粤港澳。粤菜厨坛中，鸡的菜式有200余款之多，而最为人常食不厌的正是白切鸡，深受食家青睐。', 1, 0, '2021-05-27 10:21:48', '2021-05-27 10:21:48', 1, 1, 0),
+	(1397860792492666881, '烤乳猪', 1397844391040167938, 38800.00, '213456432123456', '2e96a7e3-affb-438e-b7c3-e1430df425c9.jpeg', 9999, '广式烧乳猪主料是小乳猪，辅料是蒜，调料是五香粉、芝麻酱、八角粉等，本菜品主要通过将食材放入炭火中烧烤而成。烤乳猪是广州最著名的特色菜，并且是“满汉全席”中的主打菜肴之一。烤乳猪也是许多年来广东人祭祖的祭品之一，是家家都少不了的应节之物，用乳猪祭完先人后，亲戚们再聚餐食用。', 1, 0, '2021-05-27 10:22:39', '2021-05-27 10:22:39', 1, 1, 0),
+	(1397860963880316929, '脆皮乳鸽', 1397844391040167938, 10800.00, '1234563212345', '3fabb83a-1c09-4fd9-892b-4ef7457daafa.jpeg', 9999, '“脆皮乳鸽”是广东菜中的一道传统名菜，属于粤菜系，具有皮脆肉嫩、色泽红亮、鲜香味美的特点，常吃可使身体强健，清肺顺气。随着菜品制作工艺的不断发展，逐渐形成了熟炸法、生炸法和烤制法三种制作方法。无论那种制作方法，都是在鸽子经过一系列的加工，挂脆皮水后再加工而成，正宗的“脆皮乳鸽皮脆肉嫩、色泽红亮、鲜香味美、香气馥郁。这三种方法的制作过程都不算复杂，但想达到理想的效果并不容易。', 1, 0, '2021-05-27 10:23:19', '2021-05-27 10:23:19', 1, 1, 0),
+	(1397861683434139649, '清蒸河鲜海鲜', 1397844391040167938, 38800.00, '1234567876543213456', '1405081e-f545-42e1-86a2-f7559ae2e276.jpeg', 9999, '新鲜的海鲜，清蒸是最好的处理方式。鲜，体会为什么叫海鲜。清蒸是广州最经典的烹饪手法，过去岭南地区由于峻山大岭阻隔，交通不便，经济发展起步慢，自家打的鱼放在锅里煮了就吃，没有太多的讲究，但却发现这清淡的煮法能使鱼的鲜甜跃然舌尖。', 1, 0, '2021-05-27 10:26:11', '2021-05-27 10:26:11', 1, 1, 0),
+	(1397862198033297410, '老火靓汤', 1397844391040167938, 49800.00, '123456786532455', '583df4b7-a159-4cfc-9543-4f666120b25f.jpeg', 9999, '老火靓汤又称广府汤，是广府人传承数千年的食补养生秘方，慢火煲煮的中华老火靓汤，火候足，时间长，既取药补之效，又取入口之甘甜。 广府老火汤种类繁多，可以用各种汤料和烹调方法，烹制出各种不同口味、不同功效的汤来。', 1, 0, '2021-05-27 10:28:14', '2021-05-27 10:28:14', 1, 1, 0),
+	(1397862477831122945, '上汤焗龙虾', 1397844391040167938, 108800.00, '1234567865432', '5b8d2da3-3744-4bb3-acdc-329056b8259d.jpeg', 9999, '上汤焗龙虾是一道色香味俱全的传统名菜，属于粤菜系。此菜以龙虾为主料，配以高汤制成的一道海鲜美食。本品肉质洁白细嫩，味道鲜美，蛋白质含量高，脂肪含量低，营养丰富。是色香味俱全的传统名菜。', 1, 0, '2021-05-27 10:29:20', '2021-05-27 10:29:20', 1, 1, 0),
+	(1413342036832100354, '北冰洋', 1413341197421846529, 500.00, '', 'c99e0aab-3cb7-4eaa-80fd-f47d4ffea694.png', 9999, '', 1, 0, '2021-07-09 11:39:35', '2021-07-09 15:12:18', 1, 1, 0),
+	(1413384757047271425, '王老吉', 1413341197421846529, 500.00, '', '00874a5e-0df2-446b-8f69-a30eb7d88ee8.png', 9999, '', 1, 0, '2021-07-09 14:29:20', '2021-07-12 09:09:16', 1, 1, 0),
+	(1413385247889891330, '米饭', 1413384954989060097, 200.00, '', 'ee04a05a-1230-46b6-8ad5-1a95b140fff3.png', 9999, '', 1, 0, '2021-07-09 14:31:17', '2021-07-11 16:35:26', 1, 1, 0);
 
 -- 导出  表 xcode-takeout.takeout_dish_flavor 结构
 CREATE TABLE IF NOT EXISTS `takeout_dish_flavor` (
@@ -1528,7 +1764,8 @@ CREATE TABLE IF NOT EXISTS `takeout_dish_flavor` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='菜品口味关系表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_dish_flavor 的数据：~0 rows (大约)
+DELETE FROM `takeout_dish_flavor`;
 
 -- 导出  表 xcode-takeout.takeout_flavor 结构
 CREATE TABLE IF NOT EXISTS `takeout_flavor` (
@@ -1543,7 +1780,8 @@ CREATE TABLE IF NOT EXISTS `takeout_flavor` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜品口味表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_flavor 的数据：~0 rows (大约)
+DELETE FROM `takeout_flavor`;
 
 -- 导出  表 xcode-takeout.takeout_orders 结构
 CREATE TABLE IF NOT EXISTS `takeout_orders` (
@@ -1563,7 +1801,8 @@ CREATE TABLE IF NOT EXISTS `takeout_orders` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='订单表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_orders 的数据：~0 rows (大约)
+DELETE FROM `takeout_orders`;
 
 -- 导出  表 xcode-takeout.takeout_order_detail 结构
 CREATE TABLE IF NOT EXISTS `takeout_order_detail` (
@@ -1579,7 +1818,8 @@ CREATE TABLE IF NOT EXISTS `takeout_order_detail` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='订单明细表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_order_detail 的数据：~0 rows (大约)
+DELETE FROM `takeout_order_detail`;
 
 -- 导出  表 xcode-takeout.takeout_permission 结构
 CREATE TABLE IF NOT EXISTS `takeout_permission` (
@@ -1593,7 +1833,8 @@ CREATE TABLE IF NOT EXISTS `takeout_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户权限表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_permission 的数据：~0 rows (大约)
+DELETE FROM `takeout_permission`;
 
 -- 导出  表 xcode-takeout.takeout_role 结构
 CREATE TABLE IF NOT EXISTS `takeout_role` (
@@ -1607,7 +1848,8 @@ CREATE TABLE IF NOT EXISTS `takeout_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_role 的数据：~0 rows (大约)
+DELETE FROM `takeout_role`;
 
 -- 导出  表 xcode-takeout.takeout_role_permission 结构
 CREATE TABLE IF NOT EXISTS `takeout_role_permission` (
@@ -1617,7 +1859,8 @@ CREATE TABLE IF NOT EXISTS `takeout_role_permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色权限关联表';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_role_permission 的数据：~0 rows (大约)
+DELETE FROM `takeout_role_permission`;
 
 -- 导出  表 xcode-takeout.takeout_setmeal 结构
 CREATE TABLE IF NOT EXISTS `takeout_setmeal` (
@@ -1639,7 +1882,8 @@ CREATE TABLE IF NOT EXISTS `takeout_setmeal` (
   UNIQUE KEY `idx_setmeal_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='套餐';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_setmeal 的数据：~0 rows (大约)
+DELETE FROM `takeout_setmeal`;
 
 -- 导出  表 xcode-takeout.takeout_setmeal_dish 结构
 CREATE TABLE IF NOT EXISTS `takeout_setmeal_dish` (
@@ -1654,7 +1898,8 @@ CREATE TABLE IF NOT EXISTS `takeout_setmeal_dish` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='套餐菜品关系';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_setmeal_dish 的数据：~0 rows (大约)
+DELETE FROM `takeout_setmeal_dish`;
 
 -- 导出  表 xcode-takeout.takeout_shopping_cart 结构
 CREATE TABLE IF NOT EXISTS `takeout_shopping_cart` (
@@ -1671,7 +1916,8 @@ CREATE TABLE IF NOT EXISTS `takeout_shopping_cart` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='购物车';
 
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_shopping_cart 的数据：~0 rows (大约)
+DELETE FROM `takeout_shopping_cart`;
 
 -- 导出  表 xcode-takeout.takeout_user 结构
 CREATE TABLE IF NOT EXISTS `takeout_user` (
@@ -1687,46 +1933,8 @@ CREATE TABLE IF NOT EXISTS `takeout_user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户信息';
 
--- 数据导出被取消选择。
-
-
--- 导出 xcode-test1 的数据库结构
-CREATE DATABASE IF NOT EXISTS `xcode-test1` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
-USE `xcode-test1`;
-
--- 导出  表 xcode-test1.biz_message 结构
-CREATE TABLE IF NOT EXISTS `biz_message` (
-  `id` bigint(20) NOT NULL COMMENT '消息id',
-  `biz_type` varchar(64) NOT NULL COMMENT '消息类型',
-  `biz_key` varchar(128) NOT NULL COMMENT '消息主键',
-  `status` char(1) NOT NULL COMMENT '消息状态 0待处理 1处理成功 2处理失败 3处理中',
-  `fail_count` int(6) DEFAULT NULL COMMENT '失败次数',
-  `max_fail_count` int(6) DEFAULT NULL COMMENT '最大失败次数',
-  `err_msg` text COMMENT '错误信息',
-  `create_user` varchar(128) DEFAULT NULL COMMENT '创建用户',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `finish_time` datetime DEFAULT NULL COMMENT '完成时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
--- 数据导出被取消选择。
-
--- 导出  表 xcode-test1.his_biz_message 结构
-CREATE TABLE IF NOT EXISTS `his_biz_message` (
-  `id` bigint(20) NOT NULL COMMENT '消息id',
-  `biz_type` varchar(64) NOT NULL COMMENT '消息类型',
-  `biz_key` varchar(128) NOT NULL COMMENT '消息主键',
-  `status` char(1) NOT NULL COMMENT '消息状态 0待处理 1处理成功 2处理失败 3处理中',
-  `fail_count` int(6) DEFAULT NULL COMMENT '失败次数',
-  `max_fail_count` int(6) DEFAULT NULL COMMENT '最大失败次数',
-  `err_msg` text COMMENT '错误信息',
-  `create_user` varchar(128) DEFAULT NULL COMMENT '创建用户',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `finish_time` datetime DEFAULT NULL COMMENT '完成时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
--- 数据导出被取消选择。
+-- 正在导出表  xcode-takeout.takeout_user 的数据：~0 rows (大约)
+DELETE FROM `takeout_user`;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -25,10 +25,10 @@ public class TaskContext<T extends TaskModel> implements Serializable {
     // 是否直接退出
     private Boolean isBreak;
 
-    // 优先级 执行顺序
-    private Integer order;
+    // 处理到的处理器名称
+    private String handlerName;
 
     // 返回数据
-    private CommonResult<?> commonResult;
+    private CommonResult<?> result;
 
 }

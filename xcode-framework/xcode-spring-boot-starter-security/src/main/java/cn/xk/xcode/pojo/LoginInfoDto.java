@@ -16,6 +16,9 @@ public class LoginInfoDto {
     @Schema(description = "用户名")
     private String username;
 
+    @Schema(description = "用户名")
+    private String email;
+
     @NotNull(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
     @Schema(description = "密码")
     private String password;

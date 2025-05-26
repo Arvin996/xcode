@@ -33,4 +33,5 @@ public interface DistributionCardSystemErrorCode {
     ErrorCode NEW_OLD_PASSWORD_MUST_NOT_EQUAL = new IntErrorCode(4001_0_519, "新密码不能与原密码相同");
     ErrorCode NEW_OLD_PASSWORD_SIMILARITY = new IntErrorCode(4001_0_520, "新密码与原密码太过于相似");
     ErrorCode NOTICE_TO_USER_MUST_NOT_EMPTY = new IntErrorCode(4001_0_521, "通知接收人不能为空");
+    ErrorCode LOGIN_EMAIL_MUST_NOT_EMPTY = new IntErrorCode(4001_0_522, "登录邮箱不能为空");
 }

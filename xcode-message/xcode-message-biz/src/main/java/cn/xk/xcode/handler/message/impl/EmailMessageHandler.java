@@ -90,7 +90,6 @@ public class EmailMessageHandler extends AbstractHandler {
         return singeSendMessageResult;
     }
 
-
     @Override
     public String channelCode() {
         return ChannelTypeEnum.EMAIL.getCode();

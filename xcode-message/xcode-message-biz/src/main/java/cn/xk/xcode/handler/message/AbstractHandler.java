@@ -14,15 +14,10 @@ import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.handler.message.response.SendMessageResponse;
 import cn.xk.xcode.limit.RateLimiterHolder;
-import cn.xk.xcode.mapper.MessageTaskDetailMapper;
-import cn.xk.xcode.mapper.MessageTaskMapper;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
-import com.mybatisflex.core.BaseMapper;
-import com.mybatisflex.core.row.Db;
-import com.mybatisflex.core.update.UpdateChain;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -96,9 +91,6 @@ public abstract class AbstractHandler implements IHandler {
     @Resource
     private XcodeMessageProperties xcodeMessageProperties;
 
-    @Resource
-    private MessageTaskMapper messageTaskMapper;
-
     @Transactional
     @Override
     public CommonResult<SendMessageResponse> sendMessage(MessageTask messageTask) {
@@ -114,8 +106,9 @@ public abstract class AbstractHandler implements IHandler {
             }
         }
         // 3. 验证参数
+        populateParamsMap(messageChannelAccountPo);
         try {
-            validateChannelAccountParamValue(getChannelAccountParamsValue(messageChannelAccountPo));
+            validateChannelAccountParamValue(getChannelAccountParamsValue());
         } catch (Exception e) {
             if (e instanceof ServiceException) {
                 ServiceException s = (ServiceException) e;
@@ -167,7 +160,6 @@ public abstract class AbstractHandler implements IHandler {
 
     @Override
     public CommonResult<SendMessageResponse> reSendTaskMessage(Long taskId) {
-        initChannelSendClient();
         MessageTaskPo messageTaskPo = messageTaskService.getById(taskId);
         if (ObjectUtil.isNull(messageTaskPo)) {
             return CommonResult.error(MESSAGE_TASK_NOT_EXISTS, null);
@@ -177,6 +169,8 @@ public abstract class AbstractHandler implements IHandler {
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
             return CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
+        populateParamsMap(messageChannelAccountPo);
+        initChannelSendClient();
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         List<String> reSendReceivers = StrUtil.splitTrim(messageTaskPo.getReceivers(), ",");
         messageTask.setReceiverSet(CollectionUtil.convertSet(reSendReceivers, Function.identity()));
@@ -257,6 +251,8 @@ public abstract class AbstractHandler implements IHandler {
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
             CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
+        populateParamsMap(messageChannelAccountPo);
+        initChannelSendClient();
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         messageTask.setReceiverSet(CollectionUtil.convertSet(messageTaskDetailPoList, MessageTaskDetailPo::getReceiver));
         HandlerResult result = null;
@@ -323,7 +319,6 @@ public abstract class AbstractHandler implements IHandler {
 
     @Override
     public CommonResult<SendMessageResponse> reSendSingleTask(Long taskDetailId) {
-        initChannelSendClient();
         MessageTaskDetailPo messageTaskDetailPo = messageTaskDetailService.getById(taskDetailId);
         if (ObjectUtil.isNull(messageTaskDetailPo)) {
             CommonResult.error(MESSAGE_TASK_DETAIL_NOT_EXISTS, null);
@@ -338,6 +333,8 @@ public abstract class AbstractHandler implements IHandler {
         if (ObjectUtil.isNull(messageChannelAccountPo)) {
             CommonResult.error(THE_MESSAGE_CHANNEL_ACCOUNT_NOT_EXISTS, null);
         }
+        populateParamsMap(messageChannelAccountPo);
+        initChannelSendClient();
         MessageTask messageTask = BeanUtil.toBean(messageTaskPo, MessageTask.class);
         SingeSendMessageResult singeSendMessageResult = doSendMessage(messageTaskDetailPo.getReceiver(), messageTask, messageChannelAccountPo);
         // 1. 更新消息任务详情
@@ -484,9 +481,8 @@ public abstract class AbstractHandler implements IHandler {
         throw new UnsupportedOperationException("渠道" + channelCode() + "不支持撤回");
     }
 
-    private Map<String, Object> getChannelAccountParamsValue(MessageChannelAccountPo messageChannelAccountPo) {
+    private void populateParamsMap(MessageChannelAccountPo messageChannelAccountPo){
         channelAccountParamsValueMap = messageChannelParamService.getChannelParamsAndValueForAccount(messageChannelAccountPo.getId());
-        return channelAccountParamsValueMap;
     }
 
     protected Map<String, Object> getChannelAccountParamsValue() {

@@ -2,6 +2,7 @@ package cn.xk.xcode.core.pipeline;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,9 @@ public class TaskChainExecutor {
         String code = taskContext.getCode();
         List<TaskHandler> taskHandlerList = taskHandlerContext.getTaskHandlerList(code);
         for (TaskHandler taskHandler : taskHandlerList) {
-            taskHandler.handle(taskContext);
+            taskContext.setHandlerName(taskHandler.getHandlerName());
             if (Boolean.TRUE.equals(taskContext.getIsBreak())) {
+                taskHandler.handle(taskContext);
                 break;
             }
         }
@@ -41,14 +43,17 @@ public class TaskChainExecutor {
 
     private <T extends TaskModel> void preCheck(TaskContext<T> taskContext) {
         if (Objects.isNull(taskContext)){
-            ExceptionUtil.castServerException(TASK_CONTEXT_IS_NULL);
+            taskContext.setIsBreak(true);
+            taskContext.setResult(CommonResult.error(TASK_CONTEXT_IS_NULL, null));
         }
         if (StrUtil.isBlank(taskContext.getCode())){
-            ExceptionUtil.castServerException(TASK_CONTEXT_BIZ_CODE_IS_NULL);
+            taskContext.setIsBreak(true);
+            taskContext.setResult(CommonResult.error(TASK_CONTEXT_BIZ_CODE_IS_NULL, null));
         }
         List<TaskHandler> taskHandlerList = taskHandlerContext.getTaskHandlerList(taskContext.getCode());
         if (CollectionUtil.isEmpty(taskHandlerList)){
-            ExceptionUtil.castServerException(TASK_HANDLER_LIST_IS_NULL, taskContext.getCode());
+            taskContext.setIsBreak(true);
+            taskContext.setResult(CommonResult.error(TASK_HANDLER_LIST_IS_NULL, null));
         }
     }
 }

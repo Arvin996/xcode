@@ -2,15 +2,10 @@ package cn.xk.xcode.service.message;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.xk.xcode.entity.discard.task.MessageTask;
-import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.enums.MessageSendType;
-import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.pojo.CommonResult;
-import cn.xk.xcode.service.*;
-import cn.xk.xcode.utils.object.BeanUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
-import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -30,14 +25,10 @@ import static cn.xk.xcode.config.RabbitMqConfiguration.*;
 @Service
 public class DelaySendMessageService extends AbstractSendMessageService {
 
+    private final RabbitTemplate rabbitTemplate;
 
-    public DelaySendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService,
-                                   MessageTemplateParamsService messageTemplateParamsService,
-                                   MessageChannelService messageChannelService,
-                                   MessageTaskService messageTaskService,
-                                   MessageChannelAccessClientService messageChannelAccessClientService,
-                                   MessageChannelAccountService messageChannelAccountService) {
-        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
+    public DelaySendMessageService(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override

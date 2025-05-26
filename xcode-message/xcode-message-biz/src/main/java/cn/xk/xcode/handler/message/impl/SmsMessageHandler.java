@@ -79,6 +79,7 @@ public class SmsMessageHandler extends AbstractHandler {
         request.setSysMethod(MethodType.POST);
         request.setTemplateCode(messageTask.getTemplateCode());
         request.setTemplateParam(messageTask.getContentValueParams());
+        request.setSysEndpoint("dysmsapi.aliyuncs.com");
         try {
             singeSendMessageResult.setReceiver(receiver);
             SendSmsResponse sendSmsResponse = client.getAcsResponse(request);

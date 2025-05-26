@@ -1,6 +1,10 @@
 package cn.xk.xcode.controller.api;
 
+import cn.xk.xcode.core.pipeline.TaskChainExecutor;
+import cn.xk.xcode.core.pipeline.TaskContext;
 import cn.xk.xcode.entity.discard.task.MessageTask;
+import cn.xk.xcode.pipe.context.SendMessageTaskContext;
+import cn.xk.xcode.pipe.model.SendMessageTaskModel;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.MessageTaskService;
 import cn.xk.xcode.service.message.SendMessageServiceHolder;
@@ -23,7 +27,7 @@ import javax.annotation.Resource;
 public class SendMessageController {
 
     @Resource
-    private SendMessageServiceHolder sendMessageServiceHolder;
+    private TaskChainExecutor taskChainExecutor;
 
     @Resource
     private MessageTaskService messageTaskService;
@@ -31,7 +35,10 @@ public class SendMessageController {
     @Operation(summary = "发送消息")
     @PostMapping("/sendMessage")
     public CommonResult<?> sendMessage(@Validated @RequestBody MessageTask messageTask) {
-        return sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgType()).sendMessage(messageTask);
+        SendMessageTaskModel sendMessageTaskModel = new SendMessageTaskModel(messageTask);
+        SendMessageTaskContext sendMessageTaskContext = new SendMessageTaskContext(sendMessageTaskModel);
+        TaskContext<SendMessageTaskModel> taskContext = taskChainExecutor.execute(sendMessageTaskContext);
+        return taskContext.getResult();
     }
 
     @Operation(summary = "取消消息发送 仅针对延时消息 或者是屏蔽的消息")

@@ -18,12 +18,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class NowSendMessageService extends AbstractSendMessageService {
 
-    public NowSendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService, MessageTemplateParamsService messageTemplateParamsService,
-                                 MessageChannelService messageChannelService,
-                                 MessageChannelAccessClientService messageChannelAccessClientService,
-                                 MessageChannelAccountService messageChannelAccountService,
-                                 MessageTaskService messageTaskService) {
-        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
+    private final MessageHandlerHolder messageHandlerHolder;
+
+    public NowSendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService) {
+        this.messageHandlerHolder = messageHandlerHolder;
     }
 
     @Override

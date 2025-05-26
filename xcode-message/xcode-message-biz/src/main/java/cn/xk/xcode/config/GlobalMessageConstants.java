@@ -70,7 +70,14 @@ public interface GlobalMessageConstants {
     ErrorCode PLAIN_TEXT_MESSAGE_MUST_NOT_EMPTY =  new IntErrorCode(4003_1_545, "纯文本消息的消息内容不能为空");
     ErrorCode SHIELD_TASK_NOT_WAITING =  new IntErrorCode(4003_1_546, "屏蔽消息任务已执行，取消任务失败");
     ErrorCode EXEC_MESSAGE_TASK_ERROR = new IntErrorCode(4003_1_547, "执行消息任务失败, 异常信息：{}");
+    ErrorCode EXEC_MESSAGE_TASK_FAILED =  new IntErrorCode(4003_1_548, "执行消息任务失败, 任务处理器名称：{}");
+
 
     String XXL_THREAD_POOL_NAME = "execute-xxl-thread-pool";
     int MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME = 24 * 60 * 40 * 30; // 一个月
+    String SEND_MESSAGE_TASK_CODE =  "sendMessageTask";
+    int SEND_MESSAGE_TASK_STEP_ONE = 1;
+    int SEND_MESSAGE_TASK_STEP_TWO = 2;
+    int SEND_MESSAGE_TASK_STEP_THREE = 3;
+    int SEND_MESSAGE_TASK_STEP_FOUR = 4;
 }

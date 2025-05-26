@@ -16,4 +16,8 @@ public interface TaskHandler<T extends TaskModel> {
 
     // 责任链标识
     String getCode();
+
+    default String getHandlerName() {
+        return getCode() + "---" + this.getClass().getSimpleName();
+    }
 }

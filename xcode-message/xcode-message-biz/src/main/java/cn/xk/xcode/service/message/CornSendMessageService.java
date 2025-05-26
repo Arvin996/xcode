@@ -4,12 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.entity.po.MessageTaskPo;
 import cn.xk.xcode.enums.MessageSendType;
-import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.service.task.RegisterCornTaskService;
-import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.support.CronExpression;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +22,12 @@ import static cn.xk.xcode.config.GlobalMessageConstants.*;
 public class CornSendMessageService extends AbstractSendMessageService {
 
     private final RegisterCornTaskService registerCornTaskService;
+    private final MessageTaskService messageTaskService;
 
-    public CornSendMessageService(MessageHandlerHolder messageHandlerHolder, SensitiveWordBs sensitiveWordBs, RabbitTemplate rabbitTemplate, MessageTemplateService messageTemplateService,
-                                  MessageTemplateParamsService messageTemplateParamsService,
-                                  MessageChannelService messageChannelService,
-                                  RegisterCornTaskService registerCornTaskService,
-                                  MessageTaskService messageTaskService,
-                                  MessageChannelAccessClientService messageChannelAccessClientService,
-                                  MessageChannelAccountService messageChannelAccountService) {
-        super(messageHandlerHolder, sensitiveWordBs, rabbitTemplate, messageTemplateService, messageTemplateParamsService, messageChannelService, messageChannelAccessClientService, messageChannelAccountService, messageTaskService);
+    public CornSendMessageService(RegisterCornTaskService registerCornTaskService,
+                                  MessageTaskService messageTaskService) {
         this.registerCornTaskService = registerCornTaskService;
+        this.messageTaskService = messageTaskService;
     }
 
     @Override

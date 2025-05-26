@@ -73,13 +73,13 @@ public class EmailCaptchaHandler extends CaptchaHandlerStrategy {
         String email = captchaGenReqDto.getEmail();
         // 发送邮件
         SendMessageProto.SendMessageTaskRequest.Builder builder = SendMessageProto.SendMessageTaskRequest.newBuilder();
-        builder.setClientAccessToken("aa");
-        builder.setAccountName("ss");
+        builder.setClientAccessToken("sksjnga212sa238hojm");
+        builder.setAccountName("系统用户邮箱");
         builder.setShieldType(ShieldType.NIGHT_NO_SHIELD.getCode());
         builder.setMsgType(MessageSendType.NOW.getCode());
         builder.setMsgChannel(MessageChannelEnum.EMAIL.getCode());
         builder.setMsgContentType(MessageContentType.TEMPLATE.getCode());
-        builder.setTemplateId("ccc");
+        builder.setTemplateId("邮箱验证码模板");
         HashMap<String, String> map = MapUtil.of("code", code);
         builder.setContentValueParams(JSON.toJSONString(map));
         builder.setReceiverType(ReceiverTypeEnum.PLAIN.getCode());

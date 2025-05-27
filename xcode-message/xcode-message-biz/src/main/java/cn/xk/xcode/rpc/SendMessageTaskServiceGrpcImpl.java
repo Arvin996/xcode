@@ -29,7 +29,7 @@ public class SendMessageTaskServiceGrpcImpl extends SendMessageTaskServiceGrpc.S
         String msgChannel = request.getMsgChannel();
         MessageTask messageTask = new MessageTask();
         BeanUtil.copyProperties(request, messageTask);
-        CommonResult<?> commonResult = sendMessageServiceHolder.routeSendMessageService(msgChannel).sendMessage(messageTask);
+        CommonResult<?> commonResult = sendMessageServiceHolder.routeSendMessageService(msgChannel).dealMessage(messageTask);
         SendMessageProto.SendMessageTaskResponse.Builder builder = SendMessageProto.SendMessageTaskResponse.newBuilder();
         builder.setCode((Integer) commonResult.getCode());
         Object data = commonResult.getData();

@@ -1,5 +1,6 @@
 package cn.xk.xcode.handler.corn;
 
+import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.core.factory.ThreadPoolProduceDecider;
 import cn.xk.xcode.core.factory.ThreadPoolTypeEnums;
 import cn.xk.xcode.core.lazy.AbstractLazyTaskProcessor;
@@ -33,11 +34,9 @@ public class CrowBatchHandleMessageProcessor extends AbstractLazyTaskProcessor<C
     private static final Integer CROW_BATCH_NUM_THRESHOLD = 100;
     private static final Long CROW_BATCH_TIME_THRESHOLD = 1000L;
 
-    @Resource
-    private ThreadPoolProduceDecider threadPoolProduceDecider;
-
     public CrowBatchHandleMessageProcessor() {
         LazyTaskProcessorParamsBuilder<CsvReceiverEntity> builder = LazyTaskProcessorParamsBuilder.create();
+        ThreadPoolProduceDecider threadPoolProduceDecider = SpringUtil.getBean(ThreadPoolProduceDecider.class);
         builder.executorService(threadPoolProduceDecider.decide(ThreadPoolTypeEnums.COMMON, true))
                 .queue(new ArrayBlockingQueue<>(CROW_BATCH_QUEUE_SIZE))
                 .numThreshold(CROW_BATCH_NUM_THRESHOLD)

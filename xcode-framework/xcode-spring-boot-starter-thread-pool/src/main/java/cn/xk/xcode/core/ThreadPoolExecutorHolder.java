@@ -5,6 +5,7 @@ import cn.xk.xcode.core.factory.ThreadPoolProduceDecider;
 import cn.xk.xcode.core.factory.ThreadPoolTypeEnums;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.dromara.dynamictp.core.DtpRegistry;
 import org.dromara.dynamictp.core.executor.DtpExecutor;
 
@@ -18,10 +19,10 @@ import java.util.concurrent.ExecutorService;
  * @Version 1.0.0
  * @Description ThreadPoolExecutorHolder
  **/
+@Slf4j
 @RequiredArgsConstructor
 public class ThreadPoolExecutorHolder {
 
-    private final ThreadPoolRegister register;
     private final ThreadPoolExecutorsUniqueCodeLoader loader;
     private final ThreadPoolProduceDecider decider;
 
@@ -32,8 +33,8 @@ public class ThreadPoolExecutorHolder {
             return;
         }
         for (String code : uniqueCodes) {
-            ExecutorService executorService = decider.decide(ThreadPoolTypeEnums.COMMON, code);
-            register.register((DtpExecutor) executorService);
+            DtpExecutor executorService = (DtpExecutor) decider.decide(ThreadPoolTypeEnums.COMMON, code);
+            log.info("线程池注册成功, 线程池名称: {}", executorService.getThreadPoolName());
         }
 
     }

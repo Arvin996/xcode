@@ -52,7 +52,7 @@ public class XcodeThreadPoolConfiguration {
     }
 
     @Bean
-    public ThreadPoolExecutorHolder threadPoolExecutorHolder(ThreadPoolRegister register, ThreadPoolExecutorsUniqueCodeLoader loader, ThreadPoolProduceDecider decider) {
-        return new ThreadPoolExecutorHolder(register, loader, decider);
+    public ThreadPoolExecutorHolder threadPoolExecutorHolder(ThreadPoolExecutorsUniqueCodeLoader loader, ThreadPoolProduceDecider decider) {
+        return new ThreadPoolExecutorHolder(loader, decider);
     }
 }

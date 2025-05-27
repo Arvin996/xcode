@@ -11,9 +11,11 @@ import cn.xk.xcode.entity.XxlJobInfo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.handler.impl.MethodJobHandler;
@@ -165,22 +167,22 @@ public class EnhanceXxlJobService {
             return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
         String body = httpResponse.body();
-        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
-        if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
+        JSONObject jsonObject = JSON.parseObject(httpResponse.body());
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
+        if (CollectionUtil.isEmpty(jsonArray)){
+            return CommonResult.success(CollectionUtil.createEmptyList());
         }
-        JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
         return CommonResult.success(jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobGroup.class)).collect(Collectors.toList()));
     }
 
-    public boolean preciselyCheck() {
+    public CommonResult<Boolean> preciselyCheck() {
         String title = xxlJobProperties.getExecutorTitle();
         String appname = xxlJobProperties.getAppname();
         CommonResult<List<XxlJobGroup>> jobGroupList = getJobGroupList();
         if (!CommonResult.isSuccess(jobGroupList)) {
-            return false;
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
-        return jobGroupList.getData().stream().anyMatch(o -> o.getAppname().equals(appname) && o.getTitle().equals(title));
+        return CommonResult.success(jobGroupList.getData().stream().anyMatch(o -> o.getAppname().equals(appname) && o.getTitle().equals(title)));
     }
 
     // 自动注册执行器
@@ -198,7 +200,7 @@ public class EnhanceXxlJobService {
         if (ReturnT.SUCCESS_CODE == returnT.getCode()) {
             return CommonResult.success(true);
         } else {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
+            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null, returnT.getMsg());
         }
     }
 
@@ -218,12 +220,8 @@ public class EnhanceXxlJobService {
         if (!httpResponse.isOk()) {
             return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
         }
-        ReturnT<?> returnT = JSON.parseObject(httpResponse.body(), ReturnT.class);
-        if (ReturnT.SUCCESS_CODE != returnT.getCode()) {
-            return CommonResult.error(XXL_JOB_ADMIN_ERROR, null);
-        }
-        String body = httpResponse.body();
-        JSONArray jsonArray = JSON.parseObject(body).getJSONArray("data");
+        JSONObject jsonObject = JSON.parseObject(httpResponse.body());
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
         return CommonResult.success(jsonArray.stream().map(o -> JSON.parseObject(o.toString(), XxlJobInfo.class)).collect(Collectors.toList()));
     }
 

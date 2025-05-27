@@ -5,6 +5,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.annotation.AutoRegisterXxlJob;
 import cn.xk.xcode.entity.XxlJobGroup;
 import cn.xk.xcode.entity.XxlJobInfo;
+import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -33,7 +34,10 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         // 注册执行器
-        addJobGroup();
+        if (!addJobGroup()){
+            log.warn("xxl-job 执行器注册失败，请检查是否配置正确");
+            return;
+        }
         // 注册任务
         addJobInfo();
     }
@@ -118,13 +122,24 @@ public class XxlJobAutoRegisterLoader implements ApplicationRunner {
         return xxlJobInfo;
     }
 
-    private void addJobGroup() {
-        if (enhanceXxlJobService.preciselyCheck()) {
-            log.info("xxl-job 执行器已经存在，不需要再次注册");
-            return;
+    private boolean addJobGroup() {
+        CommonResult<Boolean> commonResult = enhanceXxlJobService.preciselyCheck();
+        if (!commonResult.isSuccess()) {
+            log.info("xxl-job 执行器注册发生错误:{}", commonResult.getMsg());
+            return false;
+        } else {
+            if (commonResult.getData()) {
+                log.info("xxl-job 执行器已经注册,无需重复注册");
+                return true;
+            }
         }
-        if (CommonResult.isSuccess(enhanceXxlJobService.autoRegisterJobGroup())) {
+        commonResult = enhanceXxlJobService.autoRegisterJobGroup();
+        if (CommonResult.isSuccess(commonResult)) {
             log.info("xxl-job 执行器注册成功");
+            return true;
+        } else {
+            log.error("xxl-job 执行器注册失败, 错误信息：{}", commonResult.getMsg());
+            return false;
         }
     }
 }

@@ -36,7 +36,7 @@ import static cn.xk.xcode.service.auth.enums.LoginTypeEnum.*;
 @RequiredArgsConstructor
 public abstract class AbstractMemberUserLoginHandler {
 
-    protected final CaptchaClientApi captchaClientApi;
+    protected CaptchaClientApi captchaClientApi;
     protected final MemberUserService memberUserService;
 
     public LoginVO doLogin(MemberUserLoginDto memberUserLoginDto){

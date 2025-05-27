@@ -1,5 +1,7 @@
 package cn.xk.xcode;
 
+import cn.xk.xcode.annotation.EnableServerSecurity;
+import cn.xk.xcode.pojo.StpType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description XcodeMemberApplication
  **/
 @SpringBootApplication
+@EnableServerSecurity(type = StpType.MIXED)
 public class XcodeMemberApplication {
 
     public static void main(String[] args) {

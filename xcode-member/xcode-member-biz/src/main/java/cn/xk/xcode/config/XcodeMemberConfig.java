@@ -6,7 +6,6 @@ import cn.xk.xcode.service.auth.handler.AbstractMemberUserLoginHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginEmailHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserLoginMobileHandler;
 import cn.xk.xcode.service.auth.handler.impl.MemberUserPasswordHandler;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,11 +15,10 @@ import javax.annotation.Resource;
  * @Author Administrator
  * @Date 2024/8/27 20:35
  * @Version V1.0.0
- * @Description XkSysMemberConfig
+ * @Description XcodeMemberConfig
  */
 @Configuration
-@EnableFeignClients(clients = {CaptchaClientApi.class})
-public class XkSysMemberConfig {
+public class XcodeMemberConfig {
 
     @Resource
     private MemberUserService memberUserService;

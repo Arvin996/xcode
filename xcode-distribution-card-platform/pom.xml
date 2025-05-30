@@ -12,6 +12,7 @@
     <name>${project.artifactId}</name>
     <modules>
         <module>xcode-distribution-card-platform-system</module>
+        <module>xcode-distribution-card-platform-product</module>
     </modules>
     <packaging>pom</packaging>
     <description>

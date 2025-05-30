@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Schema(name = "LoginUserDto 登录用户实体类")
 public class LoginUserDto {
 
-    @NotBlank(message = "用户名不能未空")
+  //  @NotBlank(message = "用户名不能未空")
     @Schema(description = "username 用户名", example = "xuk")
     private String username;
 
@@ -23,7 +23,14 @@ public class LoginUserDto {
     @Schema(description = "password 密码", example = "123456")
     private String password;
 
-  //  @NotBlank(message = "验证码不能为空")
+    @Schema(description = "邮箱")
+    private String email;
+
+    @Schema(description = "登录类型， password密码登录 email 邮箱登录", example = "password")
+    @NotBlank(message = "登录类型不能为空")
+    private String loginType;
+
+    //  @NotBlank(message = "验证码不能为空")
     @Schema(description = "code 验证码", example = "123456")
     private String code;
 

@@ -31,7 +31,7 @@ import static cn.xk.xcode.entity.def.SystemApiTableDef.SYSTEM_API_PO;
 import static cn.xk.xcode.entity.def.SystemRoleApiTableDef.SYSTEM_ROLE_API_PO;
 import static cn.xk.xcode.entity.def.SystemUserTableDef.SYSTEM_USER_PO;
 
-@Service(AbstractLoginHandler.LOGIN_BASE + "_" + "password")
+@Service
 public class PasswordAuthImpl extends AbstractLoginHandler {
 
     @Resource
@@ -71,6 +71,11 @@ public class PasswordAuthImpl extends AbstractLoginHandler {
     @Override
     public Object validateClient(LoginInfoDto loginInfoDto) {
         return null;
+    }
+
+    @Override
+    public String loginType() {
+        return "password";
     }
 
     @Override

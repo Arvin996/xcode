@@ -38,7 +38,7 @@ import static cn.xk.xcode.entity.def.SystemUserTableDef.SYSTEM_USER_PO;
  * @Version 1.0.0
  * @Description EmailAuthImpl
  **/
-@Service(AbstractLoginHandler.LOGIN_BASE + "_" + "email")
+@Service
 public class EmailAuthImpl  extends AbstractLoginHandler{
 
     @Resource
@@ -80,6 +80,11 @@ public class EmailAuthImpl  extends AbstractLoginHandler{
     @Override
     public Object validateClient(LoginInfoDto loginInfoDto) {
         return null;
+    }
+
+    @Override
+    public String loginType() {
+        return "email";
     }
 
     @Override

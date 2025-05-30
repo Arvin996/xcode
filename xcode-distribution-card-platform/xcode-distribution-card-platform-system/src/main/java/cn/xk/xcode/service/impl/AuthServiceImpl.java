@@ -9,6 +9,7 @@ import cn.xk.xcode.entity.po.SystemUserPo;
 import cn.xk.xcode.enums.CaptchaGenerateType;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.handler.AbstractLoginHandler;
+import cn.xk.xcode.handler.LoginHandlerHolder;
 import cn.xk.xcode.pojo.LoginInfoDto;
 import cn.xk.xcode.pojo.LoginVO;
 import cn.xk.xcode.rpc.CaptchaProto;
@@ -39,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private SystemUserService systemUserService;
 
     @Resource
-    private AbstractLoginHandler loginHandler;
+    private LoginHandlerHolder loginHandlerHolder;
 
     @GrpcClient("xcode-captcha")
     private CaptchaServiceGrpc.CaptchaServiceBlockingStub captchaServiceBlockingStub;
@@ -74,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
         builder.setCode(loginUserDto.getCode());
         builder.setType(CaptchaGenerateType.PIC.getCode());
        // checkCaptcha(builder);
+        AbstractLoginHandler loginHandler = loginHandlerHolder.routeLoginHandler(loginUserDto.getLoginType());
         return loginHandler.Login(LoginInfoDto.builder()
                 .code(loginUserDto.getCode())
                 .username(loginUserDto.getUsername())

@@ -1,0 +1,148 @@
+package cn.xk.xcode.entity.po;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ *  实体类。
+ *
+ * @author xuk
+ * @since 2025-05-30
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table("product_spu")
+public class ProductSpuPo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 商品 SPU 编号，自增
+     */
+    @Id(keyType = KeyType.Auto)
+    private Long id;
+
+    /**
+     * 商品所属店铺
+     */
+    private Long storeId;
+
+    /**
+     * 商品名称
+     */
+    private String name;
+
+    /**
+     * 商品简介
+     */
+    private String introduction;
+
+    /**
+     * 商品关键词 多个用逗号隔开
+     */
+    private String keywords;
+
+    /**
+     * 商品详情
+     */
+    private String description;
+
+    /**
+     * 商品封面图
+     */
+    private String picUrl;
+
+    /**
+     * 商品轮播图地址
+ 数组，以逗号分隔
+ 最多上传15张
+     */
+    private String sliderPicUrls;
+
+    /**
+     * 商品视频
+     */
+    private String videoUrl;
+
+    /**
+     * 排序字段
+     */
+    private Integer sort;
+
+    /**
+     * 审核状态 00 待审核 10审核通过 20审核不通过
+     */
+    private String auditStatus;
+
+    /**
+     * 0 上架 1下架
+     */
+    private String status;
+
+    /**
+     * 是否热卖推荐: 0 默认 1 热卖
+     */
+    private String recommendHot;
+
+    /**
+     * 是否优惠推荐: 0 默认 1 优选
+     */
+    private String recommendBenefit;
+
+    /**
+     * 是否精品推荐: 0 默认 1 精品
+     */
+    private String recommendBest;
+
+    /**
+     * 是否新品推荐: 0 默认 1 新品
+     */
+    private String recommendNew;
+
+    /**
+     * 是否优品推荐
+     */
+    private String recommendGood;
+
+    /**
+     * 商品销量
+     */
+    private Integer salesCount;
+
+    /**
+     * 是否删除 0未删除 1已删除
+     */
+    private String isDeleted;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 创建人
+     */
+    private String createUser;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
+
+    /**
+     * 更新人
+     */
+    private String updateUser;
+
+}

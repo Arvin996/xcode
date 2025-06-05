@@ -18,7 +18,6 @@ public class RandomLoadBalancer implements ILoadBalancer {
         if (CollectionUtil.isEmpty(accountPoList)){
             return null;
         }
-        // 帮我实现随机筛选accountPoList中的一个值
         int randomIndex = (int) (Math.random() * accountPoList.size());
         return accountPoList.get(randomIndex);
     }

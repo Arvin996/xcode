@@ -1,4 +1,4 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.core.config;
 
 import com.github.houbb.sensitive.word.api.IWordAllow;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class CustomWordAllow implements IWordAllow {
             Path mySensitiveWordsPath = Paths.get(mySensitiveWords.getFile().getPath());
             list =  Files.readAllLines(mySensitiveWordsPath, StandardCharsets.UTF_8);
         } catch (IOException ioException) {
-            log.error("读取敏感词文件错误！"+ ioException.getMessage());
+            log.error("读取敏感词文件错误！{}", ioException.getMessage());
         }
         return list;
     }

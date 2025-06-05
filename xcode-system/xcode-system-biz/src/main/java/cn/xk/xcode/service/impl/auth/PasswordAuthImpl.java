@@ -28,7 +28,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.*;
  * @Version 1.0
  * @Description PasswordAuthImpl
  */
-@Service(AbstractLoginHandler.LOGIN_BASE + "_" + "password")
+@Service
 public class PasswordAuthImpl extends AbstractLoginHandler {
     @Resource
     private UserService userService;
@@ -67,6 +67,11 @@ public class PasswordAuthImpl extends AbstractLoginHandler {
             throw new ServiceException(INVALID_CLIENT);
         }
         return clientPo;
+    }
+
+    @Override
+    public String loginType() {
+        return "password";
     }
 
     @Override

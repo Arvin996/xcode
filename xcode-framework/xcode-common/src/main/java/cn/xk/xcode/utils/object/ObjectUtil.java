@@ -21,11 +21,11 @@ public class ObjectUtil {
     /**
      * 复制对象，并忽略 Id 编号
      *
-     * @param object 被复制对象
+     * @param object   被复制对象
      * @param consumer 消费者，可以二次编辑被复制对象
      * @return 复制后的对象
      */
-    public static <T> T cloneIgnoreId(T object, Consumer<T> consumer){
+    public static <T> T cloneIgnoreId(T object, Consumer<T> consumer) {
         T result = cn.hutool.core.util.ObjectUtil.clone(object);
         Field field = ReflectUtil.getField(object.getClass(), "id");
         if (field != null) {
@@ -37,7 +37,8 @@ public class ObjectUtil {
         }
         return result;
     }
-    public static <T> T cloneIgnoreId(T object){
+
+    public static <T> T cloneIgnoreId(T object) {
         return cloneIgnoreId(object, null);
     }
 
@@ -46,68 +47,68 @@ public class ObjectUtil {
         return Arrays.asList(array).contains(obj);
     }
 
-    public static<T> void ifNullCastServiceException(T object, ErrorCode errorCode, Object... args){
-        if (Objects.isNull(object)){
-           if (ArrayUtil.isEmpty(args)){
+    public static <T> void ifNullCastServiceException(T object, ErrorCode errorCode, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServiceException(errorCode);
-           }else {
-               ExceptionUtil.castServiceException(errorCode, args);
-           }
+            } else {
+                ExceptionUtil.castServiceException(errorCode, args);
+            }
         }
     }
 
-    public static<T> void ifNullCastServerException(T object, ErrorCode errorCode, Object... args){
-        if (Objects.isNull(object)){
-            if (ArrayUtil.isEmpty(args)){
+    public static <T> void ifNullCastServerException(T object, ErrorCode errorCode, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServerException(errorCode);
-            }else {
+            } else {
                 ExceptionUtil.castServerException(errorCode, args);
             }
         }
     }
 
     @SuppressWarnings("all")
-    public static <U, T> T computeIfNotNull(U object, ErrorCode errorCode, Function<U, T> func, Object... args){
-        if (Objects.isNull(object)){
-            if (ArrayUtil.isEmpty(args)){
+    public static <U, T> T computeIfNotNull(U object, ErrorCode errorCode, Function<U, T> func, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServiceException(errorCode);
-            }else {
+            } else {
                 ExceptionUtil.castServiceException(errorCode, args);
             }
         }
-        if (Objects.isNull(func)){
-           return (T) object;
+        if (Objects.isNull(func)) {
+            return (T) object;
         }
         return func.apply(object);
     }
 
-    public static <U> U computeIfNotNull(U object, ErrorCode errorCode, Object... args){
-        if (Objects.isNull(object)){
-            if (ArrayUtil.isEmpty(args)){
+    public static <U> U computeIfNotNull(U object, ErrorCode errorCode, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServiceException(errorCode);
-            }else {
+            } else {
                 ExceptionUtil.castServiceException(errorCode, args);
             }
         }
         return computeIfNotNull(object, errorCode, Function.identity(), args);
     }
 
-    public static <T> T returnIfNotNullCastServiceEx(T object, ErrorCode errorCode, Object... args){
-        if (Objects.isNull(object)){
-            if (ArrayUtil.isEmpty(args)){
+    public static <T> T returnIfNotNullCastServiceEx(T object, ErrorCode errorCode, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServiceException(errorCode);
-            }else {
+            } else {
                 ExceptionUtil.castServiceException(errorCode, args);
             }
         }
         return object;
     }
 
-    public static <T> T returnIfNotNullCastServerEx(T object, ErrorCode errorCode, Object... args){
-        if (Objects.isNull(object)){
-            if (ArrayUtil.isEmpty(args)){
+    public static <T> T returnIfNotNullCastServerEx(T object, ErrorCode errorCode, Object... args) {
+        if (Objects.isNull(object)) {
+            if (ArrayUtil.isEmpty(args)) {
                 ExceptionUtil.castServerException(errorCode);
-            }else {
+            } else {
                 ExceptionUtil.castServerException(errorCode, args);
             }
         }

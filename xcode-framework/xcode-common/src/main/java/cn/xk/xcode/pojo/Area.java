@@ -1,4 +1,4 @@
-package com.xk.xcode.core.entity;
+package cn.xk.xcode.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class Area {
      */
     public static final Integer ID_CHINA = 1;
 
-    private int id;
+    private Integer id;
 
     private String name;
 

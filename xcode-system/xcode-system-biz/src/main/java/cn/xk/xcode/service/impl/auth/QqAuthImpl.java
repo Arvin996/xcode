@@ -37,7 +37,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_CLIENT;
  * @Description QqAuthImpl oauth2.0登录
  */
 @Slf4j
-@Service(AbstractLoginHandler.LOGIN_BASE + "_" + "qq")
+@Service
 public class QqAuthImpl extends AbstractLoginHandler
 {
     @Resource
@@ -97,6 +97,11 @@ public class QqAuthImpl extends AbstractLoginHandler
             throw new ServiceException(INVALID_CLIENT);
         }
         return clientPo;
+    }
+
+    @Override
+    public String loginType() {
+        return "qq";
     }
 
     @Override

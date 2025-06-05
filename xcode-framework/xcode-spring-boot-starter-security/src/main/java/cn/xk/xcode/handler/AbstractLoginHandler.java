@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public abstract class AbstractLoginHandler {
 
-    public static final String LOGIN_BASE = "AuthStrategy";
-
     public abstract LoginVO handlerLogin(LoginInfoDto loginInfoDto);
 
     public LoginVO Login(LoginInfoDto loginInfoDto) {
@@ -44,6 +42,8 @@ public abstract class AbstractLoginHandler {
         extraData.put("loginType", loginType);
         return extraData;
     }
+
+    public abstract String loginType();
 
     public abstract LoginVO createLoginVO(Object userInfo);
 }

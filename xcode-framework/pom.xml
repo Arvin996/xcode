@@ -19,7 +19,6 @@
         <module>xcode-spring-boot-starter-dict</module>
         <module>xcode-spring-boot-starter-redis</module>
         <module>xcode-spring-boot-starter-websocket</module>
-        <module>xcode-spring-boot-starter-ip</module>
         <module>xcode-spring-boot-starter-xxl-job</module>
         <module>xcode-spring-boot-starter-log</module>
         <module>xcode-spring-boot-starter-rocketmq</module>

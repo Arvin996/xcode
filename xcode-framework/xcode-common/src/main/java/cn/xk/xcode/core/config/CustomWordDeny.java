@@ -1,4 +1,4 @@
-package cn.xk.xcode.config;
+package cn.xk.xcode.core.config;
 
 import com.github.houbb.sensitive.word.api.IWordDeny;
 import lombok.extern.slf4j.Slf4j;

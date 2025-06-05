@@ -46,5 +46,7 @@ public interface GlobalErrorCodeConstants
     ErrorCode TASK_CONTEXT_IS_NULL =  new IntErrorCode(997, "任务上下文为空");
     ErrorCode TASK_CONTEXT_BIZ_CODE_IS_NULL =  new IntErrorCode(996, "任务上下文业务编码为空");
     ErrorCode TASK_HANDLER_LIST_IS_NULL =  new IntErrorCode(995, "任务编码{}对应的任务执行器列表为空");
+    ErrorCode LOGIN_TYPE_HANDLER_REPEATED = new IntErrorCode(994, "登录类型{}对应的登录处理器重复");
+    ErrorCode LOGIN_TYPE_HANDLER_NOT_EXISTS = new IntErrorCode(993, "登录类型{}对应的登录处理器不存在");
 
 }

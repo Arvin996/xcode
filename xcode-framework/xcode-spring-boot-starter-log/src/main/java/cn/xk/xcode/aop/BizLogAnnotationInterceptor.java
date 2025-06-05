@@ -9,8 +9,6 @@ import cn.xk.xcode.core.RocketMQEnhanceTemplate;
 import cn.xk.xcode.entity.BizAccessLog;
 import cn.xk.xcode.exception.core.ServiceException;
 import cn.xk.xcode.support.LogValueParser;
-import com.xk.xcode.core.entity.Area;
-import com.xk.xcode.core.utils.IpUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -71,13 +69,13 @@ public class BizLogAnnotationInterceptor implements MethodInterceptor {
         bizAccessLog.setUrl(request.getRequestURI());
         bizAccessLog.setContentType(request.getContentType());
         bizAccessLog.setIp(ServletUtil.getClientIP(request));
-        Area area = IpUtils.getArea(ServletUtil.getClientIP(request));
-        String address = area.getName();
-        while (area.getParentArea() != null) {
-            area = area.getParentArea();
-            address = area.getParentArea().getName() + "/" + address;
-        }
-        bizAccessLog.setIpAddress(address);
+//        Area area = IpUtils.getArea(ServletUtil.getClientIP(request));
+//        String address = area.getName();
+//        while (area.getParentArea() != null) {
+//            area = area.getParentArea();
+//            address = area.getParentArea().getName() + "/" + address;
+//        }
+        //     bizAccessLog.setIpAddress(address);
         bizAccessLog.setClassName(method.getDeclaringClass().getName());
         bizAccessLog.setMethod(method.getName());
         ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();

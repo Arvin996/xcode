@@ -29,6 +29,18 @@ spring:
             - Path=/xcode-captcha/**
           filters:
             - StripPrefix=1
+        - id: xcode-message
+          uri: lb://xcode-message
+          predicates:
+            - Path=/xcode-message/**
+          filters:
+            - StripPrefix=1
+        - id: xcode-infra
+          uri: lb://xcode-infra
+          predicates:
+            - Path=/xcode-infra/**
+          filters:
+            - StripPrefix=1
 #          predicates:
 #            - Path=/pay-manage/**
 #          filters:

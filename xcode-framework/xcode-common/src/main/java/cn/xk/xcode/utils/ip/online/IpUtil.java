@@ -1,4 +1,4 @@
-package cn.xk.xcode.utils.ip;
+package cn.xk.xcode.utils.ip.online;
 
 import cn.xk.xcode.utils.http.ServletUtil;
 import lombok.extern.slf4j.Slf4j;

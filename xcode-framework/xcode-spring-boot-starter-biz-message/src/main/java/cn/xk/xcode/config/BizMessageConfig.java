@@ -15,6 +15,7 @@ import javax.annotation.Resource;
  * @Description BizMessageConfig 项目启动的时候自动检测创建表
  */
 @Configuration
+@EnableConfigurationProperties(BizMessageProperties.class)
 public class BizMessageConfig implements InitializingBean {
     public static final String  BIZ_MESSAGE_TABLE_SQL;
 

@@ -97,7 +97,7 @@ public class OssClient implements InitializingBean {
             return CommonResult.success(chunkFileRespDto);
         } catch (Exception e) {
             log.error("初始化分片上传失败, 错误信息:{}", e.getMessage());
-            return CommonResult.error(INIT_UPLOAD_CHUNK_FILE_ERROR);
+            return CommonResult.error(INIT_UPLOAD_CHUNK_FILE_ERROR, null);
         }
     }
 

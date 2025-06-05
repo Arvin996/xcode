@@ -37,7 +37,7 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_CLIENT;
  * @Description WxAuthImpl 考虑新建一个普通用户作为三方登录的默认角色
  */
 @Slf4j
-@Service(AbstractLoginHandler.LOGIN_BASE + "_" + "wx")
+@Service
 public class WxAuthImpl extends AbstractLoginHandler {
     @Resource
     private UserService userService;
@@ -99,6 +99,11 @@ public class WxAuthImpl extends AbstractLoginHandler {
             throw new ServiceException(INVALID_CLIENT);
         }
         return clientPo;
+    }
+
+    @Override
+    public String loginType() {
+        return "wx";
     }
 
     private Map<String, Object> getWxOauth2AccessToken(String code, ClientPo clientPo) {

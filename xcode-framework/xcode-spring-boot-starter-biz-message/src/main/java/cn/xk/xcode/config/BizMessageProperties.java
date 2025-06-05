@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @ConfigurationProperties(prefix = "xcode.biz.message")
-@Component
 public class BizMessageProperties {
     private String dbUrl;
 

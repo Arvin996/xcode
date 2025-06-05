@@ -1,5 +1,6 @@
 package cn.xk.xcode.handler;
 
+import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.utils.WebFrameworkUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class GwGlobalExceptionHandler implements ErrorWebExceptionHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         ServerHttpResponse response = exchange.getResponse();
-        if (response.isCommitted()){
+        if (response.isCommitted()) {
             return Mono.error(ex);
         }
         // 转换成 CommonResult
@@ -51,7 +52,7 @@ public class GwGlobalExceptionHandler implements ErrorWebExceptionHandler {
         // TODO 这里要精细化翻译，默认返回用户是看不懂的 另外考虑日志记录
         ServerHttpRequest request = exchange.getRequest();
         log.error("[responseStatusExceptionHandler][uri({}/{}) 发生异常]", request.getURI(), request.getMethod(), ex);
-        return CommonResult.error(ex.getRawStatusCode(), ex.getReason());
+        return CommonResult.error(new ServerException(ex.getRawStatusCode(), ex.getReason()));
     }
 
     /**
@@ -64,6 +65,6 @@ public class GwGlobalExceptionHandler implements ErrorWebExceptionHandler {
         log.error("[defaultExceptionHandler][uri({}/{}) 发生异常]", request.getURI(), request.getMethod(), ex);
         // TODO 要插入异常日志？ 可以 这是转为记录网关日志 其他服务的日志 由其他服务记录
         // 返回 ERROR CommonResult
-        return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage());
+        return CommonResult.error(INTERNAL_SERVER_ERROR, null);
     }
 }

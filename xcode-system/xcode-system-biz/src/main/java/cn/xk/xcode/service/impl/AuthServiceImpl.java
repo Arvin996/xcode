@@ -5,11 +5,14 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.xk.xcode.exception.core.ServerException;
 import cn.xk.xcode.handler.AbstractLoginHandler;
+import cn.xk.xcode.handler.LoginHandlerHolder;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.pojo.LoginInfoDto;
 import cn.xk.xcode.pojo.LoginVO;
 import cn.xk.xcode.service.AuthService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_GRANT_TYPE;
 
@@ -21,9 +24,13 @@ import static cn.xk.xcode.exception.GlobalErrorCodeConstants.INVALID_GRANT_TYPE;
  */
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    @Resource
+    private LoginHandlerHolder loginHandlerHolder;
+
     @Override
     public CommonResult<LoginVO> doLogin(LoginInfoDto loginUserDto) {
-        AbstractLoginHandler handler = SpringUtil.getBean(AbstractLoginHandler.LOGIN_BASE + "_" + loginUserDto.getGrantType(), AbstractLoginHandler.class);
+        AbstractLoginHandler handler = loginHandlerHolder.routeLoginHandler(loginUserDto.getGrantType());
         if (ObjectUtil.isNull(handler)){
             throw new ServerException(INVALID_GRANT_TYPE);
         }

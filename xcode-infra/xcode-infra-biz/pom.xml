@@ -34,11 +34,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>cn.xk.xcode</groupId>
             <artifactId>xcode-spring-boot-starter-mysql</artifactId>
             <version>${revision}</version>

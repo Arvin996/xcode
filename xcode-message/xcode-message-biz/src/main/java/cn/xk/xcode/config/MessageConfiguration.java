@@ -32,12 +32,6 @@ import java.util.List;
 @EnableConfigurationProperties({XcodeMessageProperties.class})
 public class MessageConfiguration {
 
-    // 配置默认敏感词 + 自定义敏感词
-    IWordDeny wordDeny = WordDenys.chains(WordDenys.defaults(), new CustomWordDeny());
-    // 配置默认非敏感词 + 自定义非敏感词
-    IWordAllow wordAllow = WordAllows.chains(WordAllows.defaults(), new CustomWordAllow());
-
-
     @Bean
     public MessageHandlerHolder messageHandlerHolder(List<IHandler> handlers) {
         return new MessageHandlerHolder(handlers);
@@ -62,36 +56,6 @@ public class MessageConfiguration {
     @ConditionalOnMissingBean
     public ILoadBalancer iLoadBalancer() {
         return new FirstLoadBalancer();
-    }
-
-    @Bean
-    public SensitiveWordBs sensitiveWordBs() {
-        return SensitiveWordBs.newInstance()
-                // 忽略大小写
-                .ignoreCase(true)
-                // 忽略半角圆角
-                .ignoreWidth(true)
-                // 忽略数字的写法
-                .ignoreNumStyle(true)
-                // 忽略中文的书写格式：简繁体
-                .ignoreChineseStyle(true)
-                // 忽略英文的书写格式
-                .ignoreEnglishStyle(true)
-                // 忽略重复词
-                .ignoreRepeat(false)
-                // 是否启用数字检测
-                .enableNumCheck(true)
-                // 是否启用邮箱检测
-                .enableEmailCheck(true)
-                // 是否启用链接检测
-                .enableUrlCheck(true)
-                // 数字检测，自定义指定长度
-                .numCheckLen(8)
-                // 配置自定义敏感词
-                .wordDeny(wordDeny)
-                // 配置非自定义敏感词
-                .wordAllow(wordAllow)
-                .init();
     }
 
     @Bean(name = "stringRedisTemplate")

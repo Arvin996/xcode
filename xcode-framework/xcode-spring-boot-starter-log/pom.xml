@@ -50,11 +50,5 @@
             <version>13.0</version>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>cn.xk.xcode</groupId>
-            <artifactId>xcode-spring-boot-starter-ip</artifactId>
-            <version>${revision}</version>
-        </dependency>
     </dependencies>
 </project>

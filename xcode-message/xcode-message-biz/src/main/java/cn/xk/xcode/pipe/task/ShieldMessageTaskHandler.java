@@ -102,7 +102,6 @@ public class ShieldMessageTaskHandler implements TaskHandler<SendMessageTaskMode
                     message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
                     return message;
                 }, cd);
-                //   xxlMqTemplate.sendMessage(MqMessageTopicEnum.SHIELD_TOPIC.getTopic(), JSON.toJSONString(messageTask), Date.from(tomorrow9.atZone(ZoneId.systemDefault()).toInstant()));
             }
         }
         if (shieldType.equals(ShieldType.SHIELD_AT_BETWEEN_TIME.getCode())) {

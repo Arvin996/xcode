@@ -1,4 +1,4 @@
-package com.xk.xcode.core.entity;
+package cn.xk.xcode.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

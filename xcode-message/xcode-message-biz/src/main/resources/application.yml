@@ -117,9 +117,13 @@ knife4j:
   setting:
     language: zh_cn
   basic:
-    enable: true
+    enable: false
     username: root
     password: 123456
+springdoc:
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
 logging:
   config: classpath:log4j2.xml
 xcode:

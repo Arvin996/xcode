@@ -46,21 +46,21 @@ public abstract class CaptchaHandlerStrategy {
         String type = captchaVerifyReqDto.getType();
         if (CaptchaGenerateType.EMAIL.getCode().equals(type)){
             if (StrUtil.isBlank(captchaVerifyReqDto.getEmail())){
-                return CommonResult.error(EMAIL_MUST_NOT_NULL);
+                return CommonResult.error(EMAIL_MUST_NOT_NULL, null);
             }
         }else if (CaptchaGenerateType.MOBILE.getCode().equals(type)){
             if (StrUtil.isBlank(captchaVerifyReqDto.getMobile())){
-                return CommonResult.error(MOBILE_MUST_NOT_NULL);
+                return CommonResult.error(MOBILE_MUST_NOT_NULL, null);
             }
         }
         String code = captchaVerifyReqDto.getCode();
         String key = getLocalCodeKey(captchaVerifyReqDto);
         String localCode = saveCaptchaStrategy.get(key);
         if (!StringUtils.hasLength(localCode)) {
-            return CommonResult.error(CHECK_CODE_IS_EXPIRED);
+            return CommonResult.error(CHECK_CODE_IS_EXPIRED, null);
         }
         if (!StrUtil.equalsIgnoreCase(code, localCode)) {
-            return CommonResult.error(CHECK_CODE_IS_ERROR);
+            return CommonResult.error(CHECK_CODE_IS_ERROR, null);
         }
         saveCaptchaStrategy.remove(key);
         return CommonResult.success(true);

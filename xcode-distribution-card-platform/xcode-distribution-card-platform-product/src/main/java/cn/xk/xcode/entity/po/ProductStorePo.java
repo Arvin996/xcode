@@ -1,16 +1,13 @@
 package cn.xk.xcode.entity.po;
 
+import cn.xk.xcode.entity.DataStringObjectBaseEntity;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  *  实体类。
@@ -18,12 +15,13 @@ import lombok.NoArgsConstructor;
  * @author xuk
  * @since 2025-05-30
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("product_store")
-public class ProductStorePo implements Serializable {
+public class ProductStorePo extends DataStringObjectBaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,26 +84,7 @@ public class ProductStorePo implements Serializable {
     /**
      * 是否删除 0未删除 1已删除
      */
+    @com.mybatisflex.annotation.Column(isLogicDelete = true)
     private String isDeleted;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 创建人
-     */
-    private String createUser;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
-
-    /**
-     * 更新人
-     */
-    private String updateUser;
 
 }

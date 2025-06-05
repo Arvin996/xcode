@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "验证码校验dto")
 public class CaptchaVerifyReqDto {
 
-    @Schema(description = "uuid 图形验证是需要上送")
+    @Schema(description = "uuid 图形验证需要上送")
     private String uuid;
 
     @NotBlank(message = "验证码不能为空")

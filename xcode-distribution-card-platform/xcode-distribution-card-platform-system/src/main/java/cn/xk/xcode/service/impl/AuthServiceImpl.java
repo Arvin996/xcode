@@ -74,10 +74,10 @@ public class AuthServiceImpl implements AuthService {
         CaptchaProto.CaptchaVerifyRequest.Builder builder = CaptchaProto.CaptchaVerifyRequest.newBuilder();
         builder.setCode(loginUserDto.getCode());
         builder.setType(CaptchaGenerateType.PIC.getCode());
-       // checkCaptcha(builder);
+        builder.setUuid(loginUserDto.getUuid());
+        checkCaptcha(builder);
         AbstractLoginHandler loginHandler = loginHandlerHolder.routeLoginHandler(loginUserDto.getLoginType());
         return loginHandler.Login(LoginInfoDto.builder()
-                .code(loginUserDto.getCode())
                 .username(loginUserDto.getUsername())
                 .password(loginUserDto.getPassword())
                 .loginDevType(loginUserDto.getLoginDevType())

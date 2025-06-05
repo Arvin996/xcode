@@ -28,7 +28,7 @@ public class ProductAuditTableDef extends TableDef {
     public final QueryColumn TYPE = new QueryColumn(this, "type");
 
     /**
-     * 商品spu id或者店铺id或者商品skui_d
+     * 商品spu id或者店铺id或者商品sku_id
      */
     public final QueryColumn BIZ_ID = new QueryColumn(this, "biz_id");
 

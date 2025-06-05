@@ -39,4 +39,11 @@ public class RegisterMerchantDto {
     @Schema(description = "email 商户邮箱")
     @NotBlank(message = "商户邮箱不能为空")
     private String email;
+
+    /**
+     * 验证码
+     */
+    @Schema(description = "code 验证码")
+    @NotBlank(message = "验证码不能为空")
+    private String code;
 }

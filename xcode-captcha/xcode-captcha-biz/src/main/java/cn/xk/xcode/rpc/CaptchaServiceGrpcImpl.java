@@ -28,6 +28,7 @@ public class CaptchaServiceGrpcImpl extends CaptchaServiceGrpc.CaptchaServiceImp
                 .email(request.getEmail())
                 .type(request.getType())
                 .mobile(request.getPhone())
+                .uuid(request.getUuid())
                 .build());
         CaptchaProto.CaptchaVerifyResponse.Builder builder = CaptchaProto.CaptchaVerifyResponse.newBuilder();
         builder.setCode((Integer) commonResult.getCode());

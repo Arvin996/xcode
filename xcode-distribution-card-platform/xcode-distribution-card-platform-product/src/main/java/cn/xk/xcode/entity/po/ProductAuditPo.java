@@ -1,5 +1,6 @@
 package cn.xk.xcode.entity.po;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -31,7 +32,7 @@ public class ProductAuditPo implements Serializable {
     private Long id;
 
     /**
-     * 商品spu id或者店铺id或者商品skui_d
+     * 商品spu id或者店铺id或者商品sku_id
      */
     private Long bizId;
 
@@ -68,6 +69,7 @@ public class ProductAuditPo implements Serializable {
     /**
      * 审核创建时间
      */
+    @Column(onInsertValue = "now()")
     private LocalDateTime createTime;
 
 }

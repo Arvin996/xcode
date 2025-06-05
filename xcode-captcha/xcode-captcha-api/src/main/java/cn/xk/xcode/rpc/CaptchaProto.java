@@ -65,6 +65,21 @@ public final class CaptchaProto {
      */
     com.google.protobuf.ByteString
         getPhoneBytes();
+
+      /**
+       * <code>string uuid = 5;</code>
+       *
+       * @return The uuid.
+       */
+      java.lang.String getUuid();
+
+      /**
+       * <code>string uuid = 5;</code>
+       *
+       * @return The bytes for uuid.
+       */
+      com.google.protobuf.ByteString
+      getUuidBytes();
   }
   /**
    * Protobuf type {@code CaptchaVerifyRequest}
@@ -79,10 +94,11 @@ public final class CaptchaProto {
       super(builder);
     }
     private CaptchaVerifyRequest() {
-      code_ = "";
-      type_ = "";
-      email_ = "";
-      phone_ = "";
+        code_ = "";
+        type_ = "";
+        email_ = "";
+        phone_ = "";
+        uuid_ = "";
     }
 
     @java.lang.Override
@@ -262,6 +278,48 @@ public final class CaptchaProto {
       }
     }
 
+      public static final int UUID_FIELD_NUMBER = 5;
+      private volatile java.lang.Object uuid_;
+
+      /**
+       * <code>string uuid = 5;</code>
+       *
+       * @return The uuid.
+       */
+      @java.lang.Override
+      public java.lang.String getUuid() {
+          java.lang.Object ref = uuid_;
+          if (ref instanceof java.lang.String) {
+              return (java.lang.String) ref;
+          } else {
+              com.google.protobuf.ByteString bs =
+                      (com.google.protobuf.ByteString) ref;
+              java.lang.String s = bs.toStringUtf8();
+              uuid_ = s;
+              return s;
+          }
+      }
+
+      /**
+       * <code>string uuid = 5;</code>
+       *
+       * @return The bytes for uuid.
+       */
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+      getUuidBytes() {
+          java.lang.Object ref = uuid_;
+          if (ref instanceof java.lang.String) {
+              com.google.protobuf.ByteString b =
+                      com.google.protobuf.ByteString.copyFromUtf8(
+                              (java.lang.String) ref);
+              uuid_ = b;
+              return b;
+          } else {
+              return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -286,7 +344,10 @@ public final class CaptchaProto {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, email_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(phone_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, phone_);
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 4, phone_);
+      }
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uuid_)) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 5, uuid_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -307,7 +368,10 @@ public final class CaptchaProto {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, email_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(phone_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, phone_);
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, phone_);
+      }
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(uuid_)) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, uuid_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -330,8 +394,10 @@ public final class CaptchaProto {
           .equals(other.getType())) return false;
       if (!getEmail()
           .equals(other.getEmail())) return false;
-      if (!getPhone()
-          .equals(other.getPhone())) return false;
+        if (!getPhone()
+                .equals(other.getPhone())) return false;
+        if (!getUuid()
+                .equals(other.getUuid())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -349,8 +415,10 @@ public final class CaptchaProto {
       hash = (53 * hash) + getType().hashCode();
       hash = (37 * hash) + EMAIL_FIELD_NUMBER;
       hash = (53 * hash) + getEmail().hashCode();
-      hash = (37 * hash) + PHONE_FIELD_NUMBER;
-      hash = (53 * hash) + getPhone().hashCode();
+        hash = (37 * hash) + PHONE_FIELD_NUMBER;
+        hash = (53 * hash) + getPhone().hashCode();
+        hash = (37 * hash) + UUID_FIELD_NUMBER;
+        hash = (53 * hash) + getUuid().hashCode();
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -478,14 +546,16 @@ public final class CaptchaProto {
       }
       @java.lang.Override
       public Builder clear() {
-        super.clear();
-        code_ = "";
+          super.clear();
+          code_ = "";
 
-        type_ = "";
+          type_ = "";
 
-        email_ = "";
+          email_ = "";
 
-        phone_ = "";
+          phone_ = "";
+
+        uuid_ = "";
 
         return this;
       }
@@ -513,10 +583,11 @@ public final class CaptchaProto {
       @java.lang.Override
       public cn.xk.xcode.rpc.CaptchaProto.CaptchaVerifyRequest buildPartial() {
         cn.xk.xcode.rpc.CaptchaProto.CaptchaVerifyRequest result = new cn.xk.xcode.rpc.CaptchaProto.CaptchaVerifyRequest(this);
-        result.code_ = code_;
-        result.type_ = type_;
-        result.email_ = email_;
-        result.phone_ = phone_;
+          result.code_ = code_;
+          result.type_ = type_;
+          result.email_ = email_;
+          result.phone_ = phone_;
+        result.uuid_ = uuid_;
         onBuilt();
         return result;
       }
@@ -578,8 +649,12 @@ public final class CaptchaProto {
           onChanged();
         }
         if (!other.getPhone().isEmpty()) {
-          phone_ = other.phone_;
-          onChanged();
+            phone_ = other.phone_;
+            onChanged();
+        }
+          if (!other.getUuid().isEmpty()) {
+              uuid_ = other.uuid_;
+              onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -622,11 +697,16 @@ public final class CaptchaProto {
 
                 break;
               } // case 26
-              case 34: {
-                phone_ = input.readStringRequireUtf8();
+                case 34: {
+                    phone_ = input.readStringRequireUtf8();
 
-                break;
-              } // case 34
+                    break;
+                } // case 34
+                case 42: {
+                    uuid_ = input.readStringRequireUtf8();
+
+                    break;
+              } // case 42
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -939,11 +1019,97 @@ public final class CaptchaProto {
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        phone_ = value;
-        onChanged();
+        }
+          checkByteStringIsUtf8(value);
+
+          phone_ = value;
+          onChanged();
+          return this;
+      }
+
+        private java.lang.Object uuid_ = "";
+
+        /**
+         * <code>string uuid = 5;</code>
+         *
+         * @return The uuid.
+         */
+        public java.lang.String getUuid() {
+            java.lang.Object ref = uuid_;
+            if (!(ref instanceof java.lang.String)) {
+                com.google.protobuf.ByteString bs =
+                        (com.google.protobuf.ByteString) ref;
+                java.lang.String s = bs.toStringUtf8();
+                uuid_ = s;
+                return s;
+            } else {
+                return (java.lang.String) ref;
+            }
+        }
+
+        /**
+         * <code>string uuid = 5;</code>
+         *
+         * @return The bytes for uuid.
+         */
+        public com.google.protobuf.ByteString
+        getUuidBytes() {
+            java.lang.Object ref = uuid_;
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                        com.google.protobuf.ByteString.copyFromUtf8(
+                                (java.lang.String) ref);
+                uuid_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+
+        /**
+         * <code>string uuid = 5;</code>
+         *
+         * @param value The uuid to set.
+         * @return This builder for chaining.
+         */
+        public Builder setUuid(
+                java.lang.String value) {
+            if (value == null) {
+                throw new NullPointerException();
+            }
+
+            uuid_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <code>string uuid = 5;</code>
+         *
+         * @return This builder for chaining.
+         */
+        public Builder clearUuid() {
+
+            uuid_ = getDefaultInstance().getUuid();
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <code>string uuid = 5;</code>
+         *
+         * @param value The bytes for uuid to set.
+         * @return This builder for chaining.
+         */
+        public Builder setUuidBytes(
+                com.google.protobuf.ByteString value) {
+            if (value == null) {
+                throw new NullPointerException();
+            }
+            checkByteStringIsUtf8(value);
+
+            uuid_ = value;
+            onChanged();
         return this;
       }
       @java.lang.Override
@@ -1704,40 +1870,42 @@ public final class CaptchaProto {
     internal_static_CaptchaVerifyRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_CaptchaVerifyRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+          internal_static_CaptchaVerifyRequest_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_CaptchaVerifyResponse_descriptor;
-  private static final 
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_CaptchaVerifyResponse_fieldAccessorTable;
+            internal_static_CaptchaVerifyResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
-  static {
-    java.lang.String[] descriptorData = {
-      "\n\022CaptchaProto.proto\"P\n\024CaptchaVerifyReq" +
-      "uest\022\014\n\004code\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005emai" +
-      "l\030\003 \001(\t\022\r\n\005phone\030\004 \001(\t\"@\n\025CaptchaVerifyR" +
-      "esponse\022\014\n\004data\030\001 \001(\010\022\014\n\004code\030\002 \001(\005\022\013\n\003m" +
-      "sg\030\003 \001(\t2O\n\016CaptchaService\022=\n\nverifyCode" +
-      "\022\025.CaptchaVerifyRequest\032\026.CaptchaVerifyR" +
-      "esponse\"\000B!\n\017cn.xk.xcode.rpcB\014CaptchaPro" +
-      "toP\000b\006proto3"
-    };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        });
-    internal_static_CaptchaVerifyRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_CaptchaVerifyRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_CaptchaVerifyRequest_descriptor,
-        new java.lang.String[] { "Code", "Type", "Email", "Phone", });
+    public static com.google.protobuf.Descriptors.FileDescriptor
+    getDescriptor() {
+        return descriptor;
+    }
+
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
+
+    static {
+        java.lang.String[] descriptorData = {
+                "\n\022CaptchaProto.proto\"^\n\024CaptchaVerifyReq" +
+                        "uest\022\014\n\004code\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\r\n\005emai" +
+                        "l\030\003 \001(\t\022\r\n\005phone\030\004 \001(\t\022\014\n\004uuid\030\005 \001(\t\"@\n\025" +
+                        "CaptchaVerifyResponse\022\014\n\004data\030\001 \001(\010\022\014\n\004c" +
+                        "ode\030\002 \001(\005\022\013\n\003msg\030\003 \001(\t2O\n\016CaptchaService" +
+                        "\022=\n\nverifyCode\022\025.CaptchaVerifyRequest\032\026." +
+                        "CaptchaVerifyResponse\"\000B!\n\017cn.xk.xcode.r" +
+                        "pcB\014CaptchaProtoP\000b\006proto3"
+        };
+        descriptor = com.google.protobuf.Descriptors.FileDescriptor
+                .internalBuildGeneratedFileFrom(descriptorData,
+                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                        });
+        internal_static_CaptchaVerifyRequest_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+        internal_static_CaptchaVerifyRequest_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_CaptchaVerifyRequest_descriptor,
+        new java.lang.String[] { "Code", "Type", "Email", "Phone", "Uuid", });
     internal_static_CaptchaVerifyResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_CaptchaVerifyResponse_fieldAccessorTable = new

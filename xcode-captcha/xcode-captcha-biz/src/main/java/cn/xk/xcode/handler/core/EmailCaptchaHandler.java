@@ -79,7 +79,7 @@ public class EmailCaptchaHandler extends CaptchaHandlerStrategy {
         builder.setMsgType(MessageSendType.NOW.getCode());
         builder.setMsgChannel(MessageChannelEnum.EMAIL.getCode());
         builder.setMsgContentType(MessageContentType.TEMPLATE.getCode());
-        builder.setTemplateId("邮箱验证码模板");
+        builder.setTemplateId("sds4d5ad2ojfns2");
         HashMap<String, String> map = MapUtil.of("code", code);
         builder.setContentValueParams(JSON.toJSONString(map));
         builder.setReceiverType(ReceiverTypeEnum.PLAIN.getCode());

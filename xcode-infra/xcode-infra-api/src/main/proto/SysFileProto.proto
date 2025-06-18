@@ -1,0 +1,29 @@
+syntax = "proto3";
+option java_multiple_files = false;
+option java_package = "cn.xk.xcode.rpc";
+option java_outer_classname = "SysFileProto";
+
+
+service SysFileService {
+  rpc uploadFile(UploadFileRequest) returns (CommonUploadFileResponse) {};
+}
+
+message UploadFileRequest {
+  string bucket = 1;
+  string username = 2;
+  bool isNeedConvertToMp4 = 3;
+  bytes file = 4;
+  string originalFileName = 5;
+  string contentType = 6;
+}
+
+message CommonUploadFileResponse {
+  int32 code = 1;
+  string message = 2;
+  UploadFileResponse data = 3;
+}
+
+message UploadFileResponse {
+  string fileId = 1;
+  string filePath = 2;
+}

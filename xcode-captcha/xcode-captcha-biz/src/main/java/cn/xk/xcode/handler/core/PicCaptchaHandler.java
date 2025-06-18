@@ -54,7 +54,7 @@ public class PicCaptchaHandler extends CaptchaHandlerStrategy {
             code = exp.getValue(String.class);
         }
         String uuid = IdUtil.simpleUUID().replace("-", "");
-        return GenerateCodeResEntity.builder().uuid(uuid).code(code).picCode(abstractCaptcha.getImageBase64()).build();
+        return GenerateCodeResEntity.builder().uuid(uuid).code(code).picCode(abstractCaptcha.getImageBase64Data()).build();
     }
 
     @Override

@@ -3,6 +3,7 @@ package cn.xk.xcode.rpc;
 import cn.xk.xcode.entity.dto.CaptchaVerifyReqDto;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.CaptchaService;
+import cn.xk.xcode.utils.object.ObjectUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
@@ -32,7 +33,7 @@ public class CaptchaServiceGrpcImpl extends CaptchaServiceGrpc.CaptchaServiceImp
                 .build());
         CaptchaProto.CaptchaVerifyResponse.Builder builder = CaptchaProto.CaptchaVerifyResponse.newBuilder();
         builder.setCode((Integer) commonResult.getCode());
-        builder.setData(commonResult.getData());
+        builder.setData(ObjectUtil.isNotNull(commonResult.getData()));
         builder.setMsg(commonResult.getMsg());
         CaptchaProto.CaptchaVerifyResponse captchaVerifyResponse = builder.build();
         responseObserver.onNext(captchaVerifyResponse);

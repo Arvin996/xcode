@@ -8,14 +8,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.core.StpSystemUtil;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.StpType;
-import cn.xk.xcode.utils.collections.CollectionUtil;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * @Author xuk
@@ -40,21 +37,21 @@ public class SaTokenLoginUtils {
         stpLogic.getTokenSession().updateTimeout(saLoginModel.getTimeout());
     }
 
-    public static LoginUser getLoginUser(StpType stpType){
-        SaSession session;
-        if (Objects.equals(stpType, StpType.SYSTEM)){
+    public static LoginUser getLoginUser(LoginStpType stpType) {
+        SaSession session = null;
+        if (Objects.equals(stpType, LoginStpType.SYSTEM)) {
             session = StpSystemUtil.getSession();
-        }else {
+        } else if (Objects.equals(stpType, LoginStpType.MEMBER)) {
             session = StpMemberUtil.getSession();
         }
         return ObjectUtil.isNull(session) ? null : (LoginUser) session.get(USER_KEY);
     }
 
-    public static LoginUser getLoginUser(StpType stpType, String token){
-        SaSession session;
-        if (Objects.equals(stpType, StpType.SYSTEM)){
+    public static LoginUser getLoginUser(LoginStpType stpType, String token) {
+        SaSession session = null;
+        if (Objects.equals(stpType, LoginStpType.SYSTEM)) {
             session = StpSystemUtil.getTokenSessionByToken(token);
-        }else {
+        } else if (Objects.equals(stpType, LoginStpType.MEMBER)) {
             session = StpMemberUtil.getTokenSessionByToken(token);
         }
         return ObjectUtil.isNull(session) ? null : (LoginUser) session.get(USER_KEY);

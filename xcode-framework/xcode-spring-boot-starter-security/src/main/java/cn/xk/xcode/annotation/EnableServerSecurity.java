@@ -1,7 +1,8 @@
 package cn.xk.xcode.annotation;
 
 import cn.xk.xcode.core.XcodeSecurityBeanImport;
-import cn.xk.xcode.pojo.StpType;
+import cn.xk.xcode.pojo.LoginStpType;
+import cn.xk.xcode.pojo.PermissionStpType;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -20,5 +21,7 @@ import java.lang.annotation.Target;
 @Import(XcodeSecurityBeanImport.class)
 public @interface EnableServerSecurity {
 
-    StpType type();
+    PermissionStpType permissionType();
+
+    LoginStpType loginType() default LoginStpType.NONE;
 }

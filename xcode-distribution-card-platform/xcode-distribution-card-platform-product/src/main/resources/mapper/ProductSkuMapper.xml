@@ -4,4 +4,60 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xk.xcode.mapper.ProductSkuMapper">
 
+    <resultMap id="ProductSkuVoMap" type="cn.xk.xcode.entity.vo.sku.ProductSkuVo">
+        <result property="id" column="skuId" jdbcType="BIGINT"/>
+        <result property="skuCode" column="skuCode" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="stock" column="stock" jdbcType="INTEGER"/>
+        <result property="lowStock" column="lowStock" jdbcType="INTEGER"/>
+        <result property="pic" column="pic" jdbcType="VARCHAR"/>
+        <result property="sale" column="sale" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="promotionPrice" column="promotionPrice" jdbcType="INTEGER"/>
+        <collection property="productSkuAttributeValues"
+                    ofType="cn.xk.xcode.entity.vo.sku.ProductSkuVo$ProductSkuAttributeValueVo"
+                    javaType="List">
+            <result property="attributeId" column="attributeId" jdbcType="INTEGER"/>
+            <result property="value" column="value" jdbcType="VARCHAR"/>
+            <result property="attributeName" column="attributeName" jdbcType="VARCHAR"/>
+            <result property="pic" column="attributePic" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryProductSku" resultMap="ProductSkuVoMap">
+        select a.id skuId,
+        a.sku_code skuCode,
+        a.price,
+        a.stock,
+        a.low_stock lowStock,
+        a.pic,
+        a.sale,
+        a.status,
+        a.promotion_price promotionPrice,
+        b.id attributeId,
+        b.name attributeName,
+        c.value,
+        c.pic attributePic
+        from product_sku a
+        left join product_spu_attribute b
+        on a.spu_id = b.spu_id and a.is_deleted = '0' and b.is_deleted = '0'
+        left join product_sku_attribute_value c
+        on b.id = c.attribute_id and a.id = c.sku_id and c.is_deleted = '0'
+        where 1=1
+        <if test="querySkuDto.spuId != null">
+            and a.spu_id = #{querySkuDto.spuId}
+        </if>
+        <if test="querySkuDto.skuIds != null">
+            and a.in in
+            <foreach collection="querySkuDto.skuIds" index="index" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="querySkuDto.orderBySale != null">
+            order by a.sale desc
+        </if>
+        <if test="querySkuDto.limit != null">
+            limit #{querySkuDto.limit}
+        </if>
+    </select>
 </mapper>

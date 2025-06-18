@@ -38,7 +38,9 @@ public class SaTokenMixedGlobalConfig implements WebMvcConfigurer {
                     .notMatch("/error")
                     .notMatch("/**/favicon.ico")
                     .notMatch("/resources/**")
+                    .notMatch("/template/**")
                     .notMatch(whitelistProperties.getWhitelist())
+                    .notMatch("/auth/third/**")
                     .match("/**").check(r -> {
                         if (!StpSystemUtil.isLogin() && !StpMemberUtil.isLogin()) {
                             ExceptionUtil.castServerException(UNAUTHORIZED);

@@ -7,9 +7,7 @@ import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.entity.dto.spu.AddSpuDto;
 import cn.xk.xcode.entity.dto.spu.QuerySpuDto;
 import cn.xk.xcode.entity.dto.spu.UpdateSpuDto;
-import cn.xk.xcode.entity.po.ProductAuditPo;
-import cn.xk.xcode.entity.po.ProductSpuAttributePo;
-import cn.xk.xcode.entity.po.ProductStorePo;
+import cn.xk.xcode.entity.po.*;
 import cn.xk.xcode.entity.vo.spu.ProductSpuVo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.PageResult;
@@ -21,7 +19,6 @@ import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import cn.xk.xcode.entity.po.ProductSpuPo;
 import cn.xk.xcode.mapper.ProductSpuMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +57,9 @@ public class ProductSpuServiceImpl extends ServiceImpl<ProductSpuMapper, Product
 
     @Resource
     private ProductSkuService productSkuService;
+
+    @Resource
+    private ProductProdCategoryService productProdCategoryService;
 
     @Transactional
     @Override
@@ -101,6 +101,15 @@ public class ProductSpuServiceImpl extends ServiceImpl<ProductSpuMapper, Product
         save(productSpuPo);
         productSpuPo.setSort(Math.toIntExact(productSpuPo.getId()));
         save(productSpuPo);
+        List<Long> categoryIds = addSpuDto.getCategoryIds();
+        List<ProductProdCategoryPo> productProdCategoryPoList = new ArrayList<>();
+        for (Long categoryId : categoryIds) {
+            ProductProdCategoryPo productProdCategoryPo = new ProductProdCategoryPo();
+            productProdCategoryPo.setCategoryId(categoryId);
+            productProdCategoryPo.setSpuId(productSpuPo.getId());
+            productProdCategoryPoList.add(productProdCategoryPo);
+        }
+        productProdCategoryService.saveBatch(productProdCategoryPoList);
         List<ProductSpuAttributePo> list = new ArrayList<>();
         for (String attribute : productSpuAttributeList) {
             if (sensitiveWordBs.contains(attribute)) {

@@ -6,6 +6,7 @@ import cn.xk.xcode.entity.dto.merchant.UpdateMerchantDto;
 import cn.xk.xcode.pojo.LoginVO;
 import com.mybatisflex.core.service.IService;
 import cn.xk.xcode.entity.po.ProductMerchantPo;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *  服务层。
@@ -20,4 +21,8 @@ public interface ProductMerchantService extends IService<ProductMerchantPo> {
     Boolean updateMerchant(UpdateMerchantDto updateMerchantDto);
 
     LoginVO login(MerchantLoginDto merchantLoginDto);
+
+    Boolean sendFindPasswordEmail(String email);
+
+    ModelAndView findPassword(String email, String token);
 }

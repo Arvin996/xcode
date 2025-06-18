@@ -26,15 +26,13 @@ public class MerchantLoginDto {
     @Schema(description = "邮箱")
     private String email;
 
-    @Schema(description = "登录类型， password密码登录 email 邮箱登录", example = "password")
+    @Schema(description = "登录类型， password密码登录 email 邮箱登录", example = "username")
     @NotBlank(message = "登录类型不能为空")
     private String loginType;
 
-    @NotBlank(message = "验证码不能为空")
     @Schema(description = "code 验证码", example = "123456")
     private String code;
 
-    @NotBlank(message = "uuid不能为空")
     @Schema(description = "uuid")
     private String uuid;
 

@@ -46,4 +46,10 @@ public class RegisterMerchantDto {
     @Schema(description = "code 验证码")
     @NotBlank(message = "验证码不能为空")
     private String code;
+
+    @Schema(description = "第三方登录类型 仅仅供三方登录注册时需要")
+    private String thirdLoginType;
+
+    @Schema(description = "第三方登录唯一标识 仅仅供三方登录注册时需要")
+    private String unionId;
 }

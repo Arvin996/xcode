@@ -38,13 +38,17 @@ public class SensitiveWordConfig {
                 // 忽略重复词
                 .ignoreRepeat(false)
                 // 是否启用数字检测
-                .enableNumCheck(true)
+                .enableNumCheck(false)
                 // 是否启用邮箱检测
-                .enableEmailCheck(true)
+                .enableEmailCheck(false)
+                // 是否启用url检测
+                .enableUrlCheck(false)
+                // 是否启用ip检测
+                .enableIpv4Check(false)
                 // 是否启用链接检测
-                .enableUrlCheck(true)
+                .enableUrlCheck(false)
                 // 数字检测，自定义指定长度
-                .numCheckLen(8)
+                // .numCheckLen(8)
                 // 配置自定义敏感词
                 .wordDeny(wordDeny)
                 // 配置非自定义敏感词

@@ -29,6 +29,8 @@ public class XcodeOssProperties {
     // 私有文件访问过期时间
     private Long preSingerExpireTime = DEFAULT_EXPIRE_TIME;
 
+    private Boolean enable = true;
+
     // 访问站点
     private String endpoint;
 

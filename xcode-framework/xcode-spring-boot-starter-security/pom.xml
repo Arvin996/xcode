@@ -56,6 +56,10 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
+        </dependency>
 
     </dependencies>
 

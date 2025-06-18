@@ -6,8 +6,7 @@ package cn.xk.xcode.exception;
  * @Version 1.0
  * @Description GlobalErrorCodeConstants
  */
-public interface GlobalErrorCodeConstants
-{
+public interface GlobalErrorCodeConstants {
     ErrorCode SUCCESS = new IntErrorCode(0, "成功");
     // ========== 客户端错误段 ==========
     ErrorCode BAD_REQUEST = new IntErrorCode(400, "请求参数不正确");
@@ -26,7 +25,7 @@ public interface GlobalErrorCodeConstants
     ErrorCode PARAMETER_VALIDATION_FAIL = new IntErrorCode(418, "参数解析异常");
     ErrorCode ERROR_CODE_MESSAGE_PLACE_HOLDER_RESOLVE_ERROR = new IntErrorCode(419, "错误码信息占位符个哦实话异常");
     ErrorCode QR_CODE_GEN_ERROR = new IntErrorCode(420, "生成二维码错误");
-    ErrorCode READ_HTTP_BODY_ERROR =  new IntErrorCode(421, "读取http body失败, 异常信息:{}");
+    ErrorCode READ_HTTP_BODY_ERROR = new IntErrorCode(421, "读取http body失败, 异常信息:{}");
 
     ErrorCode LOCKED = new IntErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new IntErrorCode(429, "请求过于频繁，请稍后重试");
@@ -43,10 +42,15 @@ public interface GlobalErrorCodeConstants
     IntErrorCode EXCEL_EXPORT_ERROR = new IntErrorCode(903, "导出Excel失败");
     ErrorCode UNKNOWN = new IntErrorCode(999, "未知错误");
     ErrorCode BUNDLE_MESSAGE_NOT_FOUND = new IntErrorCode(998, "对应的国际化资源文件未找到信息code{}");
-    ErrorCode TASK_CONTEXT_IS_NULL =  new IntErrorCode(997, "任务上下文为空");
-    ErrorCode TASK_CONTEXT_BIZ_CODE_IS_NULL =  new IntErrorCode(996, "任务上下文业务编码为空");
-    ErrorCode TASK_HANDLER_LIST_IS_NULL =  new IntErrorCode(995, "任务编码{}对应的任务执行器列表为空");
+    ErrorCode TASK_CONTEXT_IS_NULL = new IntErrorCode(997, "任务上下文为空");
+    ErrorCode TASK_CONTEXT_BIZ_CODE_IS_NULL = new IntErrorCode(996, "任务上下文业务编码为空");
+    ErrorCode TASK_HANDLER_LIST_IS_NULL = new IntErrorCode(995, "任务编码{}对应的任务执行器列表为空");
     ErrorCode LOGIN_TYPE_HANDLER_REPEATED = new IntErrorCode(994, "登录类型{}对应的登录处理器重复");
     ErrorCode LOGIN_TYPE_HANDLER_NOT_EXISTS = new IntErrorCode(993, "登录类型{}对应的登录处理器不存在");
+    ErrorCode THIRD_LOGIN_TYPE_HANDLER_NOT_EXISTS = new IntErrorCode(992, "第三方登录类型{}对应的登录处理器不存在");
+    ErrorCode THIRD_LOGIN_RENDER_FAILED = new IntErrorCode(991, "第三方登录渲染失败");
+    ErrorCode THIRD_LOGIN_PROPERTY_ERROR = new IntErrorCode(990, "第三方登录方式{}的配置{}出现错误,错误信息:{}");
+    ErrorCode THIRD_LOGIN_FAILED = new IntErrorCode(989, "第三方登录失败");
+    ErrorCode CONVERT_TO_MULTIPART_FILE_FAILED = new IntErrorCode(988, "转换MultipartFile失败");
 
 }

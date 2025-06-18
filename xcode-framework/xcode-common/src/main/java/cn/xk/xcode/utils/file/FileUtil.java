@@ -1,11 +1,22 @@
 package cn.xk.xcode.utils.file;
 
 import cn.hutool.core.util.IdUtil;
+import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.exception.core.ServerException;
+import cn.xk.xcode.utils.object.ObjectUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.UUID;
+
+import static cn.xk.xcode.exception.GlobalErrorCodeConstants.CONVERT_TO_MULTIPART_FILE_FAILED;
 
 /**
  * 文件读取工具类
@@ -98,4 +109,30 @@ public class FileUtil {
         file.deleteOnExit();
         return file;
     }
+
+    public static MultipartFile convertByteToMultipartFile(byte[] imageBytes, String fileName, String contentType) {
+        if (ObjectUtil.isNull(imageBytes)) {
+            log.error("获取微信小程序码图片信息失败，接口返回为空");
+            ExceptionUtil.castServerException(CONVERT_TO_MULTIPART_FILE_FAILED);
+        }
+        FileItem item;
+        try {
+            FileItemFactory factory = new DiskFileItemFactory();
+            item = factory.createItem("file", contentType, false, fileName);
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream(imageBytes.length);
+                 OutputStream os = item.getOutputStream()) {
+                bos.write(imageBytes);
+                os.write(bos.toByteArray());
+            }
+            return new CommonsMultipartFile(item);
+        } catch (IOException e) {
+            log.error("转换微信小程序码图片信息为MultipartFile时发生错误:{}", e.getMessage());
+            throw new ServerException(CONVERT_TO_MULTIPART_FILE_FAILED);
+        }
+    }
+
+    public static MultipartFile convertFileToMultipartFile(File file, String fileName, String contentType) {
+        return convertByteToMultipartFile(cn.hutool.core.io.FileUtil.readBytes(file), fileName, contentType);
+    }
+
 }

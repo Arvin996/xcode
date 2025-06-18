@@ -29,12 +29,16 @@ public class CommonResult<T> implements Serializable {
 
     private Object code;
 
-//    public static <T> CommonResult<T> error(Object code, String msg){
+    //    public static <T> CommonResult<T> error(Object code, String msg){
 //        CommonResult<T> result = new CommonResult<>();
 //        result.setCode(code);
 //        result.setMsg(msg);
 //        return result;
 //    }
+    public static <T> CommonResult<T> error(ErrorCode errorCode, T data) {
+        return error(errorCode, data, (Object) null);
+    }
+
     public static <T> CommonResult<T> error(ErrorCode errorCode, T data, Object... args) {
         CommonResult<T> result = new CommonResult<>();
         if (ObjectUtil.isNotNull(data)) {

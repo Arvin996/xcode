@@ -2,6 +2,7 @@ package cn.xk.xcode.config;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xk.xcode.core.OssClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import java.net.URI;
  **/
 @Configuration
 @EnableConfigurationProperties(XcodeOssProperties.class)
+@ConditionalOnProperty(name = "xcode.oss.enable", havingValue = "true")
 public class XcodeOssConfiguration {
 
     @Resource

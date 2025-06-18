@@ -3,7 +3,7 @@ package cn.xk.xcode.config;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.util.SaResult;
-import cn.xk.xcode.handler.DynamicRouteHandler;
+//import cn.xk.xcode.handler.DynamicRouteHandler;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,23 +46,23 @@ public class XcodeGateWayConfiguration {
                 .setError(e -> SaResult.error(e.getMessage()));
     }
 
-    @Bean
-    public DynamicDataSourceRouteDefinitionRepository getDynamicDateSourceRouteDefinitionRepository() {
-        return new DynamicDataSourceRouteDefinitionRepository(xcodeGateWayProperties);
-    }
+//    @Bean
+//    public DynamicDataSourceRouteDefinitionRepository getDynamicDateSourceRouteDefinitionRepository() {
+//        return new DynamicDataSourceRouteDefinitionRepository(xcodeGateWayProperties);
+//    }
 
-    @Bean
-    RouterFunction<ServerResponse> dynamicRouteHandler(DynamicRouteHandler handler) {
-        return RouterFunctions.nest(RequestPredicates.path("/route"),
-                RouterFunctions.route(RequestPredicates.GET("/del/{id}"), handler::deleteRoute)
-                        .andRoute(RequestPredicates.POST("/update").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::updateRoute)
-                        .andRoute(RequestPredicates.POST("/add").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::addRoute)
+//    @Bean
+//    RouterFunction<ServerResponse> dynamicRouteHandler(DynamicRouteHandler handler) {
+//        return RouterFunctions.nest(RequestPredicates.path("/route"),
+//                RouterFunctions.route(RequestPredicates.GET("/del/{id}"), handler::deleteRoute)
+//                        .andRoute(RequestPredicates.POST("/update").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::updateRoute)
+//                        .andRoute(RequestPredicates.POST("/add").and(RequestPredicates.accept(MediaType.APPLICATION_JSON)), handler::addRoute)
+//
+//        );
+//    }
 
-        );
-    }
-
-    @Bean
-    public DynamicRouteHandler dynamicRouteHandler(DynamicDataSourceRouteDefinitionRepository routeDefinitionRepository) {
-        return new DynamicRouteHandler(routeDefinitionRepository);
-    }
+//    @Bean
+//    public DynamicRouteHandler dynamicRouteHandler(DynamicDataSourceRouteDefinitionRepository routeDefinitionRepository) {
+//        return new DynamicRouteHandler(routeDefinitionRepository);
+//    }
 }

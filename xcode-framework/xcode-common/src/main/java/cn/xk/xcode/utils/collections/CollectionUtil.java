@@ -25,8 +25,8 @@ public class CollectionUtil {
         return groupByKeyFilter(Objects::nonNull, collection, key);
     }
 
-    public static <T, E, K> Map<K, List<E>> groupByKeyFilter(Predicate<E> predicate, Collection<E> collection, Function<E, K> key) {
-        return isNotEmpty(collection) ? new HashMap<>() : collection.stream().filter(predicate).collect(Collectors.groupingBy(key));
+    public static <E, K> Map<K, List<E>> groupByKeyFilter(Predicate<E> predicate, Collection<E> collection, Function<E, K> key) {
+        return isEmpty(collection) ? new HashMap<>() : collection.stream().filter(predicate).collect(Collectors.groupingBy(key));
     }
 
     public static <E, K, U> Map<K, Map<U, List<E>>> groupBy2Key(Collection<E> collection, Function<E, K> key1, Function<E, U> key2) {

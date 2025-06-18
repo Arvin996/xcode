@@ -2,8 +2,8 @@ package cn.xk.xcode.config;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.util.ObjectUtil;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import org.springframework.core.annotation.Order;
@@ -26,7 +26,7 @@ public class SaTokenStpInterfaceConfig implements StpInterface {
 
     @Override
     public List<String> getPermissionList(Object o, String s) {
-        StpType type = StpType.getType(s);
+        LoginStpType type = LoginStpType.getType(s);
         LoginUser loginUser = SaTokenLoginUtils.getLoginUser(type);
         if (ObjectUtil.isNull(loginUser)){
             return Collections.emptyList();
@@ -36,7 +36,7 @@ public class SaTokenStpInterfaceConfig implements StpInterface {
 
     @Override
     public List<String> getRoleList(Object o, String s) {
-        StpType type = StpType.getType(s);
+        LoginStpType type = LoginStpType.getType(s);
         LoginUser loginUser = SaTokenLoginUtils.getLoginUser(type);
         if (ObjectUtil.isNull(loginUser)){
             return Collections.emptyList();

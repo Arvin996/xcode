@@ -42,6 +42,7 @@ public class SaTokenMemberGlobalConfig implements WebMvcConfigurer {
                     .notMatch("/error")
                     .notMatch("/**/favicon.ico")
                     .notMatch("/resources/**")
+                    .notMatch("/auth/third/**")
                     .notMatch(whitelistProperties.getWhitelist())
                     .check(r -> StpSystemUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
 

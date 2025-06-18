@@ -2,6 +2,7 @@ package cn.xk.xcode.controller;
 
 import cn.xk.xcode.entity.dto.sku.AddSkuDto;
 import cn.xk.xcode.entity.dto.sku.UpdateSkuDto;
+import cn.xk.xcode.entity.vo.sku.ProductSkuVo;
 import cn.xk.xcode.pojo.CommonResult;
 import cn.xk.xcode.service.ProductSkuService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author xuk
@@ -41,5 +43,11 @@ public class ProductSkuController {
     @DeleteMapping("/delProductSku/{skuId}")
     public CommonResult<Boolean> delProductSku(@PathVariable("skuId") Long skuId) {
         return CommonResult.success(productSkuService.delProductSku(skuId));
+    }
+
+    @Operation(summary = "查询商品sku")
+    @GetMapping("/queryProductSku/{spuId}")
+    public CommonResult<List<ProductSkuVo>> queryProductSku(@PathVariable("spuId") Long spuId) {
+        return CommonResult.success(productSkuService.queryProductSku(spuId));
     }
 }

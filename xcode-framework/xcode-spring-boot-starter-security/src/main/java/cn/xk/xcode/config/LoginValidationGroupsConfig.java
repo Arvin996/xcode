@@ -15,4 +15,8 @@ public class LoginValidationGroupsConfig
     public interface WX_LOGIN {
     }
 
+    public interface EMAIL_LOGIN {
+
+    }
+
 }

@@ -69,6 +69,13 @@ public class AddSpuDto {
     private Set<String> productSpuAttributeList;
 
     /**
+     * 商品分类
+     */
+    @Schema(description = "categoryIds 商品分类")
+    @NotEmpty(message = "商品分类不能为空")
+    private List<Long> categoryIds;
+
+    /**
      * 商品轮播图地址
      * 数组，以逗号分隔
      * 最多上传15张

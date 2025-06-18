@@ -9,7 +9,7 @@ import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.hutool.core.util.StrUtil;
-import cn.xk.xcode.pojo.StpType;
+import cn.xk.xcode.pojo.LoginStpType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class StpSystemUtil {
 	/**
 	 * 多账号体系下的类型标识
 	 */
-	public static final String TYPE = StpType.SYSTEM.getType();
+    public static final String TYPE = LoginStpType.SYSTEM.getType();
 
 	/**
 	 * 底层使用的 StpLogic 对象

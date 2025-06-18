@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>找回密码</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f2f5 0%, #e6f7ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .logo span {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1890ff;
+            letter-spacing: -0.5px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #1890ff;
+        }
+
+        .card.expired::before {
+            background: #ff4d4f;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header h1 {
+            font-size: 24px;
+            color: #262626;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: #8c8c8c;
+            font-size: 14px;
+            max-width: 350px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 25px;
+        }
+
+        .success-icon {
+            background-color: #f6ffed;
+            border: 2px solid #b7eb8f;
+        }
+
+        .success-icon i {
+            color: #52c41a;
+            font-size: 32px;
+        }
+
+        .error-icon {
+            background-color: #fff2f0;
+            border: 2px solid #ffccc7;
+        }
+
+        .error-icon i {
+            color: #ff4d4f;
+            font-size: 32px;
+        }
+
+        .password-container {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #d9d9d9;
+            transition: all 0.3s;
+        }
+
+        .password-container:focus-within {
+            border-color: #40a9ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .password-field {
+            flex-grow: 1;
+            padding: 14px 20px;
+            font-size: 18px;
+            color: #262626;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .copy-btn {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            background: #40a9ff;
+        }
+
+        .copy-btn:active {
+            background: #096dd9;
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .action-btn:hover {
+            background: #40a9ff;
+        }
+
+        .action-btn:active {
+            background: #096dd9;
+        }
+
+        .action-btn.expired {
+            background: #ff4d4f;
+        }
+
+        .action-btn.expired:hover {
+            background: #ff7875;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #1890ff;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #40a9ff;
+        }
+
+        .tip {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #595959;
+        }
+
+        .tip.expired {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+        }
+
+        .tip h3 {
+            color: #1890ff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip.expired h3 {
+            color: #ff4d4f;
+        }
+
+        .tip ul {
+            padding-left: 20px;
+        }
+
+        .tip li {
+            margin-bottom: 6px;
+        }
+
+        .state-switcher {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #8c8c8c;
+        }
+
+        .state-switcher a {
+            color: #1890ff;
+            text-decoration: none;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .state-switcher a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 20px;
+            }
+
+            .password-container {
+                flex-direction: column;
+            }
+
+            .copy-btn {
+                padding: 12px;
+                justify-content: center;
+            }
+        }
+
+        .copied-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .copied-message.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo-container">
+        <div class="logo">
+            <span>卡</span>
+        </div>
+        <div class="logo-text">卡汇通-找回密码</div>
+    </div>
+
+    <!-- 成功-->
+    <div class="card" th:if="${flag}">
+        <div class="card-header">
+            <div class="status-icon success-icon">
+                <span>✅</span>
+            </div>
+            <h1>密码重置成功</h1>
+            <p>您的新密码已生成，请及时复制并妥善保存</p>
+        </div>
+
+        <div class="password-container">
+            <input
+                    type="text"
+                    class="password-field"
+                    id="password"
+                    th:value="${msg}" readonly
+            />
+            <button class="copy-btn" id="copyBtn">
+                <span>复制密码</span>
+            </button>
+        </div>
+
+        <div class="login-link">
+            <a href="http://localhost:8080/login" target="_blank" id="loginLink">
+                <span>前往登录页面</span>
+            </a>
+        </div>
+
+        <div class="tip">
+            <h3>安全提示</h3>
+            <ul>
+                <li>请勿将密码透露给他人</li>
+                <li>建议立即登录并修改为易记的密码</li>
+                <li>定期更换密码以保证账户安全</li>
+                <li>避免在公共设备上保存密码</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- 链接失效卡片 -->
+    <div class="card expired" id="expiredCard" th:if="${!flag}">
+        <div class="card-header">
+            <div class="status-icon error-icon">
+                <span>❌</span>
+            </div>
+            <h1>链接已失效</h1>
+            <p>您访问的密码重置链接已过期或无效，请重新申请密码重置邮件</p>
+        </div>
+
+        <div class="login-link">
+            <a href="http://localhost:8080/login" id="backToLogin">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回登录页面</span>
+            </a>
+        </div>
+
+        <div class="tip expired">
+            <h3><i class="fas fa-info-circle"></i> 注意事项</h3>
+            <ul>
+                <li>密码重置链接有效期通常为24小时</li>
+                <li>请检查您的垃圾邮件文件夹</li>
+                <li>确保您使用的是最新发送的重置链接</li>
+                <li>如果多次未收到邮件，请联系客服支持</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="copied-message" id="copiedMessage">密码已复制到剪贴板</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordField = document.getElementById('password');
+        const copyBtn = document.getElementById('copyBtn');
+        const loginLink = document.getElementById('loginLink');
+        const copiedMessage = document.getElementById('copiedMessage');
+
+        // 复制密码功能
+        copyBtn.addEventListener('click', function () {
+            passwordField.select();
+            document.execCommand('copy');
+
+            // 显示复制成功提示
+            copiedMessage.classList.add('show');
+
+            // 改变按钮文本
+            const originalText = copyBtn.querySelector('span').textContent;
+            copyBtn.querySelector('span').textContent = '已复制';
+            copyBtn.style.background = '#52c41a';
+
+            // 3秒后恢复按钮状态
+            setTimeout(() => {
+                copiedMessage.classList.remove('show');
+                copyBtn.querySelector('span').textContent = originalText;
+                copyBtn.style.background = '#1890ff';
+            }, 3000);
+        });
+    });
+</script>
+</body>
+</html>

@@ -4,10 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.xk.xcode.core.CommonStatusEnum;
 import cn.xk.xcode.core.StpMemberUtil;
 import cn.xk.xcode.entity.dto.sku.AddSkuDto;
+import cn.xk.xcode.entity.dto.sku.QuerySkuDto;
 import cn.xk.xcode.entity.dto.sku.UpdateSkuDto;
 import cn.xk.xcode.entity.po.ProductAuditPo;
 import cn.xk.xcode.entity.po.ProductSkuAttributeValuePo;
 import cn.xk.xcode.entity.po.ProductSpuPo;
+import cn.xk.xcode.entity.vo.sku.ProductSkuVo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.service.*;
 import cn.xk.xcode.utils.object.ObjectUtil;
@@ -23,6 +25,7 @@ import javax.annotation.Resource;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +57,9 @@ public class ProductSkuServiceImpl extends ServiceImpl<ProductSkuMapper, Product
 
     @Resource
     private ProductAuditService productAuditService;
+
+    @Resource
+    private ProductSkuMapper productSkuMapper;
 
     @Transactional
     @Override
@@ -171,6 +177,13 @@ public class ProductSkuServiceImpl extends ServiceImpl<ProductSkuMapper, Product
         if ("00".equals(productSkuPo.getAuditStatus())){
             ExceptionUtil.castServiceException(SKU_IN_AUDIT_NOT_SUPPORT_DELETE);
         }
-        return null;
+        return removeById(skuId);
+    }
+
+    @Override
+    public List<ProductSkuVo> queryProductSku(Long spuId) {
+        QuerySkuDto querySkuDto = new QuerySkuDto();
+        querySkuDto.setSpuId(spuId);
+        return productSkuMapper.queryProductSku(querySkuDto);
     }
 }

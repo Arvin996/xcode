@@ -53,7 +53,6 @@ public class ProductMerchantTableDef extends TableDef {
      * 登录用户名
      */
     public final QueryColumn USERNAME = new QueryColumn(this, "username");
-
     /**
      * 是否删除 0 已删除 1未删除
      */

@@ -1,7 +1,8 @@
 package cn.xk.xcode;
 
 import cn.xk.xcode.annotation.EnableServerSecurity;
-import cn.xk.xcode.pojo.StpType;
+import cn.xk.xcode.pojo.LoginStpType;
+import cn.xk.xcode.pojo.PermissionStpType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description MainApplication
  **/
 @SpringBootApplication
-@EnableServerSecurity(type = StpType.SYSTEM)
+@EnableServerSecurity(permissionType = PermissionStpType.SYSTEM, loginType = LoginStpType.SYSTEM)
 public class MainApplication {
 
     public static void main(String[] args) {

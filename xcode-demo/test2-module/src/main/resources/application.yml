@@ -30,6 +30,7 @@ xcode:
     default-bucket: video
     init-buckets:
       - t851651
+    enable: false
 #rocketmq:
 #  name-server: 127.0.0.1:9876
 #  producer:

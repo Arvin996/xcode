@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -12,14 +13,15 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class LoginInfoDto {
 
-    @NotNull(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
+    @NotBlank(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
     @Schema(description = "用户名")
     private String username;
 
     @Schema(description = "用户名")
+    @NotBlank(groups = {LoginValidationGroupsConfig.EMAIL_LOGIN.class})
     private String email;
 
-    @NotNull(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
+    @NotBlank(groups = {LoginValidationGroupsConfig.PASSWORD_LOGIN.class})
     @Schema(description = "密码")
     private String password;
 
@@ -27,11 +29,11 @@ public class LoginInfoDto {
     private String loginDevType;
 
     // @NotNull
-    @Schema(description = "客户端id", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "客户端id")
     private String clientId;
 
     // @NotNull
-    @Schema(description = "授权类型", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "授权类型")
     private String grantType;
 
     // @NotNull(groups = {LoginValidationGroupsConfig.WX_LOGIN.class})

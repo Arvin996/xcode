@@ -31,8 +31,8 @@ public class TaskChainExecutor {
         List<TaskHandler> taskHandlerList = taskHandlerContext.getTaskHandlerList(code);
         for (TaskHandler taskHandler : taskHandlerList) {
             taskContext.setHandlerName(taskHandler.getHandlerName());
+            taskHandler.handle(taskContext);
             if (Boolean.TRUE.equals(taskContext.getIsBreak())) {
-                taskHandler.handle(taskContext);
                 break;
             }
         }

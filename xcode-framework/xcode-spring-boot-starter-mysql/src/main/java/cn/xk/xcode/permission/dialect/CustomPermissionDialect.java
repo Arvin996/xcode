@@ -9,8 +9,8 @@ import cn.xk.xcode.exception.ErrorCode;
 import cn.xk.xcode.exception.IntErrorCode;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.permission.context.DatePermissionHolder;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import com.mybatisflex.annotation.Table;
@@ -49,7 +49,7 @@ public class CustomPermissionDialect extends CommonsDialectImpl {
         Class<?> tableClazz = dataScopeEntity.getTableClazz();
         List<QueryTable> queryTables = CPI.getQueryTables(queryWrapper);
         List<QueryTable> joinTables = CPI.getJoinTables(queryWrapper);
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (ObjectUtil.isNull(loginUser)) {
             super.prepareAuth(queryWrapper, operateType);
             return;

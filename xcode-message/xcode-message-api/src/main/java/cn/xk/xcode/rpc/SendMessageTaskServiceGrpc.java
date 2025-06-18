@@ -3,7 +3,6 @@ package cn.xk.xcode.rpc;
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
- *
  */
 @javax.annotation.Generated(
         value = "by gRPC proto compiler (version 1.52.1)",

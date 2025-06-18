@@ -1,13 +1,16 @@
 package cn.xk.xcode.rpc;
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.xk.xcode.core.pipeline.TaskChainExecutor;
+import cn.xk.xcode.core.pipeline.TaskContext;
 import cn.xk.xcode.entity.discard.task.MessageTask;
 import cn.xk.xcode.handler.message.response.SendMessageResponse;
+import cn.xk.xcode.pipe.context.SendMessageTaskContext;
+import cn.xk.xcode.pipe.model.SendMessageTaskModel;
 import cn.xk.xcode.pojo.CommonResult;
-import cn.xk.xcode.service.message.SendMessageServiceHolder;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.beans.BeanUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,14 +25,17 @@ import java.util.List;
 public class SendMessageTaskServiceGrpcImpl extends SendMessageTaskServiceGrpc.SendMessageTaskServiceImplBase {
 
     @Resource
-    private SendMessageServiceHolder sendMessageServiceHolder;
+    private TaskChainExecutor taskChainExecutor;
 
     @Override
     public void sendMessageTask(SendMessageProto.SendMessageTaskRequest request, StreamObserver<SendMessageProto.SendMessageTaskResponse> responseObserver) {
-        String msgChannel = request.getMsgChannel();
         MessageTask messageTask = new MessageTask();
-        BeanUtil.copyProperties(request, messageTask);
-        CommonResult<?> commonResult = sendMessageServiceHolder.routeSendMessageService(msgChannel).dealMessage(messageTask);
+        BeanUtils.copyProperties(request, messageTask);
+        messageTask.setTemplateCode(request.getTemplateId());
+        SendMessageTaskModel sendMessageTaskModel = new SendMessageTaskModel(messageTask);
+        SendMessageTaskContext sendMessageTaskContext = new SendMessageTaskContext(sendMessageTaskModel);
+        TaskContext<SendMessageTaskModel> taskContext = taskChainExecutor.execute(sendMessageTaskContext);
+        CommonResult<?> commonResult = taskContext.getResult();
         SendMessageProto.SendMessageTaskResponse.Builder builder = SendMessageProto.SendMessageTaskResponse.newBuilder();
         builder.setCode((Integer) commonResult.getCode());
         Object data = commonResult.getData();
@@ -48,8 +54,6 @@ public class SendMessageTaskServiceGrpcImpl extends SendMessageTaskServiceGrpc.S
                 }
             }
             builder.setSendMessageResponse(rBuilder);
-        } else {
-            builder.setData(data.toString());
         }
         builder.setMsg(commonResult.getMsg());
         SendMessageProto.SendMessageTaskResponse sendMessageTaskResponse = builder.build();

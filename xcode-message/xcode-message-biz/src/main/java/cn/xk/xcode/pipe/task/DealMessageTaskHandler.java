@@ -30,7 +30,7 @@ public class DealMessageTaskHandler implements TaskHandler<SendMessageTaskModel>
     public void handle(TaskContext<SendMessageTaskModel> taskContext) {
         taskContext.setIsBreak(true);
         MessageTask messageTask = taskContext.getTaskModel().getMessageTask();
-        CommonResult<?> commonResult = sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgChannel()).dealMessage(messageTask);
+        CommonResult<?> commonResult = sendMessageServiceHolder.routeSendMessageService(messageTask.getMsgType()).dealMessage(messageTask);
         taskContext.setResult(commonResult);
     }
 

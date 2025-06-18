@@ -3,8 +3,8 @@ package cn.xk.xcode.handler;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.xk.xcode.core.annotation.Handler;
 import cn.xk.xcode.entity.vo.task.FlowTaskInteractiveTypeVo;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import org.dromara.warm.flow.core.dto.FlowParams;
@@ -23,7 +23,7 @@ public class ReductionSignatureInteractiveHandler extends AbstractInteractiveHan
 
     @Override
     public boolean handle(FlowTaskInteractiveTypeVo flowTaskInteractiveTypeVo) {
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (loginUser == null) {
             return false;
         }

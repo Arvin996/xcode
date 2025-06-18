@@ -9,8 +9,8 @@ import cn.xk.xcode.entity.dto.leave.UpdateLeaveDto;
 import cn.xk.xcode.entity.vo.leave.FlowOaLeaveResultVo;
 import cn.xk.xcode.enums.LeaveTypeEnum;
 import cn.xk.xcode.exception.core.ExceptionUtil;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
-import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
 import cn.xk.xcode.utils.collections.CollectionUtil;
 import cn.xk.xcode.utils.object.BeanUtil;
@@ -154,7 +154,7 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         // 作为办理人保存到历史记录表 【必传】
         flowParams.handler(StpUtil.getLoginIdAsString());
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
@@ -199,7 +199,7 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         flowParams.message(message);
 
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
@@ -239,7 +239,7 @@ public class FlowOaLeaveServiceImpl extends ServiceImpl<FlowOaLeaveMapper, FlowO
         // 设置流转参数
         FlowParams flowParams = new FlowParams();
         // 设置办理人拥有的权限，办理中需要校验是否有权限办理 【必传】
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }

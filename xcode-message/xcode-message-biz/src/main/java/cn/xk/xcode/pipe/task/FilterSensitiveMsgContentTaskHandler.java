@@ -118,6 +118,7 @@ public class FilterSensitiveMsgContentTaskHandler implements TaskHandler<SendMes
                 String realContent = formatContent(content, templateParamsPoList, jsonObject);
                 if (sensitiveWordBs.contains(realContent)) {
                     log.warn("敏感词信息：{}", sensitiveWordBs.findAll(realContent));
+                    System.out.println(sensitiveWordBs.findAll(realContent));
                     ExceptionUtil.castServerException(MESSAGE_CONTENT_CONTAINS_SENSITIVE_WORDS);
                 }
                 messageTask.setMessageContent(realContent);

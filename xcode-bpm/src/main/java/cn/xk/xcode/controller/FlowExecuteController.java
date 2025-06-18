@@ -10,9 +10,9 @@ import cn.xk.xcode.entity.vo.task.FlowTaskVo;
 import cn.xk.xcode.entity.vo.task.FlowTaskInteractiveTypeVo;
 import cn.xk.xcode.exception.core.ExceptionUtil;
 import cn.xk.xcode.pojo.CommonResult;
+import cn.xk.xcode.pojo.LoginStpType;
 import cn.xk.xcode.pojo.LoginUser;
 import cn.xk.xcode.pojo.PageResult;
-import cn.xk.xcode.pojo.StpType;
 import cn.xk.xcode.service.FlowExecuteTaskService;
 import cn.xk.xcode.utils.PageUtil;
 import cn.xk.xcode.utils.SaTokenLoginUtils;
@@ -74,7 +74,7 @@ public class FlowExecuteController {
     @Operation(summary = "获取待办任务列表")
     @SaCheckPermission("flow:execute:todoTask")
     public CommonResult<PageResult<FlowTaskVo>> getTodoTask(@Validated @RequestBody QueryTaskDto flowTask) {
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
@@ -152,7 +152,7 @@ public class FlowExecuteController {
     @Operation(summary = "获取分页抄送任务列表")
     @SaCheckPermission("flow:execute:copyTask")
     public CommonResult<PageResult<FlowHisTask>> getCopyTask(@Validated @RequestBody QueryTaskDto flowTask) {
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }
@@ -166,7 +166,7 @@ public class FlowExecuteController {
     @Operation(summary = "获取已办任务列表")
     @SaCheckPermission("flow:execute:doneTask")
     public CommonResult<PageResult<FlowHisTask>> getDoneTask(@RequestBody FlowHisTask flowTask, @RequestParam("pageNo") Long pageNo, @RequestParam("pageSize") Long pageSize) {
-        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(StpType.SYSTEM);
+        LoginUser loginUser = SaTokenLoginUtils.getLoginUser(LoginStpType.SYSTEM);
         if (Objects.isNull(loginUser)) {
             ExceptionUtil.castServiceException(UNAUTHORIZED);
         }

@@ -52,7 +52,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string accountName = 2;</code>
-         *
          * @return The bytes for accountName.
          */
         com.google.protobuf.ByteString
@@ -67,7 +66,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string shieldType = 3;</code>
-         *
          * @return The bytes for shieldType.
          */
         com.google.protobuf.ByteString
@@ -89,7 +87,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string shieldStartTime = 4;</code>
-         *
          * @return The bytes for shieldStartTime.
          */
         com.google.protobuf.ByteString
@@ -119,7 +116,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string msgType = 6;</code>
-         *
          * @return The msgType.
          */
         java.lang.String getMsgType();
@@ -134,7 +130,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string msgChannel = 7;</code>
-         *
          * @return The msgChannel.
          */
         java.lang.String getMsgChannel();
@@ -185,7 +180,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string scheduleTime = 9;</code>
-         *
          * @return The bytes for scheduleTime.
          */
         com.google.protobuf.ByteString
@@ -208,7 +202,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string templateId = 11;</code>
-         *
          * @return Whether the templateId field is set.
          */
         boolean hasTemplateId();
@@ -230,7 +223,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string messageContent = 12;</code>
-         *
          * @return Whether the messageContent field is set.
          */
         boolean hasMessageContent();
@@ -252,14 +244,12 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string contentValueParams = 13;</code>
-         *
          * @return Whether the contentValueParams field is set.
          */
         boolean hasContentValueParams();
 
         /**
          * <code>optional string contentValueParams = 13;</code>
-         *
          * @return The contentValueParams.
          */
         java.lang.String getContentValueParams();
@@ -274,7 +264,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string receiverType = 14;</code>
-         *
          * @return The receiverType.
          */
         java.lang.String getReceiverType();
@@ -549,7 +538,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string shieldStartTime = 4;</code>
-         *
          * @return Whether the shieldStartTime field is set.
          */
         @java.lang.Override
@@ -601,7 +589,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string shieldEndTime = 5;</code>
-         *
          * @return Whether the shieldEndTime field is set.
          */
         @java.lang.Override
@@ -653,7 +640,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string msgType = 6;</code>
-         *
          * @return The msgType.
          */
         @java.lang.Override
@@ -695,7 +681,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string msgChannel = 7;</code>
-         *
          * @return The msgChannel.
          */
         @java.lang.Override
@@ -883,7 +868,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string templateId = 11;</code>
-         *
          * @return Whether the templateId field is set.
          */
         @java.lang.Override
@@ -935,7 +919,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string messageContent = 12;</code>
-         *
          * @return Whether the messageContent field is set.
          */
         @java.lang.Override
@@ -987,7 +970,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string contentValueParams = 13;</code>
-         *
          * @return Whether the contentValueParams field is set.
          */
         @java.lang.Override
@@ -1016,7 +998,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string contentValueParams = 13;</code>
-         *
          * @return The bytes for contentValueParams.
          */
         @java.lang.Override
@@ -1175,7 +1156,6 @@ public final class SendMessageProto {
 
         /**
          * <code>optional string extraParams = 17;</code>
-         *
          * @return Whether the extraParams field is set.
          */
         @java.lang.Override
@@ -3421,7 +3401,6 @@ public final class SendMessageProto {
 
             /**
              * <code>optional string page = 16;</code>
-             *
              * @param value The page to set.
              * @return This builder for chaining.
              */
@@ -3470,7 +3449,6 @@ public final class SendMessageProto {
 
             /**
              * <code>optional string extraParams = 17;</code>
-             *
              * @return Whether the extraParams field is set.
              */
             public boolean hasExtraParams() {
@@ -3479,7 +3457,6 @@ public final class SendMessageProto {
 
             /**
              * <code>optional string extraParams = 17;</code>
-             *
              * @return The extraParams.
              */
             public java.lang.String getExtraParams() {
@@ -3497,7 +3474,6 @@ public final class SendMessageProto {
 
             /**
              * <code>optional string extraParams = 17;</code>
-             *
              * @return The bytes for extraParams.
              */
             public com.google.protobuf.ByteString
@@ -3654,7 +3630,6 @@ public final class SendMessageProto {
 
         /**
          * <code>string msg = 3;</code>
-         *
          * @return The msg.
          */
         java.lang.String getMsg();
@@ -6226,7 +6201,6 @@ public final class SendMessageProto {
 
             /**
              * <code>string receiver = 1;</code>
-             *
              * @return The receiver.
              */
             public java.lang.String getReceiver() {
@@ -6263,7 +6237,6 @@ public final class SendMessageProto {
 
             /**
              * <code>string receiver = 1;</code>
-             *
              * @param value The receiver to set.
              * @return This builder for chaining.
              */

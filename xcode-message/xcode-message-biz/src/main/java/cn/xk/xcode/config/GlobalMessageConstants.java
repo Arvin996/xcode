@@ -74,7 +74,7 @@ public interface GlobalMessageConstants {
 
 
     String XXL_THREAD_POOL_NAME = "execute-xxl-thread-pool";
-    int MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME = 24 * 60 * 40 * 30; // 一个月
+    int MESSAGE_ACCESS_CLIENT_TOKEN_EXPIRED_TIME = 30 * 24 * 60 * 60; // 一个月
     String SEND_MESSAGE_TASK_CODE =  "sendMessageTask";
     int SEND_MESSAGE_TASK_STEP_ONE = 1;
     int SEND_MESSAGE_TASK_STEP_TWO = 2;

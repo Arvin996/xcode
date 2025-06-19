@@ -14,17 +14,14 @@
     <packaging>pom</packaging>
     <modules>
         <module>xcode-framework</module>
-        <module>xcode-infra</module>
+        <module>xcode-base</module>
         <module>xcode-system</module>
         <module>xcode-gateway</module>
         <module>xcode-captcha</module>
         <module>xcode-member</module>
         <module>xcode-logger-server</module>
         <module>xcode-websocket-server</module>
-        <module>xcode-mall</module>
-        <module>xcode-pay</module>
         <module>xcode-takeout</module>
-        <module>xcode-bpm</module>
         <module>xcode-demo</module>
         <module>xcode-message</module>
         <module>xcode-distribution-card-platform</module>

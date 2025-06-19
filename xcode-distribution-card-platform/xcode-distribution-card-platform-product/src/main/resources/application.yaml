@@ -1,200 +1,29 @@
-server:
-  port: 4006
 spring:
-  thymeleaf:
-    # 关闭thymeleaf缓存 开发时使用 否则没有实时画面
-    cache: false
-    # 检查模板是否存在，然后再呈现
-    check-template-location: true
-    # Content-Type value.
-    servlet:
-      content-type: text/html
-    # 启用MVC Thymeleaf视图分辨率
-    enabled: true
-    # Template encoding.
-    encoding: UTF-8
-    # 关闭严格模式
-    mode: LEGACYHTML5
-    # Prefix that gets prepended to view names when building a URL.
-    prefix: classpath:/templates/
-    # Suffix that gets appended to view names when building a URL.
-    suffix: .html
-  main:
-    allow-bean-definition-overriding: true
-    allow-circular-references: true
   application:
     name: xcode-dc-product
-  rabbitmq:
-    publisher-confirm-type: correlated # 开启publisher confirm机制，并设置confirm类型
-    publisher-returns: true # 开启publisher return机制
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    listener:
-      direct:
-        prefetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个消息
-      simple:
-        acknowledge-mode: manual
-    #        retry:
-    #          enabled: true # 开启消费者失败重试
-    #          initial-interval: 1000ms # 初识的失败等待时长为1秒
-    #          multiplier: 1 # 失败的等待时长倍数，下次等待时长 = multiplier * last-interval
-    #          max-attempts: 3 # 最大重试次数
-    #          stateless: true # true无状态；false有状态。如果业务中包含事务，这里改为false
-    connection-timeout: 1s
-    template:
-      retry:
-        enabled: true # 开启超时重试机制
-        initial-interval: 1000ms # 失败后的初始等待时间
-        multiplier: 1 # 失败后下次的等待时长倍数，下次等待时长 = initial-interval * multiplier
-        max-attempts: 3 # 最大重试次数
   cloud:
-    loadbalancer:
-      nacos:
-        enabled: true
     nacos:
       server-addr: 127.0.0.1:8848
       username: nacos
       password: Geit@86970000
       discovery:
         enabled: true
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xcode-distribution-card-product?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&connectTimeout=60000&socketTimeout=60000&autoReconnect=true&autoReconnectForPools=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-      idle-timeout: 300000 # 5 minutes
-      max-lifetime: 1800000 # 30 minutes
-      connection-timeout: 30000 # 30 seconds
-      pool-name: ds_system_pool
-      auto-commit: false
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-  redis:
-    # Redis数据库索引（默认为0）
-    database: 1
-    # Redis服务器地址
-    host: 127.0.0.1
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    # password:
-    # 连接超时时间
-    timeout: 10
-    lettuce:
-      pool:
-        # 连接池最大连接数
-        max-active: 200
-        # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-wait: -1ms
-        # 连接池中的最大空闲连接
-        max-idle: 10
-        # 连接池中的最小空闲连接
-        min-idle: 0
-sa-token:
-  jwt-secret-key: asdasdasifhueuiwyurfewbfjsdafjk
-  # token 名称（同时也是 cookie 名称）
-  token-name: token
-  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
-  timeout: 2592000
-  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
-  active-timeout: -1
-  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
-  is-concurrent: false
-  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
-  is-share: true
-  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
-  token-style: uuid
-  # 是否输出操作日志
-  is-log: true
-  # 配置 Sa-Token 单独使用的 Redis 连接
-  alone-redis:
-    # Redis数据库索引（默认为0）
-    database: 2
-    # Redis服务器地址
-    host: 127.0.0.1
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    # 连接超时时间
-    timeout: 10s
+        group: xcode
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        group: xcode
+        import-check:
+          enabled: true
+  config:
+    import:
+      - optional:nacos:redis.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:common.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:knife4j.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:datasource.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:sa-token.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:rabbitmq.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:${spring.application.name}?group=xcode&refreshEnabled=true
 
-# http://localhost:4001/doc.html
-knife4j:
-  enable: true
-  production: false
-  setting:
-    language: zh_cn
-  basic:
-    enable: false
-    username: root
-    password: 123456
-springdoc:
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-grpc:
-  client:
-    xcode-captcha:
-      #    address: "static://127.0.0.1:9999"
-      address: 'discovery:///xcode-captcha'
-      negotiation-type: plaintext
-      #  TCP相关设置
-      enable-keep-alive: true
-      keep-alive-without-calls: true
-    xcode-message:
-      address: 'discovery:///xcode-message'
-      negotiation-type: plaintext
-      #  TCP相关设置
-      enable-keep-alive: true
-      keep-alive-without-calls: true
-logging:
-  config: classpath:log4j2.xml
-xcode:
-  dict:
-    enable: true
-    cache-type: redis
-  security:
-    whitelist:
-      - /home/**
-      - /api/product/merchant/register
-      - /api/product/merchant/login
-      - /templates/**
-    third:
-      fei-shu:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/feishu
-        client-id: cli_a8aef75a2cb9d00c
-        client-secret: zaLCjC8pErViW62SNykuWgIe2cFeVg8b
-      ding-ding:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/dingding
-        client-id: dingpzgrg8i5ywazgb1e
-        client-secret: KJ_G1DONTcvg9e0rDIjL9DWXBOtoQ9KaOyXdHfsK0rV9ZEh7EEVAEJ3RvNsNClgg
-      gitee:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/gitee
-        client-id: 5b83fdfa9666ed3e42b505c31e29926a2be64d64b36ab422db0c45e030888ef4
-        client-secret: 07cba854b3f11648630782dc138520a292e00265ba61c70d4a6f911d43eeeb90
-      github:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/github
-        client-id: Ov23ligScF78KlLh7P4J
-        client-secret: e042922e8d8d9233ff26ade172ba0df5a56270a7
-      alipay:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/alipay
-        app-id: 2021005158683876
-      qq:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/qq
-        app-id: 102795696
-        app-key: iGZfXCgw3yg9ML5Z
-      google:
-        callback-url: http://xxkk1118.w1.luyouxia.net/auth/third/callback/google
-        client-id: 579969213843-4dtu758uipchs4bk08okpv3v1rj8mfm3.apps.googleusercontent.com
-        client-secret: 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
 
 

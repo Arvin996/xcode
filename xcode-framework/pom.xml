@@ -28,7 +28,6 @@
         <module>xcode-spring-boot-starter-report</module>
         <module>xcode-spring-boot-starter-crypt</module>
         <module>xcode-monitor-parent</module>
-        <module>xcode-spring-boot-starter-env-isolation</module>
         <module>xcode-spring-boot-starter-web</module>
         <module>xcode-spring-boot-stater-tenant</module>
         <module>xcode-spring-boot-starter-oss</module>

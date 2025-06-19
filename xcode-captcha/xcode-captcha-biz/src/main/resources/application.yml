@@ -1,5 +1,3 @@
-server:
-  port: 4002
 spring:
   application:
     # 微服务名
@@ -7,71 +5,26 @@ spring:
     # 此处服务名称，与 plat_service 表中 route 字段一致（重要）
     name: xcode-captcha
   cloud:
-    loadbalancer:
-      nacos:
-        enabled: true
     nacos:
       server-addr: 127.0.0.1:8848
       username: nacos
       password: Geit@86970000
       discovery:
         enabled: true
-  main:
-    allow-bean-definition-overriding: true
-    allow-circular-references: true
-  redis:
-    # Redis数据库索引（默认为0）
-    database: 1
-    # Redis服务器地址
-    host: 127.0.0.1
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    # password:
-    # 连接超时时间
-    timeout: 10
-    lettuce:
-      pool:
-        # 连接池最大连接数
-        max-active: 200
-        # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-wait: -1ms
-        # 连接池中的最大空闲连接
-        max-idle: 10
-        # 连接池中的最小空闲连接
-        min-idle: 0
-xcode:
-  captcha:
-    cache-type: redis
-    expired-time: 60
-    pic:
-      category: LINE
-      type: char
-      math-length: 1
-    code-length: 6
-grpc:
-  server:
-    port: 3000
-  client:
-    xcode-message:
-      address: 'discovery:///xcode-message'
-      negotiation-type: plaintext
-      #  TCP相关设置
-      enable-keep-alive: true
-      keep-alive-without-calls: true
-knife4j:
-  enable: true
-  production: false
-  setting:
-    language: zh_cn
-  basic:
-    enable: false
-    username: root
-    password: 123456
-springdoc:
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
+        group: xcode
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        group: xcode
+        import-check:
+          enabled: true
+  config:
+    import:
+      - optional:nacos:redis.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:common.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:knife4j.yaml?group=xcode&refreshEnabled=true
+      - optional:nacos:${spring.application.name}?group=xcode&refreshEnabled=true
+
 
 
 

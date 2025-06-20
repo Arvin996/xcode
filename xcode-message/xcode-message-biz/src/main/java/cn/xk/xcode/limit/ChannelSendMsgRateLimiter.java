@@ -26,7 +26,7 @@ public class ChannelSendMsgRateLimiter implements BaseRateLimiter{
 
     @Override
     public Boolean rateLimit(MessageTask messageTask) {
-        RRateLimiter rateLimiter = redissonClient.getRateLimiter(RATE_LIMITER_KEY_PREFIX + KEY);
+        RRateLimiter rateLimiter = redissonClient.getRateLimiter(RATE_LIMITER_KEY_PREFIX + "_" + KEY + "_" + messageTask.getMsgChannel());
         rateLimiter.setRate(RateType.OVERALL, xcodeMessageProperties.getLimiter().getChannelNumRatePerSecond(), 1, RateIntervalUnit.SECONDS);
         return rateLimiter.tryAcquire(messageTask.getReceiverSet().size());
     }

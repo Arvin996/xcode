@@ -5,6 +5,7 @@ import cn.xk.xcode.balance.core.ILoadBalancer;
 import cn.xk.xcode.handler.MessageHandlerHolder;
 import cn.xk.xcode.handler.message.IHandler;
 import cn.xk.xcode.limit.BaseRateLimiter;
+import cn.xk.xcode.limit.ChannelSendMsgRateLimiter;
 import cn.xk.xcode.limit.GlobalRequestRateLimiter;
 import cn.xk.xcode.limit.RateLimiterHolder;
 import org.redisson.api.RedissonClient;
@@ -39,7 +40,7 @@ public class MessageConfiguration {
 
     @Bean
     public BaseRateLimiter channelSendMsgRateLimiter(RedissonClient redissonClient, XcodeMessageProperties xcodeMessageProperties) {
-        return new GlobalRequestRateLimiter(redissonClient, xcodeMessageProperties);
+        return new ChannelSendMsgRateLimiter(redissonClient, xcodeMessageProperties);
     }
 
     @Bean

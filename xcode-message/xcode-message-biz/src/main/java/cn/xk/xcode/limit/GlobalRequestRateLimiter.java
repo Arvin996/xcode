@@ -27,7 +27,7 @@ public class GlobalRequestRateLimiter implements BaseRateLimiter{
 
     @Override
     public Boolean rateLimit(MessageTask messageTask) {
-        RRateLimiter rateLimiter = redissonClient.getRateLimiter(RATE_LIMITER_KEY_PREFIX + KEY);
+        RRateLimiter rateLimiter = redissonClient.getRateLimiter(RATE_LIMITER_KEY_PREFIX + "_" + KEY);
         rateLimiter.setRate(RateType.OVERALL, xcodeMessageProperties.getLimiter().getTotalRequestRatePerSecond(), 1, RateIntervalUnit.SECONDS);
         return rateLimiter.tryAcquire();
     }

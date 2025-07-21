@@ -27,7 +27,7 @@ public class ArrayUtil {
         if (CollectionUtil.isEmpty(from)) {
             return (T[]) (new Object[0]);
         }
-        return cn.hutool.core.util.ArrayUtil.toArray(from, (Class<T>) IterUtil.getElementType(from.iterator()));
+        return (T[]) from.toArray();
     }
 
     @SuppressWarnings("unchecked")
